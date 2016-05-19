@@ -10,8 +10,13 @@ module Puppet::Parser::Functions
 
     # Find recently created network by name
     matches = OneviewSDK::EthernetNetwork.find_by(@client, name: options['name'])
-    ethernet = matches.first
-    puts "\nFound ethernet-network by name: '#{options["name"]}'.\n  uri = '#{ethernet[:uri]}'"
+    ethernet2 = matches.first
+
+    if ethernet2
+      puts "\nFound ethernet-network by name: '#{options["name"]}'.\n  uri = '#{ethernet2[:uri]}'"
+    else
+      puts "\nThere is no ethernet network named #{options['name']}.\n"
+    end
 
 
 

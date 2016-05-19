@@ -10,8 +10,13 @@ module Puppet::Parser::Functions
 
     matches = OneviewSDK::EthernetNetwork.find_by(@client, name: attributes['name'])
     ethernet2 = matches.first
-    ethernet2.delete
-    puts "\nSucessfully deleted ethernet-network '#{attributes['name']}'."
+
+    if ethernet2
+      ethernet2.delete
+      puts "\nDeleted ethernet-network '#{attributes['name']}' successfully.\n"
+    else
+      puts "\nThere is no ethernet network named #{attributes['name']}.\n"
+    end
 
 
   end
