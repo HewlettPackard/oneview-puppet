@@ -35,5 +35,5 @@ class oneview-puppet {
         # # Deleting ethernet
         # ethernet_network_delete($attributes)
         #
-        ethernet_network("create", $ethernet_options)
+        ethernet_network("delete", $ethernet_options)
 }
