@@ -1,12 +1,12 @@
-class oneview-puppet {
+class oneview {
 
         # # CONNECTION TO THE APPLIANCE
         # # **********************************************************************
         # # Login info for the OneView appliance
         $login_information = {
-          appliance_adress =>  'https://172.16.101.19',
-          login =>  'Administrator',
-          password =>  'rainforest'
+          appliance_adress =>  '<Your appliance IP here>',
+          login =>  '<Your appliance\'s user here>',
+          password =>  '<Your appliance\'s password here>'
         }
         # # Connecting to appliance
         connection_create($login_information)
@@ -23,17 +23,12 @@ class oneview-puppet {
                   connectionTemplateUri => 'nil',
                   type =>  'ethernet-networkV3'
                 }
-        # # Creating ethernet
-        # ethernet_network_create($ethernet_options)
-        # # Finding ethernet
-        # ethernet_network_find($ethernet_options)
-        # # Updating ethernet
+
         $attributes = {
                   name =>  'Puppet Network'
                 }
-        # ethernet_network_update($ethernet_options, $attributes)
-        # # Deleting ethernet
-        # ethernet_network_delete($attributes)
-        #
-        ethernet_network("delete", $ethernet_options)
+        ethernet_network("create", $ethernet_options) # Creates ethernet network
+        ethernet_network("find", $ethernet_options) # Finds ethernet network
+        ethernet_network("update", $ethernet_options,$attributes) # Updates ethernet network
+        ethernet_network("delete", $attributes) # Deletes ethernet network
 }

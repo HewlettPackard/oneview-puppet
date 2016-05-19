@@ -11,12 +11,16 @@ module Puppet::Parser::Functions
     options.each { |key,value| options[key] = nil if value == 'nil' } ## Removes quotes from nil values inside the hash
     options.each { |key,value| options[key] = false if value == 'false' } ## Removes quotes from false values inside the hash
 
-    if args[2]
-      attributes = args[1] # new attributes to be updated
-      attributes.each { |key,value| attributes[key] = nil if value == 'nil' } ## Removes quotes from nil values inside the hash
-      attributes.each { |key,value| attributes[key] = false if value == 'false' } ## Removes quotes from false values inside the hash
-    end
+    # Third set of values, only used in updates
+    attributes_exist = false
+    attributes_exist = true if args[2]
+    attributes = args[2] if attributes_exist # new attributes to be updated
+    attributes.each { |key,value| attributes[key] = nil if value == 'nil' } if attributes_exist ## Removes quotes from nil values inside the hash
+    attributes.each { |key,value| attributes[key] = false if value == 'false' } if attributes_exist ## Removes quotes from false values inside the hash
 
+
+
+    # Validates if a network with specified name exists
     network_exists = false
     matches = OneviewSDK::EthernetNetwork.find_by(@client, name: options['name'])
     network_exists = true if matches.first
@@ -33,17 +37,19 @@ module Puppet::Parser::Functions
 
     when "find"
       puts "\nFound ethernet-network by name: '#{options["name"]}'.\n  uri = '#{matches.first[:uri]}'" if network_exists
-      puts "\nThere is no ethernet network named #{options['name']}.\n"                                if !network_exists
+      puts "\nAn ethernet network named '#{options['name']}' does not exist.\n" if !network_exists
 
-    # when "update"
+    when "update"
+      matches.first.update(attributes) if network_exists && attributes_exist
+      puts "\n'attributes' not found. Please declare the attributes to be changed when using 'update'" if !attributes_exist
+      puts "\nAn ethernet network named '#{options['name']}' does not exist.\n" if !network_exists
+      puts "\nUpdated ethernet-network: '#{options["name"]}'.\n  uri = '#{matches.first[:uri]}'" if network_exists && attributes_exist
+      puts "with attributes: #{attributes}\n" if network_exists && attributes_exist
 
-  when "delete" # WARNING:: delete works but returns an unknown error. to be fixed. error is most likely to be in the puts below
-      if network_exists
-        matches.first.delete
-        # puts "\nDeleted ethernet-network '#{matches.first['name']}' successfully.\n"
-      else
-        # puts "\nThere is no ethernet network named #{matches.first['name']}.\n"
-      end
+    when "delete" # WARNING:: delete works but returns an unknown error. to be fixed. error is most likely to be in the puts below
+      matches.first.delete if network_exists
+      puts "\nDeleted ethernet-network '#{matches.first['name']}' successfully.\n" if network_exists
+      puts "\nAn ethernet network named '#{options['name']}' does not exist.\n" if !network_exists
 
     else
       puts "#{action} is not a valid action."
