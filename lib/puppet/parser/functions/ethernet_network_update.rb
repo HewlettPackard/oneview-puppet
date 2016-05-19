@@ -11,22 +11,21 @@ module Puppet::Parser::Functions
     attributes.each { |key,value| attributes[key] = nil if value == 'nil' } ## Removes quotes from nil values inside the hash
     attributes.each { |key,value| attributes[key] = false if value == 'false' } ## Removes quotes from false values inside the hash
 
-
+    network_exists = false
     matches = OneviewSDK::EthernetNetwork.find_by(@client, name: options['name'])
-    ethernet2 = matches.first # Checks whether the previously created ethernet exists
+    network_exists = true if matches.first
 
-    matches = OneviewSDK::EthernetNetwork.find_by(@client, name: attributes['name'])
-    ethernet3 = matches.first # Checks whether an ethernet with the new given name exists
+    new_network_exists = false
+    matches_new = OneviewSDK::EthernetNetwork.find_by(@client, name: attributes['name'])
+    new_name_exists = true if matches_new.first
 
-    if !ethernet2 # The current ethernet has to exist
-      puts "\nThere is no network currently named #{options['name']}.\n"
-    elsif ethernet3 # The new name cannot be equal to an existing network's name
-      puts "\nA network with the name #{attributes['name']} already exists.\n"
-    else
-      ethernet2.update(attributes)
-      puts "\nUpdated ethernet-network: '#{options["name"]}'.\n  uri = '#{ethernet2[:uri]}'"
-      puts "with attributes: #{attributes}"
-    end
+    puts "\nThere is no network currently named #{options['name']}.\n" if !network_exists
+
+    puts "\nA network with the name #{attributes['name']} already exists.\n" if new_name_exists
+
+    matches.first.update(attributes) if !new_name_exists
+    puts "\nUpdated ethernet-network: '#{options["name"]}'.\n  uri = '#{matches.first[:uri]}'" if !new_name_exists
+    puts "with attributes: #{attributes}" if !new_name_exists
 
   end
 end

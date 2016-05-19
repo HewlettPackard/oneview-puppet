@@ -8,15 +8,14 @@ module Puppet::Parser::Functions
     attributes.each { |key,value| attributes[key] = nil if value == 'nil' } ## Removes quotes from nil values inside the hash
     attributes.each { |key,value| attributes[key] = false if value == 'false' } ## Removes quotes from false values inside the hash
 
+    network_exists = false
     matches = OneviewSDK::EthernetNetwork.find_by(@client, name: attributes['name'])
-    ethernet2 = matches.first
+    network_exists = true if matches.first
 
-    if ethernet2
-      ethernet2.delete
-      puts "\nDeleted ethernet-network '#{attributes['name']}' successfully.\n"
-    else
-      puts "\nThere is no ethernet network named #{attributes['name']}.\n"
-    end
+      matches.first.delete if network_exists
+      puts "\nDeleted ethernet-network '#{attributes['name']}' successfully.\n" if network_exists
+
+      puts "\nThere is no ethernet network named #{attributes['name']}.\n" if !network_exists
 
 
   end
