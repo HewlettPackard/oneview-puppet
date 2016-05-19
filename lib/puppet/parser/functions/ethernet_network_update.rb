@@ -23,9 +23,11 @@ module Puppet::Parser::Functions
 
     puts "\nA network with the name #{attributes['name']} already exists.\n" if new_name_exists
 
-    matches.first.update(attributes) if !new_name_exists
-    puts "\nUpdated ethernet-network: '#{options["name"]}'.\n  uri = '#{matches.first[:uri]}'" if !new_name_exists
-    puts "with attributes: #{attributes}" if !new_name_exists
+    if (network_exists && !new_name_exists)
+      matches.first.update(attributes)
+      puts "\nUpdated ethernet-network: '#{options["name"]}'.\n  uri = '#{matches.first[:uri]}'"
+      puts "with attributes: #{attributes}"
+    end
 
   end
 end

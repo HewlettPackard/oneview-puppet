@@ -19,8 +19,8 @@ module Puppet::Parser::Functions
     puts "\nAn ethernet network named #{options['name']} already exists.\n" if network_exists
 
     # if !network_exists
-      ethernet = OneviewSDK::EthernetNetwork.new(@client, options) if !network_exists
-      ethernet.create if !network_exists
+      ethernet = OneviewSDK::EthernetNetwork.new(@client, options)
+      ethernet.create unless ethernet.retrieve! 
       puts "\nCreated ethernet-network '#{ethernet[:name]}' sucessfully.\n  uri = '#{ethernet[:uri]}'" if !network_exists
     # end
 
