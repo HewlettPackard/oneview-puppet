@@ -1,10 +1,10 @@
-class oneview {
+class oneview-puppet {
 
         # CONNECTION TO THE APPLIANCE
         # **********************************************************************
         # Login info for the OneView appliance
         $login_information = {
-          appliance_adress =>  'https://172.16.103.21',
+          appliance_adress =>  'https://172.16.101.19',
           login =>  'Administrator',
           password =>  'rainforest'
         }
