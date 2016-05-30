@@ -1,34 +1,24 @@
-class oneview {
+class oneview (
+  $action_list
+  ) {
 
-        # # CONNECTION TO THE APPLIANCE
+        # # Here we verify the expected resource, the action that will be performed and the options passed onto it
         # # **********************************************************************
-        # # Login info for the OneView appliance
-        $login_information = {
-          appliance_adress =>  '<Your appliance IP here>',
-          login =>  '<Your appliance\'s user here>',
-          password =>  '<Your appliance\'s password here>'
+        $action_list.each |$key, $value| {
+          case $value['action'] {
+            'connection_create': {connection_create($value['options'])}
+            'ethernet_network_create': {ethernet_network("create", $value['options'])}
+            'ethernet_network_find': {ethernet_network("find", $value['options'])}
+            'ethernet_network_update': {ethernet_network("update", $value['options'], $value['attributes'])}
+            'ethernet_network_delete': {ethernet_network("delete", $value['options'])}
+            }
         }
-        # # Connecting to appliance
-        connection_create($login_information)
-        #
-        # # ETHERNET NETWORK
-        # # **********************************************************************
-        # # Ethernet options (going to be the same for all CRUD operations)
-        $ethernet_options = {
-                  vlanId =>  '1201',
-                  purpose =>  'General',
-                  name =>  'OneViewSDK Test Vlan',
-                  smartLink =>  'false',
-                  privateNetwork =>  'false',
-                  connectionTemplateUri => 'nil',
-                  type =>  'ethernet-networkV3'
-                }
 
-        $attributes = {
-                  name =>  'Puppet Network'
-                }
+
+/* DEPRECATED Code for reference on how to directly call the functions
         ethernet_network("create", $ethernet_options) # Creates ethernet network
         ethernet_network("find", $ethernet_options) # Finds ethernet network
         ethernet_network("update", $ethernet_options,$attributes) # Updates ethernet network
         ethernet_network("delete", $attributes) # Deletes ethernet network
+*/
 }
