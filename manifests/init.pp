@@ -2,22 +2,8 @@ class oneview (
   $action_list
   ) {
 
-/*
-create_resources ($action_list)
-notify {"\n${key} and ${value}\n":}
-*/
-
-        # # CONNECTION TO THE APPLIANCE
+        # # Here we verify the expected resource, the action that will be performed and the options passed onto it
         # # **********************************************************************
-/* DEPRECATED CODE FOR LOGIN INFO
-        # # Login info for the OneView appliance
-        $login_information = {
-          appliance_adress =>  'https://172.16.103.21',
-          login =>  'Administrator',
-          password =>  'rainforest'
-        }
-*/
-        # # Connecting to appliance
         $action_list.each |$key, $value| {
           case $value['action'] {
             'connection_create': {connection_create($value['options'])}
@@ -29,25 +15,7 @@ notify {"\n${key} and ${value}\n":}
         }
 
 
-/*
-        #
-        # # ETHERNET NETWORK
-        # # **********************************************************************
-        # # Ethernet options (going to be the same for all CRUD operations)
-
-        $ethernet_options = {
-                  vlanId =>  '1201',
-                  purpose =>  'General',
-                  name =>  'OneViewSDK Test Vlan',
-                  smartLink =>  'false',
-                  privateNetwork =>  'false',
-                  connectionTemplateUri => 'nil',
-                  type =>  'ethernet-networkV3'
-                }
-
-        $attributes = {
-                  name =>  'Puppet Network'
-                }
+/* DEPRECATED Code for reference on how to directly call the functions
         ethernet_network("create", $ethernet_options) # Creates ethernet network
         ethernet_network("find", $ethernet_options) # Finds ethernet network
         ethernet_network("update", $ethernet_options,$attributes) # Updates ethernet network
