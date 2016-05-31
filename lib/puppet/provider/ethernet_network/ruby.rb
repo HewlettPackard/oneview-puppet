@@ -9,6 +9,8 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
+    puts "Running #{resource}"
+    Puppet.notice("Connected to OneView appliance at #{@client.url}")
   end
 
   # Provider methods
@@ -28,7 +30,6 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
   def destroy
     ethernet_network = get_ethernet_network(resource['attributes']['name'])
     ethernet_network.first.delete
-    Puppet.warning("Network destroyed")
   end
 
 

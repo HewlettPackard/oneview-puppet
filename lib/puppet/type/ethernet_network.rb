@@ -4,7 +4,7 @@ Puppet::Type.newtype(:ethernet_network) do
   ensurable
 
   # Debug warning
-  Puppet.warning("Puppet has passed through the type")
+  # Puppet.warning("Puppet has passed through the type")
 
   newparam(:name, :namevar => true) do
     desc "Ethernet network name"
