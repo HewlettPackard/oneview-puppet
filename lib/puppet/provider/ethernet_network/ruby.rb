@@ -1,19 +1,14 @@
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:ethernet_network).provide(:ruby) do
 
   # Helper methods - TO BE REDEFINED
 
-  def get_ethernet_network(name)
-    @client = OneviewSDK::Client.new(
-    url: 'https://172.16.101.19',
-    user: 'Administrator',
-    password: 'rainforest',
-    ssl_enabled: false
-    )
-    Puppet.warning("Connected to the appliance #{@client.url}")
-    matches = OneviewSDK::EthernetNetwork.find_by(@client, name: name)
-    return matches
+  def initialize(*args)
+    super(*args)
+    @client = OneviewSDK::Client.new(login)
   end
 
   # Provider methods
@@ -25,10 +20,8 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
   end
 
   def create
-    options = resource['attributes']
-    options.each { |key,value| options[key] = nil if value == 'nil' ; options[key] = false if value == 'false'}
-    puts options
-    ethernet_network = OneviewSDK::EthernetNetwork.new(@client, options)
+    puts attributes
+    ethernet_network = OneviewSDK::EthernetNetwork.new(@client, attributes)
     ethernet_network.create
   end
 
