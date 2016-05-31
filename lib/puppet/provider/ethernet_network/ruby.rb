@@ -20,7 +20,7 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
   end
 
   def create
-    puts attributes
+    attributes = attributes_parse(resource['attributes'])
     ethernet_network = OneviewSDK::EthernetNetwork.new(@client, attributes)
     ethernet_network.create
   end

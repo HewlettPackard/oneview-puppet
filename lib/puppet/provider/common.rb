@@ -7,7 +7,6 @@ end
 
 # Returns the result of a network search by name
 def get_ethernet_network(name)
-  Puppet.warning("Connected to the appliance #{@client.url}")
   matches = OneviewSDK::EthernetNetwork.find_by(@client, name: name)
   return matches
 end

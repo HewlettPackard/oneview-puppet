@@ -11,7 +11,7 @@ ethernet_network{'net2':
     attributes => {
       vlanId                => '1001',
       purpose               => 'General',
-      name                  => 'Puppet Network',
+      name                  => 'Net 2das',
       smartLink             => 'false',
       privateNetwork        => 'false',
       connectionTemplateUri => 'nil',
