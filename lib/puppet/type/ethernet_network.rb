@@ -10,11 +10,7 @@ Puppet::Type.newtype(:ethernet_network) do
     desc "Ethernet network name"
   end
 
-  newparam(:vlanid) do
-    desc "Ethernet network name"
-  end
-
-  newparam(:mypar) do
+  newparam(:attributes) do
     desc "Ethernet network name"
   end
 
