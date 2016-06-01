@@ -23,9 +23,10 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
     if ethernet_network_exists && resource['ensure'].to_s != 'absent'
       new_attributes = attributes_parse(resource['attributes'])
       new_attributes.delete('connectionTemplateUri') if new_attributes['connectionTemplateUri'] == nil
+      Puppet.warning("Update operation does not support vlanId changing, ignoring...") if new_attributes['vlanId']
+      new_attributes.delete('vlanId') if new_attributes['vlanId']
       current = ethernet_network.first.data
       current.delete('modified')
-      current['vlanId'] = String(current['vlanId'])
       update = current.merge(new_attributes)
       update.delete('modified')
       if update != current

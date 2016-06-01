@@ -1,5 +1,5 @@
 ethernet_network{'net1':
-    ensure => 'absent',
+    ensure => 'present',
     attributes => {
       vlanId                => '1001',
       purpose               => 'General',
@@ -12,11 +12,24 @@ ethernet_network{'net1':
 }
 
 ethernet_network{'net2':
+    ensure => 'present',
+    attributes => {
+      vlanId                => '1050',
+      purpose               => 'Management',
+      name                  => 'Puppet 1',
+      smartLink             => 'false',
+      privateNetwork        => 'false',
+      connectionTemplateUri => 'nil',
+      type                  => 'ethernet-networkV3'
+    }
+}
+
+ethernet_network{'net3':
     ensure => 'absent',
     attributes => {
-      vlanId                => '1001',
+      vlanId                => '1075',
       purpose               => 'General',
-      name                  => 'Puppet 2',
+      name                  => 'Puppet 1',
       smartLink             => 'false',
       privateNetwork        => 'false',
       connectionTemplateUri => 'nil',
