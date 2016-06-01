@@ -1,7 +1,7 @@
 ethernet_network{'net1':
     ensure => 'present',
     attributes => {
-      vlanId                => '100',
+      vlanId                => 'asda',
       purpose               => 'General',
       name                  => 'Puppet 1',
       smartLink             => 'false',
@@ -12,12 +12,12 @@ ethernet_network{'net1':
 }
 
 ethernet_network{'net2':
-    ensure => 'absent',
+    ensure => 'present',
     attributes => {
       vlanId                => '1050',
-      purpose               => 'Management',
+      purpose               => 'General',
       name                  => 'Puppet 2',
-      smartLink             => 'false',
+      smartLink             => 'true',
       privateNetwork        => 'true',
       connectionTemplateUri => 'nil',
       type                  => 'ethernet-networkV3'
