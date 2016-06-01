@@ -20,7 +20,7 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
     ethernet_network_exists = false ; ethernet_network_exists = true if ethernet_network.first
 
     # Checking for potential updates
-    if ethernet_network_exists && resource['ensure'] != 'absent'
+    if ethernet_network_exists && resource['ensure'].to_s != 'absent'
       new_attributes = attributes_parse(resource['attributes'])
       new_attributes.delete('connectionTemplateUri') if new_attributes['connectionTemplateUri'] == nil
       current = ethernet_network.first.data
