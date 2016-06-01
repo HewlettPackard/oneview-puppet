@@ -4,7 +4,7 @@ ethernet_network{'net1':
       vlanId                => '1001',
       purpose               => 'General',
       name                  => 'Puppet 1',
-      smartLink             => 'true',
+      smartLink             => 'false',
       privateNetwork        => 'false',
       connectionTemplateUri => 'nil',
       type                  => 'ethernet-networkV3'
