@@ -1,7 +1,7 @@
 ethernet_network{'net1':
     ensure => 'present',
     attributes => {
-      vlanId                => '1001',
+      vlanId                => '666',
       purpose               => 'General',
       name                  => 'Puppet 1',
       smartLink             => 'false',
