@@ -9,6 +9,9 @@ def attributes_parse(resource_attributes)
   return attributes
 end
 
+
+
+
 =begin  POSSIBLY WORTH DOING AN UPDATE_PARSE TO PARSE OPTIONS FOR UPDATE AND REMOVE NOT ALLOWED ONES
 def update_parse(resource_attributes)
   attributes = resource['attributes']
