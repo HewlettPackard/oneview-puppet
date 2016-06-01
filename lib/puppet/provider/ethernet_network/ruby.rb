@@ -20,7 +20,7 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
     ethernet_network_exists = false ; ethernet_network_exists = true if ethernet_network.first
     state = resource['ensure'].to_s
 
-    # Checking for potential updates. OBS: data = new attributes from the manifest, may have updates
+    # Checking for potential updates.
     if ethernet_network_exists && state != 'absent'
       ethernet_network_update(resource['attributes'], ethernet_network)
     end

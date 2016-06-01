@@ -1,3 +1,5 @@
+# ============== Common methods ==============
+
 # Removes quotes from nil and false values
 def attributes_parse(resource_attributes)
   attributes = resource['attributes']
@@ -9,8 +11,17 @@ def attributes_parse(resource_attributes)
   return attributes
 end
 
+# ============== Ethernet Network methods ==============
+
+# Returns the result of a network search by name
+def get_ethernet_network(name)
+  matches = OneviewSDK::EthernetNetwork.find_by(@client, name: name)
+  return matches
+end
+
+# Compares and updates the ethernet network if necessary
 def ethernet_network_update(resource, ethernet_network)
-  data = attributes_parse(resource)                               # new data to be checked for changes
+  data = attributes_parse(resource)                                             # new data to be checked for changes
   existing_ethernet_network = ethernet_network.first.data
   if data['vlanId'].to_s != existing_ethernet_network['vlanId'].to_s            # checks whether the vlanId has been changed
     Puppet.warning("Update operation does not support vlanId changing, ignoring...")
@@ -26,6 +37,8 @@ def ethernet_network_update(resource, ethernet_network)
   end
 end
 
+# ============== --- methods ==============
+
 
 =begin  POSSIBLY WORTH DOING AN UPDATE_PARSE TO PARSE OPTIONS FOR UPDATE AND REMOVE NOT ALLOWED ONES
 def update_parse(resource_attributes)
@@ -38,9 +51,3 @@ def update_parse(resource_attributes)
   return attributes
 end
 =end
-
-# Returns the result of a network search by name
-def get_ethernet_network(name)
-  matches = OneviewSDK::EthernetNetwork.find_by(@client, name: name)
-  return matches
-end
