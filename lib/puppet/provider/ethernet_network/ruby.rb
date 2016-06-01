@@ -19,34 +19,21 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
     ethernet_network = get_ethernet_network(resource['attributes']['name'])
     ethernet_network_exists = false ; ethernet_network_exists = true if ethernet_network.first
 
-    if ethernet_network_exists
+    # Checking for potential updates
+    if ethernet_network_exists && resource['ensure'] != 'absent'
       new_attributes = attributes_parse(resource['attributes'])
       new_attributes.delete('connectionTemplateUri') if new_attributes['connectionTemplateUri'] == nil
-      puts new_attributes
       current = ethernet_network.first.data
       current.delete('modified')
       current['vlanId'] = String(current['vlanId'])
-      puts current
       update = current.merge(new_attributes)
       update.delete('modified')
-      puts update
       if update != current
-        Puppet.warning("THIS IS DIFFERENT")
-        Puppet.warning(update.to_a-current.to_a)
         update = Hash[update.to_a-current.to_a]
-        puts update
         ethernet_network.first.update(update)
+        Puppet.warning("Updated: #{update.inspect} ")
       end
     end
-
-    # if ethernet_network_exists
-    #   new_attributes = attributes_parse(resource['attributes'])
-    #   current = ethernet_network.first.data
-    #   puts new_attributes
-    #   puts current
-    #
-    # end
-
 
     return ethernet_network_exists
   end

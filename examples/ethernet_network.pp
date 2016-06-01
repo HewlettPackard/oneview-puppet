@@ -1,10 +1,10 @@
 ethernet_network{'net1':
-    ensure => 'present',
+    ensure => 'absent',
     attributes => {
       vlanId                => '1001',
       purpose               => 'General',
       name                  => 'Puppet 1',
-      smartLink             => 'false',
+      smartLink             => 'true',
       privateNetwork        => 'false',
       connectionTemplateUri => 'nil',
       type                  => 'ethernet-networkV3'
