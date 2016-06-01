@@ -34,7 +34,9 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
       if update != current
         Puppet.warning("THIS IS DIFFERENT")
         Puppet.warning(update.to_a-current.to_a)
-        ethernet_network.first.update(update)
+        update = Hash[update.to_a-current.to_a]
+        puts update
+        puts ethernet_network.first.update(update)
       end
     end
 
