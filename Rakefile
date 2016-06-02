@@ -9,6 +9,9 @@ task :validate do
   Dir['manifests/**/*.pp'].each do |manifest|
     sh "puppet parser validate --noop #{manifest}"
   end
+  Dir['examples/**/*.pp'].each do |example|
+    sh "puppet parser validate --noop #{example}"
+  end
   Dir['spec/**/*.rb','lib/**/*.rb'].each do |ruby_file|
     sh "ruby -c #{ruby_file}" unless ruby_file =~ /spec\/fixtures/
   end
