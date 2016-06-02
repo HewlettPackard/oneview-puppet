@@ -31,7 +31,7 @@ def ethernet_network_update(resource, ethernet_network)
   end
   existing_ethernet_network = ethernet_network.first.data                             # new data to be checked for changes
   if data['vlanId'].to_s != existing_ethernet_network['vlanId'].to_s                  # checks whether the vlanId has been changed
-    Puppet.warning("Update operation does not support vlanId changing, ignoring...")
+    # Puppet.warning("Update operation does not support vlanId changing, ignoring...")
   end
   data.delete('connectionTemplateUri') if data['connectionTemplateUri'] == nil         # the connectionTemplateUri can only be nil at its creation
   data.delete('vlanId') if data['vlanId']                                              # in case a new vlanId exists, as it cannot be changed
