@@ -20,7 +20,7 @@ def get_ethernet_network(name)
 end
 
 # Compares and updates the ethernet network if necessary
-def ethernet_network_update(resource, ethernet_network)
+def ethernet_network_update(resource, ethernet_network, process)                      # process = name of the running proccess
 
   data = data_parse(resource)
   new_name_exists = true
@@ -42,6 +42,6 @@ def ethernet_network_update(resource, ethernet_network)
   if updated_data != existing_ethernet_network                                         # if there's any difference..
     updated_data = Hash[updated_data.to_a-existing_ethernet_network.to_a]              # hash with different data remaining  # the actual update on the# hash with different data remaining
     ethernet_network.first.update(updated_data)                                        # the actual update on the# hash with different data remaining
-    Puppet.notice("Updated: #{updated_data.inspect} ")
+    Puppet.notice("#{process} updated: #{updated_data.inspect} ")
   end
 end

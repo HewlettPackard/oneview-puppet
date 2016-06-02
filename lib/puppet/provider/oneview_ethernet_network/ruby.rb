@@ -10,7 +10,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
     super(*args)
     @client = OneviewSDK::Client.new(login)
     puts "Running #{resource}"
-    Puppet.notice("Connected to OneView appliance at #{@client.url}")
+    # Puppet.notice("Connected to OneView appliance at #{@client.url}")
   end
 
   # Provider methods
@@ -22,7 +22,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
     # Checking for potential updates.
     if ethernet_network_exists && state != 'absent'
-      ethernet_network_update(resource['data'], ethernet_network)
+      ethernet_network_update(resource['data'], ethernet_network, resource) # resource itself sends the name of the running proccess
     end
 
     return ethernet_network_exists
