@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:ethernet_network) do
+Puppet::Type.newtype(:oneview_ethernet_network) do
   desc "Oneview's ethernet network"
 
   ensurable
@@ -10,7 +10,7 @@ Puppet::Type.newtype(:ethernet_network) do
     desc "Ethernet network name"
   end
 
-  newparam(:attributes) do
+  newparam(:data) do
     desc "Ethernet network name"
   end
 

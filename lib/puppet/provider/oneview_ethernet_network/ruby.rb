@@ -2,7 +2,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:ethernet_network).provide(:ruby) do
+Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
   # Helper methods - TO BE REDEFINED
 
@@ -16,26 +16,26 @@ Puppet::Type.type(:ethernet_network).provide(:ruby) do
   # Provider methods
 
   def exists?
-    ethernet_network = get_ethernet_network(resource['attributes']['name'])
+    ethernet_network = get_ethernet_network(resource['data']['name'])
     ethernet_network_exists = false ; ethernet_network_exists = true if ethernet_network.first
     state = resource['ensure'].to_s
 
     # Checking for potential updates.
     if ethernet_network_exists && state != 'absent'
-      ethernet_network_update(resource['attributes'], ethernet_network)
+      ethernet_network_update(resource['data'], ethernet_network)
     end
 
     return ethernet_network_exists
   end
 
   def create
-    attributes = attributes_parse(resource['attributes'])
-    ethernet_network = OneviewSDK::EthernetNetwork.new(@client, attributes)
+    data = data_parse(resource['data'])
+    ethernet_network = OneviewSDK::EthernetNetwork.new(@client, data)
     ethernet_network.create
   end
 
   def destroy
-    ethernet_network = get_ethernet_network(resource['attributes']['name'])
+    ethernet_network = get_ethernet_network(resource['data']['name'])
     ethernet_network.first.delete
   end
 
