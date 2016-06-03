@@ -15,6 +15,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
   # Provider methods
 
+  # to do: decide whether an ethernet net can be created with a new name
   def exists?
     ethernet_network = get_ethernet_network(resource['data']['name'])
     ethernet_network_exists = false ; ethernet_network_exists = true if ethernet_network.first
@@ -30,6 +31,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
   def create
     data = data_parse(resource['data'])
+    data.delete('new_name') if data['new_name']
     ethernet_network = OneviewSDK::EthernetNetwork.new(@client, data)
     ethernet_network.create
   end
