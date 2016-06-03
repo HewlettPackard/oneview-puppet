@@ -39,4 +39,10 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
     ethernet_network.first.delete
   end
 
+  def found
+    # Pass on the attributes to find and search for a network with the specified attributes
+    matches = OneviewSDK::EthernetNetwork.find_by(@client, name: resource['data']['name'])
+    matches.first ? Puppet.notice("Found the network \'#{resource['data']['name']}\' on the system") : Puppet.notice("No networks with the name \'#{resource['data']['name']}\' were found on the system")
+  end
+
 end

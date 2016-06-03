@@ -42,9 +42,40 @@ oneview_ethernet_network{'net3':
 }
 
 oneview_ethernet_network{'net4':
-    ensure  => 'absent',
+    ensure  => 'found',
     require => Oneview_ethernet_network['net3'],
     data    => {
       name                  => 'Finishing'
+    }
+}
+
+oneview_ethernet_network{'net5':
+    ensure  => 'found',
+    require => Oneview_ethernet_network['net4'],
+    data    => {
+      name                  => 'Finished?'
+    }
+}
+
+oneview_ethernet_network{'net6':
+    ensure  => 'present',
+    require => Oneview_ethernet_network['net5'],
+    data    => {
+      name                  => 'Finishing',
+      new_name              => 'Finished',
+      vlanId                => '1045',
+      purpose               => 'General',
+      smartLink             => 'true',
+      privateNetwork        => 'false',
+      connectionTemplateUri => 'nil',
+      type                  => 'ethernet-networkV3'
+    }
+}
+
+oneview_ethernet_network{'net7':
+    ensure  => 'absent',
+    require => Oneview_ethernet_network['net6'],
+    data    => {
+      name                  => 'Finished'
     }
 }

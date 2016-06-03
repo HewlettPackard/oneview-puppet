@@ -1,7 +1,15 @@
 Puppet::Type.newtype(:oneview_ethernet_network) do
   desc "Oneview's ethernet network"
 
-  ensurable
+  ensurable do
+    defaultvalues
+
+    # Creating the find operation for the ensure method
+    newvalue(:found) do
+      provider.found
+    end
+
+  end
 
   # Debug warning
   # Puppet.warning("Puppet has passed through the type")
@@ -13,5 +21,7 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
   newparam(:data) do
     desc "Ethernet network name"
   end
+
+
 
 end
