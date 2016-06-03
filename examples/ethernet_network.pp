@@ -1,8 +1,7 @@
-oneview_ethernet_network{'net1':
+oneview_ethernet_network{'job':
     ensure => 'present',
     data   => {
       name                  => 'Puppet Network',
-      new_name              => 'Edited Name',
       vlanId                => '100',
       purpose               => 'General',
       smartLink             => 'false',
@@ -11,7 +10,36 @@ oneview_ethernet_network{'net1':
       type                  => 'ethernet-networkV3'
     }
 }
-
+# oneview_ethernet_network{'job4':
+#     ensure => 'present',
+#     data   => {
+#       name                  => 'Puppet Network2',
+#       vlanId                => '100',
+#       purpose               => 'General',
+#       smartLink             => 'false',
+#       privateNetwork        => 'true',
+#       connectionTemplateUri => 'nil',
+#       type                  => 'ethernet-networkV3'
+#     }
+# }
+#
+# oneview_ethernet_network{'job1':
+#     ensure => 'present',
+#     require=> Oneview_ethernet_network['job'],
+#     data   => {
+#       name                  => 'Puppet Network',
+#       new_name              => 'Edited Name',
+#     }
+# }
+#
+# oneview_ethernet_network{'job2':
+#     ensure => 'present',
+#     require=> Oneview_ethernet_network['job1'],
+#     data   => {
+#       name              => 'Edited Name',
+#     }
+# }
+#
 # oneview_ethernet_network{'net1':
 #     ensure => 'present',
 #     data   => {

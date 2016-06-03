@@ -38,7 +38,7 @@ def ethernet_network_update(resource, ethernet_network, process)                
   data.delete('modified')                                                              # field not considered for comparison
   updated_data = existing_ethernet_network.merge(data)                                 # new hash / difference between old and new ones
   updated_data['name'] = new_name if new_name_exists == false
-
+  # Puppet.warning('There is another ethernet network with the same name.') if new_name_exists
   if updated_data != existing_ethernet_network                                         # if there's any difference..
     updated_data = Hash[updated_data.to_a-existing_ethernet_network.to_a]              # hash with different data remaining  # the actual update on the# hash with different data remaining
     ethernet_network.first.update(updated_data)                                        # the actual update on the# hash with different data remaining

@@ -11,7 +11,16 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
     @client = OneviewSDK::Client.new(login)
     puts "Running #{resource}"
     # Puppet.notice("Connected to OneView appliance at #{@client.url}")
+    @property_flush = {}
   end
+
+  # def self.instances
+  #   @client = OneviewSDK::Client.new(login)
+  #   matches = OneviewSDK::EthernetNetwork.get_all(@client)
+  #   matches.collect do |line|
+  #     Puppet.notice("Ethernet Network: #{line['name']}, URI: #{line['uri']}")
+  #   end
+  # end
 
   # Provider methods
 
