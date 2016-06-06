@@ -21,7 +21,10 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
   #   @client = OneviewSDK::Client.new(login)
   #   matches = OneviewSDK::EthernetNetwork.get_all(@client)
   #   matches.collect do |line|
-  #   Puppet.notice("Ethernet Network: #{line['name']}, URI: #{line['uri']}")
+  #     # Puppet.notice("Ethernet Network: #{line['name']}, URI: #{line['uri']}")
+  #     name = line['name']
+  #     data = line.inspect
+  #     new(:name => name, :ensure => :present)
   #   end
   # end
 

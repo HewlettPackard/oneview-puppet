@@ -1,4 +1,3 @@
-
 oneview_ethernet_network{'job':
     ensure => 'present',
     data   => {
