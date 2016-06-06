@@ -7,6 +7,7 @@ def data_parse(resource_data)
     data[key] = nil if value == 'nil'
     data[key] = false if value == 'false'
     data[key] = true if value == 'true'
+    data[key] = data[key].to_i if key == 'vlanId'
   end
   return data
 end
@@ -16,6 +17,12 @@ end
 # Returns the result of a network search by name
 def get_ethernet_network(name)
   matches = OneviewSDK::EthernetNetwork.find_by(@client, name: name)
+  return matches
+end
+
+# Returns the result of a network search using all data provided
+def find_ethernet_networks(data)
+  matches = OneviewSDK::EthernetNetwork.find_by(@client, data)
   return matches
 end
 
