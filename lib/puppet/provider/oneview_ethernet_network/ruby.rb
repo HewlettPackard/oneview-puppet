@@ -1,5 +1,6 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'ethernet_network'))
 require 'oneview-sdk'
 
 ### FIXME: puppet parser is detecting an error on "Puppet::Type.type"
@@ -20,7 +21,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
   #   @client = OneviewSDK::Client.new(login)
   #   matches = OneviewSDK::EthernetNetwork.get_all(@client)
   #   matches.collect do |line|
-  #     Puppet.notice("Ethernet Network: #{line['name']}, URI: #{line['uri']}")
+  #   Puppet.notice("Ethernet Network: #{line['name']}, URI: #{line['uri']}")
   #   end
   # end
 
