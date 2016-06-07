@@ -19,7 +19,13 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
   end
 
   newparam(:data) do
-    desc "Ethernet network name"
+    desc "Ethernet network data hash containing all specifications for the
+    network"
+    validate do |value|
+      unless value.class == Hash
+        raise Puppet::Error, "Inserted value for data is not valid"
+      end
+    end
   end
 
 

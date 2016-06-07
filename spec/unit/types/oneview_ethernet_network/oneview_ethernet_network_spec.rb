@@ -39,24 +39,32 @@ describe type_class do
     }.to raise_error(Puppet::Error, 'Title or name must be provided')
   end
 
-  ethernet_config.keys.each do |key|
-    it "should require a value for #{key}" do
-      modified_config = ethernet_config
-      modified_config[key] = ''
-      expect {
-        type_class.new(modified_config)
-      }.to raise_error(Puppet::Error)
-    end
-  end
+it 'should require a data hash' do
+  modified_config = ethernet_config
+  modified_config['data'] = ''
+  expect {
+      type_class.new(modified_config)
+  }.to raise_error(Puppet::ResourceError, "Inserted value for data is not valid")
+end
 
-  [
-    'name',
-    'purpose',
-    'type',
-  ].each do |property|
-    it "should require #{property} to be a string" do
-      expect(type_class).to require_string_for(property)
-    end
-  end
+  # ethernet_config.keys.each do |key|
+  #   it "should require a value for #{key}" do
+  #     modified_config = ethernet_config
+  #     modified_config[key] = ''
+  #     expect {
+  #       type_class.new(modified_config)
+  #     }.to raise_error(Puppet::Error)
+  #   end
+  # end
+
+  # [
+  #   'name',
+  #   'purpose',
+  #   'type',
+  # ].each do |property|
+  #   it "should require #{property} to be a string" do
+  #     expect(type_class).to require_string_for(property)
+  #   end
+  # end
 
 end
