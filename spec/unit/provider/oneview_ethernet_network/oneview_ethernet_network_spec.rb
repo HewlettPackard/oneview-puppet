@@ -1,9 +1,14 @@
 require 'spec_helper'
-provider_class = Puppet::Type.type(:oneview_ethernet_network)
+require 'oneview-sdk'
 
-describe provider_class do
+type_provider = Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
 
+describe type_provider do
 
-
+  # describe 'instances' do
+  #   it 'should have an instance method' do
+  #     expect(described_class).to respond_to :destroy
+  #   end
+  # end
 
 end
