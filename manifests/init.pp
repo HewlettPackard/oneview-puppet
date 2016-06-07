@@ -1,24 +1,42 @@
-class oneview (
-  $action_list
-  ) {
+# == Class: oneview
+#
+# Full description of class oneview here.
+#
+# === Parameters
+#
+# Document parameters here.
+#
+# [*sample_parameter*]
+#   Explanation of what this parameter affects and what it defaults to.
+#   e.g. "Specify one or more upstream ntp servers as an array."
+#
+# === Variables
+#
+# Here you should define a list of variables that this module would require.
+#
+# [*sample_variable*]
+#   Explanation of how this variable affects the funtion of this class and if
+#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
+#   External Node Classifier as a comma separated list of hostnames." (Note,
+#   global variables should be avoided in favor of class parameters as
+#   of Puppet 2.6.)
+#
+# === Examples
+#
+#  class { 'oneview':
+#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#  }
+#
+# === Authors
+#
+# Author Name <author@domain.com>
+#
+# === Copyright
+#
+# Copyright 2016 Your name here, unless otherwise noted.
+#
 
-        # # Here we verify the expected resource, the action that will be performed and the options passed onto it
-        # # **********************************************************************
-        $action_list.each |$key, $value| {
-          case $value['action'] {
-            'connection_create': {connection_create($value['options'])}
-            'ethernet_network_create': {ethernet_network("create", $value['options'])}
-            'ethernet_network_find': {ethernet_network("find", $value['options'])}
-            'ethernet_network_update': {ethernet_network("update", $value['options'], $value['attributes'])}
-            'ethernet_network_delete': {ethernet_network("delete", $value['options'])}
-            }
-        }
+class oneview {
 
 
-/* DEPRECATED Code for reference on how to directly call the functions
-        ethernet_network("create", $ethernet_options) # Creates ethernet network
-        ethernet_network("find", $ethernet_options) # Finds ethernet network
-        ethernet_network("update", $ethernet_options,$attributes) # Updates ethernet network
-        ethernet_network("delete", $attributes) # Deletes ethernet network
-*/
 }
