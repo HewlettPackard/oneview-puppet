@@ -1,20 +1,16 @@
 Puppet::Type.newtype(:oneview_fcoe_network) do
   desc "Oneview's FCoE network"
 
-  # ensurable do
-  #   defaultvalues
-  #
-  #   # Creating the find operation for the ensure method
-  #   # newvalue(:found) do
-  #   #   provider.found
-  #   # end
-  #
-  # end
+  ensurable do
+    defaultvalues
 
-  ensurable
+    # Creating the find operation for the ensure method
+    newvalue(:found) do
+      provider.found
+    end
 
-  # Debug warning
-  # Puppet.warning("Puppet has passed through the type")
+  end
+
 
   newparam(:name, :namevar => true) do
     desc "FCoE network name"

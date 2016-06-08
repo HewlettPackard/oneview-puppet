@@ -64,4 +64,18 @@ Puppet::Type.type(:oneview_fcoe_network).provide(:ruby) do
     @property_hash.clear
   end
 
+  def found
+    # Searches networks with data matching the manifest data
+    data = data_parse(resource['data'])
+    matches = OneviewSDK::FCoENetwork.find_by(@client, data)
+    # If matches are found, iterate through them and notify. Else just notify.
+    if matches
+       matches.each { |network| Puppet.notice ( "\n\n Found matching network "+
+      "#{network['name']} (URI: #{network['uri']}) on Oneview Appliance\n" ) }
+    else
+      Puppet.notice("No networks with the specified data were found on the "+
+      " Oneview Appliance")
+    end
+  end
+
 end
