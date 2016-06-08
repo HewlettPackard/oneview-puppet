@@ -1,5 +1,4 @@
 # ============== Ethernet Network methods ==============
-require 'oneview-sdk'
 # Returns the result of a network search by name
 def get_ethernet_network(name)
   matches = OneviewSDK::EthernetNetwork.find_by(@client, name: name)
