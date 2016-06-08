@@ -23,7 +23,7 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
     network"
     validate do |value|
       unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
+        raise(ArgumentError, "Invalid Data Hash")
       end
     end
   end

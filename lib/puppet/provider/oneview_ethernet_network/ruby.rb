@@ -56,6 +56,8 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
         ethernet_network_exists = true if ethernet_network.first
         # Checking for and performing potential updates.
         if ethernet_network_exists
+          Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
+          " in Oneview Appliance")
           ethernet_network_update(resource['data'], ethernet_network, resource)
           return true
         end
@@ -64,6 +66,8 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
         ethernet_network = get_ethernet_network(resource['data']['name'])
         ethernet_network_exists = false
         ethernet_network_exists = true if ethernet_network.first
+        Puppet.notice("#{resource} '#{resource['data']['name']}' not located"+
+        " in Oneview Appliance") if ethernet_network_exists == false
         return ethernet_network_exists
       when 'found' then
         ethernet_network = find_ethernet_networks(resource['data'])
