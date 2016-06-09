@@ -1,14 +1,53 @@
 require 'spec_helper'
-require 'oneview-sdk'
 
-type_provider = Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
 
-describe type_provider do
+describe provider_class do
 
-  # describe 'instances' do
-  #   it 'should have an instance method' do
-  #     expect(described_class).to respond_to :destroy
-  #   end
-  # end
+  let(:resource) {
+    Puppet::Type.type(:oneview_ethernet_network).new(
+      name: 'ethernet',
+      ensure: 'present',
+        data:
+          {
+            'name'                    =>'Puppet Network',
+            'vlanId'                  => 100,
+            'purpose'                 =>'General',
+            'smartLink'               =>'false',
+            'privateNetwork'          =>'true',
+            'connectionTemplateUri'   =>'nil',
+            'type'                    =>'ethernet-networkV3',
+          },
+    )
+  }
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  it 'should be an instance of the provider Ruby' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
+  end
+
+  context 'given the minimum parameters' do
+
+    it 'exists? shouldnt find a network' do
+      expect(provider.exists?).not_to be
+    end
+
+    it 'should create a new network' do
+      expect(provider.create).to be
+    end
+
+    it 'exists? should find a network' do
+      expect(provider.exists?).to be
+    end
+
+    it 'should destroy the network' do
+      expect(provider.destroy).to be
+    end
+
+  end
+
 
 end

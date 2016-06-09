@@ -111,9 +111,11 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
     if matches
        matches.each { |network| Puppet.notice ( "\n\n Found matching network "+
       "#{network['name']} (URI: #{network['uri']}) on Oneview Appliance\n" ) }
+      return true
     else
       Puppet.notice("No networks with the specified data were found on the "+
       " Oneview Appliance")
+      return false
     end
   end
 
