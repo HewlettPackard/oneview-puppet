@@ -10,13 +10,13 @@ describe provider_class do
       ensure: 'present',
         data:
           {
-            name:                   'Puppet Network',
-            vlanId:                 '100',
-            purpose:                'General',
-            smartLink:              'false',
-            privateNetwork:         'true',
-            connectionTemplateUri:  'nil',
-            type:                   'ethernet-networkV3',
+            'name'                    =>'Puppet Network',
+            'vlanId'                  => 100,
+            'purpose'                 =>'General',
+            'smartLink'               =>'false',
+            'privateNetwork'          =>'true',
+            'connectionTemplateUri'   =>'nil',
+            'type'                    =>'ethernet-networkV3',
           },
     )
   }

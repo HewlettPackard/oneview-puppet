@@ -10,10 +10,10 @@ describe provider_class do
       ensure: 'present',
         data:
           {
-              name:                       'OneViewSDK Test FC Network',
-              connectionTemplateUri:      'nil',
-              vlanId:                     300,
-              type:                       'fcoe-network',
+              'name'                  =>'OneViewSDK Test FC Network',
+              'connectionTemplateUri' =>'nil',
+              'vlanId'                =>300,
+              'type'                  =>'fcoe-network',
           },
     )
   }
