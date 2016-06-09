@@ -12,7 +12,7 @@ describe provider_class do
           {
               name:                       'OneViewSDK Test FC Network',
               connectionTemplateUri:      'nil',
-              vlanId:                     '300',
+              vlanId:                     300,
               type:                       'fcoe-network',
           },
     )
@@ -28,8 +28,20 @@ describe provider_class do
 
   context 'given the min parameters' do
 
-    it 'should run create' do
+    it 'exists? should return false at first' do
+      expect(provider.exists?).to be_falsy
+    end
+
+    it 'should create a new network' do
       expect(provider.create).to be_truthy
+    end
+
+    it 'exists? should find a network' do
+      expect(provider.exists?).to be_truthy
+    end
+
+    it 'should run destroy' do
+      expect(provider.destroy).to be_truthy
     end
 
   end
