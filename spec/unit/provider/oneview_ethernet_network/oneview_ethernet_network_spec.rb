@@ -29,22 +29,22 @@ describe provider_class do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
   end
 
-  context 'given the min parameters' do
+  context 'given the minimum parameters' do
 
     it 'exists? shouldnt find a network' do
-      expect(provider.exists?).to be_falsy
+      expect(provider.exists?).not_to be
     end
 
     it 'should create a new network' do
-      expect(provider.create).to be_truthy
+      expect(provider.create).to be
     end
 
     it 'exists? should find a network' do
-      expect(provider.exists?).to be_truthy
+      expect(provider.exists?).to be
     end
 
     it 'should destroy the network' do
-      expect(provider.destroy).to be_truthy
+      expect(provider.destroy).to be
     end
 
   end

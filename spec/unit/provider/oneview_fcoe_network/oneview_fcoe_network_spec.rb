@@ -29,19 +29,19 @@ describe provider_class do
   context 'given the min parameters' do
 
     it 'exists? should return false at first' do
-      expect(provider.exists?).to be_falsy
+      expect(provider.exists?).not_to be
     end
 
     it 'should create a new network' do
-      expect(provider.create).to be_truthy
+      expect(provider.create).to be
     end
 
     it 'exists? should find a network' do
-      expect(provider.exists?).to be_truthy
+      expect(provider.exists?).to be
     end
 
     it 'should run destroy' do
-      expect(provider.destroy).to be_truthy
+      expect(provider.destroy).to be
     end
 
   end
