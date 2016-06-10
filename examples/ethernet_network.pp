@@ -38,7 +38,7 @@ oneview_ethernet_network{'net4':
     ensure  => 'found',
     require => Oneview_ethernet_network['net3'],
     data    => {
-      vlanId                => '1045',
+      vlanId                => '1',
     }
 }
 

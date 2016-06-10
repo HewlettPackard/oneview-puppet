@@ -31,9 +31,17 @@ describe provider_class do
 
   context 'given the minimum parameters' do
 
-    it 'exists? shouldnt find a network' do
+    it 'exists? should return false at first' do
       expect(provider.exists?).not_to be
     end
+
+    it 'found should return false at first' do
+      expect(provider.found).not_to be
+    end
+
+    # it 'should not have a network to destroy' do
+    #   expect(provider.destroy).not_to be
+    # end
 
     it 'should create a new network' do
       expect(provider.create).to be
@@ -43,7 +51,11 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
-    it 'should destroy the network' do
+    # it 'found should return the matching network' do
+    #   expect(provider.found).to be
+    # end
+
+    it 'should run destroy' do
       expect(provider.destroy).to be
     end
 

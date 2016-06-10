@@ -108,12 +108,14 @@ Puppet::Type.type(:oneview_fc_network).provide(:ruby) do
     data = data_parse(resource['data'])
     matches = OneviewSDK::FCNetwork.find_by(@client, data)
     # If matches are found, iterate through them and notify. Else just notify.
-    if matches
+    unless matches.empty?
        matches.each { |network| Puppet.notice ( "\n\n Found matching network "+
-      "'#{network['name']}' (URI: #{network['uri']}) on Oneview Appliance\n" ) }
+      "#{network['name']} (URI: #{network['uri']}) on Oneview Appliance\n" ) }
+      true
     else
-      Puppet.notice("No networks with the specified data were found on the "+
-      " Oneview Appliance")
+      Puppet.notice("\n\n No networks with the specified data were found on the "+
+      " Oneview Appliance\n")
+      false
     end
   end
 
