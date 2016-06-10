@@ -1,18 +1,16 @@
 require 'spec_helper'
 
-type_class = Puppet::Type.type(:oneview_ethernet_network)
+type_class = Puppet::Type.type(:oneview_fc_network)
 
-def ethernet_config
+def fc_config
   {
-    name:                           'test_net',
+    name:                           'test_fc',
     data:
-      {     name:                   'Puppet Network',
-            vlanId:                 '100',
-            purpose:                'General',
-            smartLink:              'false',
-            privateNetwork:         'true',
-            connectionTemplateUri:  'nil',
-            type:                   'ethernet-networkV3',
+      {
+          name:                       'OneViewSDK Test FC Network',
+          connectionTemplateUri:      nil,
+          autoLoginRedistribution:    true,
+          fabricType:                 'FabricAttach',
       },
   }
 end
@@ -40,7 +38,7 @@ describe type_class do
   end
 
   it 'should require a data hash' do
-    modified_config = ethernet_config
+    modified_config = fc_config
     modified_config[:data] = ''
     resource_type = type_class.to_s.split('::')
     expect {

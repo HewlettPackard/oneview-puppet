@@ -41,3 +41,13 @@ oneview_fc_network{'fc4':
       fabricType                => 'FabricAttach',
     }
 }
+
+oneview_fc_network{'fc5':
+    ensure  => 'found',
+    require => Oneview_fc_network['fc4'],
+    data    => {
+      name                      => 'Updated OneViewSDK Test FC Network',
+      autoLoginRedistribution   => true,
+      fabricType                => 'FabricAttach',
+    }
+}
