@@ -1,0 +1,2 @@
+lib/puppet/provider/login.rb
+spec/fixtures/
