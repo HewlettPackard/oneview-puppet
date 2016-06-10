@@ -2,7 +2,7 @@ oneview_fcoe_network{'fcoe':
     ensure => 'present',
     data   => {
       name                  => 'FCoE Network',
-      new_name              => 'Test name', #This will be dropped at the first
+      new_name              => 'Test name', #This will be dropped at first
       vlanId                => '100',
       connectionTemplateUri => 'nil',
       type                  => 'fcoe-network'
