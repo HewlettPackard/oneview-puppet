@@ -13,24 +13,35 @@ def find_fcoe_networks(data)
 end
 
 # Compares and updates the fcoe network if necessary
-def fcoe_network_update(resource, fcoe_network, process)                      # process = name of the running proccess
+# process = name of the running proccess
+def fcoe_network_update(resource, fcoe_network, process)
   data = data_parse(resource)
   new_name_exists = true
-  if data['new_name']                                                                 # checks if name is within the attr to be changed
+  # checks if name is within the attr to be changed
+  if data['new_name']
     new_name = data['new_name']
-    new_name_exists = false if !get_fcoe_network(new_name).first                  # flag, true if exists
+    # flag, true if exists
+    new_name_exists = false if !get_fcoe_network(new_name).first
     data.delete('new_name')
   end
-  existing_fcoe_network = fcoe_network.first.data                             # new data to be checked for changes
-  data.delete('connectionTemplateUri') if data['connectionTemplateUri'] == nil         # the connectionTemplateUri can only be nil at its creation
-  data.delete('vlanId') if data['vlanId']                                              # in case a new vlanId exists, as it cannot be changed
-  data.delete('modified')                                                              # field not considered for comparison
-  updated_data = existing_fcoe_network.merge(data)                                 # new hash / difference between old and new ones
-  updated_data['name'] = new_name if new_name_exists == false
+  # new data to be checked for changes
+  existing_fcoe_network = fcoe_network.first.data
+  # the connectionTemplateUri can only be nil at its creation
+  data.delete('connectionTemplateUri') if data['connectionTemplateUri'] == nil
+  # in case a new vlanId exists, as it cannot be changed
+  data.delete('vlanId') if data['vlanId']
+  # field not considered for comparison
+  data.delete('modified')
+  # new hash / difference between old and new ones
+  updated_data = existing_fcoe_network.merge(data)
   # Puppet.warning('There is another fcoe network with the same name.') if new_name_exists
-  if updated_data != existing_fcoe_network                                         # if there's any difference..
-    updated_data = Hash[updated_data.to_a-existing_fcoe_network.to_a]              # hash with different data remaining  # the actual update on the# hash with different data remaining
-    fcoe_network.first.update(updated_data)                                        # the actual update on the# hash with different data remaining
-    Puppet.notice("#{process} updated: #{updated_data.inspect} ")
+  updated_data['name'] = new_name if new_name_exists == false
+  # if there's any difference..
+  if updated_data != existing_fcoe_network
+    # hash with different data remaining
+    updated_data = Hash[updated_data.to_a-existing_fcoe_network.to_a]
+    # the actual update on the# hash with different data remaining
+    fcoe_network.first.update(updated_data)
+    Puppet.notice("#{process} updated: #{updated_data.inspect}")
   end
 end
