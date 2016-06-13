@@ -1,5 +1,5 @@
 oneview_enclosure_group{'enclosure group':
-    ensure  => 'absent',
+    ensure  => 'found',
     data    => {
       name => 'my enclosure group',
       # new_name => 'dasdas',
