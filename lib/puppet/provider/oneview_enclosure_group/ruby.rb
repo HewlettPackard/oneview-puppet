@@ -5,13 +5,25 @@ require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
 
+  mk_resource_methods
+
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
   end
 
-  def self.instances
-  end
+  # def self.instances
+  #   @client = OneviewSDK::Client.new(login)
+  #   matches = OneviewSDK::EnclosureGroup.get_all(@client)
+  #   matches.collect do |line|
+  #     name = line['name']
+  #     data = line.data
+  #     new(  :name   => name,
+  #           :ensure => :present,
+  #           :data   => data
+  #         )
+  #   end
+  # end
 
   def exists?
     state = resource['ensure']
@@ -27,6 +39,7 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
     elsif state == :found
       true
     end
+    # @property_hash[:ensure] == :present
   end
 
   def create
@@ -35,7 +48,7 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
     enclosure_group = OneviewSDK::EnclosureGroup.new(@client, data)
     enclosure_group.create
     @property_hash[:ensure] = :present
-    @property_hash[:data]   = data
+    @property_hash[:data] = data
   end
 
   def destroy
