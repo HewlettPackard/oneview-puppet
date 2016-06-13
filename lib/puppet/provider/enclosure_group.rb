@@ -1,10 +1,15 @@
 def enclosure_group_parse(data)
-  data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount'])
-
-  data['interconnectBayMappings'].each do |k|
-    k['interconnectBay'] = k['interconnectBay'].to_i
-    k['logicalInterconnectGroupUri'] = nil if k['logicalInterconnectGroupUri'] == "nil"
+  if data['interconnectBayMappingCount']
+    data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount'])
   end
+  
+  if data['interconnectBayMappings']
+    data['interconnectBayMappings'].each do |k|
+      k['interconnectBay'] = k['interconnectBay'].to_i
+      k['logicalInterconnectGroupUri'] = nil if k['logicalInterconnectGroupUri'] == "nil"
+    end
+  end
+
   data
 end
 
