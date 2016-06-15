@@ -1,6 +1,22 @@
+################################################################################
+# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-# require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logical_enclosure'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logical_enclosure'))
 require 'oneview-sdk'
 
 ### FIXME: puppet parser is detecting an error on "Puppet::Type.type"
@@ -51,19 +67,15 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:ruby) do
     case state
       when 'present' then
         # Resource itself sends the name of the running proccess
-        logical_enclosure = OneviewSDK::LogicalEnclosure.new(@client, resource['data'])
-        logical_enclosure.retrieve!
-        puts "Retrieved logical-enclosure '#{logical_enclosure[:name]}' by name."
+        logical_enclosure = get_logical_enclosure(resource['data']['name'])
         logical_enclosure_exists = false
-        logical_enclosure_exists = true if logical_enclosure
-        puts "\n\nfalse\n\n" if !logical_enclosure_exists
-        puts "\n\ntrue\n\n" if logical_enclosure_exists
+        logical_enclosure_exists = true if logical_enclosure.first
         # Checking for and performing potential updates.
         if logical_enclosure_exists
           Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
           " in Oneview Appliance")
           logical_enclosure_update(resource['data'], logical_enclosure, resource)
-          return true
+          true
         end
       when 'absent' then
         # Resource itself sends the name of the running proccess
@@ -74,7 +86,10 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:ruby) do
         " in Oneview Appliance") if logical_enclosure_exists == false
         return logical_enclosure_exists
       when 'found' then
-        true
+        logical_enclosure = find_logical_enclosures(resource['data'])
+        logical_enclosure_exists = false
+        logical_enclosure_exists = true if logical_enclosure
+        return logical_enclosure_exists
     end
     # puts @property_hash[:data]
     @property_hash[:ensure] == :present
@@ -194,5 +209,6 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:ruby) do
       " found on the Oneview Appliance\n")
     end
   end
+
 
 end
