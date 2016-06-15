@@ -74,16 +74,16 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
   end
 
   def found
-    # Searches networks with data matching the manifest data
+    # Searches enclosure groups with data matching the manifest data
     data = data_parse(resource['data'])
     matches = OneviewSDK::EnclosureGroup.find_by(@client, data)
     # If matches are found, iterate through them and notify. Else just notify.
     if matches
-       matches.each { |network| Puppet.notice ( "\n\n Found matching network "+
-      "#{network['name']} (URI: #{network['uri']}) on Oneview Appliance\n" ) }
+       matches.each { |enclosure| Puppet.notice ("\n\n Found matching enclosure "+
+      "group #{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n") }
       true
     else
-      Puppet.notice("No networks with the specified data were found on the "+
+      Puppet.notice("No enclosure groups with the specified data were found on the "+
       " Oneview Appliance")
       false
     end

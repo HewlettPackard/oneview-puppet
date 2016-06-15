@@ -22,9 +22,9 @@ def enclosure_group_parse(data)
   end
 
   if data['interconnectBayMappings']
-    data['interconnectBayMappings'].each do |k|
-      k['interconnectBay'] = k['interconnectBay'].to_i
-      k['logicalInterconnectGroupUri'] = nil if k['logicalInterconnectGroupUri'] == "nil"
+    data['interconnectBayMappings'].each do |mapping_attr|
+      mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
+      mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == "nil"
     end
   end
 
