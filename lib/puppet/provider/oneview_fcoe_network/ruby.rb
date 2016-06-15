@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_fcoe_network).provide(:ruby) do
     @client = OneviewSDK::Client.new(login)
     matches = OneviewSDK::FCoENetwork.get_all(@client)
     matches.collect do |line|
-      # Puppet.notice("FC Network: #{line['name']}, URI: #{line['uri']}")
+      # Puppet.notice("FCoE Network: #{line['name']}, URI: #{line['uri']}")
       name = line['name']
       data = line.inspect
       new(:name   => name,
