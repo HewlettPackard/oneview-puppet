@@ -92,7 +92,7 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
-    it 'should return that a network was found' do
+    it 'should return that an enclosure group was found' do
       expect(provider.found).to be
     end
 
