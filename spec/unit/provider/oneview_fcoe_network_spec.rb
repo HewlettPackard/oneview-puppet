@@ -40,6 +40,10 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
+    it 'should return that no network was found' do
+      expect(provider.found).to be
+    end
+
     it 'should run destroy' do
       expect(provider.destroy).to be
     end
