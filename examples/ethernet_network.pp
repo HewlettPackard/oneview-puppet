@@ -1,4 +1,16 @@
-
+#
+# oneview_ethernet_network{'bulk':
+#     ensure  => 'present',
+#     data    => {
+#       namePrefix            => 'OneViewSDK_Bulk_Network',
+#       vlanIdRange           => '26-28',
+#       purpose               => 'General',
+#       smartLink             => 'true',
+#       privateNetwork        => 'false',
+#       # connectionTemplateUri => 'nil',
+#       # type                  => 'ethernet-networkV3'
+#     }
+# }
 oneview_ethernet_network{'net1':
     ensure  => 'present',
     data    => {

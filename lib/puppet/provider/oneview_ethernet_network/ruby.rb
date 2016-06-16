@@ -3,89 +3,57 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'ethernet_network'))
 require 'oneview-sdk'
 
-### FIXME: puppet parser is detecting an error on "Puppet::Type.type"
-### not entirely sure why, but should be fixed once found out.
 Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
-  # Helper methods - TO BE REDEFINED
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    # puts "Running #{resource}"
-    # Puppet.notice("Connected to OneView appliance at #{@client.url}")
   end
 
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::EthernetNetwork.get_all(@client)
-    matches.collect do |line|
-      # Puppet.notice("Ethernet Network: #{line['name']}, URI: #{line['uri']}")
-      name = line['name']
-      data = line.inspect
-      new(:name   => name,
-          :ensure => :present,
-          :data   => data
-          )
-    end
-  end
-
-  def self.prefetch(resources)
-    packages = instances
-    resources.keys.each do |name|
-      if provider = packages.find{ |pkg| pkg.name == name }
-        resources[name].provider = provider
-      end
-    end
-  end
-
-  # Provider methods
-
-  # to do: decide whether an ethernet net can be created with a new name
   def exists?
-    # Gets the desired operation to perform
-    state = resource['ensure'].to_s
+    state = resource['ensure']
+    data = data_parse(resource['data'])
 
-    # Verify ensure flag and sets environment flags for operations
-    case state
-      when 'present' then
-        # Resource itself sends the name of the running proccess
-        ethernet_network = get_ethernet_network(resource['data']['name'])
-        ethernet_network_exists = false
-        ethernet_network_exists = true if ethernet_network.first
-        # Checking for and performing potential updates.
-        if ethernet_network_exists
-          Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
-          " in Oneview Appliance")
-          ethernet_network_update(resource['data'], ethernet_network, resource)
-          return true
-        end
-      when 'absent' then
-        # Resource itself sends the name of the running proccess
-        ethernet_network = get_ethernet_network(resource['data']['name'])
-        ethernet_network_exists = false
-        ethernet_network_exists = true if ethernet_network.first
-        Puppet.notice("#{resource} '#{resource['data']['name']}' not located"+
-        " in Oneview Appliance") if ethernet_network_exists == false
-        return ethernet_network_exists
-      when 'found' then
-        ethernet_network = find_ethernet_networks(resource['data'])
-        ethernet_network_exists = false
-        ethernet_network_exists = true if ethernet_network
-        return ethernet_network_exists
+    #skips all steps but creation in case of a bulk request
+    is_bulk = true if data['vlanIdRange']
+    return false if is_bulk == true
+
+    # to be used in FOUND
+    if data['name']
+      ethernet_network = OneviewSDK::EthernetNetwork.new(@client, name: data['name'])
+    elsif data['vlanId']
+      ethernet_network = OneviewSDK::EthernetNetwork.new(@client, name: data['vlanId'])
     end
-    # puts @property_hash[:data]
-    @property_hash[:ensure] == :present
+
+    if ethernet_network.retrieve! && state == :present
+      Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
+      " in Oneview Appliance")
+      ethernet_network_update(data, ethernet_network, resource)
+      true
+    elsif ethernet_network.retrieve! && state == :absent
+      true
+    elsif state == :found
+      true
+    else
+      false
+    end
+
   end
 
   def create
     data = data_parse(resource['data'])
+    is_bulk = true if data['vlanIdRange']
     data.delete('new_name') if data['new_name']
-    ethernet_network = OneviewSDK::EthernetNetwork.new(@client, data)
-    ethernet_network.create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = data
+    if is_bulk
+      bulk_data = bulk_parse(data)
+      puts bulk_data
+      # ethernet_network = OneviewSDK::EthernetNetwork.bulk_create(@client, data)
+    else
+      ethernet_network = OneviewSDK::EthernetNetwork.new(@client, data)
+      ethernet_network.create
+    end
   end
 
   def destroy
@@ -93,15 +61,6 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
     ethernet_network.first.delete
     @property_hash.clear
   end
-
-  def data
-    @property_hash[:data]
-  end
-
-  def data=(value)
-    @property_hash[:data] = value
-  end
-
 
   def found
     # Searches networks with data matching the manifest data
@@ -118,5 +77,6 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
       false
     end
   end
+
 
 end
