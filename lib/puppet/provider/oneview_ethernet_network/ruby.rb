@@ -18,14 +18,14 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
     #skips all steps but creation in case of a bulk request
     is_bulk = true if data['vlanIdRange']
+    # always goes to create when it's a bulk net
     return false if is_bulk == true
 
-    # to be used in FOUND
-    if data['name']
-      ethernet_network = OneviewSDK::EthernetNetwork.new(@client, name: data['name'])
-    elsif data['vlanId']
-      ethernet_network = OneviewSDK::EthernetNetwork.new(@client, name: data['vlanId'])
-    end
+    # forces method found, no matter what attr were passed
+    return true if state == :found
+
+    # if it's not found, it will find the network by its name
+    ethernet_network = OneviewSDK::EthernetNetwork.new(@client, name: data['name'])
 
     if ethernet_network.retrieve! && state == :present
       Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
@@ -33,8 +33,6 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
       ethernet_network_update(data, ethernet_network, resource)
       true
     elsif ethernet_network.retrieve! && state == :absent
-      true
-    elsif state == :found
       true
     else
       false
