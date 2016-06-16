@@ -42,26 +42,65 @@ describe provider_class do
 
   context 'given the minimum parameters' do
 
-    # it 'exists? should return false at first' do
-    #   expect(provider.exists?).not_to be
-    # end
-    #
-    # it 'found should return false at first' do
-    #   expect(provider.found).not_to be
-    # end
-    #
-    # it 'should create a new logical enclosure' do
-    #   expect(provider.create).to be
-    # end
-    #
-    # it 'exists? should find a logical enclosure' do
-    #   expect(provider.exists?).to be
-    # end
-    # 
-    # it 'should not be able to run destroy' do
-    #   expect(provider.destroy).not_to be
-    # end
+    it 'should be able to get the script from the logical enclosure' do
+      expect(provider.get_script).to be
+    end
+
+    it 'should find the logical enclosure' do
+      expect(provider.found).to be
+    end
+
+    it 'should successfuly run update from group' do
+      expect(provider.updated_from_group).to be
+    end
 
   end
+
+  let(:resource_with_script) {
+    Puppet::Type.type(:oneview_logical_enclosure).new(
+      name: 'Test Logical Enclosure',
+      ensure: 'present',
+      data:
+          {
+              'name'                    => 'Encl1',
+              'script'                  => 'This is a script example',
+          },
+    )
+  }
+
+  context 'given the script parameter' do
+
+    it 'should be able to set the script on the logical enclosure' do
+      expect(provider.set_script).to be
+    end
+
+  end
+
+  # FIXME This for some unknown reason is giving out a runtime error related to
+  # the URI 'Must specify a task_uri!', leaving dump test commented till fixed.
+  # let(:resource_with_dump) {
+  #   Puppet::Type.type(:oneview_logical_enclosure).new(
+  #     name: 'Test Logical Enclosure',
+  #     ensure: 'dumped',
+  #     data:
+  #         {
+  #             'name'                    => 'Encl1',
+  #             'dump'                    =>
+  #               {
+  #                 'errorCode' => 'Mydump',
+  #                 'encrypt' => 'false',
+  #                 'excludeApplianceDump' => 'false',
+  #               },
+  #         },
+  #   )
+  # }
+  #
+  # context 'given the dump parameters' do
+  #
+  #   it 'should be able to successfully create a dump' do
+  #     expect(provider.dumped).to be
+  #   end
+  #
+  # end
 
 end

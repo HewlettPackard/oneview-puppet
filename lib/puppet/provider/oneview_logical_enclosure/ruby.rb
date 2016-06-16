@@ -210,5 +210,4 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:ruby) do
     end
   end
 
-
 end
