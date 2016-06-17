@@ -14,5 +14,5 @@
 # limitations under the License.
 ################################################################################
 
-spec/fixtures/
-lib/puppet/provider/login.rb
+# Convert all line endings to lf
+* text eol=lf
