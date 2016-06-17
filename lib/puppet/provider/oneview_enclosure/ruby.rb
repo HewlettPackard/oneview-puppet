@@ -110,12 +110,14 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
     matches = OneviewSDK::Enclosure.find_by(@client, data)
     # If matches are found, iterate through them and notify. Else just notify.
     unless matches.empty?
-       matches.each { |enclosure| Puppet.notice ( "\n\n Found matching enclosure "+
-      "#{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n" ) }
+       matches.each do |enclosure|
+         Puppet.notice ( "\n\n Found matching enclosure #{enclosure['name']} "+
+         "(URI: #{enclosure['uri']}) on Oneview Appliance\n" )
+      end
       true
     else
-      Puppet.notice("\n\n No enclosures with the specified data were found on the "+
-      " Oneview Appliance\n")
+      Puppet.notice("\n\n No enclosures with the specified data were found on "+
+      "the Oneview Appliance\n")
       false
     end
   end
