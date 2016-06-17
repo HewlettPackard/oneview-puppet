@@ -76,8 +76,25 @@ oneview_enclosure_group{'Enclosure Group Update':
     }
 }
 
-oneview_enclosure_group{'Enclosure Group Delete':
+oneview_enclosure_group{'Enclosure Group Set Script':
     require => Oneview_enclosure_group['Enclosure Group Update'],
+    ensure  => 'set_script',
+    data    => {
+      name   => 'New Enclosure Group Name',
+      script => 'This is a script example'
+    }
+}
+
+oneview_enclosure_group{'Enclosure Group Get Script':
+    require => Oneview_enclosure_group['Enclosure Group Set Script'],
+    ensure  => 'get_script',
+    data    => {
+      name => 'New Enclosure Group Name'
+    }
+}
+
+oneview_enclosure_group{'Enclosure Group Delete':
+    require => Oneview_enclosure_group['Enclosure Group Get Script'],
     ensure  => 'absent',
     data    => {
       name => 'New Enclosure Group Name'

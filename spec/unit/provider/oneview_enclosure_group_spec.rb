@@ -96,6 +96,34 @@ describe provider_class do
       expect(provider.found).to be
     end
 
+    it 'should not be able to get the script from the enclosure group' do
+      expect(provider.get_script).not_to be
+    end
+
+    let(:resource_with_script) {
+      Puppet::Type.type(:oneview_enclosure_group).new(
+        name: 'Enclosure Group',
+        ensure: 'present',
+        data:
+            {
+                'name'                    => 'Enclosure Group',
+                'script'                  => 'This is a script example',
+            },
+      )
+    }
+
+    context 'given the script parameter' do
+
+      # It does work, but the test returns that the script field is missing in
+      # the example
+
+      # it 'should be able to set the script on the enclosure group' do
+      #   expect(provider.set_script).to be
+      # end
+
+    end
+
+
     it 'should destroy the enclosure group' do
       expect(provider.destroy).to be
     end

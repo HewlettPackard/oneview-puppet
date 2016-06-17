@@ -6,6 +6,12 @@ Puppet::Type.newtype(:oneview_enclosure_group) do
     newvalue(:found) do
       provider.found
     end
+    newvalue(:get_script) do
+        provider.get_script
+    end
+    newvalue(:set_script) do
+        provider.set_script
+    end
   end
 
   newparam(:name, :namevar => true) do
