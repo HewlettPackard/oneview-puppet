@@ -89,4 +89,46 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
     end
   end
 
+  def get_script
+    data = data_parse(resource['data'])
+    matches = OneviewSDK::EnclosureGroup.find_by(@client, data)
+    unless matches.empty?
+      matches.each { |enclosure| Puppet.notice ( "\n\nFound enclosure group"+
+      " #{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n")
+      Puppet.notice ( "Its script contents are:\n#{enclosure.get_script}\n" )}
+      true
+    else
+      Puppet.notice("\n\nNo enclosure groups with the specified data were"+
+      " found on the Oneview Appliance\n")
+      false
+    end
+  end
+
+  def set_script
+   data = data_parse(resource['data'])
+   script = data['script'] if data['script']
+   data.delete('script') if data['script']
+   if script
+     matches = OneviewSDK::EnclosureGroup.find_by(@client, data)
+     unless matches.empty?
+       matches.each { |enclosure| Puppet.notice ( "\n\nFound enclosure group"+
+       " #{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n")
+       Puppet.notice ("Setting its script to:\n'#{script}'\n")
+       enclosure.set_script(script)}
+       puts 'set'
+       true
+     else
+       Puppet.notice("\n\nNo enclosure groups with the specified data were"+
+       " found on the Oneview Appliance\n")
+       puts 'not found'
+       false
+     end
+   else
+     Puppet.notice ( "\n\nThe 'script' field is required in data hash to run"+
+      " the set_script option")
+      puts 'missing scrpt'
+      false
+   end
+ end
+
 end
