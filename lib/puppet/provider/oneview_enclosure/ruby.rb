@@ -59,7 +59,7 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
 
     # Verify ensure flag and sets environment flags for operations
     case state
-      when 'present' then
+      when 'present'
         # Resource itself sends the name of the running proccess
         enclosure = get_enclosure(resource['data']['name'])
         enclosure_exists = false
@@ -69,22 +69,25 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
           Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
           " in Oneview Appliance")
           enclosure_update(resource['data'], enclosure, resource)
-          return true
+          true
         end
-      when 'absent' then
+      when 'absent'
         # Resource itself sends the name of the running proccess
         enclosure = get_enclosure(resource['data']['name'])
         enclosure_exists = false
         enclosure_exists = true if enclosure.first
         Puppet.notice("#{resource} '#{resource['data']['name']}' not located"+
         " in Oneview Appliance") if enclosure_exists == false
-        return enclosure_exists
-      when 'found' then
+        enclosure_exists
+      when 'found' || 'configured'
         enclosure = find_enclosures(resource['data'])
         enclosure_exists = false
         enclosure_exists = true if enclosure
-        return enclosure_exists
+        enclosure_exists
     end
+
+
+
     @property_hash[:ensure] == :present
   end
 
@@ -122,4 +125,14 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
     end
   end
 
+  def configured
+      data = data_parse(resource['data'])
+      enclosure = OneviewSDK::Enclosure.new(@client, data)
+      enclosure_exists = enclosure.retrieve! ? true : false
+      enclosure.configuration if enclosure.retrieve!
+      puts "\n\nEnclosure #{enclosure['name']} Updated\n\n" if enclosure_exists
+      puts "\n\nEnclosure #{enclosure['name']} does not exist\n\n" unless
+      enclosure_exists
+  end
+  
 end

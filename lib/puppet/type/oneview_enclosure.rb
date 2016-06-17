@@ -25,6 +25,10 @@ Puppet::Type.newtype(:oneview_enclosure) do
       provider.found
     end
 
+    newvalue(:configured) do
+      provider.configured
+    end
+
   end
 
 
