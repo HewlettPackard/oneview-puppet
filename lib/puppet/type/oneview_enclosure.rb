@@ -29,6 +29,30 @@ Puppet::Type.newtype(:oneview_enclosure) do
       provider.configured
     end
 
+    newvalue(:retrieved_environmental_configuration) do
+      provider.retrieved_environmental_configuration
+    end
+
+    newvalue(:set_environmental_configuration) do
+      provider.set_environmental_configuration
+    end
+
+    newvalue(:set_refresh_state) do
+      provider.set_refresh_state
+    end
+
+    newvalue(:script_retrieved) do
+      provider.script_retrieved
+    end
+
+    newvalue(:retrieved_single_sign_on) do
+      provider.retrieved_single_sign_on
+    end
+
+    newvalue(:retrieved_utilization) do
+      provider.retrieved_utilization
+    end
+
   end
 
 

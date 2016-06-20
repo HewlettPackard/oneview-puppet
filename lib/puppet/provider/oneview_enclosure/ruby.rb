@@ -131,8 +131,79 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
       enclosure_exists = enclosure.retrieve! ? true : false
       enclosure.configuration if enclosure.retrieve!
       puts "\n\nEnclosure #{enclosure['name']} Updated\n\n" if enclosure_exists
-      puts "\n\nEnclosure #{enclosure['name']} does not exist\n\n" unless
-      enclosure_exists
+      puts "\n\nEnclosure #{enclosure['name']} does not exist\n\n" unless enclosure_exists
   end
-  
+
+  def retrieved_environmental_configuration
+      data = data_parse(resource['data'])
+      enclosure = OneviewSDK::Enclosure.new(@client, data)
+      enclosure_exists = enclosure.retrieve! ? true : false
+      configuration = enclosure.environmental_configuration if enclosure.retrieve!
+      puts "\nEnclosure #{enclosure['name']} environmental configuration:\n" if enclosure_exists
+      puts "\n #{configuration}" if enclosure_exists
+      puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure_exists
+  end
+
+  def set_environmental_configuration
+      #TODO This endpoint is not yet implemented on the ruby sdk, this should be revisited if/once it is
+      Puppet.notice("\n\n Set environmental configuration is not currently supported via Puppet \n")
+  end
+
+  def set_refresh_state
+      data = data_parse(resource['data'])
+      # Get the refreshState if it exists
+      refresh_state = data['refreshState'] if data['refreshState']
+      data.delete('refreshState') if data['refreshState']
+      Puppet.error("\nThe 'refreshState' must be specified for this operation.\n") unless refresh_state
+      # Get the refreshForceOptions if it exists
+      refresh_force_options = false
+      refresh_force_options = data['refreshForceOptions'] if data['refreshForceOptions']
+      data.delete('refreshForceOptions') if data['refreshForceOptions']
+      # Verify that the enclosure exists
+      enclosure = OneviewSDK::Enclosure.new(@client, data)
+      enclosure_exists = enclosure.retrieve! ? true : false
+      puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure_exists
+      # Sets the refresh state for the enclosure
+      puts "\nSetting refresh state for Enclosure #{enclosure['name']}\n" if enclosure_exists && refresh_state
+      configuration = enclosure.set_refresh_state(refresh_state) if
+      enclosure.retrieve! && refresh_state && refresh_force_options == false
+      configuration = enclosure.set_refresh_state(refresh_state, refresh_force_options) if
+      enclosure.retrieve! && refresh_state && refresh_force_options
+  end
+
+  def script_retrieved
+      data = data_parse(resource['data'])
+      enclosure = OneviewSDK::Enclosure.new(@client, data)
+      enclosure_exists = enclosure.retrieve! ? true : false
+      puts "\nRetrieving script from enclosure #{enclosure['name']}... \n" if enclosure_exists
+      puts "\nEnclosure #{enclosure['name']} does not exist.\n" unless enclosure_exists
+      enclosure.script if enclosure.retrieve!
+  end
+
+  def retrieved_single_sign_on
+    #TODO This endpoint is not yet implemented on the ruby sdk, this should be revisited if/once it is
+    Puppet.notice("\n\n Single Sign-On is not currently supported via Puppet \n")
+  end
+
+  def retrieved_utilization
+    data = data_parse(resource['data'])
+    # Get the utilization_parameters if it exists
+    utilization_parameters = data['utilization_parameters'] if data['utilization_parameters']
+    data.delete('utilization_parameters') if data['utilization_parameters']
+    Puppet.error("\nThe 'utilization_parameters' must be specified for this operation.\n") unless utilization_parameters
+    # Verify that the enclosure exists
+    enclosure = OneviewSDK::Enclosure.new(@client, data)
+    enclosure_exists = enclosure.retrieve! ? true : false
+    puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure_exists
+    # Retrieve utilization data
+    puts "\nRetrieving utilization data for enclosure '#{enclosure['name']}'\n" if enclosure_exists && utilization_parameters
+    utilization_data = enclosure.utilization(utilization_parameters) if enclosure_exists && utilization_parameters
+    pretty utilization_data
+  end
+
+  def pretty(arg)
+    return puts arg if arg.instance_of?(String)
+    puts JSON.pretty_generate(arg)
+  end
+
 end
