@@ -51,6 +51,11 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
     end
   end
 
+  def pretty(arg)
+    return puts arg if arg.instance_of?(String)
+    puts JSON.pretty_generate(arg)
+  end
+
   # Provider methods
 
   def exists?
@@ -69,7 +74,7 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
           Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
           " in Oneview Appliance")
           enclosure_update(resource['data'], enclosure, resource)
-          true
+          return true
         end
       when 'absent'
         # Resource itself sends the name of the running proccess
@@ -78,16 +83,13 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
         enclosure_exists = true if enclosure.first
         Puppet.notice("#{resource} '#{resource['data']['name']}' not located"+
         " in Oneview Appliance") if enclosure_exists == false
-        enclosure_exists
-      when 'found' || 'configured'
+        return enclosure_exists
+      else
         enclosure = find_enclosures(resource['data'])
         enclosure_exists = false
         enclosure_exists = true if enclosure
-        enclosure_exists
+        return enclosure_exists
     end
-
-
-
     @property_hash[:ensure] == :present
   end
 
@@ -135,13 +137,15 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
   end
 
   def retrieved_environmental_configuration
-      data = data_parse(resource['data'])
-      enclosure = OneviewSDK::Enclosure.new(@client, data)
-      enclosure_exists = enclosure.retrieve! ? true : false
-      configuration = enclosure.environmental_configuration if enclosure.retrieve!
-      puts "\nEnclosure #{enclosure['name']} environmental configuration:\n" if enclosure_exists
-      puts "\n #{configuration}" if enclosure_exists
-      puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure_exists
+    data = data_parse(resource['data'])
+    enclosure = OneviewSDK::Enclosure.new(@client, data)
+    # enclosure_exists = enclosure.retrieve! ? true : false
+    if enclosure.retrieve!
+      configuration = enclosure.environmental_configuration
+      puts "\nEnclosure #{enclosure['name']} environmental configuration:\n"
+      pretty configuration
+    end
+    puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure.retrieve!
   end
 
   def set_environmental_configuration
@@ -199,11 +203,6 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
     puts "\nRetrieving utilization data for enclosure '#{enclosure['name']}'\n" if enclosure_exists && utilization_parameters
     utilization_data = enclosure.utilization(utilization_parameters) if enclosure_exists && utilization_parameters
     pretty utilization_data
-  end
-
-  def pretty(arg)
-    return puts arg if arg.instance_of?(String)
-    puts JSON.pretty_generate(arg)
   end
 
 end

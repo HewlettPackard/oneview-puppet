@@ -37,15 +37,13 @@ def enclosure_update(resource, enclosure, process)
   if data['new_name']
     new_name = data['new_name']
     # flag, true if exists
-    new_name_exists = false if !get_enclosure(new_name).first
+    new_name_exists = false unless get_enclosure(new_name).first
     data.delete('new_name')
   end
   # new data to be checked for changes
   existing_enclosure = enclosure.first.data
   # the connectionTemplateUri can only be nil at its creation
   data.delete('connectionTemplateUri') if data['connectionTemplateUri'] == nil
-  # in case a new vlanId exists, as it cannot be changed
-  data.delete('vlanId') if data['vlanId']
   # field not considered for comparison
   data.delete('modified')
   # new hash / difference between old and new ones

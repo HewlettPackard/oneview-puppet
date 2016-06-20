@@ -14,100 +14,97 @@
 # limitations under the License.
 ################################################################################
 
-# oneview_enclosure{'Enclosure Create':
-#     ensure => 'present',
-#     data   => {
-#       name              => 'Puppet-Test-Enclosure',
-#       hostname          => '172.18.1.13',
-#       username          => 'dcs',
-#       password          => 'dcs',
-#       enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#       licensingIntent   => 'OneView'
-#     }
-# }
-#
-# oneview_enclosure{'Enclosure Update':
-#     ensure  => 'present',
-#     require => Oneview_enclosure['Enclosure Create'],
-#     data    => {
-#       name                  => 'Enclosure',
-#       new_name              => 'New Enclosure Name',
-#       vlanId                => '100',
-#       connectionTemplateUri => 'nil',
-#       type                  => 'enclosure'
-#     }
-# }
-#
-# oneview_enclosure{'Enclosure Found':
-#     ensure  => 'found',
-#     # require => Oneview_enclosure['Enclosure Update'],
-#     data    => {
-#         name              => 'OneViewSDK_Test_Enclosure',
-#         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#         licensingIntent   => 'OneView'
-#     }
-# }
+oneview_enclosure{'Enclosure Create':
+    ensure => 'present',
+    data   => {
+      name              => 'Puppet_Test_Enclosure',
+      hostname          => '172.18.1.13',
+      username          => 'dcs',
+      password          => 'dcs',
+      enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+      licensingIntent   => 'OneView'
+    }
+}
 
-# oneview_enclosure{'Enclosure configured':
-#     ensure  => 'configured',
-#     # require => Oneview_enclosure['Enclosure Update'],
-#     data    => {
-#         name              => 'OneViewSDK_Test_Enclosure',
-#         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#         licensingIntent   => 'OneView'
-#     }
-# }
+oneview_enclosure{'Enclosure Update':
+    ensure => 'present',
+    data   => {
+      name              => 'Puppet_Test_Enclosure',
+      rackName          => 'Puppet_Test_Rack',
+      enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+    }
+}
 
-# oneview_enclosure{'Enclosure retrieved environmental configuration':
-#     ensure  => 'retrieved_environmental_configuration',
-#     # require => Oneview_enclosure['Enclosure Update'],
-#     data    => {
-#         name              => 'OneViewSDK_Test_Enclosure',
-#         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#         licensingIntent   => 'OneView'
-#     }
-# }
-#
-# oneview_enclosure{'Enclosure set refresh state':
-#     ensure  => 'set_refresh_state',
-#     # require => Oneview_enclosure['Enclosure Update'],
-#     data    => {
-#         name              => 'OneViewSDK_Test_Enclosure',
-#         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#         licensingIntent   => 'OneView',
-#         refreshState      => 'RefreshPending',
-#     }
-# }
+oneview_enclosure{'Enclosure Found':
+    ensure  => 'found',
+    # require => Oneview_enclosure['Enclosure Update'],
+    data    => {
+        name              => 'Puppet_Test_Enclosure',
+        enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+        licensingIntent   => 'OneView'
+    }
+}
 
-# oneview_enclosure{'Enclosure retrieve script':
-#     ensure  => 'script_retrieved',
-#     # require => Oneview_enclosure['Enclosure Update'],
-#     data    => {
-#         name              => 'OneViewSDK_Test_Enclosure',
-#         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#         licensingIntent   => 'OneView',
-#         refreshState      => 'RefreshPending',
-#     }
-# }
+oneview_enclosure{'Enclosure configured':
+    ensure  => 'configured',
+    # require => Oneview_enclosure['Enclosure Update'],
+    data    => {
+        name              => 'Puppet_Test_Enclosure',
+        enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+        licensingIntent   => 'OneView'
+    }
+}
 
-# oneview_enclosure{'Enclosure retrieve utilization':
-#     ensure  => 'retrieved_utilization',
-#     # require => Oneview_enclosure['Enclosure Update'],
-#     data    => {
-#         name                   => 'OneViewSDK_Test_Enclosure',
-#         enclosureGroupUri      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#         licensingIntent        => 'OneView',
-#         utilization_parameters => {
-#           view => 'day'
-#           },
-#     }
-# }
+oneview_enclosure{'Enclosure retrieved environmental configuration':
+    ensure  => 'retrieved_environmental_configuration',
+    # require => Oneview_enclosure['Enclosure Update'],
+    data    => {
+        name              => 'Puppet_Test_Enclosure',
+        enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+        licensingIntent   => 'OneView'
+    }
+}
 
-#
-# oneview_enclosure{'Enclosure Delete':
-#     ensure  => 'absent',
-#     # require => Oneview_enclosure['Enclosure Found'],
-#     data    => {
-#       name                  => 'Puppet-Test-Enclosure',
-#     }
-# }
+oneview_enclosure{'Enclosure set refresh state':
+    ensure  => 'set_refresh_state',
+    # require => Oneview_enclosure['Enclosure Update'],
+    data    => {
+        name              => 'Puppet_Test_Enclosure',
+        enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+        licensingIntent   => 'OneView',
+        refreshState      => 'RefreshPending',
+    }
+}
+
+oneview_enclosure{'Enclosure retrieve script':
+    ensure  => 'script_retrieved',
+    # require => Oneview_enclosure['Enclosure Update'],
+    data    => {
+        name              => 'Puppet_Test_Enclosure',
+        enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+        licensingIntent   => 'OneView',
+        refreshState      => 'RefreshPending',
+    }
+}
+
+oneview_enclosure{'Enclosure retrieve utilization':
+    ensure  => 'retrieved_utilization',
+    # require => Oneview_enclosure['Enclosure Update'],
+    data    => {
+        name                   => 'Puppet_Test_Enclosure',
+        enclosureGroupUri      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+        licensingIntent        => 'OneView',
+        utilization_parameters => {
+          view => 'day'
+          },
+    }
+}
+
+
+oneview_enclosure{'Enclosure Delete':
+    ensure  => 'absent',
+    # require => Oneview_enclosure['Enclosure Found'],
+    data    => {
+      name                  => 'Puppet_Test_Enclosure',
+    }
+}
