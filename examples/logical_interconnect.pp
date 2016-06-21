@@ -14,6 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-spec/fixtures/
-lib/puppet/provider/login.rb
-.vscode/
+oneview_logical_interconnect{'Logical Interconnect Create':
+  ensure => 'found',
+  data   =>
+    {
+      name => 'li',
+    }
+}

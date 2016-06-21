@@ -14,6 +14,31 @@
 # limitations under the License.
 ################################################################################
 
-spec/fixtures/
-lib/puppet/provider/login.rb
-.vscode/
+Puppet::Type.newtype(:oneview_logical_interconnect) do
+  desc "Oneview's Logical Interconnect"
+
+  ensurable do
+
+    defaultvalues
+
+    newvalue(:found) do
+      provider.found
+    end
+
+  end
+
+  newparam(:name, :namevar => true) do
+    desc "FCoE network name"
+  end
+
+  newparam(:data) do
+    desc "Logical Interconnect data hash containing all specifications for the
+    resource"
+    validate do |value|
+      unless value.class == Hash
+        raise Puppet::Error, "Inserted value for data is not valid"
+      end
+    end
+  end
+
+end
