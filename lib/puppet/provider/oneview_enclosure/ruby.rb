@@ -169,10 +169,11 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
       puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure_exists
       # Sets the refresh state for the enclosure
       puts "\nSetting refresh state for Enclosure #{enclosure['name']}\n" if enclosure_exists && refresh_state
-      configuration = enclosure.set_refresh_state(refresh_state) if
+      return enclosure.set_refresh_state(refresh_state) if
       enclosure.retrieve! && refresh_state && refresh_force_options == false
-      configuration = enclosure.set_refresh_state(refresh_state, refresh_force_options) if
+      return enclosure.set_refresh_state(refresh_state, refresh_force_options) if
       enclosure.retrieve! && refresh_state && refresh_force_options
+      # return true
   end
 
   def script_retrieved
@@ -201,8 +202,8 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
     puts "\nEnclosure #{enclosure['name']} does not exist\n" unless enclosure_exists
     # Retrieve utilization data
     puts "\nRetrieving utilization data for enclosure '#{enclosure['name']}'\n" if enclosure_exists && utilization_parameters
-    utilization_data = enclosure.utilization(utilization_parameters) if enclosure_exists && utilization_parameters
-    pretty utilization_data
+    pretty enclosure.utilization(utilization_parameters) if enclosure_exists && utilization_parameters
+    return true if enclosure_exists && utilization_parameters
   end
 
 end
