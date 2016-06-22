@@ -160,15 +160,23 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
     data = data_parse(resource['data'])
     log_int = OneviewSDK::LogicalInterconnect.new(@client, data).retrieve!
     if !log_int
-      Puppet.notice('No Logical Interconnect with the given specifications '+
+      Puppet.notice('No Logical Interconnects with the given specifications '+
       'were found.')
     elsif log_int['qosConfiguration']
-      Puppet.notice('Qos Aggregated Configuration: #{log_int["qosConfiguration"]}')
+      Puppet.notice('QoS Aggregated Configuration: #{log_int["qosConfiguration"]}')
     else
-      Puppet.notice('No Qos Aggregated Configuration was found.')
+      Puppet.notice('No QoS Aggregated Configuration was found.')
     end
   end
 
-
+  def set_qos_aggregated_configuration
+    data = data_parse(resource['data'])
+    if data['qosConfiguration']
+      log_int = OneviewSDK::LogicalInterconnect.new(@client, data)
+      log_int.update_qos_configuration
+    else
+      Puppet.notice('No QoS Aggregated Configuration was found.')
+    end
+  end
 
 end
