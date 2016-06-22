@@ -27,8 +27,9 @@ oneview_enclosure{'Enclosure Create':
 }
 
 oneview_enclosure{'Enclosure Update':
-    ensure => 'present',
-    data   => {
+    ensure  => 'present',
+    require => Oneview_enclosure['Enclosure Create'],
+    data    => {
       name              => 'Puppet_Test_Enclosure',
       rackName          => 'Puppet_Test_Rack',
       enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
@@ -37,7 +38,7 @@ oneview_enclosure{'Enclosure Update':
 
 oneview_enclosure{'Enclosure Found':
     ensure  => 'found',
-    # require => Oneview_enclosure['Enclosure Update'],
+    require => Oneview_enclosure['Enclosure Update'],
     data    => {
         name              => 'Puppet_Test_Enclosure',
         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
@@ -47,7 +48,7 @@ oneview_enclosure{'Enclosure Found':
 
 oneview_enclosure{'Enclosure configured':
     ensure  => 'configured',
-    # require => Oneview_enclosure['Enclosure Update'],
+    require => Oneview_enclosure['Enclosure Found'],
     data    => {
         name              => 'Puppet_Test_Enclosure',
         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
@@ -57,7 +58,7 @@ oneview_enclosure{'Enclosure configured':
 
 oneview_enclosure{'Enclosure retrieved environmental configuration':
     ensure  => 'retrieved_environmental_configuration',
-    # require => Oneview_enclosure['Enclosure Update'],
+    require => Oneview_enclosure['Enclosure configured'],
     data    => {
         name              => 'Puppet_Test_Enclosure',
         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
@@ -67,7 +68,7 @@ oneview_enclosure{'Enclosure retrieved environmental configuration':
 
 oneview_enclosure{'Enclosure set refresh state':
     ensure  => 'set_refresh_state',
-    # require => Oneview_enclosure['Enclosure Update'],
+    require => Oneview_enclosure['Enclosure retrieved environmental configuration'],
     data    => {
         name              => 'Puppet_Test_Enclosure',
         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
@@ -76,20 +77,21 @@ oneview_enclosure{'Enclosure set refresh state':
     }
 }
 
-oneview_enclosure{'Enclosure retrieve script':
-    ensure  => 'script_retrieved',
-    # require => Oneview_enclosure['Enclosure Update'],
-    data    => {
-        name              => 'Puppet_Test_Enclosure',
-        enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-        licensingIntent   => 'OneView',
-        refreshState      => 'RefreshPending',
-    }
-}
+# Leaving this commented since it requires a script to be put inside the enclosure to work
+# oneview_enclosure{'Enclosure retrieve script':
+#     ensure  => 'script_retrieved',
+#     require => Oneview_enclosure['Enclosure set refresh state'],
+#     data    => {
+#         name              => 'Puppet_Test_Enclosure',
+#         enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+#         licensingIntent   => 'OneView',
+#         refreshState      => 'RefreshPending',
+#     }
+# }
 
 oneview_enclosure{'Enclosure retrieve utilization':
     ensure  => 'retrieved_utilization',
-    # require => Oneview_enclosure['Enclosure Update'],
+    require => Oneview_enclosure['Enclosure set refresh state'],
     data    => {
         name                   => 'Puppet_Test_Enclosure',
         enclosureGroupUri      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
@@ -103,8 +105,8 @@ oneview_enclosure{'Enclosure retrieve utilization':
 
 oneview_enclosure{'Enclosure Delete':
     ensure  => 'absent',
-    # require => Oneview_enclosure['Enclosure Found'],
+    require => Oneview_enclosure['Enclosure retrieve utilization'],
     data    => {
-      name                  => 'Puppet_Test_Enclosure',
+        name => 'Puppet_Test_Enclosure',
     }
 }
