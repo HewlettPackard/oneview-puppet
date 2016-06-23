@@ -19,14 +19,7 @@ oneview_logical_interconnect{'Logical Interconnect Found  ':
   data   =>
     {
       name             => 'Encl2-my enclosure logical interconnect group',
-      qosConfiguration =>
       
-        {
-          activeQosConfig => 
-          {
-            description => 'KKKKKKKKKKKKKKKKK',
-          }
-        }
       
     }
 }

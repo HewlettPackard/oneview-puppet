@@ -75,6 +75,10 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
     set_endpoints(resource['data'], 'qosConfiguration')
   end
 
+  def set_snmp_configuration
+    set_endpoints(resource['data'], 'snmpConfiguration')
+  end
+
   
   
 

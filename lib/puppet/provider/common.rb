@@ -34,3 +34,4 @@ def pretty(arg)
   return puts arg if arg.instance_of?(String)
   puts JSON.pretty_generate(arg)
 end
+

@@ -14,6 +14,8 @@
 # limitations under the License.
 ################################################################################
 
+require 'deep_merge'
+
 def get_endpoints(data, action)
     case action
     when 'qosConfiguration'
@@ -68,15 +70,12 @@ def set_endpoints(data, action)
     end
     
     data = data_parse(data)
-    puts data[action]
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
     if log_int.retrieve! && data[action]
-        puts log_int[action]
-        log_int[action].merge(data[action])
+        log_int[action].deep_merge!(data[action])
         case action
         when 'qosConfiguration'
-            puts log_int[action]
-            # log_int.update_qos_configuration
+            log_int.update_qos_configuration
         when 'snmpConfiguration'
             log_int.update_snmp_configuration
         when 'portMonitor'
