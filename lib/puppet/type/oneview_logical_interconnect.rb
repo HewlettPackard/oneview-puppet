@@ -25,6 +25,22 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.found
     end
 
+    newvalue(:get_ethernet_settings) do
+      provider.get_ethernet_settings
+    end
+
+    newvalue(:set_qos_aggregated_configuration) do
+      provider.set_qos_aggregated_configuration
+    end
+
+    newvalue(:get_qos_aggregated_configuration) do
+      provider.get_qos_aggregated_configuration
+    end
+
+    newvalue(:get_snmp_configuration) do
+      provider.get_snmp_configuration
+    end
+
   end
 
   newparam(:name, :namevar => true) do

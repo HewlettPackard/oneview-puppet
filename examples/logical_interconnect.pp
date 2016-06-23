@@ -14,10 +14,12 @@
 # limitations under the License.
 ################################################################################
 
-oneview_logical_interconnect{'Logical Interconnect Create':
-  ensure => 'found',
+oneview_logical_interconnect{'Logical Interconnect Found  ':
+  ensure => 'get_snmp_configuration',
   data   =>
     {
-      name => 'li',
+      name             => ' Encl2-my enclosure logical interconnect group',
+
+      
     }
 }
