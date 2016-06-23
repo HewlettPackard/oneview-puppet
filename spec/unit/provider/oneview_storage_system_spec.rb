@@ -20,47 +20,41 @@ provider_class = Puppet::Type.type(:oneview_storage_system).provider(:ruby)
 
 describe provider_class do
 
-
-  # Negative testing all the get/find operations
-  # context 'given the minimum parameters' do
-  #   let(:resource) {
-  #     Puppet::Type.type(:oneview_storage_system).new(
-  #       name: 'Enclosure',
-  #       ensure: 'present',
-  #         data:
-  #           {
-  #             'credentials'   => {
-  #               'ip_hostname' => '172.18.11.11',
-  #             }
-  #           },
-  #     )
-  #   }
-
-
-
-  # end
-
-  context 'given the parameters for creating a storage' do
-    let(:resource) {
-      Puppet::Type.type(:oneview_storage_system).new(
-        name: 'Storage System',
-        ensure: 'present',
+  let(:resource) {
+    Puppet::Type.type(:oneview_storage_system).new(
+      name: 'Enclosure',
+      ensure: 'present',
         data:
           {
-            'name'          => 'Puppet_Test_Storage_System',
-            'managedDomain' => 'TestDomain',
             'credentials'   => {
               'ip_hostname' => '172.18.11.11',
-              'username'    => 'dcs',
-              'password'    => 'dcs'
             }
-          }
-      )
-    }
+          },
+    )
+  }
 
-    let(:provider) { resource.provider }
+  let(:provider) { resource.provider }
 
-    let(:instance) { provider.class.instances.first }
+  let(:instance) { provider.class.instances.first }
+
+  context 'given the minimum parameters' do
+    # Negative testing all the get/find operations
+    #   let(:resource) {
+    #     Puppet::Type.type(:oneview_storage_system).new(
+    #       name: 'Enclosure',
+    #       ensure: 'present',
+    #         data:
+    #           {
+    #             'credentials'   => {
+    #               'ip_hostname' => '172.18.11.11',
+    #             }
+    #           },
+    #     )
+    #   }
+    #
+    # let(:provider) { resource.provider }
+    #
+    # let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:ruby)
@@ -86,37 +80,57 @@ describe provider_class do
       expect(provider.get_host_types).not_to be
     end
 
+  end
+
+  context 'given the create parameters' do
+    let(:resource) {
+      Puppet::Type.type(:oneview_storage_system).new(
+        name: 'Enclosure',
+        ensure: 'present',
+          data:
+            {
+              'name'         => 'OneViewSDK Test Storage System',
+              'managedDomain' => 'TestDomain',
+              'credentials'   => {
+                'ip_hostname' => '172.18.11.11',
+                'username'     => 'dcs',
+                'password'     => 'dcs',
+              }
+            },
+      )
+    }
+
+    # TODO Create block
     it 'should create the storage system' do
       expect(provider.create).to be
     end
 
+  end
+
+  context 'given the minimum parameters' do
     it 'exists? should find the storage system' do
       expect(provider.exists?).to be
     end
+    it 'should return that the storage system was found' do
+      expect(provider.found).to be
+    end
 
-    # TODO fix these
-    # it 'should return that the storage system was found' do
-    #   expect(provider.found).to be
-    # end
-    #
-    # it 'should be able to get the storage pools from the storage system' do
-    #   expect(provider.get_storage_pools).to be
-    # end
-    #
-    # it 'should be able to get the managed ports from the storage system' do
-    #   expect(provider.get_managed_ports).to be
-    # end
-    #
-    # it 'should be able to get the host types from the storage system' do
-    #   expect(provider.get_host_types).to be
-    # end
+    it 'should be able to get the storage pools from the storage system' do
+      expect(provider.get_storage_pools).to be
+    end
+
+    it 'should be able to get the managed ports from the storage system' do
+      expect(provider.get_managed_ports).to be
+    end
+
+    it 'should be able to get the host types from the storage system' do
+      expect(provider.get_host_types).to be
+    end
 
     it 'should drop the storage system' do
       expect(provider.destroy).to be
     end
-
-
-
+    
   end
 
 end
