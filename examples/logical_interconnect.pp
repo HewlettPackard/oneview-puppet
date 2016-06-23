@@ -15,7 +15,7 @@
 ################################################################################
 
 oneview_logical_interconnect{'Logical Interconnect Found  ':
-  ensure => 'set_firmware',
+  ensure => 'set_compliance',
   data   =>
     {
       name             => 'Encl2-my enclosure logical interconnect group',

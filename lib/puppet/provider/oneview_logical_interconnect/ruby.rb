@@ -96,6 +96,10 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   def set_firmware
     set_endpoints(resource['data'], 'firmware')
   end
+
+  def set_compliance
+    set_endpoints(resource['data'], 'compliance')
+  end
   
   
 

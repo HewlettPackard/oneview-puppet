@@ -73,6 +73,10 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.set_firmware
     end
 
+    newvalue(:set_compliance) do
+      provider.set_compliance
+    end
+
   end
 
   newparam(:name, :namevar => true) do

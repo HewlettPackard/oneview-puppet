@@ -35,21 +35,29 @@ def get_endpoints(data, action)
         label  = 'Telemetry Configuration' 
     when 'firmware'
         action = 'firmware'
-        label  = 'Firmware'   
+        label  = 'Firmware'
+    # when 'compliance'
+    #     action = 'compliance'
+    #     label  = 'Compliance'   
     end
 
     data = data_parse(data)
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
-    if log_int.retrieve! && log_int[action]
-        Puppet.notice("\n\n#{label}:\n")
-        pretty log_int[action]
+    if log_int.retrieve!
+        if action == 'firmware'
+            firmware = log_int.get_firmware
+            pretty firmware
+        elsif log_int[action]
+            Puppet.notice("\n\n#{label}:\n")
+            pretty log_int[action]
         return true
+        end
     elsif !log_int.retrieve!
-        Puppet.notice('No Logical Interconnects with the given specifications '+
+        Puppet.warning('No Logical Interconnects with the given specifications '+
       'were found.')
       return false
     elsif !log_int[action]
-        Puppet.notice("No #{label} was found in the Logical Interconnect.")
+        Puppet.warning("No #{label} was found in the Logical Interconnect.")
         return false
     end
 
@@ -76,10 +84,15 @@ def set_endpoints(data, action)
     when 'firmware'
         action = 'firmware'
         label  = 'Firmware'
+    when 'compliance'
+        action = 'compliance'
+        label  = 'Compliance'
     end
     
     data = data_parse(data)
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
+    log_int_current = log_int
+    log_int_current.retrieve!
     if log_int.retrieve! && data[action]
         log_int[action].deep_merge!(data[action])
         case action
@@ -91,14 +104,23 @@ def set_endpoints(data, action)
             log_int.update_port_monitor
         when 'telemetryConfiguration'
             log_int.update_telemetry_configuration
+        when 'firmware' #TO BE FINISHED
+            firmware = OneviewSDK::FirmwareDriver.new(@client, name: data['firmware'])
+            firmware_update = data['firmware']
+            firmware_update.delete('operation')
+            log_int.firmware_update(data['firmware']['operation'], firmware, firmware_update)
         end
         Puppet.notice("#{label} has been updated.")
         return true
+    elsif action == 'compliance'
+        log_int_current.compliance
+        Puppet.notice("#{label} has been updated.")
+        return true
     elsif !log_int.retrieve!
-        Puppet.notice("No Logical Interconnects with the given specifications were found.")
+        Puppet.warning("No Logical Interconnects with the given specifications were found.")
       return false
     elsif !data[action]
-        Puppet.notice("No #{label} has been set.")
+        Puppet.warning("No #{label} has been set.")
         return false
     end
 
