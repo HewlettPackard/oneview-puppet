@@ -67,9 +67,19 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
     get_endpoints(resource['data'], 'portMonitor')
   end
 
-
+  def get_firmware
+    get_endpoints(resource['data'], 'firmware')
+  end
 
   # PUT/SET ENDPOINTS =======================================
+  
+  def set_ethernet_settings
+    set_endpoints(resource['data'], 'ethernetSettings')
+  end
+
+  def set_telemetry_configuration
+    set_endpoints(resource['data'], 'telemetryConfiguration')
+  end
 
   def set_qos_aggregated_configuration
     set_endpoints(resource['data'], 'qosConfiguration')
@@ -79,6 +89,13 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
     set_endpoints(resource['data'], 'snmpConfiguration')
   end
 
+  def set_port_monitor
+    set_endpoints(resource['data'], 'portMonitor')
+  end
+
+  def set_firmware
+    set_endpoints(resource['data'], 'firmware')
+  end
   
   
 

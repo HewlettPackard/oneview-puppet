@@ -15,11 +15,11 @@
 ################################################################################
 
 oneview_logical_interconnect{'Logical Interconnect Found  ':
-  ensure => 'get_port_monitor',
+  ensure => 'set_firmware',
   data   =>
     {
       name             => 'Encl2-my enclosure logical interconnect group',
-      
+
       
     }
 }

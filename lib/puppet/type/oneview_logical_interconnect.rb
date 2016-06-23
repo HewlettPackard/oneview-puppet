@@ -65,6 +65,14 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.set_telemetry_configuration
     end
 
+    newvalue(:get_firmware) do
+      provider.get_firmware
+    end
+
+    newvalue(:set_firmware) do
+      provider.set_firmware
+    end
+
   end
 
   newparam(:name, :namevar => true) do

@@ -32,7 +32,10 @@ def get_endpoints(data, action)
         label  = 'Ethernet Settings'
     when 'telemetryConfiguration'
         action = 'telemetryConfiguration'
-        label  = 'Telemetry Configuration'    
+        label  = 'Telemetry Configuration' 
+    when 'firmware'
+        action = 'firmware'
+        label  = 'Firmware'   
     end
 
     data = data_parse(data)
@@ -67,6 +70,12 @@ def set_endpoints(data, action)
     when 'ethernetSettings'
         action = 'ethernetSettings'
         label  = 'Ethernet Settings'
+    when 'telemetryConfiguration'
+        action = 'telemetryConfiguration'
+        label  = 'Telemetry Configuration'
+    when 'firmware'
+        action = 'firmware'
+        label  = 'Firmware'
     end
     
     data = data_parse(data)
@@ -80,14 +89,16 @@ def set_endpoints(data, action)
             log_int.update_snmp_configuration
         when 'portMonitor'
             log_int.update_port_monitor
+        when 'telemetryConfiguration'
+            log_int.update_telemetry_configuration
         end
-        Puppet.notice("The # has been updated.")
+        Puppet.notice("#{label} has been updated.")
         return true
     elsif !log_int.retrieve!
         Puppet.notice("No Logical Interconnects with the given specifications were found.")
       return false
     elsif !data[action]
-        Puppet.notice("No  has been set.")
+        Puppet.notice("No #{label} has been set.")
         return false
     end
 
