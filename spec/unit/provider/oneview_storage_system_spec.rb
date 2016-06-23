@@ -38,23 +38,6 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    # Negative testing all the get/find operations
-    #   let(:resource) {
-    #     Puppet::Type.type(:oneview_storage_system).new(
-    #       name: 'Enclosure',
-    #       ensure: 'present',
-    #         data:
-    #           {
-    #             'credentials'   => {
-    #               'ip_hostname' => '172.18.11.11',
-    #             }
-    #           },
-    #     )
-    #   }
-    #
-    # let(:provider) { resource.provider }
-    #
-    # let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:ruby)
@@ -130,7 +113,7 @@ describe provider_class do
     it 'should drop the storage system' do
       expect(provider.destroy).to be
     end
-    
+
   end
 
 end
