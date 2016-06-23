@@ -15,35 +15,36 @@
 ################################################################################
 
 def get_endpoints(data, action)
-    endpoint = {}
     case action
     when 'qosConfiguration'
-        endpoint.store('action', 'qosConfiguration')
-        endpoint.store('label', 'QoS Aggregated Configuration')
+        action = 'qosConfiguration'
+        label  = 'QoS Aggregated Configuration'
     when 'snmpConfiguration'
-        endpoint.store('action', 'snmpConfiguration')
-        endpoint.store('label', 'SNMP Configuration')
+        action = 'snmpConfiguration'
+        label  = 'SNMP Configuration'
     when 'portMonitor'
-        endpoint.store('action', 'portMonitor')
-        endpoint.store('label', 'Port Monitor')
+        action = 'portMonitor'
+        label  = 'Port Monitor'
     when 'ethernetSettings'
-        endpoint.store('action', 'ethernetSettings')
-        endpoint.store('label', 'Ethernet Settings')
+        action = 'ethernetSettings'
+        label  = 'Ethernet Settings'
+    when 'telemetryConfiguration'
+        action = 'telemetryConfiguration'
+        label  = 'Telemetry Configuration'    
     end
 
     data = data_parse(data)
-    log_int = OneviewSDK::LogicalInterconnect.new(@client, data)
-    log_int.retrieve!
-    if log_int && log_int[endpoint['action']]
-        attributes = log_int[endpoint['action']]
-        Puppet.notice('#{endpoint["label"]}: #{attributes}')
+    log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
+    if log_int.retrieve! && log_int[action]
+        Puppet.notice("\n\n#{label}:\n")
+        pretty log_int[action]
         return true
-    elsif !log_int
+    elsif !log_int.retrieve!
         Puppet.notice('No Logical Interconnects with the given specifications '+
       'were found.')
       return false
-    elsif !data[endpoint['action']]
-        Puppet.notice("No #{endpoint['label']} was found in the Logical Interconnect.")
+    elsif !log_int[action]
+        Puppet.notice("No #{label} was found in the Logical Interconnect.")
         return false
     end
 
@@ -67,27 +68,27 @@ def set_endpoints(data, action)
     end
     
     data = data_parse(data)
+    puts data[action]
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
-    log_int.retrieve!
-    
-    
-    if log_int && data[action]
-        log_int[action] = data[action]
+    if log_int.retrieve! && data[action]
+        puts log_int[action]
+        log_int[action].merge(data[action])
         case action
         when 'qosConfiguration'
-            log_int.update_qos_configuration
+            puts log_int[action]
+            # log_int.update_qos_configuration
         when 'snmpConfiguration'
             log_int.update_snmp_configuration
         when 'portMonitor'
             log_int.update_port_monitor
         end
-        Puppet.notice("The #{endpoint['label']} has been updated.")
+        Puppet.notice("The # has been updated.")
         return true
-    elsif !log_int
+    elsif !log_int.retrieve!
         Puppet.notice("No Logical Interconnects with the given specifications were found.")
       return false
     elsif !data[action]
-        Puppet.notice("No #{endpoint['label']} has been set.")
+        Puppet.notice("No  has been set.")
         return false
     end
 

@@ -29,6 +29,10 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.get_ethernet_settings
     end
 
+    newvalue(:set_ethernet_settings) do
+      provider.set_ethernet_settings
+    end
+
     newvalue(:set_qos_aggregated_configuration) do
       provider.set_qos_aggregated_configuration
     end
@@ -39,6 +43,26 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
 
     newvalue(:get_snmp_configuration) do
       provider.get_snmp_configuration
+    end
+
+    newvalue(:set_snmp_configuration) do
+      provider.set_snmp_configuration
+    end
+
+    newvalue(:get_port_monitor) do
+      provider.get_port_monitor
+    end
+
+    newvalue(:set_port_monitor) do
+      provider.set_port_monitor
+    end
+
+    newvalue(:get_telemetry_configuration) do
+      provider.get_telemetry_configuration
+    end
+
+    newvalue(:set_telemetry_configuration) do
+      provider.set_telemetry_configuration
     end
 
   end

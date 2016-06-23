@@ -15,11 +15,18 @@
 ################################################################################
 
 oneview_logical_interconnect{'Logical Interconnect Found  ':
-  ensure => 'get_snmp_configuration',
+  ensure => 'get_port_monitor',
   data   =>
     {
-      name             => ' Encl2-my enclosure logical interconnect group',
-
+      name             => 'Encl2-my enclosure logical interconnect group',
+      qosConfiguration =>
+      
+        {
+          activeQosConfig => 
+          {
+            description => 'KKKKKKKKKKKKKKKKK',
+          }
+        }
       
     }
 }

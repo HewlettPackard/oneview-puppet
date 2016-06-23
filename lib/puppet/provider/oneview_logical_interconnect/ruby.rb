@@ -29,15 +29,12 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   end
 
   def exists?
-
   end
 
   def found
     data = data_parse(resource['data'])
-    log_int = OneviewSDK::LogicalInterconnect.new(@client, data)
-    log_int.retrieve!
-    puts log_int
-    if log_int
+    log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
+    if log_int.retrieve!
       Puppet.notice ( "\n\nFound logical interconnect"+
       " #{log_int['name']} on Oneview Appliance\n")
       return true
@@ -46,15 +43,16 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
       " found on the Oneview Appliance\n")
       return false
     end
-
   end
+
+  # GET ENDPOINTS =======================================
 
   def get_ethernet_settings
     get_endpoints(resource['data'], 'ethernetSettings')
   end
 
-  def set_qos_aggregated_configuration
-    set_endpoints(resource['data'], 'qosConfiguration')
+  def get_telemetry_configuration
+    get_endpoints(resource['data'], 'telemetryConfiguration')
   end
 
   def get_qos_aggregated_configuration
@@ -64,6 +62,21 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   def get_snmp_configuration
     get_endpoints(resource['data'], 'snmpConfiguration')
   end
+
+  def get_port_monitor
+    get_endpoints(resource['data'], 'portMonitor')
+  end
+
+
+
+  # PUT/SET ENDPOINTS =======================================
+
+  def set_qos_aggregated_configuration
+    set_endpoints(resource['data'], 'qosConfiguration')
+  end
+
+  
+  
 
 
 #   def set_ethernet_settings

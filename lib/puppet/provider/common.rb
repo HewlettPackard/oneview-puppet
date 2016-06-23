@@ -16,6 +16,8 @@
 
 # ============== Common methods ==============
 
+require 'json'
+
 # Removes quotes from nil and false values
 def data_parse(resource_data)
   data = resource['data']
@@ -26,4 +28,9 @@ def data_parse(resource_data)
     data[key] = data[key].to_i if key == 'vlanId'
   end
   return data
+end
+
+def pretty(arg)
+  return puts arg if arg.instance_of?(String)
+  puts JSON.pretty_generate(arg)
 end
