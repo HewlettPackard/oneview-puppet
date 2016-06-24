@@ -138,7 +138,12 @@ def set_endpoints(data, action)
             log_int[action].deep_merge!(data[action])
             log_int.update_telemetry_configuration
         when 'internalNetworks'
-            # log_int_current.update_internal_networks(parse_net(networks))
+            network = {}
+            data[action].each_with_index do |(key, value), i|
+                network[i] = OneviewSDK::EthernetNetwork.new(@client, data[action][key])
+            end
+            # TO BE VERIFIED ON MONDAY
+            log_int_current.update_internal_networks(network.values.first)
         when 'firmware' #TO BE FINISHED
             firmware = OneviewSDK::FirmwareDriver.new(@client, name: data['firmware'])
             firmware_update = data['firmware']

@@ -107,3 +107,18 @@ oneview_logical_interconnect{'Logical Interconnect Compliance':
       name             => 'Encl2-my enclosure logical interconnect group',
     }
 }
+
+oneview_logical_interconnect{'Logical Interconnect Internal Networks':
+  ensure => 'set_internal_networks',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+      internalNetworks =>
+      {
+        e1 =>
+        {
+          name => 'NET',
+        }
+      }
+    }
+}
