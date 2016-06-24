@@ -77,11 +77,32 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.set_compliance
     end
 
+    newvalue(:get_internal_vlans) do
+      provider.get_internal_vlans
+    end
+
+    newvalue(:set_internal_networks) do
+      provider.set_internal_networks
+    end
+
+    newvalue(:set_forwarding_information_base) do
+      provider.set_forwarding_information_base
+    end
+
+    newvalue(:get_forwarding_information_base) do
+      provider.get_forwarding_information_base
+    end
+
+    newvalue(:get_schema) do
+      provider.get_schema
+    end
+
   end
 
   newparam(:name, :namevar => true) do
-    desc "FCoE network name"
+    desc "Logical interconnect process name"
   end
+  
 
   newparam(:data) do
     desc "Logical Interconnect data hash containing all specifications for the

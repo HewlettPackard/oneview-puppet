@@ -30,6 +30,16 @@ def data_parse(resource_data)
   return data
 end
 
+def data_parse_interconnect(data)
+  data.each do |key,value|
+    data[key] = nil if value == 'nil'
+    data[key] = false if value == 'false'
+    data[key] = true if value == 'true'
+    data[key] = data[key].to_i if key == 'vlanId'
+  end
+  return data
+end
+
 def pretty(arg)
   return puts arg if arg.instance_of?(String)
   puts JSON.pretty_generate(arg)

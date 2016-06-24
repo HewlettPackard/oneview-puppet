@@ -14,12 +14,96 @@
 # limitations under the License.
 ################################################################################
 
-oneview_logical_interconnect{'Logical Interconnect Found  ':
+oneview_logical_interconnect{'Logical Interconnect Found':
+  ensure => 'found',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect QoS Get':
+  ensure => 'get_qos_aggregated_configuration',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect QoS Set':
+  ensure => 'set_qos_aggregated_configuration',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+      qosConfiguration =>
+      {
+        activeQosConfig =>
+        {
+
+          uplinkClassificationType => 'DOT1P'
+        }
+      }
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect Port Monitor Set':
+  ensure => 'set_port_monitor',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+      portMonitor =>
+      {
+        enablePortMonitor => 'false'
+      }
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect Port Monitor Get':
+  ensure => 'get_port_monitor',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect Internal Vlan':
+  ensure => 'get_internal_vlans',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect SNMP Config Get':
+  ensure => 'get_snmp_configuration',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+      snmpConfiguration =>
+      {
+        enabled => 'false'
+      }
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
+  ensure => 'set_snmp_configuration',
+  data   =>
+    {
+      name             => 'Encl2-my enclosure logical interconnect group',
+      snmpConfiguration =>
+      {
+        enabled => 'true'
+      }
+    }
+}
+
+
+
+oneview_logical_interconnect{'Logical Interconnect Compliance':
   ensure => 'set_compliance',
   data   =>
     {
       name             => 'Encl2-my enclosure logical interconnect group',
-
-      
     }
 }

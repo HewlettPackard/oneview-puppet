@@ -15,6 +15,7 @@
 ################################################################################
 
 require 'deep_merge'
+require_relative 'ethernet_network'
 
 def get_endpoints(data, action)
     case action
@@ -36,26 +37,51 @@ def get_endpoints(data, action)
     when 'firmware'
         action = 'firmware'
         label  = 'Firmware'
-    # when 'compliance'
-    #     action = 'compliance'
-    #     label  = 'Compliance'   
+    when 'vlanNetworks'
+        action = 'vlanNetworks'
+        label  = 'VLan Networks'
+    when 'schema'
+        action = 'schema'
+        label  = 'Schema'
+    when 'forwardingInformation'
+        action = 'forwardingInformation'
+        label  = 'Forwarding Information Base'
     end
 
     data = data_parse(data)
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
     if log_int.retrieve!
+        # special case
         if action == 'firmware'
             firmware = log_int.get_firmware
             pretty firmware
+            return true
+        # special case
+        elsif action == 'vlanNetworks'
+            vlanNetworks = log_int.list_vlan_networks
+            if vlanNetworks.size > 0
+                vlanNetworks.each do |net|
+                    pretty "Network #{net[:name]} with uri #{net[:uri]}"
+                end
+            else
+                Puppet.warning("No #{label} were found in the Logical Interconnect.")
+            end
+            return true
+        # special case
+        elsif action == 'schema'
+            Puppet.notice("\n\n#{label}:\n")
+            pretty log_int.schema
+            return true
+        # common cases
         elsif log_int[action]
             Puppet.notice("\n\n#{label}:\n")
             pretty log_int[action]
-        return true
+            return true
         end
     elsif !log_int.retrieve!
         Puppet.warning('No Logical Interconnects with the given specifications '+
-      'were found.')
-      return false
+        'were found.')
+        return false
     elsif !log_int[action]
         Puppet.warning("No #{label} was found in the Logical Interconnect.")
         return false
@@ -87,23 +113,32 @@ def set_endpoints(data, action)
     when 'compliance'
         action = 'compliance'
         label  = 'Compliance'
+    when 'internalNetworks'
+        action = 'internalNetworks'
+        label  = 'Internal Networks'
     end
     
-    data = data_parse(data)
+    data = data_parse_interconnect(data)
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
     log_int_current = log_int
     log_int_current.retrieve!
     if log_int.retrieve! && data[action]
-        log_int[action].deep_merge!(data[action])
+        
         case action
         when 'qosConfiguration'
+            log_int[action].deep_merge!(data[action])
             log_int.update_qos_configuration
         when 'snmpConfiguration'
+            log_int[action].deep_merge!(data[action])
             log_int.update_snmp_configuration
         when 'portMonitor'
+            log_int[action].deep_merge!(data[action])
             log_int.update_port_monitor
         when 'telemetryConfiguration'
+            log_int[action].deep_merge!(data[action])
             log_int.update_telemetry_configuration
+        when 'internalNetworks'
+            # log_int_current.update_internal_networks(parse_net(networks))
         when 'firmware' #TO BE FINISHED
             firmware = OneviewSDK::FirmwareDriver.new(@client, name: data['firmware'])
             firmware_update = data['firmware']
