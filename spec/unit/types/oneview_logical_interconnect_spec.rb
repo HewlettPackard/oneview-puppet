@@ -18,14 +18,15 @@ require 'spec_helper'
 
 type_class = Puppet::Type.type(:oneview_logical_interconnect)
 
-def logical_interconnect_config
-  {
-    name:                           'test_logical_interconnect',
+def logical_interconnect
+{
+  name: 'Logical Interconnect',
+  ensure: 'present',
     data:
       {
-          name:                       'Encl2-my enclosure logical interconnect group',
-      },
-  }
+        'name'                         =>'Logical Interconnect',
+      }
+}
 end
 
 describe type_class do
@@ -51,7 +52,7 @@ describe type_class do
   end
 
   it 'should require a data hash' do
-    modified_config = logical_interconnect_config
+    modified_config = enclosure_group_config
     modified_config[:data] = ''
     resource_type = type_class.to_s.split('::')
     expect {
