@@ -30,6 +30,8 @@ def data_parse(resource_data)
   return data
 end
 
+# FIXME: method created because data_parse (above) was returning hashes with booleans as strings
+# to be debugged in the future
 def data_parse_interconnect(data)
   data.each do |key,value|
     data[key] = nil if value == 'nil'
