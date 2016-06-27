@@ -29,6 +29,9 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   end
 
   def exists?
+    data = data_parse(resource['data'])
+    log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
+    return log_int.retrieve!
   end
 
   def found
