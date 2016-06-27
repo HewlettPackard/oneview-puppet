@@ -16,4 +16,3 @@
 
 spec/fixtures/
 lib/puppet/provider/login.rb
-.vscode/
