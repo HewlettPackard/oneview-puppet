@@ -142,9 +142,8 @@ def set_endpoints(data, action)
             data[action].each_with_index do |(key, value), i|
                 network[i] = OneviewSDK::EthernetNetwork.new(@client, data[action][key])
             end
-            # TO BE VERIFIED ON MONDAY
             log_int_current.update_internal_networks(network.values.first)
-        when 'firmware' #TO BE FINISHED
+        when 'firmware'
             firmware = OneviewSDK::FirmwareDriver.new(@client, name: data['firmware'])
             firmware_update = data['firmware']
             firmware_update.delete('operation')
