@@ -16,6 +16,8 @@
 
 # ============== Common methods ==============
 
+require 'json'
+
 # Removes quotes from nil and false values
 def data_parse(resource_data)
   data = resource['data']
@@ -27,3 +29,21 @@ def data_parse(resource_data)
   end
   return data
 end
+
+# FIXME: method created because data_parse (above) was returning hashes with booleans as strings
+# to be debugged in the future
+def data_parse_interconnect(data)
+  data.each do |key,value|
+    data[key] = nil if value == 'nil'
+    data[key] = false if value == 'false'
+    data[key] = true if value == 'true'
+    data[key] = data[key].to_i if key == 'vlanId'
+  end
+  return data
+end
+
+def pretty(arg)
+  return puts arg if arg.instance_of?(String)
+  puts JSON.pretty_generate(arg)
+end
+
