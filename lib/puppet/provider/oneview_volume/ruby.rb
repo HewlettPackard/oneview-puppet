@@ -60,15 +60,18 @@ Puppet::Type.type(:oneview_volume).provide(:ruby) do
 
   def exists?
     state = resource['ensure'].to_s
+    # Verify if data is set for resources that need it, else fail
+    unless resource['data'] || (state == ('found' || 'get_attachable_volumes' || 'get_extra_managed_volume_paths'))
+      fail("A 'data' Hash is required for the present operation")
+    end
     unless state == 'present'
       # If no data hash is provided, create empty hash
       resource['data'] = Hash.new if resource['data'] == nil
       volume = OneviewSDK::Volume.find_by(@client, resource['data'])
-      return volume
+      return volume.retrieve!
     end
     if state == 'present'
-      fail("A 'data' Hash is required for the present operation") unless resource['data']
-      Puppet::Error("A 'name' parameter is required inside data for the present operation") unless resource['data']['name']
+      fail("A 'name' parameter is required inside data for the present operation") unless resource['data']['name']
       volume = OneviewSDK::Volume.new(@client, name: resource['data']['name'])
       Puppet.notice("#{resource} '#{resource['data']['name']}' located in Oneview Appliance") if volume.retrieve!
       # volume_update(resource['data'], volume, resource)
@@ -126,42 +129,78 @@ Puppet::Type.type(:oneview_volume).provide(:ruby) do
     end
   end
 
-  def get_storage_pools
-    data = data_parse(resource['data'])
-    volume = OneviewSDK::Volume.new(@client, data)
-    if volume.retrieve!
-      puts "\nVolume #{volume['name']} environmental configuration:\n"
-      pretty volume.get_storage_pools
-    end
-    puts "\nVolume #{volume['name']} does not exist\n" unless volume.retrieve!
-    return volume.retrieve!
+  def get_attachable_volumes
+    Puppet.notice("\n Getting attachable volumes...\n")
+    Puppet.notice("\n Displaying list of attachable volumes bellow:\n")
+    pretty OneviewSDK::Volume.get_attachable_volumes(@client)
+    Puppet.notice("\n <End of the list of attachable volumes>\n")
+    true
   end
 
-  def get_managed_ports
+  def get_extra_managed_volume_paths
+    Puppet.notice("\n Getting extra managed volume paths...\n")
+    Puppet.notice("\n Displaying list of extra managed volume paths bellow:\n")
+    pretty OneviewSDK::Volume.get_extra_managed_volume_paths(@client)
+    Puppet.notice("\n <End of the list of attachable volumes>\n")
+    true
+  end
+
+  def repair
       data = data_parse(resource['data'])
-      # Verify if the ports parameter has been set or if we'll use nil
-      ports = data['ports'] ? data['ports'] : nil
-      data.delete('ports') if data['ports']
       volume = OneviewSDK::Volume.new(@client, data)
       puts "\nVolume #{volume['name']} does not exist.\n" unless volume.retrieve!
       if volume.retrieve!
-        puts "\nRetrieving managed ports from Volume #{volume['name']}... \n"
-        pretty volume.get_managed_ports(ports) if ports
-        pretty volume.get_managed_ports unless ports
+        puts "\n Removing extra presentations from specified volume #{volume['name']}... \n"
+        volume.repair
       end
       return volume.retrieve!
   end
 
-  def get_host_types
-    data = data_parse(resource['data'])
-    # Verify that the volume exists
-    volume = OneviewSDK::Volume.new(@client, data)
-    puts "\nVolume #{volume['name']} does not exist\n" unless volume.retrieve!
-    if volume.retrieve!
-      puts "\nRetrieving host types data for volume '#{volume['name']}'...\n"
-      pretty OneviewSDK::Volume.get_host_types(@client)
-    end
-    return volume.retrieve!
+  def create_snapshot
+      data = data_parse(resource['data'])
+      # Verify if the ports parameter has been set or if we'll use nil
+      volume = OneviewSDK::Volume.new(@client, name: resource['data']['name'])
+      puts "\nVolume #{volume['name']} does not exist.\n" unless volume.retrieve!
+      if volume.retrieve!
+        puts "\nCreating snapshot on Volume #{volume['name']}... \n"
+        volume.create_snapshot(data['snapshotParameters'])
+      end
+      return volume.retrieve!
   end
+
+  def delete_snapshot
+      data = data_parse(resource['data'])
+      # Verify if the ports parameter has been set or if we'll use nil
+      volume = OneviewSDK::Volume.new(@client, name: resource['data']['name'])
+      puts "\nVolume #{volume['name']} does not exist.\n" unless volume.retrieve!
+      if volume.retrieve!
+        puts "\nDeleting snapshot on Volume #{volume['name']}... \n"
+        volume.delete_snapshot(data['snapshotParameters']['name'])
+      end
+      return volume.retrieve!
+  end
+
+  def get_snapshot
+      data = data_parse(resource['data'])
+      # Verify if the ports parameter has been set or if we'll use nil
+      volume = OneviewSDK::Volume.new(@client, name: data['name'])
+      puts "\nVolume #{volume['name']} does not exist.\n" unless volume.retrieve!
+      if volume.retrieve!
+        if data['snapshotParameters']
+          # Checks that name exists within snapshotParameters
+          fail ("A snapshot Parameter 'name' is required for this operation") unless data['snapshotParameters']['name']
+          puts "\n Getting snapshot #{data['snapshotParameters']['name']} from Volume #{volume['name']}... \n"
+          pretty volume.get_snapshot(data['snapshotParameters']['name'])
+        end
+        unless data['snapshotParameters']
+          puts "\n Getting all snapshots from Volume #{volume['name']}... \n"
+          pretty volume.get_snapshots
+        end
+      end
+
+
+      return volume.retrieve!
+  end
+
 
 end

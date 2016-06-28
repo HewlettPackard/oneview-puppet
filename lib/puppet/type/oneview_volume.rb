@@ -25,6 +25,18 @@ Puppet::Type.newtype(:oneview_volume) do
       provider.found
     end
 
+    newvalue(:get_attachable_volumes) do
+      provider.get_attachable_volumes
+    end
+
+    newvalue(:get_extra_managed_volume_paths) do
+      provider.get_extra_managed_volume_paths
+    end
+
+    newvalue(:repair) do
+      provider.repair
+    end
+
     newvalue(:create_snapshot) do
       provider.create_snapshot
     end
