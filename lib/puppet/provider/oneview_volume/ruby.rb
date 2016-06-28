@@ -61,14 +61,14 @@ Puppet::Type.type(:oneview_volume).provide(:ruby) do
   def exists?
     state = resource['ensure'].to_s
     # Verify if data is set for resources that need it, else fail
-    unless resource['data'] || (state == ('found' || 'get_attachable_volumes' || 'get_extra_managed_volume_paths'))
+    unless resource['data'] || (state == 'found' || 'get_attachable_volumes' || 'get_extra_managed_volume_paths')
       fail("A 'data' Hash is required for the present operation")
     end
     unless state == 'present'
       # If no data hash is provided, create empty hash
       resource['data'] = Hash.new if resource['data'] == nil
       volume = OneviewSDK::Volume.find_by(@client, resource['data'])
-      return volume.retrieve!
+      return volume
     end
     if state == 'present'
       fail("A 'name' parameter is required inside data for the present operation") unless resource['data']['name']
