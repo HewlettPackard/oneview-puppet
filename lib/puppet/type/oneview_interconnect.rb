@@ -46,7 +46,19 @@ Puppet::Type.newtype(:oneview_interconnect) do
       provider.get_name_servers
     end
 
+    newvalue(:get_types) do
+      provider.get_types
+    end
+
     # PUTs
+
+    newvalue(:reset_port_protection) do
+      provider.reset_port_protection
+    end
+
+    newvalue(:update_ports) do
+      provider.update_ports
+    end
 
   end
 

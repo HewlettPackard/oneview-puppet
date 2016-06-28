@@ -29,10 +29,48 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
         @client = OneviewSDK::Client.new(login)
     end
 
+    # PATCH operations
+    # Checks whether the patch should apply to 1) all or 2) a specific interconnect
     def exists?
-        data = data_parse(resource['data'])
+      # In case there is no data hash (get types), it returns false right away
+      if !resource['data']
+        return false
+      end
+
+      data = data_parse(resource['data']) if data_parse(resource['data'])
+      # 1)
+      if !data['name'] && data['op'] && data['path'] && data['value']
+        OneviewSDK::Interconnect.find_by(@client, {}).each do |ic|
+          ic.retrieve!
+          ic.update_attribute(data['op'], data['path'], data['value'])
+        end
+        Puppet.warning("All Interconnects have been updated")
+        return true
+      # 2)
+      elsif data['name'] && data['op'] && data['path'] && data['value']
         interconnect = OneviewSDK::Interconnect.new(@client, name: data['name'])
+        # Does this one exist? If not, skip the update.
+        return false if !interconnect.retrieve!
+        interconnect.retrieve!
+        interconnect.update_attribute(data['op'], data['path'], data['value'])
+        Puppet.warning("The Interconnect has been updated")
+        return true
+      # Common cases
+      else
+        interconnect = OneviewSDK::Interconnect.new(@client, name: data['name'])
+        interconnect.retrieve!
         return interconnect.retrieve!
+      end
+    end
+
+    def create
+      Puppet.warning("This resource depends on other resources to be created.")
+      return false
+    end
+
+    def destroy
+      Puppet.warning("This resource depends on other resources to be destroyed.")
+      return false
     end
 
     def found
@@ -47,7 +85,14 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
         end
     end
 
-    # GET endpoints
+    # GET endpoints ============================================================
+
+    def get_types
+      Puppet.notice("\n\nInterconnect Types\n")
+      pretty OneviewSDK::Interconnect.get_types(@client)
+      return true
+    end
+
     def get_interconnect_type
         Puppet.notice("\n\nInterconnects\n")
         interconnect = OneviewSDK::Interconnect.find_by(@client, {}).each do |ic|
@@ -106,6 +151,41 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
       return true
     end
 
-    # PUT endpoints
+    # PUT endpoints ============================================================
+
+    # For each item in the hash ports, one port to be updated (key = port name)
+    def update_ports
+      data = data_parse(resource['data'])
+      Puppet.notice("\n\n Update Ports \n")
+      if data['ports']
+        ports = data['ports']
+        interconnect = OneviewSDK::Interconnect.new(@client, name: data['name'])
+        interconnect.retrieve!
+        ports.each do |key, value|
+          interconnect.update_port(key, ports[key])
+          Puppet.notice("\n\n The port #{key} has been updated. \n")
+        end
+        return true
+      else
+        Puppet.warning("No Port settings have been set in the manifest.")
+        return false
+      end
+    end
+
+    def reset_port_protection
+      Puppet.notice("\n\n Reset Port Protection \n")
+      data = data_parse(resource['data'])
+      interconnect = OneviewSDK::Interconnect.new(@client, name: data['name'])
+      if interconnect.retrieve!
+        interconnect.reset_port_protection
+        Puppet.notice("The Port Protection has been reset.")
+        return true
+      else
+        Puppet.warning("No Interconnects with the given specifications were found.")
+        return false
+      end
+    end
+
+
 
 end

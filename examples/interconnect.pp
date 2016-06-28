@@ -14,48 +14,105 @@
 # limitations under the License.
 ################################################################################
 
-# oneview_interconnect{'Interconnect Found':
-#     ensure => 'found',
-#     data   => {
-#       name                  => 'Encl2, interconnect 1'
-#     }
-# }
-#
-# oneview_interconnect{'Interconnect Get Type':
-#     ensure => 'get_interconnect_type',
-#     data   => {
-#       name                  => 'Encl2, interconnect 1'
-#     }
-# }
-#
-# oneview_interconnect{'Interconnect Get Schema':
-#     ensure => 'get_schema',
-#     data   => {
-#       name                  => 'Encl2, interconnect 1',
-#     }
-# }
-#
-# oneview_interconnect{'Interconnect Get Statistics':
-#     ensure => 'get_statistics',
-#     data   => {
-#       name                  => 'Encl2, interconnect 1',
-#     }
-# }
-#
-# oneview_interconnect{'Interconnect Get Specific Statistics':
-#     ensure => 'get_statistics',
-#     data   => {
-#       name                  => 'Encl2, interconnect 1',
-#       subportStatistics     =>
-#       {
-#         portName => 'X8'
-#       }
-#     }
-# }
+oneview_interconnect{'Interconnect Get Types':
+ensure => 'get_types'
+}
+
+oneview_interconnect{'Interconnect Found':
+    ensure => 'found',
+    data   => {
+      name                  => 'Encl2, interconnect 1'
+    }
+}
+
+
+oneview_interconnect{'Interconnect Get Type':
+    ensure => 'get_interconnect_type',
+    data   => {
+      name                  => 'Encl2, interconnect 1'
+    }
+}
+
+oneview_interconnect{'Interconnect Get Schema':
+    ensure => 'get_schema',
+    data   => {
+      name                  => 'Encl2, interconnect 1',
+    }
+}
+
+oneview_interconnect{'Interconnect Get Statistics':
+    ensure => 'get_statistics',
+    data   => {
+      name                  => 'Encl2, interconnect 1',
+    }
+}
+
+oneview_interconnect{'Interconnect Get Specific Statistics':
+    ensure => 'get_statistics',
+    data   => {
+      name                  => 'Encl2, interconnect 1',
+      subportStatistics     =>
+      {
+        portName => 'X8'
+      }
+    }
+}
 
 oneview_interconnect{'Interconnect Get Name Servers':
     ensure => 'get_name_servers',
     data   => {
       name                  => 'Encl2, interconnect 1'
+    }
+}
+
+oneview_interconnect{'Interconnect Patch One Interconnect':
+    ensure => 'present',
+    data   => {
+      name   => 'Encl2, interconnect 1',
+      op     => 'replace',
+      path   => '/uidState',
+      value  => 'Off',
+    }
+}
+
+oneview_interconnect{'Interconnect Patch All Interconnects':
+    ensure => 'present',
+    data   => {
+      op     => 'replace',
+      path   => '/powerState',
+      value  => 'Off',
+    }
+}
+
+oneview_interconnect{'Interconnect Destroy (warning)':
+    ensure => 'absent',
+    data   => {
+      name                  => 'Encl2, interconnect 1'
+    }
+}
+
+oneview_interconnect{'Interconnect Reset Port Protection':
+    ensure => 'reset_port_protection',
+    data   => {
+      name  => 'Encl2, interconnect 1',
+    }
+}
+
+oneview_interconnect{'Interconnect Update Ports':
+    ensure => 'update_ports',
+    data   => {
+      name  => 'Encl2, interconnect 1',
+      ports =>
+      {
+        d1 =>
+        {
+          portName => 'newPortName',
+          available => 'false',
+        },
+        d2 =>
+        {
+          available => 'true',
+        }
+      },
     }
 }
