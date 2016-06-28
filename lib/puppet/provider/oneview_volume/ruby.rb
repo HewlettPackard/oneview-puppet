@@ -74,7 +74,7 @@ Puppet::Type.type(:oneview_volume).provide(:ruby) do
       fail("A 'name' parameter is required inside data for the present operation") unless resource['data']['name']
       volume = OneviewSDK::Volume.new(@client, name: resource['data']['name'])
       Puppet.notice("#{resource} '#{resource['data']['name']}' located in Oneview Appliance") if volume.retrieve!
-      # volume_update(resource['data'], volume, resource)
+      volume_update(resource['data'], volume, resource)
       return volume.retrieve!
     end
     @property_hash[:ensure] == :present

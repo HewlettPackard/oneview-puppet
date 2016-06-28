@@ -32,12 +32,13 @@ end
 # process = name of the running proccess
 def volume_update(resource, volume, process)
   data = data_parse(resource)
-  new_name_exists = true
+  new_name_exists = false
   # checks if name is within the attr to be changed
   if data['new_name']
     new_name = data['new_name']
     # flag, true if exists
-    new_name_exists = false unless get_volume(new_name)
+    new_volume = OneviewSDK::Volume.new(@client, name: data['new_name'])
+    new_name_exists = true unless new_volume.retrieve!
     data.delete('new_name')
   end
   # new data to be checked for changes
@@ -46,7 +47,7 @@ def volume_update(resource, volume, process)
   data.delete('modified')
   # new hash / difference between old and new ones
   updated_data = existing_volume.merge(data)
-  updated_data['name'] = new_name if new_name_exists == false
+  updated_data['name'] = new_name if new_name_exists == true
   # if there's any difference..
   if updated_data != existing_volume
     # hash with different data remaining
