@@ -99,11 +99,11 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
     end
 
     def get_name_servers
-        OneviewSDK::Interconnect.find_by(@client, {}).each do |interconnect|
-
-            # Retrieve name servers
-            puts " - Name servers: #{interconnect.nameServers}"
-        end
+      data = data_parse(resource['data'])
+      OneviewSDK::Interconnect.find_by(@client, name: data['name']).each do |ic|
+        Puppet.notice("\n\n - Name servers: #{ic.name_servers}\n")
+      end
+      return true
     end
 
     # PUT endpoints
