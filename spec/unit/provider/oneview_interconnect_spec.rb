@@ -49,7 +49,8 @@ describe provider_class do
 
   context 'given the min parameters' do
 
-    it 'exists? should return false at first' do
+    # you must have the interconnect in your appliance
+    it 'exists? should return true' do
       expect(provider.exists?).to be
     end
 
