@@ -20,7 +20,6 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
-
   mk_resource_methods
 
   def initialize(*args)
@@ -34,21 +33,22 @@ Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
     matches.collect do |line|
       name = line['name']
       data = line.inspect
-      new(:name   => name,
-          :ensure => :present,
-          :data   => data
-          )
+      new(name: name,
+          ensure: :present,
+          data: data
+         )
     end
   end
 
-  def self.prefetch(resources)
-    packages = instances
-    resources.keys.each do |name|
-      if provider = packages.find{ |pkg| pkg.name == name }
-        resources[name].provider = provider
-      end
-    end
-  end
+  # TODO: eventually implement this prefetch method as it seems useful but requires an investigation into it
+  # def self.prefetch(resources)
+  #   packages = instances
+  #   resources.keys.each do |name|
+  #     if provider = packages.find { |pkg| pkg.name == name }
+  #       resources[name].provider = provider
+  #     end
+  #   end
+  # end
 
   def pretty(arg)
     return puts arg if arg.instance_of?(String)
@@ -59,27 +59,29 @@ Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
 
   def exists?
     state = resource['ensure'].to_s
-    resource['data']['poolName'] = resource['data']['name'] if resource['data']['name']
-    # Verify if data is set for resources that need it, else fail
-    unless resource['data'] || (state == 'found')
-      fail("A 'data' Hash is required for the present operation")
-    end
-    unless state == 'present'
-      # If no data hash is provided, create empty hash
-      resource['data'] = Hash.new if resource['data'] == nil
-      storage_pool = OneviewSDK::StoragePool.find_by(@client, resource['data'])
-      return storage_pool
-    end
-    if state == 'present'
-      storage_pool = OneviewSDK::StoragePool.new(@client, name: resource['data']['poolName'])
-      Puppet.notice("#{resource} '#{resource['data']['poolName']}' located in Oneview Appliance") if storage_pool.retrieve!
-      return storage_pool.retrieve!
-    end
-    @property_hash[:ensure] == :present
+    # # TODO: This validation should be run on the "type" itself
+    # # In case it is not, we should enable this part of the code
+    # # Verify if data is set for resources that need it, else fail
+    # unless resource['data'] || (state == 'found')
+    #   fail("A 'data' Hash is required for the present operation")
+    # end
+    data = helper_data
+    storage_pool = if state == 'present'
+                     OneviewSDK::StoragePool.find_by(@client, name: data['name'])
+                   else
+                     OneviewSDK::StoragePool.find_by(@client, data)
+                   end
+    # Puppet.notice("#{resource} '#{data['name']}' located in Oneview Appliance") unless storage_pool.empty? || !data['name']
+    !storage_pool.empty?
   end
 
   def create
-    data = data_parse(resource['data'])
+    data = helper_data
+    # Changes name for poolName, which is required only for this method
+    if data['name']
+      data['poolName'] = data['name']
+      data.delete('name')
+    end
     # Creates the storage pool
     storage_pool = OneviewSDK::StoragePool.new(@client, data)
     storage_pool.create
@@ -88,29 +90,42 @@ Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
   end
 
   def destroy
-    # Here both name and poolName are accepted as inputs
-    storage_pool = OneviewSDK::StoragePool.new(@client, name: resource['data']['poolName']) if resource['data']['poolName']
-    storage_pool = OneviewSDK::StoragePool.new(@client, name: resource['data']['name']) if resource['data']['name']
-    storage_pool.delete if storage_pool.retrieve!
+    data = helper_data
+    storage_pool = OneviewSDK::StoragePool.find_by(@client, name: data['name']).first
+    if storage_pool
+      storage_pool.delete
+    else
+      Puppet.notice("#{resource} '#{data['name']}' not located in Oneview Appliance")
+    end
     @property_hash.clear
   end
 
   def found
     # Searches StoragePools with data matching the manifest data
-    data = data_parse(resource['data'])
+    data = helper_data
     matches = OneviewSDK::StoragePool.find_by(@client, data)
     # If matches are found, iterate through them and notify. Else just notify.
-    unless matches.empty?
-       matches.each do |storage_pool|
-         Puppet.notice ( "\n\n Found matching storage pool #{storage_pool['poolName']} "+
-         "(URI: #{storage_pool['uri']}) on Oneview Appliance\n" )
+    if !matches.empty?
+      matches.each do |storage_pool|
+        Puppet.notice "\n\n Found matching storage pool #{storage_pool['name']} "\
+        "(URI: #{storage_pool['uri']}) on Oneview Appliance\n"
       end
       true
     else
-      Puppet.notice("\n\n No storage pools with the specified data were found on "+
+      Puppet.notice("\n\n No storage pools with the specified data were found on "\
       "the Oneview Appliance\n")
       false
     end
   end
 
+  def helper_data
+    # If no data hash is provided, create empty hash
+    resource['data'] ||= {}
+    data = data_parse(resource['data'])
+    if data['poolName']
+      data['name'] = data['poolName']
+      data.delete('poolName')
+    end
+    data
+  end
 end

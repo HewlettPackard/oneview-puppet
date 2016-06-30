@@ -24,7 +24,7 @@ oneview_storage_pool{'storage_pool_1':
 
 oneview_storage_pool{'storage_pool_2':
     ensure => 'found',
-    require => Oneview_storage_pool['storage_pool_1'],
+    # require => Oneview_storage_pool['storage_pool_1'],
     # This resource accepts a data hash to filter out results or no data hash to display all
     # data   => {
     #   poolName                   => 'FST_CPG2',
