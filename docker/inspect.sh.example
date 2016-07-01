@@ -14,7 +14,27 @@
 # limitations under the License.
 ################################################################################
 
-Gemfile.lock
-spec/fixtures/
-lib/puppet/provider/login.rb
-docker/*.sh
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied: Please give the command you want to pass to the docker conatianer e.g. bash"
+    exit 1
+fi
+
+proxy='{proxy}'
+
+docker run  -it \
+			-v $(pwd)/puppet:/puppet \
+			-e ONEVIEW_URL='{url}' \
+			-e ONEVIEW_USER='{user}' \
+			-e ONEVIEW_PASSWORD='{password}' \
+			-e ONEVIEW_SSL_ENABLED=false, \
+			-e ONEVIEW_LOG_LEVEL='info' \
+			-e ONEVIEW_API_VERSION=200 \
+			-e HTTP_PROXY=$proxy \
+			-e HTTPS_PROXY=$proxy \
+			-e http_proxy=$proxy \
+			-e https_proxy=$proxy	\
+			puppet-oneview-ruby $1
+
+#Example param for using token instead of username/password
+#-e ONEVIEW_TOKEN='ABCDEFGH1234...' \

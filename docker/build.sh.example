@@ -14,7 +14,11 @@
 # limitations under the License.
 ################################################################################
 
-Gemfile.lock
-spec/fixtures/
-lib/puppet/provider/login.rb
-docker/*.sh
+proxy='{proxy}'
+
+docker build 	--build-arg HTTP_PROXY=$proxy  \
+				--build-arg HTTPS_PROXY=$proxy \
+				--build-arg http_proxy=$proxy  \
+				--build-arg https_proxy=$proxy \
+				-t puppet-oneview-ruby \
+				.
