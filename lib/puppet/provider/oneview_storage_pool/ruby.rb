@@ -50,11 +50,6 @@ Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
   #   end
   # end
 
-  def pretty(arg)
-    return puts arg if arg.instance_of?(String)
-    puts JSON.pretty_generate(arg)
-  end
-
   # Provider methods
 
   def exists?
