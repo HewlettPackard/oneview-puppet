@@ -4,9 +4,7 @@ def login
     ssl_enabled: ['true', '1', 'yes'].include?(ENV['ONEVIEW_SSL_ENABLED']),
     logger: Logger.new(STDOUT),
     log_level: :info,
-    api_version: 200,
     log_level: ENV['ONEVIEW_LOG_LEVEL'] ||= 'info',
-    api_version: ENV['ONEVIEW_API_VERSION'].to_i
   }
 
   # Set EITHER token or the user & password
@@ -15,6 +13,12 @@ def login
   else
     credentials[:user] = ENV['ONEVIEW_USER'] ||= 'Administrator'
     credentials[:password] = ENV['ONEVIEW_PASSWORD'] ||= 'chefoneview'
+  end
+
+  if ENV['ONEVIEW_API_VERSION']
+    credentials[:api_version] = ENV['ONEVIEW_API_VERSION'].to_i
+  else
+    credentials[:api_version] = 200
   end
 
   credentials
