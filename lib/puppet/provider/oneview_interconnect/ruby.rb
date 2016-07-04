@@ -16,7 +16,6 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'interconnect'))
 require 'oneview-sdk'
 require 'json'
 
