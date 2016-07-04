@@ -18,7 +18,6 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
   desc "Oneview's Logical Interconnect Group"
 
   ensurable do
-
     defaultvalues
 
     newvalue(:found) do
@@ -42,24 +41,19 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
     newvalue(:get_schema) do
       provider.get_schema
     end
-
-    # PUTs
-
   end
 
   newparam(:name, :namevar => true) do
-    desc "Logical Interconnect Group process name"
+    desc 'Logical Interconnect Group process name'
   end
 
-
   newparam(:data) do
-    desc "Logical Interconnect Group data hash containing all specifications for the
-    resource"
+    desc 'Logical Interconnect Group data hash containing all specifications for the
+    resource'
     validate do |value|
       unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
+        raise Puppet::Error, 'Inserted value for data is not valid'
       end
     end
   end
-
 end

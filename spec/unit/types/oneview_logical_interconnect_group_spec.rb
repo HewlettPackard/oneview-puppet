@@ -20,10 +20,11 @@ type_class = Puppet::Type.type(:oneview_logical_interconnect_group)
 
 def logical_interconnect_group_config
   {
-    name:                           'Test LIG',
+    name:                           'test_lig',
     data:
       {
-          name:                       'OneView_Puppet Test LIG',
+          name:                       'Test LIG',
+          enclosureType:              'C7000'
       },
   }
 end
@@ -56,7 +57,7 @@ describe type_class do
     resource_type = type_class.to_s.split('::')
     expect {
         type_class.new(modified_config)
-    }.to raise_error(Puppet::Error, "Parameter data failed on" +
+    }.to raise_error(Puppet::Error, "Parameter data failed on"\
     " #{resource_type[2]}[#{modified_config[:name]}]: Invalid Data Hash")
   end
 

@@ -19,7 +19,6 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
-
   mk_resource_methods
 
   def initialize(*args)
@@ -28,7 +27,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
   end
 
   def exists?
-    return true if !resource['data'] || resource['data'].size == 0
+    return true if !resource['data'] || resource['data'].empty?
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
     # looking for potential updates
@@ -43,20 +42,20 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     #   lig.data = lig_data_update
     #   lig.update
     # end
-    return lig.retrieve!
+    lig.retrieve!
   end
 
   def found
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
     if lig.retrieve!
-      Puppet.notice ( "\n\nFound logical interconnect group"+
+      Puppet.notice("\n\nFound logical interconnect group"\
       " #{lig['name']} in Oneview Appliance\n")
-      return true
+      true
     else
-      Puppet.notice("\n\nNo logical interconnect groups with the specified data were"+
+      Puppet.notice("\n\nNo logical interconnect groups with the specified data were"\
       " found on the Oneview Appliance\n")
-      return false
+      false
     end
   end
 
@@ -64,14 +63,14 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
     lig.create
-    return lig.retrieve!
+    lig.retrieve!
   end
 
   def destroy
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
     lig.retrieve!
-    return lig.delete
+    lig.delete
   end
 
   # GET ENDPOINTS =======================================
@@ -81,7 +80,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     options = {}
     options = data_parse(resource['data']) if resource['data']
     OneviewSDK::LogicalInterconnectGroup.find_by(@client, options).each do |lig|
-      Puppet.notice ( "\n\nFound logical interconnect group"+
+      Puppet.notice("\n\nFound logical interconnect group"\
       " #{lig['name']} (URI #{lig['uri']}) in Oneview Appliance\n")
     end
     true
@@ -93,10 +92,10 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, data)
     if lig.retrieve!
       pretty lig.get_settings
-      return true
+      true
     else
-      Puppet.warning("No Logical Interconnect Groups with the given specifications were found.")
-      return false
+      Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
+      false
     end
   end
 
@@ -106,10 +105,10 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, data)
     if lig.retrieve!
       pretty lig.get_default_settings
-      return true
+      true
     else
-      Puppet.warning("No Logical Interconnect Groups with the given specifications were found.")
-      return false
+      Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
+      false
     end
   end
 
@@ -119,10 +118,10 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, data)
     if lig.retrieve!
       pretty lig.schema
-      return true
+      true
     else
-      Puppet.warning("No Logical Interconnect Groups with the given specifications were found.")
-      return false
+      Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
+      false
     end
   end
 

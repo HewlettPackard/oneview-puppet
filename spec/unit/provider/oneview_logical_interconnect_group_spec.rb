@@ -68,9 +68,7 @@ describe provider_class do
     end
 
     it 'should be able to delete the logical interconnect group' do
-      expect(provider.delete).to be
+      expect(provider.destroy).to be
     end
-
   end
-
 end
