@@ -18,6 +18,7 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Create':
     ensure  => 'present',
     data    => {
       name          => 'My LIG',
+      # new_name      => 'Edited Name',
       enclosureType => 'C7000',
       type          => 'logical-interconnect-groupV3'
     }

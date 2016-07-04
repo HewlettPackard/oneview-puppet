@@ -16,7 +16,7 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-# require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logical_interconnect_group'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logical_interconnect_group'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
@@ -32,6 +32,18 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     return true if !resource['data'] || resource['data'].size == 0
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
+    # looking for potential updates
+    # the sdk update method returns an error
+    # it has to be checked later on
+    # lig_data_update = data_parse_interconnect(lig.data.merge(data))
+    # lig_data_update['name'] = data['new_name'] if data['new_name']
+    # lig_data_update.delete('new_name') if data['new_name']
+    # if lig_data_update != lig.data
+    #   puts lig.data
+    #   puts lig_data_update
+    #   lig.data = lig_data_update
+    #   lig.update
+    # end
     return lig.retrieve!
   end
 
@@ -40,7 +52,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
     if lig.retrieve!
       Puppet.notice ( "\n\nFound logical interconnect group"+
-      " #{lig['name']} on Oneview Appliance\n")
+      " #{lig['name']} in Oneview Appliance\n")
       return true
     else
       Puppet.notice("\n\nNo logical interconnect groups with the specified data were"+
