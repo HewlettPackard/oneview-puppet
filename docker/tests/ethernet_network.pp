@@ -1,5 +1,5 @@
 oneview_ethernet_network{'net1':
-    ensure  => 'absent',
+    ensure  => 'present',
     data    => {
       name                  => 'Puppet network',
       vlanId                => '1045',
