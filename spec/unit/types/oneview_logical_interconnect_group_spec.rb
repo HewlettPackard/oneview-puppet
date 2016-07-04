@@ -23,8 +23,8 @@ def logical_interconnect_group_config
     name:                           'test_lig',
     data:
       {
-          name:                       'Test LIG',
-          enclosureType:              'C7000'
+          'name'           => 'Test LIG',
+          'enclosureType'  => 'C7000'
       },
   }
 end
