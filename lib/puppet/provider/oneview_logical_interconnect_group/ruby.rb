@@ -126,10 +126,4 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     end
   end
 
-  # PUT/SET ENDPOINTS =======================================
-
-  # def set_ethernet_settings
-  #   set_endpoints(resource['data'], 'ethernetSettings')
-  # end
-
 end
