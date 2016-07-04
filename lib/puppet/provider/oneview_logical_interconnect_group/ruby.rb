@@ -30,6 +30,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     return true if !resource['data'] || resource['data'].empty?
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
+    # TODO: Update is currently not supported in sdk, this should be enabled it becomes supported
     # looking for potential updates
     # the sdk update method returns an error
     # it has to be checked later on
