@@ -73,3 +73,12 @@
 #       type          => 'logical-interconnect-groupV3'
 #     }
 # }
+
+oneview_logical_interconnect_group{'Logical Interconnect Group Create':
+    ensure  => 'present',
+    data    => {
+      name          => 'My LIG',
+      enclosureType => 'C7000000',
+      type          => 'logical-interconnect-groupV3'
+    }
+}

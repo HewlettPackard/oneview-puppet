@@ -32,15 +32,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
     return true if !resource['data'] || resource['data'].size == 0
     data = data_parse(resource['data'])
     lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
-    # lig.retrieve!
-    # if lig.retrieve!
-    #   puts lig.methods
-    #   puts lig
-    #   #update
-    #   true
-    # else
-    #   false
-    # end
+    return lig.retrieve!
   end
 
   def found
