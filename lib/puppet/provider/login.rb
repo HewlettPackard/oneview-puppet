@@ -1,6 +1,6 @@
 def login
   credentials = {
-    url: ENV['ONEVIEW_URL'] ||= 'https://15.244.150.163',
+    url: ENV['ONEVIEW_URL'] ||= 'https://172.16.101.19',
     ssl_enabled: ['true', '1', 'yes'].include?(ENV['ONEVIEW_SSL_ENABLED']),
     logger: Logger.new(STDOUT),
     log_level: :info,
@@ -12,7 +12,7 @@ def login
     credentials[:token] = ENV['ONEVIEW_TOKEN']	
   else
     credentials[:user] = ENV['ONEVIEW_USER'] ||= 'Administrator'
-    credentials[:password] = ENV['ONEVIEW_PASSWORD'] ||= 'chefoneview'
+    credentials[:password] = ENV['ONEVIEW_PASSWORD'] ||= 'rainforest'
   end
 
   if ENV['ONEVIEW_API_VERSION']
@@ -23,4 +23,3 @@ def login
 
   credentials
 end
-
