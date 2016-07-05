@@ -28,13 +28,10 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     end
 
     def exists?
+      true if !resource['data']
       data = data_parse(resource['data'])
       lsg = OneviewSDK::LogicalSwitchGroup.new(@client, name: data['name'])
-      lsg.retrieve!
-      unless lsg['data'] == data
-        updated_data = Hash[lsg['data'].to_a-data.to_a]
-        lsg.update(updated_data)
-      end
+      resource_update(data, OneviewSDK::LogicalSwitchGroup) if lsg.retrieve!
       lsg.retrieve!
     end
 
@@ -62,7 +59,6 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     end
 
     def get_logical_switch_groups
-      data = data_parse(resource['data'])
       lsg_list = OneviewSDK::LogicalSwitchGroup.find_all(@client)
       lsg_list.each do |lsg|
         Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\

@@ -25,13 +25,28 @@ oneview_logical_switch_group{'Logical Switch Group Create':
     }
 }
 
-# oneview_logical_switch_group{'Logical Switch Group Create':
-#   ensure => 'present',
-#   data   =>
-#     {
-#       name     => 'OneViewSDK Test Logical Switch Group',
-#       category => 'logical-switch-groups',
-#       state    => 'Active',
-#       type     => 'logical-switch-group'
-#     }
-# }
+oneview_logical_switch_group{'Logical Switch Group Found':
+  ensure => 'found',
+  data   =>
+    {
+      name     => 'OneViewSDK Test Logical Switch Group',
+      category => 'logical-switch-groups',
+      state    => 'Active',
+      type     => 'logical-switch-group'
+    }
+}
+
+oneview_logical_switch_group{'Logical Switch Get Schema':
+  ensure => 'get_schema',
+  data   =>
+    {
+      name     => 'OneViewSDK Test Logical Switch Group',
+      category => 'logical-switch-groups',
+      state    => 'Active',
+      type     => 'logical-switch-group'
+    }
+}
+
+oneview_logical_switch_group{'Logical Switch Group Get All':
+  ensure => 'get_logical_switch_groups',
+}
