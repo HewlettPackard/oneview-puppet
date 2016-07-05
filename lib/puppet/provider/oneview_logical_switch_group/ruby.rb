@@ -27,7 +27,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def exists?
-    true unless resource['data']
+    return true unless resource['data']
     data = data_parse(resource['data'])
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, name: data['name'])
     resource_update(data, OneviewSDK::LogicalSwitchGroup) if lsg.retrieve!
@@ -36,12 +36,19 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
 
   def create
     data = data_parse(resource['data'])
+    groupingParameters = data['groupingParameters']
+    data.delete('groupingParameters') if data['groupingParameters']
+    groupingParameters = groupingParameters.to_a
+    puts groupingParameters[0][0], groupingParameters[0][1].to_s
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
+    # TO BE FINISHED
+    lsg.set_grouping_parameters(groupingParameters[0][0], groupingParameters[0][1].to_s)
     lsg.create!
   end
 
   def destroy
     data = data_parse(resource['data'])
+    data.delete('groupingParameters') if data['groupingParameters']
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
     lsg.retrieve!
     lsg.delete
@@ -49,16 +56,18 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
 
   def found
     data = data_parse(resource['data'])
+    data.delete('groupingParameters') if data['groupingParameters']
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
     if lsg.retrieve!
-      Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\
+      Puppet.notice("\nLogical Switch Group found in Oneview Appliance "\
       "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
       true
     end
   end
 
   def get_logical_switch_groups
-    lsg_list = OneviewSDK::LogicalSwitchGroup.find_all(@client)
+    Puppet.notice("\n\nLogical Switch Groups\n")
+    lsg_list = OneviewSDK::LogicalSwitchGroup.get_all(@client)
     lsg_list.each do |lsg|
       Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\
       "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
@@ -67,7 +76,9 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def get_schema
+    Puppet.notice("\n\nLogical Switch Groups Schema\n")
     data = data_parse(resource['data'])
+    data.delete('groupingParameters') if data['groupingParameters']
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
     pretty lsg.schema if lsg.retrieve!
   end

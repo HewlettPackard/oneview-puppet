@@ -18,35 +18,53 @@ oneview_logical_switch_group{'Logical Switch Group Create':
   ensure => 'present',
   data   =>
     {
-      name     => 'OneViewSDK Test Logical Switch Group',
-      category => 'logical-switch-groups',
-      state    => 'Active',
-      type     => 'logical-switch-group'
+      name => 'Test Logical Switch Group',
+      category           => 'logical-switch-groups',
+      state              => 'Active',
+      type               => 'logical-switch-group',
+      groupingParameters =>
+      {
+        1 => 'Cisco Nexus 50xx'
+      }
     }
 }
 
-oneview_logical_switch_group{'Logical Switch Group Found':
-  ensure => 'found',
-  data   =>
-    {
-      name     => 'OneViewSDK Test Logical Switch Group',
-      category => 'logical-switch-groups',
-      state    => 'Active',
-      type     => 'logical-switch-group'
-    }
-}
-
-oneview_logical_switch_group{'Logical Switch Get Schema':
-  ensure => 'get_schema',
-  data   =>
-    {
-      name     => 'OneViewSDK Test Logical Switch Group',
-      category => 'logical-switch-groups',
-      state    => 'Active',
-      type     => 'logical-switch-group'
-    }
-}
-
-oneview_logical_switch_group{'Logical Switch Group Get All':
-  ensure => 'get_logical_switch_groups',
-}
+# oneview_logical_switch_group{'Logical Switch Group Found':
+#   ensure   => 'found',
+#   require  => Oneview_logical_switch_group['Logical Switch Group Create'],
+#   data     =>
+#     {
+#       name     => 'OneViewSDK Test Logical Switch Group',
+#       category => 'logical-switch-groups',
+#       state    => 'Active',
+#       type     => 'logical-switch-group'
+#     }
+# }
+#
+# oneview_logical_switch_group{'Logical Switch Group Get Schema':
+#   ensure  => 'get_schema',
+#   require => Oneview_logical_switch_group['Logical Switch Group Found'],
+#   data    =>
+#     {
+#       name     => 'OneViewSDK Test Logical Switch Group',
+#       category => 'logical-switch-groups',
+#       state    => 'Active',
+#       type     => 'logical-switch-group'
+#     }
+# }
+#
+# oneview_logical_switch_group{'Logical Switch Group Get All':
+#   ensure => 'get_logical_switch_groups',
+# }
+#
+# oneview_logical_switch_group{'Logical Switch Group Destroy':
+#   ensure  => 'absent',
+#   require => Oneview_logical_switch_group['Logical Switch Group Get Schema'],
+#   data    =>
+#     {
+#       name => 'Test Logical Switch Group',
+#       category => 'logical-switch-groups',
+#       state    => 'Active',
+#       type     => 'logical-switch-group'
+#     }
+# }
