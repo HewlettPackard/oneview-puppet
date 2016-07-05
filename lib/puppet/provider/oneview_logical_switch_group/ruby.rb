@@ -19,62 +19,56 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
+  mk_resource_methods
 
-    mk_resource_methods
+  def initialize(*args)
+    super(*args)
+    @client = OneviewSDK::Client.new(login)
+  end
 
-    def initialize(*args)
-        super(*args)
-        @client = OneviewSDK::Client.new(login)
+  def exists?
+    true unless resource['data']
+    data = data_parse(resource['data'])
+    lsg = OneviewSDK::LogicalSwitchGroup.new(@client, name: data['name'])
+    resource_update(data, OneviewSDK::LogicalSwitchGroup) if lsg.retrieve!
+    lsg.retrieve!
+  end
+
+  def create
+    data = data_parse(resource['data'])
+    lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
+    lsg.create!
+  end
+
+  def destroy
+    data = data_parse(resource['data'])
+    lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
+    lsg.retrieve!
+    lsg.delete
+  end
+
+  def found
+    data = data_parse(resource['data'])
+    lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
+    if lsg.retrieve!
+      Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\
+      "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
+      true
     end
+  end
 
-    def exists?
-      true if !resource['data']
-      data = data_parse(resource['data'])
-      lsg = OneviewSDK::LogicalSwitchGroup.new(@client, name: data['name'])
-      resource_update(data, OneviewSDK::LogicalSwitchGroup) if lsg.retrieve!
-      lsg.retrieve!
+  def get_logical_switch_groups
+    lsg_list = OneviewSDK::LogicalSwitchGroup.find_all(@client)
+    lsg_list.each do |lsg|
+      Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\
+      "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
     end
+    true unless lsg_list.empty?
+  end
 
-    def create
-      data = data_parse(resource['data'])
-      lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-      lsg.create!
-    end
-
-    def destroy
-      data = data_parse(resource['data'])
-      lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-      lsg.retrieve!
-      lsg.delete
-    end
-
-    def found
-      data = data_parse(resource['data'])
-      lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-      if lsg.retrieve!
-        Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\
-        "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
-        true
-      end
-    end
-
-    def get_logical_switch_groups
-      lsg_list = OneviewSDK::LogicalSwitchGroup.find_all(@client)
-      lsg_list.each do |lsg|
-        Puppet.notice("\nLogical Switch Group found in Oneview Appliance"\
-        "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
-      end
-      true unless lsg_list.empty?
-    end
-
-    def get_schema
-      data = data_parse(resource['data'])
-      lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-      if lsg.retrieve!
-        lsg.schema
-        true
-      end
-    end
-
-
+  def get_schema
+    data = data_parse(resource['data'])
+    lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
+    pretty lsg.schema if lsg.retrieve!
+  end
 end
