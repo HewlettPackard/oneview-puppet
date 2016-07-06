@@ -41,17 +41,13 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
 
   def create
     data = data_parse(resource['data'])
-    unless data['groupingParameters']
-      Puppet.warning('No grouping Parameters were defined in the manifest.')
-      return false
-    end
-    # Assigning the key (k) and value (v) of Grouping Parameters,
+    # Assigning the key and value of Grouping Parameters (gp),
     # then removing it from the data hash
-    groupingParametersK = data['groupingParameters'].keys[0].to_i
-    groupingParametersV = data['groupingParameters'].values[0]
+    gp_key = data['groupingParameters'].keys[0].to_i
+    gp_value = data['groupingParameters'].values[0]
     data.delete('groupingParameters')
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-    lsg.set_grouping_parameters(groupingParametersK, groupingParametersV)
+    lsg.set_grouping_parameters(gp_key, gp_value)
     lsg.create!
   end
 

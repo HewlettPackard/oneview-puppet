@@ -19,17 +19,16 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_logical_switch_group).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_logical_switch_group).new(
-    name:   'Test_Logical_Switch_Group',
-    ensure: 'present',
-        data:
+      name: 'Logical Switch Group',
+      ensure: 'present',
+      data:
           {
-              'name'                    => 'Test LSG',
-          },
+            'name' => 'Logical Switch Group'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
@@ -62,5 +61,4 @@ describe provider_class do
   it 'should destroy the LSG' do
     expect(provider.destroy).to be
   end
-
 end

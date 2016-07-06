@@ -26,24 +26,24 @@ Puppet::Type.newtype(:oneview_logical_switch_group) do
 
     # GETs ===============================
 
-    newvalue(:get_logical_switch_groups)do
+    newvalue(:get_logical_switch_groups) do
       provider.get_logical_switch_groups
     end
 
-    newvalue(:get_schema)do
+    newvalue(:get_schema) do
       provider.get_schema
     end
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Logical Switch Group name"
+  newparam(:name, namevar: true) do
+    desc 'Logical Switch Group name'
   end
 
   newparam(:data) do
-    desc "Logical Switch Group attributes"
+    desc 'Logical Switch Group attributes'
     validate do |value|
       unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
+        raise Puppet::Error, 'Inserted value for data is not valid'
       end
     end
   end
