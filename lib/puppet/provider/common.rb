@@ -64,3 +64,8 @@ def new_name_validation(data, resourcetype)
     data.delete('new_name')
   end
 end
+
+def get_uri(name, resourcetype)
+  resource = resourcetype.new(@client, name: name)
+  resource['uri'] if resource.retrieve!
+end
