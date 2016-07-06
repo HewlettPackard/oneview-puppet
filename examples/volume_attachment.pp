@@ -43,15 +43,15 @@ oneview_volume_attachment{'volume_attachment_4':
 }
 
 oneview_volume_attachment{'volume_attachment_5':
-    ensure  => 'remove_extra_unmanaged_volume',
-    data    => {
+    ensure => 'remove_extra_unmanaged_volume',
+    data   => {
       name       => 'OneViewSDK Test ServerProfile1',
     }
 }
 
 oneview_volume_attachment{'volume_attachment_6':
-    ensure  => 'get_paths',
-    data    => {
+    ensure => 'get_paths',
+    data   => {
       name       => 'ONEVIEW_PUPPET_TEST VA1',
     }
 }
