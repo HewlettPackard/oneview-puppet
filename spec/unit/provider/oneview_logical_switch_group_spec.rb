@@ -25,7 +25,14 @@ describe provider_class do
       ensure: 'present',
       data:
           {
-            'name' => 'Logical Switch Group'
+            'name'               => 'Logical Switch Group',
+            'category'           => 'logical-switch-groups',
+            'state'              => 'Active',
+            'type'               => 'logical-switch-group',
+            'groupingParameters' =>
+              {
+                '1' => 'Cisco Nexus 50xx'
+              }
           }
     )
   end

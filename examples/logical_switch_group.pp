@@ -18,7 +18,7 @@ oneview_logical_switch_group{'Logical Switch Group Create':
   ensure => 'present',
   data   =>
     {
-      name => 'Test Logical Switch Group',
+      name               => 'Test Logical Switch Group',
       category           => 'logical-switch-groups',
       state              => 'Active',
       type               => 'logical-switch-group',
@@ -30,9 +30,9 @@ oneview_logical_switch_group{'Logical Switch Group Create':
 }
 
 oneview_logical_switch_group{'Logical Switch Group Found':
-  ensure   => 'found',
-  require  => Oneview_logical_switch_group['Logical Switch Group Create'],
-  data     =>
+  ensure  => 'found',
+  require => Oneview_logical_switch_group['Logical Switch Group Create'],
+  data    =>
     {
       name     => 'OneViewSDK Test Logical Switch Group',
       category => 'logical-switch-groups',
@@ -62,7 +62,7 @@ oneview_logical_switch_group{'Logical Switch Group Destroy':
   require => Oneview_logical_switch_group['Logical Switch Group Get Schema'],
   data    =>
     {
-      name => 'Test Logical Switch Group',
+      name     => 'Test Logical Switch Group',
       category => 'logical-switch-groups',
       state    => 'Active',
       type     => 'logical-switch-group'
