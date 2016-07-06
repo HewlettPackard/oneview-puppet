@@ -159,8 +159,8 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:ruby) do
         get_all_paths(retrieved_resource)
       end
     else
-    Puppet.err("\n\nSpecified Storage Volume Attachment does not exist\n\n") unless retrieved_resource
-    # fail 'Specified Storage Volume Attachment does not exist' unless retrieved_resource
+      Puppet.err("\n\nSpecified Storage Volume Attachment does not exist\n\n") unless retrieved_resource
+      # fail 'Specified Storage Volume Attachment does not exist' unless retrieved_resource
     end
   end
 

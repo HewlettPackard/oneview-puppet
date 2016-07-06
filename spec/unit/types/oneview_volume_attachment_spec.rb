@@ -24,7 +24,7 @@ def volume_attachment_config
     ensure: 'present',
     data:
       {
-        'name'         => 'ONEVIEW_PUPPET_VA_TEST',
+        'name' => 'ONEVIEW_PUPPET_VA_TEST'
       }
   }
 end
