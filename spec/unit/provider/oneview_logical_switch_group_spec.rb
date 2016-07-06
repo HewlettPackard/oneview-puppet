@@ -22,7 +22,7 @@ describe provider_class do
 
   let(:resource) {
     Puppet::Type.type(:oneview_logical_switch_group).new(
-      name: 'Test Logical Switch Group',
+    name:   'Test_Logical_Switch_Group',
     ensure: 'present',
         data:
           {

@@ -28,21 +28,30 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
 
   def exists?
     return true unless resource['data']
-    data = data_parse(resource['data'])
+    # Cloning the data so that grouping parameters don't get removed
+    # permanently from the hash
+    data = resource['data'].clone
+    data.delete('groupingParameters')
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, name: data['name'])
+    # Passing the data for update without grouping Parameters
+    # data.delete('groupingParameters')
     resource_update(data, OneviewSDK::LogicalSwitchGroup) if lsg.retrieve!
     lsg.retrieve!
   end
 
   def create
     data = data_parse(resource['data'])
-    groupingParameters = data['groupingParameters']
-    data.delete('groupingParameters') if data['groupingParameters']
-    groupingParameters = groupingParameters.to_a
-    puts groupingParameters[0][0], groupingParameters[0][1].to_s
+    unless data['groupingParameters']
+      Puppet.warning('No grouping Parameters were defined in the manifest.')
+      return false
+    end
+    # Assigning the key (k) and value (v) of Grouping Parameters,
+    # then removing it from the data hash
+    groupingParametersK = data['groupingParameters'].keys[0].to_i
+    groupingParametersV = data['groupingParameters'].values[0]
+    data.delete('groupingParameters')
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-    # TO BE FINISHED
-    lsg.set_grouping_parameters(groupingParameters[0][0], groupingParameters[0][1].to_s)
+    lsg.set_grouping_parameters(groupingParametersK, groupingParametersV)
     lsg.create!
   end
 
@@ -50,8 +59,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     data = data_parse(resource['data'])
     data.delete('groupingParameters') if data['groupingParameters']
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-    lsg.retrieve!
-    lsg.delete
+    lsg.delete if lsg.retrieve!
   end
 
   def found
@@ -80,6 +88,8 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     data = data_parse(resource['data'])
     data.delete('groupingParameters') if data['groupingParameters']
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
-    pretty lsg.schema if lsg.retrieve!
+    lsg.retrieve!
+    pretty lsg.schema
+    true
   end
 end
