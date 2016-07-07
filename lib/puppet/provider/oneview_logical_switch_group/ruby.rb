@@ -36,7 +36,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     # Passing the data for update without grouping Parameters
     # data.delete('groupingParameters')
     resource_update(data, OneviewSDK::LogicalSwitchGroup) if lsg.retrieve!
-    lsg.retrieve!
+    lsg.exists?
   end
 
   def create
@@ -48,7 +48,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     data.delete('groupingParameters')
     lsg = OneviewSDK::LogicalSwitchGroup.new(@client, data)
     lsg.set_grouping_parameters(gp_key, gp_value)
-    lsg.create!
+    lsg.create
   end
 
   def destroy
