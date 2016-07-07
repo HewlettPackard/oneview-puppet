@@ -15,7 +15,7 @@
 ################################################################################
 
 oneview_server_profile_template{'Server Profile Template Create':
-  ensure => 'get_new_profile',
+  ensure => 'get_available_hardware',
   data   =>
     {
       name               => 'My SPT',

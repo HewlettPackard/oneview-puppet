@@ -33,3 +33,8 @@ def spt_parse(data)
   end
   data_clone
 end
+
+def get_spt(data)
+  spt = OneviewSDK::ServerProfileTemplate.new(@client, data)
+  spt.retrieve!
+end

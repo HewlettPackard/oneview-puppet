@@ -34,6 +34,10 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
     newvalue(:get_new_profile) do
       provider.get_new_profile
     end
+
+    newvalue(:get_available_hardware) do
+      provider.get_available_hardware
+    end
   end
 
   newparam(:name, namevar: true) do
