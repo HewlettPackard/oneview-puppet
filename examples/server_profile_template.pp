@@ -15,10 +15,44 @@
 ################################################################################
 
 oneview_server_profile_template{'Server Profile Template Create':
-  ensure => 'get_available_hardware',
+  ensure => 'present',
   data   =>
     {
       name               => 'My SPT',
+      enclosureGroup     => 'EG',
+      serverHardwareType => 'BL460c Gen8 1'
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Found':
+  ensure  => 'found',
+  require => Oneview_server_profile_template['Server Profile Template Create'],
+  data    =>
+    {
+      name               => 'My SPT',
+      enclosureGroup     => 'EG',
+      serverHardwareType => 'BL460c Gen8 1'
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Edit':
+  ensure  => 'present',
+  require => Oneview_server_profile_template['Server Profile Template Found'],
+  data    =>
+    {
+      name               => 'My SPT',
+      new_name           => 'Edited SPT Name',
+      enclosureGroup     => 'EG',
+      serverHardwareType => 'BL460c Gen8 1'
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Destroy':
+  ensure  => 'absent',
+  require => Oneview_server_profile_template['Server Profile Template Edit'],
+  data    =>
+    {
+      name               => 'Edited SPT Name',
       enclosureGroup     => 'EG',
       serverHardwareType => 'BL460c Gen8 1'
     }
