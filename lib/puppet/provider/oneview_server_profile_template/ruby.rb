@@ -35,13 +35,13 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     if spt.retrieve! && resource['ensure'] != 'absent'
       resource_update(spt_parse(data_parse), OneviewSDK::ServerProfileTemplate)
     end
-    spt.retrieve!
+    spt.exists?
   end
 
   def create
     data = spt_parse(data_parse)
     spt = OneviewSDK::ServerProfileTemplate.new(@client, data)
-    spt.create!
+    spt.create
   end
 
   def destroy

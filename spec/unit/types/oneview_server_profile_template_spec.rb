@@ -29,7 +29,6 @@ def spt_config
           'serverHardwareType' => 'BL460c Gen8 1'
         }
   }
-
 end
 
 describe type_class do
