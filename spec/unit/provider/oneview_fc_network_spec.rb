@@ -4,37 +4,34 @@ require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_fc_network).provider(:ruby)
 
-
 describe provider_class, unit: true do
-    include_context 'shared context'
+  include_context 'shared context'
 
+  let(:resource) do
+    Puppet::Type.type(:oneview_fc_network).new(
+      name: 'fc',
+      ensure: 'present',
+      data:
+          {
+            'name'                    => 'OneViewSDK Test FC Network',
+            'connectionTemplateUri'   => nil,
+            'autoLoginRedistribution' => true,
+            'fabricType'              => 'FabricAttach',
+            'type' => 'fc-networkV2',
+            'linkStabilityTime' => 30
+          }
+    )
+  end
 
-    let(:resource) do
-      Puppet::Type.type(:oneview_fc_network).new(
-        name: 'fc',
-        ensure: 'present',
-        data:
-            {
-              'name'                    => 'OneViewSDK Test FC Network',
-              'connectionTemplateUri'   => nil,
-              'autoLoginRedistribution' => true,
-              'fabricType'              => 'FabricAttach',
-              "type"=>"fc-networkV2",
-              "linkStabilityTime"=>30
-            }
-      )
-    end
-
-    # TODO: View the before :each method to reduce code repetition, specially for find_by calls 
-    # before(:each) do
-    #   # @item = OneviewSDK::ServerProfileTemplate.new(@client, name: 'server_profile_template')
-    #   test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-    #   puts test
-    #   expect(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, name: resource['data']['name']).and_return(test)
-    # end
+  # TODO: View the before :each method to reduce code repetition, specially for find_by calls
+  # before(:each) do
+  #   # @item = OneviewSDK::ServerProfileTemplate.new(@client, name: 'server_profile_template')
+  #   test = OneviewSDK::FCNetwork.new(@client, resource['data'])
+  #   puts test
+  #   expect(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, name: resource['data']['name']).and_return(test)
+  # end
 
   context 'given the Creation parameters' do
-
     let(:resource) do
       Puppet::Type.type(:oneview_fc_network).new(
         name: 'fc',
@@ -45,8 +42,8 @@ describe provider_class, unit: true do
               'connectionTemplateUri'   => nil,
               'autoLoginRedistribution' => true,
               'fabricType'              => 'FabricAttach',
-              "type"=>"fc-networkV2",
-              "linkStabilityTime"=>30
+              'type' => 'fc-networkV2',
+              'linkStabilityTime' => 30
             }
       )
     end
@@ -72,9 +69,9 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post).with('/rest/fc-networks', { 'body' => resource['data'] }, test.api_version)
-        .and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return({uri: '/rest/fc-networks/100'})
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+        .with('/rest/fc-networks', { 'body' => resource['data'] }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/fc-networks/100')
       expect(provider.create).to eq(resource['data'])
     end
 
@@ -88,7 +85,6 @@ describe provider_class, unit: true do
   end
 
   context 'given the minimum parameters' do
-
     let(:resource) do
       Puppet::Type.type(:oneview_fc_network).new(
         name: 'fc',
@@ -100,11 +96,10 @@ describe provider_class, unit: true do
               'connectionTemplateUri'   => nil,
               'autoLoginRedistribution' => true,
               'fabricType'              => 'FabricAttach',
-              "type"=>"fc-networkV2",
-              "linkStabilityTime"=>30
+              'type' => 'fc-networkV2',
+              'linkStabilityTime' => 30
             }
       )
     end
-
   end
 end
