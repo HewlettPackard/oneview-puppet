@@ -16,3 +16,4 @@
 
 spec/fixtures/
 lib/puppet/provider/login.rb
+coverage/

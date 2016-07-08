@@ -1,0 +1,21 @@
+# <OneviewSDK::FCNetwork:0x000000020dc738 @client=#<OneviewSDK::Client:0x000000024f4dc0
+@logger=#<Logger:0x000000024f4aa0 @progname=nil, @level=1,
+@default_formatter=#<Logger::Formatter:0x000000024f4a78 @datetime_format=nil>,
+@formatter=nil, @logdev=#<Logger::LogDevice:0x000000024f4a28
+@shift_size=nil, @shift_age=nil, @filename=nil, @dev=#<IO:<STDOUT>>,
+@mutex=#<Logger::LogDevice::LogDeviceMutex:0x000000024f4a00 @mon_owner=nil,
+@mon_count=0, @mon_mutex=#<Mutex:0x000000024f49b0>>>>, @log_level=:info,
+@print_wait_dots=false, @url="https://172.16.103.21", @max_api_version=200,
+@api_version=200, @ssl_enabled=false, @token="LTYxMDY2ODMzNDUxw8_bVqz3o6i7u6wYMkOzNrXWQzbCTSL-",
+@user="Administrator", @password="rainforest">, @logger=#<Logger:0x000000024f4aa0 @progname=nil,
+@level=1, @default_formatter=#<Logger::Formatter:0x000000024f4a78 @datetime_format=nil>,
+@formatter=nil, @logdev=#<Logger::LogDevice:0x000000024f4a28 @shift_size=nil, @shift_age=nil,
+@filename=nil, @dev=#<IO:<STDOUT>>, @mutex=#<Logger::LogDevice::LogDeviceMutex:0x000000024f4a00
+@mon_owner=nil, @mon_count=0, @mon_mutex=#<Mutex:0x000000024f49b0>>>>, @api_version=200,
+@data={"type"=>"fc-networkV2", "fabricType"=>"FabricAttach",
+  "connectionTemplateUri"=>"/rest/connection-templates/8e496d1c-a98d-4ec2-af81-3c86cbe4eab6",
+  "managedSanUri"=>nil, "linkStabilityTime"=>30, "autoLoginRedistribution"=>true,
+  "description"=>nil, "status"=>"OK", "name"=>"OneViewSDK Test FC Network", "state"=>"Active",
+  "category"=>"fc-networks", "eTag"=>"42603b58-b7ca-4381-af56-78939284ed46",
+  "modified"=>"2016-07-06T17:37:05.728Z", "created"=>"2016-07-06T17:37:05.721Z", 
+  "uri"=>"/rest/fc-networks/93cf159c-2f7d-4d2c-816a-8e5a191f85b5"}>
