@@ -17,7 +17,7 @@
 # This method gets the resource URIs from their names when needed
 def spt_parse(data)
   # array with attributes that need to be replaced by ...Uri and their URIs as values
-  needuri = %w(enclosureGroup serverHardwareType)
+  needuri = %w(enclosureGroup serverHardwareType volume enclosure)
   # as the hash cant be edited when its iterating, we modify a clone instead
   data_clone = data.clone
   data.each do |key, value|
@@ -32,7 +32,7 @@ def spt_parse(data)
       data_clone["#{key}Uri"] = get_uri(value, resource)
     end
     # recursive call in order to parse the entire data hash
-    spt_parse(key) if key.class == Hash
+    data_clone[key] = spt_parse(data_clone[key]) if data_clone[key].is_a?(Hash)
   end
   data_clone
 end
