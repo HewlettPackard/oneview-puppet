@@ -49,7 +49,7 @@ namespace :lint do
       module_name = parts[1]
       next if LINT_IGNORES.include? module_name
 
-      puts "Evalueting code style for #{puppet_file}"
+      puts "Evaluating code style for #{puppet_file}"
       linter.file = puppet_file
       linter.run
       success = false if linter.errors?
