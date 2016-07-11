@@ -52,8 +52,8 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   def found
     spt = OneviewSDK::ServerProfileTemplate.new(@client, name: resource['data']['name'])
     if spt.retrieve!
-    Puppet.notice("\n\nFound Server Profile Template"\
-    " #{spt['name']} (URI: #{spt['uri']}) in Oneview Appliance\n")
+      Puppet.notice("\n\nFound Server Profile Template"\
+      " #{spt['name']} (URI: #{spt['uri']}) in Oneview Appliance\n")
     else
       Puppet.notice("\n\nNo Server Profile Templates with the specified data were"\
       " found the Oneview Appliance\n")

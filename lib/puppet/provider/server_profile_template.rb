@@ -17,7 +17,7 @@
 # This method gets the resource URIs from their names when needed
 def spt_parse(data)
   # array with attributes that need to be replaced by ...Uri and their URIs as values
-  needuri = %w(enclosureGroup serverHardwareType volume enclosure)
+  needuri = %w(enclosureGroup serverHardwareType network volume firmwareBaseline)
   # as the hash cant be edited when its iterating, we modify a clone instead
   data_clone = data.clone
   data.each do |key, value|
