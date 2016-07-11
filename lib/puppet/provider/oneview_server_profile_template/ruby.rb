@@ -105,7 +105,6 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   #   spt = get_spt('Server Profile Templates Set Connection')
   #   networkType = Object.const_get(data['network']['type'])
   #   network = networkType.new(@client, name: data['network']['name'])
-  #   network.retrieve!
   #   true if spt.add_connection(network, data['network']['options'])
   # end
   #
@@ -113,7 +112,6 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   # def set_firmware_driver
   #   spt = get_spt('Server Profile Templates Set Firmware Driver')
   #   firmware = OneviewSDK::FirmwareDriver.new(@client, name: data['firmwareDriver']['name'])
-  #   firmware.retrieve!
   #   true if spt.set_firmware_driver(firmware, data['firmwareDriver']['options'])
   # end
   #
@@ -121,7 +119,6 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   # def set_enclosure_group
   #   spt = get_spt('Server Profile Templates Set Enclosure Group')
   #   eg = OneviewSDK::EnclosureGroup.new(@client, name: data['enclosureGroup']['name'])
-  #   eg.retrieve!
   #   true if spt.set_enclosure_group(eg)
   # end
   #
@@ -129,7 +126,6 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   # def set_server_hardware_type
   #   spt = get_spt('Server Profile Templates Set Server Hardware Type')
   #   sht = OneviewSDK::ServerHardwareType.new(@client, name: data['serverHardwareType']['name'])
-  #   sht.retrieve!
   #   true if spt.set_server_hardware_type(sht)
   # end
 end
