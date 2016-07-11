@@ -50,11 +50,10 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   end
 
   def found
-    spt = get_spt
+    spt = OneviewSDK::ServerProfileTemplate.new(@client, name: resource['data']['name'])
     if spt.retrieve!
-      Puppet.notice("\n\nFound Server Profile Template"\
-      " #{spt['name']} (URI: #{spt['uri']}) in Oneview Appliance\n")
-      true
+    Puppet.notice("\n\nFound Server Profile Template"\
+    " #{spt['name']} (URI: #{spt['uri']}) in Oneview Appliance\n")
     else
       Puppet.notice("\n\nNo Server Profile Templates with the specified data were"\
       " found the Oneview Appliance\n")
@@ -81,19 +80,17 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   # These endpoints only work with the new version of the SDK installed,
   # and will be uncommented once it has been released
   #
+  # helper resources retrieve! might be left out of set methods, as it's already being
+  # executed within the sdk update calls
+  #
   # def get_available_hardware
   #   spt = get_spt('Server Profile Templates Available Hardware')
-  #   spt.available_hardware unless spt.available_hardware.empty?
+  #   Puppet.notice(spt.available_hardware) unless spt.available_hardware.empty?
   # end
   #
   # Creates and returns a new server profile based on the working template
   # def set_new_profile
   #   spt = get_spt('New Server Profile From Template')
-  #   if spt.retrieve!
-  #     Puppet.notice("\n\nNo Server Profile Templates with the specified data were"+
-  #     " found on the Oneview Appliance\n")
-  #     return false
-  #   end
   #   spt.new_profile
   # end
   #
