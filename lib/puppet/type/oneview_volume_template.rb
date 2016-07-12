@@ -14,9 +14,33 @@
 # limitations under the License.
 ################################################################################
 
-LineLength:
-  Max: 140
-MethodLength:
-  Max: 40
-Style/AccessorMethodName:
-  Enabled: false
+Puppet::Type.newtype(:oneview_volume_template) do
+  desc "Oneview's Volume Template"
+
+  ensurable do
+    defaultvalues
+
+    # Creating the find operation for the ensure method
+    newvalue(:found) do
+      provider.found
+    end
+
+    # Retrieves and prints the connectable volume templates
+    newvalue(:get_connectable_volume_templates) do
+      provider.get_connectable_volume_templates
+    end
+  end
+
+  newparam(:name, namevar: true) do
+    desc 'Volume Template name'
+  end
+
+  newparam(:data) do
+    desc 'Volume Template data hash containing all specifications for the system'
+    validate do |value|
+      unless value.class == Hash
+        fail Puppet::Error, 'Inserted value for data is not valid'
+      end
+    end
+  end
+end

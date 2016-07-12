@@ -14,9 +14,37 @@
 # limitations under the License.
 ################################################################################
 
-LineLength:
-  Max: 140
-MethodLength:
-  Max: 40
-Style/AccessorMethodName:
-  Enabled: false
+Puppet::Type.newtype(:oneview_logical_switch_group) do
+  desc "Oneview's Logical Switch Group"
+
+  ensurable do
+    defaultvalues
+
+    newvalue(:found) do
+      provider.found
+    end
+
+    # GETs ===============================
+
+    newvalue(:get_logical_switch_groups) do
+      provider.get_logical_switch_groups
+    end
+
+    newvalue(:get_schema) do
+      provider.get_schema
+    end
+  end
+
+  newparam(:name, namevar: true) do
+    desc 'Logical Switch Group name'
+  end
+
+  newparam(:data) do
+    desc 'Logical Switch Group attributes'
+    validate do |value|
+      unless value.class == Hash
+        raise Puppet::Error, 'Inserted value for data is not valid'
+      end
+    end
+  end
+end

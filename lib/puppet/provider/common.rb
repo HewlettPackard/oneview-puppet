@@ -18,32 +18,49 @@
 
 require 'json'
 
-# Removes quotes from nil and false values
-def data_parse(resource_data)
-  data = resource['data']
-  data.each do |key,value|
-    data[key] = nil if value == 'nil'
-    data[key] = false if value == 'false'
-    data[key] = true if value == 'true'
-    data[key] = data[key].to_i if key == 'vlanId'
-  end
-  return data
-end
-
-# FIXME: method created because data_parse (above) was returning hashes with booleans as strings
-# to be debugged in the future
-def data_parse_interconnect(data)
-  data.each do |key,value|
-    data[key] = nil if value == 'nil'
-    data[key] = false if value == 'false'
-    data[key] = true if value == 'true'
-    data[key] = data[key].to_i if key == 'vlanId'
-  end
-  return data
-end
-
 def pretty(arg)
   return puts arg if arg.instance_of?(String)
   puts JSON.pretty_generate(arg)
 end
 
+# Removes quotes from nil and false values
+def data_parse(data = {})
+  data = resource['data'] ||= data
+  data.each do |key, value|
+    data[key] = nil if value == 'nil'
+    data[key] = false if value == 'false'
+    data[key] = true if value == 'true'
+    data[key] = data[key].to_i if key == 'vlanId'
+  end
+  data
+end
+
+# FIXME: method created because data_parse (above) was returning hashes with booleans as strings
+# to be debugged in the future
+def data_parse_interconnect(data)
+  data.each do |key, value|
+    data[key] = nil if value == 'nil'
+    data[key] = false if value == 'false'
+    data[key] = true if value == 'true'
+    data[key] = data[key].to_i if key == 'vlanId'
+  end
+  data
+end
+
+def resource_update(data, resourcetype)
+  current_resource = resourcetype.find_by(@client, name: data['name']).first
+  current_resource ? current_attributes = current_resource.data : return
+  new_name_validation(data, resourcetype)
+  raw_merged_data = current_attributes.merge(data)
+  updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
+  current_resource.update(updated_data) if updated_data.size > 0
+end
+
+def new_name_validation(data, resourcetype)
+  # Validation for name change on resource through flag 'new_name'
+  if data['new_name']
+    new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
+    data['name'] = data['new_name'] unless new_resource_name_used
+    data.delete('new_name')
+  end
+end
