@@ -34,7 +34,7 @@ docker run  -it \
 			-e HTTPS_PROXY=$proxy \
 			-e http_proxy=$proxy \
 			-e https_proxy=$proxy	\
-			puppet-oneview-ruby puppet apply docker/tests/$1 --debug --trace
+			puppet-oneview-ruby puppet apply examples/$1 --debug --trace
 
 #Example param for using token instead of username/password
 #-e ONEVIEW_TOKEN='ABCDEFGH1234...' \

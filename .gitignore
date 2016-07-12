@@ -18,3 +18,4 @@ Gemfile.lock
 spec/fixtures/
 lib/puppet/provider/login.rb
 docker/*.sh
+docker/tests/
