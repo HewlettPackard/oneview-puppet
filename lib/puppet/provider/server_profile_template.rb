@@ -14,39 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-# This method gets the resource URIs from their names when needed
-def spt_parse(data)
-  # array with attributes that need to be replaced by ...Uri and their URIs as values
-  needuri = %w(enclosureGroup serverHardwareType network volume firmwareBaseline)
-  # as the hash cant be edited when its iterating, we modify a clone instead
-  data_clone = data.clone
-  data.each do |key, value|
-    # checks if the current key is within the needUri list
-    needuri.each do |item|
-      next unless item.include?(key)
-      # deleting the key from the clone hash
-      data_clone.delete(key)
-      # getting the object from a string
-      resource = objectfromstring(key)
-      # assigning a new variable "...Uri" to the hash
-      data_clone["#{key}Uri"] = get_uri(value, resource)
-    end
-    # recursive call in order to parse the entire data hash
-    data_clone[key] = spt_parse(data_clone[key]) if data_clone[key].is_a?(Hash)
-  end
-  data_clone
-end
-
-def objectfromstring(str)
-  # capitalizing the first letter + getting the remaining ones as they are
-  # '.capitalize' alone will return something like Firstlettercapitalizedonly
-  Object.const_get("OneviewSDK::#{str.to_s[0].upcase}#{str[1..str.size]}")
-end
-
 # Gets the server profile template by its name, retrieves it and sends back the Object
 # Fails if the spt does not exist in the Appliance
 def get_spt(message = nil)
-  data = spt_parse(data_parse)
+  data = data_parse
   Puppet.notice("\n\n#{message}\n") if message
   spt = OneviewSDK::ServerProfileTemplate.new(@client, name: data['name'])
   raise 'No Server Profile Templates were found in Oneview Appliance.' unless spt.retrieve!

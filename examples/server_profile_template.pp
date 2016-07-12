@@ -14,13 +14,17 @@
 # limitations under the License.
 ################################################################################
 
+# This resource requires:
+# Enclosure Group 'EG'
+# Server Hardware Type 'BL460c Gen8 1'
+
 oneview_server_profile_template{'Server Profile Template Create':
   ensure => 'present',
   data   =>
     {
-      name               => 'My SPT',
-      enclosureGroup     => 'EG',
-      serverHardwareType => 'BL460c Gen8 1'
+      name                  => 'New SPT',
+      enclosureGroupUri     => uri('EG', 'EnclosureGroup'),
+      serverHardwareTypeUri => uri('BL460c Gen8 1', 'ServerHardwareType')
     }
 }
 
@@ -29,9 +33,7 @@ oneview_server_profile_template{'Server Profile Template Found':
   require => Oneview_server_profile_template['Server Profile Template Create'],
   data    =>
     {
-      name               => 'My SPT',
-      enclosureGroup     => 'EG',
-      serverHardwareType => 'BL460c Gen8 1'
+      name => 'New SPT',
     }
 }
 
@@ -40,20 +42,116 @@ oneview_server_profile_template{'Server Profile Template Edit':
   require => Oneview_server_profile_template['Server Profile Template Found'],
   data    =>
     {
-      name               => 'My SPT',
-      new_name           => 'Edited SPT Name',
-      enclosureGroup     => 'EG',
-      serverHardwareType => 'BL460c Gen8 1'
+      name     => 'New SPT',
+      new_name => 'Edited SPT',
     }
+}
+
+oneview_server_profile_template{'Server Profile Template Create #2':
+  ensure  => 'present',
+  require => Oneview_server_profile_template['Server Profile Template Edit'],
+  data    =>
+    {
+      name                  => 'New SPT #2',
+      enclosureGroupUri     => uri('EG', 'EnclosureGroup'),
+      serverHardwareTypeUri => uri('BL460c Gen8 1', 'ServerHardwareType')
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Get All':
+  ensure  => 'get_server_profile_templates',
+  require => Oneview_server_profile_template['Server Profile Template Create #2'],
 }
 
 oneview_server_profile_template{'Server Profile Template Destroy':
   ensure  => 'absent',
-  require => Oneview_server_profile_template['Server Profile Template Edit'],
+  require => Oneview_server_profile_template['Server Profile Template Get All'],
   data    =>
     {
-      name               => 'Edited SPT Name',
-      enclosureGroup     => 'EG',
-      serverHardwareType => 'BL460c Gen8 1'
+      name => 'Edited SPT',
     }
 }
+
+oneview_server_profile_template{'Server Profile Template Destroy #2':
+  ensure  => 'absent',
+  require => Oneview_server_profile_template['Server Profile Template Destroy'],
+  data    =>
+    {
+      name => 'New SPT #2',
+    }
+}
+
+# oneview_server_profile_template{'Server Profile Create':
+#   ensure => 'set_new_profile',
+#   data   =>
+#     {
+#       name                  => 'New SPT',
+#       enclosureGroupUri     => uri('EG', 'EnclosureGroup'),
+#       serverHardwareTypeUri => uri('BL460c Gen8 1', 'ServerHardwareType'),
+#       # serverProfileName     => "My SP"
+#     }
+# }
+# 
+# oneview_server_profile_template{'Server Profile Template Add Connection':
+#   ensure => 'set_connection',
+#   data   =>
+#     {
+#       name        => 'New SPT',
+#       connections =>
+#       [
+#         {
+#           name => 'NET',
+#           type => 'EthernetNetwork'
+#           # options =>
+#           #   {
+#           #     This is optional
+#           #   }
+#         }
+#       ]
+#     }
+# }
+#
+# oneview_server_profile_template{'Server Profile Template Remove Connection':
+#   ensure => 'remove_connection',
+#   data   =>
+#     {
+#       name        => 'New SPT',
+#       connections =>
+#       [
+#         {
+#           name => 'NET',
+#           type => 'EthernetNetwork'
+#         }
+#       ]
+#     }
+# }
+
+# oneview_server_profile_template{'Server Profile Template Set EG':
+#   ensure => 'set_enclosure_group',
+#   data   =>
+#     {
+#       name           => 'New SPT',
+#       enclosureGroup => 'my enclosure'
+#     }
+# }
+#
+# oneview_server_profile_template{'Server Profile Template Add SHT':
+#   ensure => 'set_server_hardware_type',
+#   data   =>
+#     {
+#       name               => 'New SPT',
+#       serverHardwareType => 'BL660c Gen8 1'
+#     }
+# }
+#
+# oneview_server_profile_template{'Server Profile Template Set FD':
+#   ensure => 'set_firmware_driver',
+#   data   =>
+#     {
+#       name           => 'New SPT',
+#       firmwareDriver =>
+#       {
+#         name    => 'Firmware'
+#       }
+#     }
+# }
