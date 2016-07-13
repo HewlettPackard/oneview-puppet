@@ -49,7 +49,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
 
   def destroy
     spt = get_spt
-    true if spt.delete
+    spt.delete
   end
 
   def found
@@ -59,9 +59,9 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
       " found the Oneview Appliance\n")
       return false
     end
-      Puppet.notice("\n\nFound Server Profile Template"\
-      " #{spt.first.data['name']} (URI: #{spt.first.data['uri']}) in Oneview Appliance\n")
-      true
+    Puppet.notice("\n\n\s\sFound Server Profile Template"\
+    " #{spt.first.data['name']} (URI: #{spt.first.data['uri']}) in Oneview Appliance\n")
+    true
   end
 
   def get_server_profile_templates
@@ -75,7 +75,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
       return false
     end
     spt.each do |item|
-      Puppet.notice("\n\nName: #{item['name']}\n URI: #{item['uri']}\n\n")
+      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
     end
     true
   end
@@ -106,33 +106,25 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
       Puppet.warning('There are no connections settings in the manifest.')
       return false
     end
-    connections = @data['connections']
     spt = get_spt('Server Profile Templates Remove Connections')
-    connections.each do |con|
-      name = con['name']
-      type = con['type']
-      networkType = objectfromstring(type)
-      network = networkType.new(@client, name: name)
-      true if spt.remove_connection(network)
+    @data['connections'].each do |con|
+      network = objectfromstring(con['type']).new(@client, name: con['name'])
+      spt.remove_connection(network)
     end
   end
 
   # Needs the attr network name, type and its options
   def set_connection
-    unless data['connections']
+    unless @data['connections']
       Puppet.warning('There are no connections settings in the manifest.')
       return false
     end
-    connections = @data['connections']
     spt = get_spt('Server Profile Templates Set Connections')
-    connections.each do |con|
-      name = con['name']
-      type = con['type']
+    @data['connections'].each do |con|
       options = {}
       options = con['options'] if con['options']
-      networkType = objectfromstring(type)
-      network = networkType.new(@client, name: name)
-      true if spt.add_connection(network, options)
+      network = objectfromstring(con['type']).new(@client, name: con['name'])
+      spt.add_connection(network, options)
     end
   end
 
@@ -148,7 +140,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     options = firmware['options'] if firmware['options']
     fd = OneviewSDK::FirmwareDriver.new(@client, name: firmware['name'])
     fd.retrieve!
-    true if spt.set_firmware_driver(fd, options)
+    spt.set_firmware_driver(fd, options)
   end
 
   # Needs the enclosure group name
@@ -160,7 +152,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     end
     eg = OneviewSDK::EnclosureGroup.new(@client, name: @data['enclosureGroup'])
     eg.retrieve!
-    true if spt.set_enclosure_group(eg)
+    spt.set_enclosure_group(eg)
   end
 
   # Needs the server hardware type name
@@ -172,6 +164,6 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     end
     sht = OneviewSDK::ServerHardwareType.new(@client, name: @data['serverHardwareType'])
     sht.retrieve!
-    true if spt.set_server_hardware_type(sht)
+    spt.set_server_hardware_type(sht)
   end
 end

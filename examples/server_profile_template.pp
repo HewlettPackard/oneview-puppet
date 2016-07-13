@@ -77,9 +77,10 @@ oneview_server_profile_template{'Server Profile Template Destroy':
     }
 }
 
+
 oneview_server_profile_template{'Server Profile Create':
   ensure  => 'set_new_profile',
-  require => Oneview_server_profile_template['Server Profile Template Destroy'],
+  require => Oneview_server_profile_template['Server Profile Template Get All'],
   data    =>
     {
       name                  => 'New SPT #2',
@@ -96,25 +97,27 @@ oneview_server_profile_template{'Server Profile Create':
 #       name => 'New SPT #2',
 #     }
 # }
-
 #
+# The following tasks are not available in the resources currently in use
+# (enclosure groups and server hardware types cannot be changed)
 # oneview_server_profile_template{'Server Profile Template Add Connection':
-#   ensure => 'set_connection',
-#   data   =>
-#     {
-#       name        => 'New SPT',
-#       connections =>
-#       [
-#         {
-#           name => 'NET',
-#           type => 'EthernetNetwork'
-#           # options =>
-#           #   {
-#           #     This is optional
-#           #   }
-#         }
-#       ]
-#     }
+# ensure  => 'set_connection',
+# require => Oneview_server_profile_template['Server Profile Template Destroy'],
+#   data  =>
+#   {
+#     name        => 'New SPT #2',
+#     connections =>
+#     [
+#       {
+#         name => 'NET',
+#         type => 'EthernetNetwork'
+#         # options =>
+#         #   {
+#         #     This is optional
+#         #   }
+#       }
+#     ]
+#   }
 # }
 #
 # oneview_server_profile_template{'Server Profile Template Remove Connection':
@@ -131,7 +134,7 @@ oneview_server_profile_template{'Server Profile Create':
 #       ]
 #     }
 # }
-
+#
 # oneview_server_profile_template{'Server Profile Template Set EG':
 #   ensure => 'set_enclosure_group',
 #   data   =>
@@ -157,7 +160,11 @@ oneview_server_profile_template{'Server Profile Create':
 #       name           => 'New SPT',
 #       firmwareDriver =>
 #       {
-#         name    => 'Firmware'
+#         name    => 'Firmware',
+          # options =>
+          # {
+          #   This is optional
+          # }
 #       }
 #     }
 # }
