@@ -65,11 +65,6 @@ def new_name_validation(data, resourcetype)
   end
 end
 
-def get_uri(name, resourcetype)
-  resource = resourcetype.new(@client, name: name)
-  resource['uri'] if resource.retrieve!
-end
-
 def objectfromstring(str)
   # capitalizing the first letter + getting the remaining ones as they are
   # '.capitalize' alone will return something like Firstlettercapitalizedonly

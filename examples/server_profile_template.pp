@@ -25,11 +25,13 @@
 
 oneview_server_profile_template{'Server Profile Template Create':
   ensure => 'present',
+
   data   =>
     {
       name                  => 'New SPT',
-      enclosureGroupUri     => uri('EG', 'EnclosureGroup'),
-      serverHardwareTypeUri => uri('BL460c Gen8 1', 'ServerHardwareType')
+      # You can either declare the name or the uri of the following parameters:
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'BL460c Gen8 1'
     }
 }
 
@@ -58,8 +60,9 @@ oneview_server_profile_template{'Server Profile Template Create #2':
   data    =>
     {
       name                  => 'New SPT #2',
-      enclosureGroupUri     => uri('EG', 'EnclosureGroup'),
-      serverHardwareTypeUri => uri('BL460c Gen8 1', 'ServerHardwareType')
+      # You can either declare the name or the uri of the following parameters:
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'BL460c Gen8 1'
     }
 }
 
@@ -97,7 +100,7 @@ oneview_server_profile_template{'Server Profile Create':
 #       name => 'New SPT #2',
 #     }
 # }
-#
+
 # The following tasks are not available in the resources currently in use
 # (enclosure groups and server hardware types cannot be changed)
 # oneview_server_profile_template{'Server Profile Template Add Connection':

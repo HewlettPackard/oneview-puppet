@@ -88,6 +88,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   # Creates and returns a new server profile based on the current template
   def set_new_profile
     spt = get_spt('New Server Profile From Template')
+    # assigns a default name in case the user has not declared one
     sp_name = "Server Profile from #{spt['name']}"
     sp_name = @data['serverProfileName'] if @data['serverProfileName']
     sp = spt.new_profile(sp_name)
