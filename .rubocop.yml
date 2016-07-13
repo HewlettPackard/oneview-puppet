@@ -18,5 +18,7 @@ LineLength:
   Max: 140
 MethodLength:
   Max: 40
+Style/AccessorMethodName:
+  Enabled: false
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact

@@ -15,8 +15,13 @@
 ################################################################################
 
 # This resource requires:
-# Enclosure Group 'EG'
-# Server Hardware Type 'BL460c Gen8 1'
+# - Enclosure Group 'EG'
+# - Server Hardware Type 'BL460c Gen8 1'
+# For newer SDK features (commented blocks):
+# - Ethernet Network 'NET'
+# - Enclosure Group 'my enclosure'
+# - Server Hardware Type 'BL660c Gen8 1'
+# - Firmware Driver 'firmware'
 
 oneview_server_profile_template{'Server Profile Template Create':
   ensure => 'present',
@@ -72,26 +77,27 @@ oneview_server_profile_template{'Server Profile Template Destroy':
     }
 }
 
-oneview_server_profile_template{'Server Profile Template Destroy #2':
-  ensure  => 'absent',
+oneview_server_profile_template{'Server Profile Create':
+  ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Server Profile Template Destroy'],
   data    =>
     {
-      name => 'New SPT #2',
+      name                  => 'New SPT #2',
+      # serverProfileName     => 'My SP'
     }
 }
 
-# oneview_server_profile_template{'Server Profile Create':
-#   ensure => 'set_new_profile',
-#   data   =>
+# This task will only work once the Server Profile above is deleted
+# oneview_server_profile_template{'Server Profile Template Destroy #2':
+#   ensure  => 'absent',
+#   require => Oneview_server_profile_template['Server Profile Create'],
+#   data    =>
 #     {
-#       name                  => 'New SPT',
-#       enclosureGroupUri     => uri('EG', 'EnclosureGroup'),
-#       serverHardwareTypeUri => uri('BL460c Gen8 1', 'ServerHardwareType'),
-#       # serverProfileName     => "My SP"
+#       name => 'New SPT #2',
 #     }
 # }
-# 
+
+#
 # oneview_server_profile_template{'Server Profile Template Add Connection':
 #   ensure => 'set_connection',
 #   data   =>

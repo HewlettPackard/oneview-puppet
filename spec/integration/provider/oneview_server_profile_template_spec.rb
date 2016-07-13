@@ -36,6 +36,10 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  before(:each) do
+    provider.exists?
+  end
+
   context 'given the minimum parameters' do
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:ruby)

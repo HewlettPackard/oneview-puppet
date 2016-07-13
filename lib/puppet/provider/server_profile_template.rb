@@ -17,9 +17,8 @@
 # Gets the server profile template by its name, retrieves it and sends back the Object
 # Fails if the spt does not exist in the Appliance
 def get_spt(message = nil)
-  data = data_parse
   Puppet.notice("\n\n#{message}\n") if message
-  spt = OneviewSDK::ServerProfileTemplate.new(@client, name: data['name'])
+  spt = OneviewSDK::ServerProfileTemplate.new(@client, name: @data['name'])
   raise 'No Server Profile Templates were found in Oneview Appliance.' unless spt.retrieve!
   spt
 end
