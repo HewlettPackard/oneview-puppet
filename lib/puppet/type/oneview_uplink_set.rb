@@ -24,37 +24,34 @@ Puppet::Type.newtype(:oneview_uplink_set) do
     newvalue(:found) do
       provider.found
     end
-
   end
 
-
-  newparam(:name, :namevar => true) do
-    desc "Uplink Set name"
+  newparam(:name, namevar: true) do
+    desc 'Uplink Set name'
   end
 
   newparam(:data) do
-    desc "Uplink Set data hash containing all specifications for the system"
+    desc 'Uplink Set data hash containing all specifications for the system'
     validate do |value|
       unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
+        fail Puppet::Error, 'Inserted value for data is not valid'
       end
     end
   end
 
   newparam(:network) do
-    desc "Accepts network as a name instead of network URI"
+    desc 'Accepts network as a name instead of network URI'
   end
 
   newparam(:fc_network) do
-    desc "Accepts fc_network as a name instead of fc_network URI"
+    desc 'Accepts fc_network as a name instead of fc_network URI'
   end
 
   newparam(:fcoe_network) do
-    desc "Accepts fcoe_network as a name instead of fcoe_network URI"
+    desc 'Accepts fcoe_network as a name instead of fcoe_network URI'
   end
 
   newparam(:logical_interconnect) do
-    desc "Accepts logical_interconnect as a name instead of logical_interconnect URI"
+    desc 'Accepts logical_interconnect as a name instead of logical_interconnect URI'
   end
-
 end

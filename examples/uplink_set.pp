@@ -19,7 +19,6 @@ oneview_uplink_set{'uplink_set_1':
     data                 => {
       nativeNetworkUri               => 'nil',
       reachability                   => 'Reachable',
-      # logicalInterconnectUri => '/rest/logical-interconnects/e5e7e935-17a4-4ac6-9cd6-45caf410e323',
       manualLoginRedistributionState => 'NotSupported',
       connectionMode                 => 'Auto',
       lacpTimer                      => 'Short',
@@ -34,10 +33,10 @@ oneview_uplink_set{'uplink_set_1':
 
 oneview_uplink_set{'uplink_set_2':
     ensure               => 'present',
+    require              => Oneview_uplink_set['uplink_set_1'],
     data                 => {
       nativeNetworkUri               => 'nil',
       reachability                   => 'Reachable',
-      # logicalInterconnectUri => '/rest/logical-interconnects/e5e7e935-17a4-4ac6-9cd6-45caf410e323',
       manualLoginRedistributionState => 'NotSupported',
       connectionMode                 => 'Auto',
       lacpTimer                      => 'Short',
@@ -52,9 +51,9 @@ oneview_uplink_set{'uplink_set_2':
 }
 
 oneview_uplink_set{'uplink_set_3':
-    ensure => 'found',
-    # require => Oneview_uplink_set['uplink_set_2'],
-    data   => {
+    ensure  => 'found',
+    require => Oneview_uplink_set['uplink_set_2'],
+    data    => {
       connectionMode      => 'Auto',
       lacpTimer           => 'Short',
       networkType         => 'Ethernet',
@@ -64,10 +63,10 @@ oneview_uplink_set{'uplink_set_3':
     }
 }
 
-oneview_uplink_set{'uplink_set_7':
-    ensure => 'absent',
-    # require => Oneview_uplink_set['uplink_set_6'],
-    data   => {
+oneview_uplink_set{'uplink_set_4':
+    ensure  => 'absent',
+    require => Oneview_uplink_set['uplink_set_3'],
+    data    => {
       name => 'Puppet Uplink Set Updated'
     }
 }
