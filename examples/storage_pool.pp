@@ -17,9 +17,9 @@
 oneview_storage_pool{'storage_pool_1':
     ensure => 'present',
     data   => {
-      poolName          => "FST_CPG2",
-      storageSystemUri  => "/rest/storage-systems/TXQ1000307"
-   }
+      poolName         => 'FST_CPG2',
+      storageSystemUri => '/rest/storage-systems/TXQ1000307'
+    }
 }
 
 oneview_storage_pool{'storage_pool_2':
@@ -32,9 +32,9 @@ oneview_storage_pool{'storage_pool_2':
 }
 
 oneview_storage_pool{'storage_pool_3':
-    ensure => 'absent',
+    ensure  => 'absent',
     require => Oneview_storage_pool['storage_pool_2'],
-    data   => {
+    data    => {
       poolName         => 'FST_CPG2',
     }
 }

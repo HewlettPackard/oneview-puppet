@@ -15,14 +15,14 @@
 ################################################################################
 
 oneview_storage_system{'storage_system_1':
-    ensure  => 'present',
-    data    => {
-      name         => 'OneViewSDK Test Storage System',
+    ensure => 'present',
+    data   => {
+      name          => 'OneViewSDK Test Storage System',
       managedDomain => 'TestDomain',
-      credentials => {
-        ip_hostname  => '172.18.11.11',
-        username     => 'dcs',
-        password     => 'dcs',
+      credentials   => {
+        ip_hostname => '172.18.11.11',
+        username    => 'dcs',
+        password    => 'dcs',
       }
     }
 }
@@ -31,7 +31,7 @@ oneview_storage_system{'storage_system_2':
     ensure  => 'present',
     require => Oneview_storage_system['storage_system_1'],
     data    => {
-      name         => 'OneViewSDK Test Storage System',
+      name        => 'OneViewSDK Test Storage System',
       credentials => {
         ip_hostname  => '172.18.11.11',
       }
