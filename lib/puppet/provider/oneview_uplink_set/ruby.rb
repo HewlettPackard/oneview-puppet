@@ -54,11 +54,6 @@ Puppet::Type.type(:oneview_uplink_set).provide(:ruby) do
   #   end
   # end
 
-  def pretty(arg)
-    return puts arg if arg.instance_of?(String)
-    puts JSON.pretty_generate(arg)
-  end
-
   # Provider methods
 
   def exists?
@@ -74,7 +69,7 @@ Puppet::Type.type(:oneview_uplink_set).provide(:ruby) do
     uplink_set = if state == 'present'
                    # TODO: assure update works
                    resource_update(@data, @resourcetype)
-                   @resourcetype.find_by(@client, name: @data['name'])
+                   teste = @resourcetype.find_by(@client, name: @data['name'])
                  else
                    @resourcetype.find_by(@client, @data)
                  end
@@ -85,18 +80,20 @@ Puppet::Type.type(:oneview_uplink_set).provide(:ruby) do
   def create
     uplink_set = @resourcetype.new(@client, @data)
     uri_setter(uplink_set)
-    uplink_set.create
+    teste = uplink_set.create
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data
+    true
   end
 
   def destroy
     uplink_set = @resourcetype.find_by(@client, name: @data['name']).first
-    if uplink_set
+    # TODO: Possibly remove this if, since it should be run on the exists method
+    # if uplink_set
       uplink_set.delete
-    else
-      Puppet.notice("#{resource} '#{@data['name']}' not located in Oneview Appliance")
-    end
+    # else
+    #   Puppet.notice("#{resource} '#{@data['name']}' not located in Oneview Appliance")
+    # end
     @property_hash.clear
   end
 

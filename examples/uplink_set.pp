@@ -15,59 +15,59 @@
 ################################################################################
 
 oneview_uplink_set{'uplink_set_1':
-    ensure  => 'present',
-    data    => {
-      nativeNetworkUri => 'nil',
-      reachability => 'Reachable',
+    ensure               => 'present',
+    data                 => {
+      nativeNetworkUri               => 'nil',
+      reachability                   => 'Reachable',
       # logicalInterconnectUri => '/rest/logical-interconnects/e5e7e935-17a4-4ac6-9cd6-45caf410e323',
       manualLoginRedistributionState => 'NotSupported',
-      connectionMode => 'Auto',
-      lacpTimer => 'Short',
-      networkType => 'Ethernet',
-      ethernetNetworkType => 'Tagged',
-      description => 'nil',
-      name => 'Puppet Uplink Set',
+      connectionMode                 => 'Auto',
+      lacpTimer                      => 'Short',
+      networkType                    => 'Ethernet',
+      ethernetNetworkType            => 'Tagged',
+      description                    => 'nil',
+      name                           => 'Puppet Uplink Set',
     },
-    network   => 'Puppet Test EthNetwork',
+    network              => 'Puppet Test EthNetwork',
     logical_interconnect => 'Encl1-Test Oneview'
 }
 
 oneview_uplink_set{'uplink_set_2':
-    ensure  => 'present',
-    data    => {
-      nativeNetworkUri => 'nil',
-      reachability => 'Reachable',
+    ensure               => 'present',
+    data                 => {
+      nativeNetworkUri               => 'nil',
+      reachability                   => 'Reachable',
       # logicalInterconnectUri => '/rest/logical-interconnects/e5e7e935-17a4-4ac6-9cd6-45caf410e323',
       manualLoginRedistributionState => 'NotSupported',
-      connectionMode => 'Auto',
-      lacpTimer => 'Short',
-      networkType => 'Ethernet',
-      ethernetNetworkType => 'Tagged',
-      description => 'nil',
-      name => 'Puppet Uplink Set',
-      new_name => 'Puppet Uplink Set Updated'
+      connectionMode                 => 'Auto',
+      lacpTimer                      => 'Short',
+      networkType                    => 'Ethernet',
+      ethernetNetworkType            => 'Tagged',
+      description                    => 'nil',
+      name                           => 'Puppet Uplink Set',
+      new_name                       => 'Puppet Uplink Set Updated'
     },
-    network   => 'Puppet Test EthNetwork',
+    network              => 'Puppet Test EthNetwork',
     logical_interconnect => 'Encl1-Test Oneview'
 }
 
 oneview_uplink_set{'uplink_set_3':
-    ensure  => 'found',
+    ensure => 'found',
     # require => Oneview_uplink_set['uplink_set_2'],
-    data    => {
-      connectionMode => 'Auto',
-      lacpTimer => 'Short',
-      networkType => 'Ethernet',
+    data   => {
+      connectionMode      => 'Auto',
+      lacpTimer           => 'Short',
+      networkType         => 'Ethernet',
       ethernetNetworkType => 'Tagged',
-      description => 'nil',
-      name => 'Puppet Uplink Set Updated',
+      description         => 'nil',
+      name                => 'Puppet Uplink Set Updated',
     }
 }
 
 oneview_uplink_set{'uplink_set_7':
-    ensure  => 'absent',
+    ensure => 'absent',
     # require => Oneview_uplink_set['uplink_set_6'],
-    data    => {
+    data   => {
       name => 'Puppet Uplink Set Updated'
     }
 }

@@ -33,8 +33,7 @@ Puppet::Type.newtype(:oneview_uplink_set) do
   end
 
   newparam(:data) do
-    desc "Uplink Set data hash containing all specifications for the
-    system"
+    desc "Uplink Set data hash containing all specifications for the system"
     validate do |value|
       unless value.class == Hash
         raise Puppet::Error, "Inserted value for data is not valid"
