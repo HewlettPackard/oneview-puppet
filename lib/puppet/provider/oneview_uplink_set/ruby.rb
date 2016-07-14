@@ -163,17 +163,4 @@ Puppet::Type.type(:oneview_uplink_set).provide(:ruby) do
       uplink_set.add_port_config(@port_config)
     end
   end
-
-  # def uplink_update
-  #   current_resource = @resourcetype.find_by(@client, name: @data['name']).first
-  #   current_resource ? current_attributes = current_resource.data : return
-  #   if @data['new_name']
-  #     new_resource_name_used = @resourcetype.find_by(@client, name: @data['new_name']).first
-  #     @data['name'] = @data['new_name'] unless new_resource_name_used
-  #     @data.delete('new_name')
-  #   end
-  #   raw_merged_data = current_attributes.merge(data)
-  #   updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
-  #   current_resource.update(updated_data) if updated_data.size > 0
-  # end
 end
