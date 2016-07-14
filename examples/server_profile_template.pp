@@ -31,7 +31,7 @@ oneview_server_profile_template{'Server Profile Template Create':
       name                  => 'New SPT',
       # You can either declare the name or the uri of the following parameters:
       enclosureGroupUri     => 'EG',
-      serverHardwareTypeUri => 'BL460c Gen8 1'
+      serverHardwareTypeUri => 'BL460c Gen8 1',
     }
 }
 
@@ -87,6 +87,7 @@ oneview_server_profile_template{'Server Profile Create':
   data    =>
     {
       name                  => 'New SPT #2',
+      # This is optional; a default name will be provided
       # serverProfileName     => 'My SP'
     }
 }
@@ -166,7 +167,7 @@ oneview_server_profile_template{'Server Profile Create':
 #         name    => 'Firmware',
           # options =>
           # {
-          #   This is optional
+          #   This is also optional
           # }
 #       }
 #     }

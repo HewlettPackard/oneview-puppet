@@ -26,8 +26,8 @@ describe provider_class do
       data:
           {
             'name'                  => 'Test_SPT',
-            'enclosureGroupUri'     => '/rest/enclosure-groups/85a4045d-8e5a-4787-894e-a5e404098944',
-            'serverHardwareTypeUri' => '/rest/server-hardware-types/1D614B25-4119-40F6-A71B-EAF01E325A3A'
+            'enclosureGroupUri'     => 'EG',
+            'serverHardwareTypeUri' => 'BL460c Gen8 1'
           }
     )
   end
