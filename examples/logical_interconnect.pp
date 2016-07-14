@@ -50,10 +50,10 @@ oneview_logical_interconnect{'Logical Interconnect Port Monitor Set':
   ensure => 'set_port_monitor',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name        => 'Encl2-my enclosure logical interconnect group',
       portMonitor =>
       {
-        enablePortMonitor => 'false'
+        enablePortMonitor => false
       }
     }
 }
@@ -78,10 +78,10 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Get':
   ensure => 'get_snmp_configuration',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name              => 'Encl2-my enclosure logical interconnect group',
       snmpConfiguration =>
       {
-        enabled => 'false'
+        enabled => false
       }
     }
 }
@@ -90,10 +90,10 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
   ensure => 'set_snmp_configuration',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name              => 'Encl2-my enclosure logical interconnect group',
       snmpConfiguration =>
       {
-        enabled => 'true'
+        enabled => true
       }
     }
 }

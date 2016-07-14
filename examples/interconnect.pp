@@ -50,8 +50,8 @@ oneview_interconnect{'Interconnect Get Statistics':
 oneview_interconnect{'Interconnect Get Specific Statistics':
     ensure => 'get_statistics',
     data   => {
-      name                  => 'Encl2, interconnect 1',
-      subportStatistics     =>
+      name              => 'Encl2, interconnect 1',
+      subportStatistics =>
       {
         portName => 'X8'
       }
@@ -68,19 +68,19 @@ oneview_interconnect{'Interconnect Get Name Servers':
 oneview_interconnect{'Interconnect Patch One Interconnect':
     ensure => 'present',
     data   => {
-      name   => 'Encl2, interconnect 1',
-      op     => 'replace',
-      path   => '/uidState',
-      value  => 'Off',
+      name  => 'Encl2, interconnect 1',
+      op    => 'replace',
+      path  => '/uidState',
+      value => 'Off',
     }
 }
 
 oneview_interconnect{'Interconnect Patch All Interconnects':
     ensure => 'present',
     data   => {
-      op     => 'replace',
-      path   => '/powerState',
-      value  => 'Off',
+      op    => 'replace',
+      path  => '/powerState',
+      value => 'Off',
     }
 }
 
@@ -114,12 +114,12 @@ oneview_interconnect{'Interconnect Update Ports':
       {
         d1 =>
         {
-          portName => 'newPortName',
-          available => 'false',
+          portName  => 'newPortName',
+          available => false,
         },
         d2 =>
         {
-          available => 'true',
+          available => true,
         }
       },
     }

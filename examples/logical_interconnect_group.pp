@@ -15,8 +15,8 @@
 # ################################################################################
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Create':
-    ensure  => 'present',
-    data    => {
+    ensure => 'present',
+    data   => {
       name          => 'My LIG',
       # new_name      => 'Edited Name',
       enclosureType => 'C7000',
@@ -25,14 +25,14 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Create':
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get LIGs':
-    ensure  => 'get_logical_interconnect_group',
-    data    => {
+    ensure => 'get_logical_interconnect_group',
+    data   => {
     }
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Get LIG':
-    ensure  => 'get_logical_interconnect_group',
-    data    => {
+    ensure => 'get_logical_interconnect_group',
+    data   => {
       name          => 'My LIG',
       enclosureType => 'C7000',
       type          => 'logical-interconnect-groupV3'
@@ -40,8 +40,8 @@ oneview_logical_interconnect_group{'Logical Interconnect Get LIG':
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Found':
-    ensure  => 'found',
-    data    => {
+    ensure => 'found',
+    data   => {
       name          => 'My LIG',
       enclosureType => 'C7000',
       type          => 'logical-interconnect-groupV3'
@@ -49,8 +49,8 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Found':
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Schema':
-    ensure  => 'get_schema',
-    data    => {
+    ensure => 'get_schema',
+    data   => {
       name          => 'My LIG',
       enclosureType => 'C7000',
       type          => 'logical-interconnect-groupV3'
@@ -58,8 +58,8 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Schema':
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Settings':
-    ensure  => 'get_default_settings',
-    data    => {
+    ensure => 'get_default_settings',
+    data   => {
       name          => 'My LIG',
       enclosureType => 'C7000',
       type          => 'logical-interconnect-groupV3'
@@ -67,8 +67,8 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Setti
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
-    ensure  => 'get_settings',
-    data    => {
+    ensure => 'get_settings',
+    data   => {
       name          => 'My LIG',
       enclosureType => 'C7000',
       type          => 'logical-interconnect-groupV3'

@@ -15,13 +15,13 @@
 ################################################################################
 
 oneview_ethernet_network{'net1':
-    ensure  => 'present',
-    data    => {
+    ensure => 'present',
+    data   => {
       name                  => 'Puppet network',
       vlanId                => '1045',
       purpose               => 'General',
-      smartLink             => 'true',
-      privateNetwork        => 'false',
+      smartLink             => true,
+      privateNetwork        => false,
       connectionTemplateUri => 'nil',
       type                  => 'ethernet-networkV3'
     }
@@ -34,8 +34,8 @@ oneview_ethernet_network{'net2':
       new_name              => 'Updated',
       vlanId                => '1045',
       purpose               => 'General',
-      smartLink             => 'true',
-      privateNetwork        => 'false',
+      smartLink             => true,
+      privateNetwork        => false,
       connectionTemplateUri => 'nil',
       type                  => 'ethernet-networkV3'
     }
@@ -69,14 +69,14 @@ oneview_ethernet_network{'net5':
 # Bulk Ethernet Networks
 
 oneview_ethernet_network{'Bulk Create':
-    ensure  => 'present',
-    data    => {
-      vlanIdRange           => '26-27',
-      purpose               => 'General',
-      namePrefix            => 'Puppet',
-      smartLink             => 'false',
-      privateNetwork        => 'false',
-      bandwidth =>
+    ensure => 'present',
+    data   => {
+      vlanIdRange    => '26-27',
+      purpose        => 'General',
+      namePrefix     => 'Puppet',
+      smartLink      => false,
+      privateNetwork => false,
+      bandwidth      =>
       {
         maximumBandwidth => '10_000',
         typicalBandwidth => '2000'
@@ -85,16 +85,16 @@ oneview_ethernet_network{'Bulk Create':
 }
 
 oneview_ethernet_network{'Bulk Delete 1':
-    require => Oneview_ethernet_network['Bulk Create'],
     ensure  => 'absent',
+    require => Oneview_ethernet_network['Bulk Create'],
     data    => {
-      name => "Puppet_26"
+      name => 'Puppet_26'
     }
 }
 oneview_ethernet_network{'Bulk Delete 2':
-    require => Oneview_ethernet_network['Bulk Delete 1'],
     ensure  => 'absent',
+    require => Oneview_ethernet_network['Bulk Delete 1'],
     data    => {
-      name => "Puppet_27"
+      name => 'Puppet_27'
     }
 }

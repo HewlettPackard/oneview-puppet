@@ -15,44 +15,44 @@
 ################################################################################
 
 oneview_enclosure_group{'Enclosure Group Create':
-    ensure  => 'present',
-    data    => {
-      name => 'Enclosure Group',
-      stackingMode => 'Enclosure',
-      interconnectBayMappingCount => "8",
-      type => 'EnclosureGroupV200',
-      interconnectBayMappings =>
+    ensure => 'present',
+    data   => {
+      name                        => 'Enclosure Group',
+      stackingMode                => 'Enclosure',
+      interconnectBayMappingCount => '8',
+      type                        => 'EnclosureGroupV200',
+      interconnectBayMappings     =>
       [
         {
-          interconnectBay => "1",
+          interconnectBay             => '1',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "2",
+          interconnectBay             => '2',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "3",
+          interconnectBay             => '3',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "4",
+          interconnectBay             => '4',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "5",
+          interconnectBay             => '5',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "6",
+          interconnectBay             => '6',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "7",
+          interconnectBay             => '7',
           logicalInterconnectGroupUri => 'nil'
         },
         {
-          interconnectBay => "8",
+          interconnectBay             => '8',
           logicalInterconnectGroupUri => 'nil'
         }
       ]
@@ -60,25 +60,25 @@ oneview_enclosure_group{'Enclosure Group Create':
 }
 
 oneview_enclosure_group{'Enclosure Group Found':
-    require => Oneview_enclosure_group['Enclosure Group Create'],
     ensure  => 'found',
+    require => Oneview_enclosure_group['Enclosure Group Create'],
     data    => {
       name  => 'Enclosure Group',
     }
 }
 
 oneview_enclosure_group{'Enclosure Group Update':
-    require => Oneview_enclosure_group['Enclosure Group Found'],
     ensure  => 'present',
+    require => Oneview_enclosure_group['Enclosure Group Found'],
     data    => {
-      name  => 'Enclosure Group',
+      name     => 'Enclosure Group',
       new_name => 'New Enclosure Group Name'
     }
 }
 
 oneview_enclosure_group{'Enclosure Group Set Script':
-    require => Oneview_enclosure_group['Enclosure Group Update'],
     ensure  => 'set_script',
+    require => Oneview_enclosure_group['Enclosure Group Update'],
     data    => {
       name   => 'New Enclosure Group Name',
       script => 'This is a script example'
@@ -86,16 +86,16 @@ oneview_enclosure_group{'Enclosure Group Set Script':
 }
 
 oneview_enclosure_group{'Enclosure Group Get Script':
-    require => Oneview_enclosure_group['Enclosure Group Set Script'],
     ensure  => 'get_script',
+    require => Oneview_enclosure_group['Enclosure Group Set Script'],
     data    => {
       name => 'New Enclosure Group Name'
     }
 }
 
 oneview_enclosure_group{'Enclosure Group Delete':
-    require => Oneview_enclosure_group['Enclosure Group Get Script'],
     ensure  => 'absent',
+    require => Oneview_enclosure_group['Enclosure Group Get Script'],
     data    => {
       name => 'New Enclosure Group Name'
     }
