@@ -44,12 +44,12 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
 
   def create
     spt = @resourcetype.new(@client, @data)
-    spt.create
+    true if spt.create
   end
 
   def destroy
     spt = get_spt
-    spt.delete
+    true if spt.delete
   end
 
   def found
@@ -125,7 +125,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
       options = {}
       options = con['options'] if con['options']
       network = objectfromstring(con['type']).new(@client, name: con['name'])
-      spt.add_connection(network, options)
+      true if spt.add_connection(network, options)
     end
   end
 
