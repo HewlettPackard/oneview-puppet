@@ -16,7 +16,6 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'server_profile_template'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
