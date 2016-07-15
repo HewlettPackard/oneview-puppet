@@ -167,4 +167,14 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     sht.retrieve!
     spt.set_server_hardware_type(sht)
   end
+
+  # Gets the server profile template by its name, retrieves it and sends back the Object
+  # Fails if the spt does not exist in the Appliance
+  def get_spt(message = nil)
+    Puppet.notice("\n\n#{message}\n") if message
+    spt = OneviewSDK::ServerProfileTemplate.new(@client, name: @data['name'])
+    raise 'No Server Profile Templates were found in Oneview Appliance.' unless spt.retrieve!
+    spt
+  end
+
 end
