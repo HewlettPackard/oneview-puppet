@@ -176,5 +176,4 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     raise 'No Server Profile Templates were found in Oneview Appliance.' unless spt.retrieve!
     spt
   end
-
 end

@@ -13,8 +13,8 @@ describe provider_class, unit: true do
       ensure: 'present',
       data:
           {
-            'name'                    => 'SPT',
-            'enclosureGroupUri'   => '/rest/',
+            'name'                  => 'SPT',
+            'enclosureGroupUri'     => '/rest/',
             'serverHardwareTypeUri' => '/rest/'
           }
     )
@@ -24,7 +24,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'set_new_profile',
+        ensure: 'set_new_profile',
         data:
             {
               'name'                  => 'SPT',
@@ -59,7 +59,8 @@ describe provider_class, unit: true do
     #   test = OneviewSDK::ServerProfile.new(@client, name: 'SP')
     #   allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:new_profile).with('SP')
     #
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post).with('/rest/server-profiles', { 'body' => {"name"=>"SP", "type"=>"ServerProfileV5"} },
+    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post).with('/rest/server-profiles',
+    # { 'body' => {"name"=>"SP", "type"=>"ServerProfileV5"} },
     #     test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
     #   allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-profiles/100')
     #   allow_any_instance_of(OneviewSDK::ServerProfile).to receive(:retrieve!).and_return(true)
@@ -103,14 +104,14 @@ describe provider_class, unit: true do
       expect(provider.found).to eq(false)
     end
 
-
     it 'runs through the create method' do
       expect_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:retrieve!).and_return(false)
       expect_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:exists?).and_return(false)
       expect(provider.exists?).to eq(false)
       test = OneviewSDK::ServerProfileTemplate.new(@client, resource['data'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post).with('/rest/server-profile-templates', { 'body' => resource['data'] },
-        test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+        .with('/rest/server-profile-templates', { 'body' => resource['data'] }, test.api_version)
+        .and_return(FakeResponse.new('uri' => '/rest/fake'))
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-profile-templates/100')
       expect(provider.create).to eq(true)
     end
@@ -150,7 +151,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'set_enclosure_group',
+        ensure: 'set_enclosure_group',
         data:
             {
               'name'                  => 'SPT',
@@ -171,7 +172,8 @@ describe provider_class, unit: true do
     #   allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:exists?).and_return(true)
     #   expect(provider.exists?).to eq(true)
     #   eg = OneviewSDK::EnclosureGroup.new(@client, resource['data'])
-    #   allow_any_instance_of(OneviewSDK::EnclosureGroup).to receive(:find_by).with(anything, name: resource['data']['enclosureGroup']).and_return([eg])
+    #   allow_any_instance_of(OneviewSDK::EnclosureGroup).to receive(:find_by).
+    #     with(anything, name: resource['data']['enclosureGroup']).and_return([eg])
     #   allow_any_instance_of(OneviewSDK::EnclosureGroup).to receive(:retrieve!).and_return(true)
     #   allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:set_enclosure_group).and_return(true)
     #   expect(provider.set_enclosure_group).to eq(true)
@@ -182,7 +184,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'present',
+        ensure: 'present',
         data: 'parameter'
       )
     end
@@ -192,7 +194,9 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should return a hash error' do
-      expect{provider.found}.to raise_error(Puppet::Error, 'Parameter data failed on Oneview_server_profile_template[spt]: Inserted value for data is not valid')
+      expect { provider.found }
+        .to raise_error(Puppet::Error, 'Parameter data failed on Oneview_server_profile_template[spt]: Inserted value for data is \
+        not valid')
     end
   end
 
@@ -200,7 +204,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'set_server_hardware_type',
+        ensure: 'set_server_hardware_type',
         data:
             {
               'name'                  => 'SPT',
@@ -216,7 +220,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should set an enclosure group' do
-      test = OneviewSDK::ServerProfileTemplate.new(@client, resource['data'])
+      # test = OneviewSDK::ServerProfileTemplate.new(@client, resource['data'])
       allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:retrieve!).and_return(true)
       allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:exists?).and_return(true)
       expect_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:retrieve!).and_return(true)
@@ -228,7 +232,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'set_connection',
+        ensure: 'set_connection',
         data:
             {
               'name'                  => 'SPT',
@@ -254,7 +258,8 @@ describe provider_class, unit: true do
       test = OneviewSDK::EthernetNetwork.new(@client, name: 'network')
       allow_any_instance_of(OneviewSDK::EthernetNetwork).to receive(:retrieve!).and_return(true)
       expect_any_instance_of(OneviewSDK::EthernetNetwork).to receive(:retrieve!).and_return(true)
-      expect_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:add_connection).with(network: test, connection_options: {}).and_return(true)
+      expect_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:add_connection).with(network: test, connection_options: {})
+        .and_return(true)
       expect(provider.set_connection).to be
     end
   end
@@ -263,12 +268,12 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'set_connection',
+        ensure: 'set_connection',
         data:
             {
               'name'                  => 'SPT',
               'enclosureGroupUri'     => '/rest/',
-              'serverHardwareTypeUri' => '/rest/',
+              'serverHardwareTypeUri' => '/rest/'
             }
       )
     end
@@ -289,7 +294,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_server_profile_template).new(
         name: 'spt',
-      ensure: 'get_available_hardware',
+        ensure: 'get_available_hardware',
         data:
             {
               'name'                  => 'SPT',
@@ -304,7 +309,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should return there is no available hardware' do
-      test = OneviewSDK::ServerProfileTemplate.new(@client, resource['data'])
+      # test = OneviewSDK::ServerProfileTemplate.new(@client, resource['data'])
       allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:retrieve!).and_return(true)
       allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:exists?).and_return(true)
       expect(provider.exists?).to eq(true)
@@ -333,7 +338,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should set a firmware driver' do
-      test = OneviewSDK::ServerProfileTemplate.new(@client, name: resource['data']['name'])
+      # test = OneviewSDK::ServerProfileTemplate.new(@client, name: resource['data']['name'])
       allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:retrieve!).and_return(true)
       allow_any_instance_of(OneviewSDK::ServerProfileTemplate).to receive(:exists?).and_return(true)
       expect(provider.exists?).to eq(true)
