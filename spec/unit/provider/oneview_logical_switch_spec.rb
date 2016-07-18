@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 # support to the new version
-require_relative 'logical_switch'
+# require_relative 'logical_switch'
 
 provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
 resourcetype = OneviewSDK::LogicalSwitch
