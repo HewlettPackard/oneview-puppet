@@ -1,0 +1,89 @@
+################################################################################
+# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+require 'oneview-sdk'
+require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
+
+Puppet::Type.newtype(:oneview_logical_switch) do
+  desc "Oneview's Logical Switch"
+
+  ensurable do
+    defaultvalues
+
+    # Creating the find operation for the ensure method
+    newvalue(:found) do
+      provider.found
+    end
+
+    newvalue(:get_schema) do
+      provider.get_schema
+    end
+
+    newvalue(:refresh) do
+      provider.refresh
+    end
+
+    newvalue(:get_logical_switches) do
+      provider.get_logical_switches
+    end
+  end
+
+  newparam(:name, namevar: true) do
+    desc 'Logical Switch name'
+  end
+
+  newparam(:ssh_username) do
+    desc 'Logical Switch ssh username'
+  end
+
+  newparam(:ssh_password) do
+    desc 'Logical Switch ssh password'
+  end
+
+  newparam(:snmp_port) do
+    desc 'Logical Switch snmp port'
+  end
+
+  newparam(:snmp_version) do
+    desc 'Logical Switch snmp version'
+  end
+
+  newparam(:snmp_connection_string) do
+    desc 'Logical Switch snmp connection string'
+  end
+
+  newparam(:community_string) do
+    desc 'Logical Switch snmp community string'
+  end
+
+  newparam(:switch1_ip) do
+    desc 'Logical Switch switch 1 ip'
+  end
+
+  newparam(:switch2_ip) do
+    desc 'Logical Switch switch 2 ip'
+  end
+
+  newparam(:data) do
+    desc 'Logical Switch data hash containing all specifications for the system'
+    validate do |value|
+      unless value.class == Hash
+        raise Puppet::Error, 'Inserted value for data is not valid'
+      end
+      uri_validation(value)
+    end
+  end
+end

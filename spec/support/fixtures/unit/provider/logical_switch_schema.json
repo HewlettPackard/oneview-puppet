@@ -1,0 +1,445 @@
+{
+  "type": "object",
+  "optional": true,
+  "properties": {
+    "switchUris": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "optional": true
+      },
+      "required": "true"
+    },
+    "stackingHealth": {
+      "type": "string",
+      "optional": true,
+      "enum": [
+        "Unknown",
+        "Connected",
+        "BiConnected",
+        "Disconnected",
+        "DisconnectedShutdown",
+        "NotApplicable"
+      ]
+    },
+    "snmpConfiguration": {
+      "type": "object",
+      "optional": true,
+      "properties": {
+        "readCommunity": {
+          "type": "string",
+          "optional": true,
+          "default": "public"
+        },
+        "systemContact": {
+          "type": "string",
+          "optional": true,
+          "default": ""
+        },
+        "trapDestinations": {
+          "type": "array",
+          "optional": true,
+          "items": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+              "trapSeverities": {
+                "type": "array",
+                "optional": true,
+                "items": {
+                  "type": "string",
+                  "optional": true
+                }
+              },
+              "enetTrapCategories": {
+                "type": "array",
+                "optional": true,
+                "items": {
+                  "type": "string",
+                  "optional": true
+                }
+              },
+              "fcTrapCategories": {
+                "type": "array",
+                "optional": true,
+                "items": {
+                  "type": "string",
+                  "optional": true
+                }
+              },
+              "vcmTrapCategories": {
+                "type": "array",
+                "optional": true,
+                "items": {
+                  "type": "string",
+                  "optional": true
+                }
+              },
+              "communityString": {
+                "type": "string",
+                "optional": true,
+                "default": "public"
+              },
+              "trapFormat": {
+                "type": "string",
+                "optional": true,
+                "enum": [
+                  "SNMPv1",
+                  "SNMPv2",
+                  "SNMPv3"
+                ],
+                "default": "SNMPv1"
+              },
+              "trapDestination": {
+                "type": "string",
+                "optional": true,
+                "default": ""
+              }
+            }
+          }
+        },
+        "snmpAccess": {
+          "type": "array",
+          "optional": true,
+          "items": {
+            "type": "string",
+            "optional": true
+          }
+        },
+        "enabled": {
+          "type": "boolean",
+          "optional": false,
+          "default": "false"
+        },
+        "description": {
+          "type": "string",
+          "optional": true
+        },
+        "status": {
+          "type": "string",
+          "optional": true
+        },
+        "name": {
+          "type": "string",
+          "optional": true
+        },
+        "state": {
+          "type": "string",
+          "optional": true
+        },
+        "eTag": {
+          "type": "string",
+          "optional": true
+        },
+        "modified": {
+          "type": "string",
+          "optional": true
+        },
+        "created": {
+          "type": "string",
+          "optional": true
+        },
+        "category": {
+          "type": "string",
+          "optional": true
+        },
+        "uri": {
+          "type": "string",
+          "optional": true
+        }
+      }
+    },
+    "switchMap": {
+      "type": "object",
+      "optional": true,
+      "properties": {
+        "switchMapEntries": {
+          "type": "array",
+          "optional": true,
+          "items": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+              "switchUri": {
+                "type": "string",
+                "optional": true,
+                "readonly": "true"
+              },
+              "permittedSwitchTypeUri": {
+                "type": "string",
+                "optional": true
+              },
+              "location": {
+                "type": "object",
+                "optional": true,
+                "properties": {
+                  "locationEntries": {
+                    "type": "array",
+                    "optional": true,
+                    "items": {
+                      "type": "object",
+                      "optional": true,
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "optional": true
+                        },
+                        "type": {
+                          "type": "string",
+                          "optional": true,
+                          "enum": [
+                            "Port",
+                            "Bay",
+                            "Enclosure",
+                            "Ip",
+                            "UserId",
+                            "Password",
+                            "StackingDomainId",
+                            "StackingMemberId"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "logicalSwitchGroupUri": {
+      "type": "string",
+      "required": "true"
+    },
+    "switchCredentialConfiguration": {
+      "type": "array",
+      "optional": true,
+      "items": {
+        "type": "object",
+        "optional": true,
+        "properties": {
+          "switchUri": {
+            "type": "string",
+            "optional": true
+          },
+          "snmpVersion": {
+            "type": "string",
+            "optional": true,
+            "enum": [
+              "SNMPv1",
+              "SNMPv2",
+              "SNMPv3"
+            ]
+          },
+          "memberId": {
+            "type": "integer",
+            "optional": true
+          },
+          "logicalSwitchManagementHost": {
+            "type": "string",
+            "optional": true
+          },
+          "logicalSwitchManagementHostIpAddress": {
+            "type": "string",
+            "optional": true
+          },
+          "snmpV3Configuration": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+              "securityLevel": {
+                "type": "string",
+                "optional": true,
+                "enum": [
+                  "NA",
+                  "Unknown",
+                  "Auth",
+                  "AuthPrivacy"
+                ]
+              },
+              "privacyProtocol": {
+                "type": "string",
+                "optional": true,
+                "enum": [
+                  "NA",
+                  "Unknown",
+                  "DES56",
+                  "AES128"
+                ]
+              },
+              "authorizationProtocol": {
+                "type": "string",
+                "optional": true,
+                "enum": [
+                  "NA",
+                  "Unknown",
+                  "SHA",
+                  "MD5"
+                ]
+              },
+              "snmpV3UserName": {
+                "type": "string",
+                "optional": true
+              }
+            }
+          },
+          "snmpV1Configuration": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+              "communityString": {
+                "type": "string",
+                "optional": true
+              }
+            }
+          },
+          "sshUsername": {
+            "type": "string",
+            "optional": true
+          },
+          "snmpPort": {
+            "type": "integer",
+            "optional": true
+          }
+        }
+      }
+    },
+    "switchCredentialCount": {
+      "type": "integer",
+      "optional": true
+    },
+    "fabricUri": {
+      "type": "string",
+      "required": "true"
+    },
+    "consistencyStatus": {
+      "type": "string",
+      "optional": true,
+      "enum": [
+        "CONSISTENT",
+        "NOT_CONSISTENT"
+      ]
+    },
+    "logicalSwitchDomainInfo": {
+      "type": "object",
+      "optional": true,
+      "properties": {
+        "domainId": {
+          "type": "string",
+          "optional": true
+        },
+        "perSwitchDomain": {
+          "type": "array",
+          "optional": true,
+          "items": {
+            "type": "object",
+            "optional": true,
+            "properties": {
+              "ipAddress": {
+                "type": "string",
+                "optional": true
+              },
+              "model": {
+                "type": "string",
+                "optional": true
+              },
+              "firmwareVersion": {
+                "type": "string",
+                "optional": true
+              },
+              "memberId": {
+                "type": "string",
+                "optional": true
+              },
+              "vpcRole": {
+                "type": "string",
+                "optional": true
+              },
+              "uri": {
+                "type": "string",
+                "optional": true
+              },
+              "status": {
+                "type": "string",
+                "optional": true
+              },
+              "state": {
+                "type": "string",
+                "optional": true
+              }
+            }
+          }
+        },
+        "masterMacAddress": {
+          "type": "string",
+          "optional": true
+        }
+      }
+    },
+    "switchStackingInfo": {
+      "type": "array",
+      "optional": true,
+      "items": {
+        "type": "object",
+        "optional": true,
+        "properties": {
+          "switchStackingElements": {
+            "type": "array",
+            "optional": true,
+            "items": {
+              "type": "object",
+              "optional": true,
+              "properties": {
+                "srcPortUri": {
+                  "type": "string",
+                  "optional": true
+                },
+                "destPortUri": {
+                  "type": "string",
+                  "optional": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "optional": true
+    },
+    "status": {
+      "type": "string",
+      "optional": true
+    },
+    "name": {
+      "type": "string",
+      "optional": true
+    },
+    "state": {
+      "type": "string",
+      "optional": true
+    },
+    "eTag": {
+      "type": "string",
+      "optional": true
+    },
+    "modified": {
+      "type": "string",
+      "optional": true
+    },
+    "created": {
+      "type": "string",
+      "optional": true
+    },
+    "category": {
+      "type": "string",
+      "optional": true
+    },
+    "uri": {
+      "type": "string",
+      "optional": true
+    }
+  }
+}

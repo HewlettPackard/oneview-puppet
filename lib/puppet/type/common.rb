@@ -27,7 +27,7 @@ def uri_recursive_hash(client, data)
     # in case the key is either an array or hash
     hash_array_check(client, data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri-
-    next if value[0..6].include?('/rest/') || !(key.include? 'Uri')
+    next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include? 'Uri')
     # looks for the resource
     resource = get_class(key).find_by(client, name: value)
     # fails if resource returns an empty hash (no results)
