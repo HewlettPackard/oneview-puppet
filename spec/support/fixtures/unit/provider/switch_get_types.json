@@ -1,0 +1,586 @@
+{
+  "type": "interconnect-typeV2",
+  "unsupportedCapabilities": [
+
+  ],
+  "partNumber": "N5K-C50XX",
+  "portInfos": [
+    {
+      "portName": "3.7",
+      "portNumber": 55,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.6",
+      "portNumber": 46,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.17",
+      "portNumber": 17,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.3",
+      "portNumber": 43,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.39",
+      "portNumber": 39,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.29",
+      "portNumber": 29,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.35",
+      "portNumber": 35,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.15",
+      "portNumber": 15,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.36",
+      "portNumber": 36,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.28",
+      "portNumber": 28,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.16",
+      "portNumber": 16,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.19",
+      "portNumber": 19,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.13",
+      "portNumber": 13,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.5",
+      "portNumber": 45,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.1",
+      "portNumber": 1,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.3",
+      "portNumber": 51,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.12",
+      "portNumber": 12,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.24",
+      "portNumber": 24,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.30",
+      "portNumber": 30,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.8",
+      "portNumber": 48,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.11",
+      "portNumber": 11,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.2",
+      "portNumber": 50,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.2",
+      "portNumber": 42,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.1",
+      "portNumber": 41,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.38",
+      "portNumber": 38,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.33",
+      "portNumber": 33,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.27",
+      "portNumber": 27,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.25",
+      "portNumber": 25,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.7",
+      "portNumber": 47,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.4",
+      "portNumber": 52,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.9",
+      "portNumber": 9,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.26",
+      "portNumber": 26,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.5",
+      "portNumber": 5,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "2.4",
+      "portNumber": 44,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.21",
+      "portNumber": 21,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.18",
+      "portNumber": 18,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.23",
+      "portNumber": 23,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.32",
+      "portNumber": 32,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.5",
+      "portNumber": 53,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.20",
+      "portNumber": 20,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.31",
+      "portNumber": 31,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.14",
+      "portNumber": 14,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.8",
+      "portNumber": 56,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.1",
+      "portNumber": 49,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.10",
+      "portNumber": 10,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.34",
+      "portNumber": 34,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "3.6",
+      "portNumber": 54,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.2",
+      "portNumber": 2,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.7",
+      "portNumber": 7,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.3",
+      "portNumber": 3,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.22",
+      "portNumber": 22,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.37",
+      "portNumber": 37,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.8",
+      "portNumber": 8,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.40",
+      "portNumber": 40,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.6",
+      "portNumber": 6,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    },
+    {
+      "portName": "1.4",
+      "portNumber": 4,
+      "uplinkCapable": true,
+      "portCapability": [
+        "Ethernet"
+      ],
+      "downlinkCapable": false,
+      "pairedPortName": null
+    }
+  ],
+  "minimumFirmwareVersion": "5.1(3)N2(1c),5.2(1)N1(4),6.0(2)N2(4),7.0(1)N1(1)",
+  "maximumFirmwareVersion": "8.0",
+  "downlinkCapabilities": [
+    "Ethernet",
+    "FibreChannel",
+    "FCoE"
+  ],
+  "downlinkCount": 0,
+  "name": "Cisco Nexus 50xx",
+  "state": "Active",
+  "description": null,
+  "status": "OK",
+  "eTag": "df8a00f6-1b03-4f64-b45e-cd94ed693030",
+  "modified": "2016-04-19T17:36:24.692Z",
+  "created": "2016-04-19T17:36:24.672Z",
+  "category": "switch-types",
+  "uri": "/rest/switch-types/b4a3dabb-e284-4ed6-bea6-0fde238e5933"
+}
