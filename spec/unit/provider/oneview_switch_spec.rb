@@ -23,27 +23,26 @@ describe provider_class, unit: true do
 
   @resourcetype = OneviewSDK::Switch
 
-# TODO: #1 - a future improvement might be to make this test more atomic, by adding the
-# possibility to call creates to this test dependencies
-# TODO: #2 - This example is still using the ethernet_network_members.json file to generate
-# its json outputs. Ideally a switch specific json file should be used for cohesion.
-  let(:resource) {
+  # TODO: #1 - a future improvement might be to make this test more atomic, by adding the
+  # possibility to call creates to this test dependencies
+  # TODO: #2 - This example is still using the ethernet_network_members.json file to generate
+  # its json outputs. Ideally a switch specific json file should be used for cohesion.
+  let(:resource) do
     Puppet::Type.type(:oneview_switch).new(
       name: 'Switch',
-    ensure: 'found',
-        data:
+      ensure: 'found',
+      data:
           {
-          'name'                      => '172.18.20.1',
-          },
+            'name' => '172.18.20.1'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:ruby)
     end
@@ -54,7 +53,7 @@ describe provider_class, unit: true do
 
     it 'create should display unavailable method' do
       expect(provider.exists?).to be
-      expect{provider.create}.to raise_error(OneviewSDK::MethodUnavailable, /The method #create is unavailable for this resource/)
+      expect { provider.create }.to raise_error(OneviewSDK::MethodUnavailable, /The method #create is unavailable for this resource/)
     end
 
     it 'should return that the Switch was found' do
@@ -85,7 +84,6 @@ describe provider_class, unit: true do
       expect(provider.get_environmental_configuration).to be
     end
 
-
     it 'should drop the Switch' do
       resource['data']['uri'] = '/rest/fake'
       test = OneviewSDK::Switch.new(@client, resource['data'])
@@ -97,16 +95,16 @@ describe provider_class, unit: true do
   end
 
   context 'given a non existant switch name' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
         ensure: 'absent',
-          data:
+        data:
             {
-            'name'                      => '172.18.200.1',
-            },
+              'name'                      => '172.18.200.1'
+            }
       )
-    }
+    end
     it 'exists? should not find the Switch' do
       allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
@@ -115,21 +113,22 @@ describe provider_class, unit: true do
     it 'should fail and return that the Switch was not found' do
       allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
-      expect{provider.found}.to raise_error(Puppet::Error, /No Switches with the specified data were found on the Oneview Appliance/)
+      expect { provider.found }.to raise_error(Puppet::Error, /No Switches with the specified data were found on the Oneview Appliance/)
     end
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-      ensure: 'present',
-          data:
+        ensure: 'present',
+        data:
             {
-            'name'                      => '172.18.20.1',
-            },
+              'name'                      => '172.18.20.1'
+            }
       )
-    }
+    end
+
     it 'should be able to run through self.instances' do
       test = OneviewSDK::Switch.new(@client, resource['data'])
       allow(OneviewSDK::Switch).to receive(:get_all).and_return([test])
@@ -140,22 +139,22 @@ describe provider_class, unit: true do
       allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
       allow(OneviewSDK::Switch).to receive(:get_type).with(anything, resource['data']['name']).and_return(nil)
       provider.exists?
-      expect{provider.get_type}.to raise_error(Puppet::Error,
-      /\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
+      expect { provider.get_type }
+        .to raise_error(Puppet::Error, /\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
     end
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-      ensure: 'get_type',
-          data:
+        ensure: 'get_type',
+        data:
             {
-            'name'                      => 'Cisco Nexus 50xx',
-            },
+              'name'                      => 'Cisco Nexus 50xx'
+            }
       )
-    }
+    end
     it 'should be able to get types' do
       allow(OneviewSDK::Switch).to receive(:get_type).with(anything, resource['data']['name']).and_return(resource['data']['name'])
       provider.exists?
@@ -164,18 +163,18 @@ describe provider_class, unit: true do
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-      ensure: 'get_statistics',
-          data:
+        ensure: 'get_statistics',
+        data:
             {
-            'name'                      => '172.18.20.1',
-            'port_name'                 => '1.4',
-            # 'subport_number'            => 'test'
-            },
+              'name'                      => '172.18.20.1',
+              'port_name'                 => '1.4',
+              # 'subport_number'            => 'test'
+            }
       )
-    }
+    end
     it 'should be able to get types' do
       resource['data']['uri'] = '/rest/fake'
       test = OneviewSDK::Switch.new(@client, resource['data'])

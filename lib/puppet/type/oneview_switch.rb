@@ -20,8 +20,8 @@ Puppet::Type.newtype(:oneview_switch) do
   ensurable do
     defaultvalues
 
-# Starting to ignore the provider methods in simplecov, since they won't be accessed in the file itself
-# :nocov:
+    # Starting to ignore the provider methods in simplecov, since they won't be accessed in the file itself
+    # :nocov:
     # Creating the find operation for the ensure method
     newvalue(:found) do
       provider.found
@@ -38,23 +38,19 @@ Puppet::Type.newtype(:oneview_switch) do
     newvalue(:get_environmental_configuration) do
       provider.get_environmental_configuration
     end
-# :nocov:
-
+    # :nocov:
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Switch name"
+  newparam(:name, namevar: true) do
+    desc 'Switch name'
   end
 
   newparam(:data) do
-    desc "Switch data hash containing all specifications for the system"
+    desc 'Switch data hash containing all specifications for the system'
     validate do |value|
       unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
+        fail Puppet::Error, 'Inserted value for data is not valid'
       end
     end
   end
-
-
-
 end

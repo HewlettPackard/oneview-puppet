@@ -71,7 +71,7 @@ Puppet::Type.type(:oneview_switch).provide(:ruby) do
 
   def create
     # This returns method unavailable
-    switch = @resourcetype.new(@client, @data).create
+    @resourcetype.new(@client, @data).create
   end
 
   def destroy

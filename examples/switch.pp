@@ -23,21 +23,21 @@ oneview_switch{'switch_1':
 }
 
 oneview_switch{'switch_2':
-    ensure => 'get_type',
+    ensure  => 'get_type',
     require => Oneview_switch['switch_1'],
     # A data hash is optional for the get_type ensurable, and serves as a filter for the types
-    data   => {
+    data    => {
       name                => 'Cisco Nexus 50xx',
     }
 }
 
 # Get statistics for a switch, for the specified port or port/subport duo
 oneview_switch{'switch_3':
-    ensure => 'get_statistics',
+    ensure  => 'get_statistics',
     require => Oneview_switch['switch_2'],
     # Here a 'port_name' or 'port_name'+'subport_number' can be specified in the data hash for filtering
     # or left blank
-    data   => {
+    data    => {
       # name is the name of the switch which will be queried for statistics and is required
       name                      => '172.18.20.1',
       # port_name                => '1.4',
@@ -46,9 +46,9 @@ oneview_switch{'switch_3':
 
 # Get environmental configuration for a switch
 oneview_switch{'switch_4':
-    ensure => 'get_environmental_configuration',
+    ensure  => 'get_environmental_configuration',
     require => Oneview_switch['switch_3'],
-    data   => {
+    data    => {
       # name is the name of the switch which will be queried for its environmental configuration and is required
       name                      => '172.18.20.1',
     }

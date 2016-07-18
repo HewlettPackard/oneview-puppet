@@ -19,26 +19,24 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_switch).provider(:ruby)
 
 describe provider_class do
-
-# TODO: a future improvement might be to make this test more atomic, by adding the
-# possibility to call creates to this test dependencies
-  let(:resource) {
+  # TODO: a future improvement might be to make this test more atomic, by adding the
+  # possibility to call creates to this test dependencies
+  let(:resource) do
     Puppet::Type.type(:oneview_switch).new(
       name: 'Switch',
-    ensure: 'found',
-        data:
+      ensure: 'found',
+      data:
           {
-          'name'                      => '172.18.20.1',
-          },
+            'name' => '172.18.20.1'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:ruby)
     end
@@ -47,10 +45,10 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
-#TODO get this to work!
+    # TODO: get this to work!
     it 'create should display unavailable method' do
       expect(provider.exists?).to be
-      expect{provider.create}.to raise_error(OneviewSDK::MethodUnavailable, /The method #create is unavailable for this resource/)
+      expect { provider.create }.to raise_error(OneviewSDK::MethodUnavailable, /The method #create is unavailable for this resource/)
     end
 
     it 'should return that the Switch was found' do
@@ -71,59 +69,59 @@ describe provider_class do
   end
 
   context 'given a non existant switch name' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
         ensure: 'absent',
-          data:
+        data:
             {
-            'name'                      => '172.18.200.1',
-            },
+              'name'                      => '172.18.200.1'
+            }
       )
-    }
+    end
     it 'exists? should not find the Switch' do
       expect(provider.exists?).not_to be
     end
 
     it 'should fail and return that the Switch was not found' do
       expect(provider.exists?).not_to be
-      expect{provider.found}.to raise_error(Puppet::Error, /No Switches with the specified data were found on the Oneview Appliance/)
+      expect { provider.found }.to raise_error(Puppet::Error, /No Switches with the specified data were found on the Oneview Appliance/)
     end
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-      ensure: 'present',
-          data:
+        ensure: 'present',
+        data:
             {
-            'name'                      => '172.18.20.1',
-            },
+              'name'                      => '172.18.20.1'
+            }
       )
-    }
+    end
     it 'should be able to run through self.instances' do
-          expect(instance).to be
+      expect(instance).to be
     end
 
     it 'should be able to get types' do
       provider.exists?
-      expect{provider.get_type}.to raise_error(Puppet::Error,
-      /\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
+      expect { provider.get_type }
+        .to raise_error(Puppet::Error, /\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
     end
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-      ensure: 'get_type',
-          data:
+        ensure: 'get_type',
+        data:
             {
-            'name'                      => 'Cisco Nexus 50xx',
-            },
+              'name'                      => 'Cisco Nexus 50xx'
+            }
       )
-    }
+    end
     it 'should be able to get types' do
       provider.exists?
       expect(provider.get_type).to be
@@ -131,18 +129,18 @@ describe provider_class do
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-      ensure: 'get_statistics',
-          data:
+        ensure: 'get_statistics',
+        data:
             {
-            'name'                      => '172.18.20.1',
-            'port_name'                 => '1.4',
-            # 'subport_number'            => 'test'
-            },
+              'name'                      => '172.18.20.1',
+              'port_name'                 => '1.4',
+              # 'subport_number'            => 'test'
+            }
       )
-    }
+    end
     it 'should be able to get types' do
       provider.exists?
       expect(provider.get_statistics).to be
