@@ -16,6 +16,7 @@
 
 oneview_logical_switch{'Logical Switch Create':
   ensure           => 'present',
+  # SSH and SNMP credentials information
   ssh_username     => 'dcs',
   ssh_password     => 'dcs',
   snmp_port        => '161',

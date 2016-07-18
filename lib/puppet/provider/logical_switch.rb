@@ -14,6 +14,8 @@
 # limitations under the License.
 ################################################################################
 
+# Methods used to treat and create credentials manually
+
 def new_ssh(username, password)
   OneviewSDK::LogicalSwitch::CredentialsSSH.new(username, password)
 end
@@ -26,6 +28,7 @@ def set_credentials(ls, ip, ssh, snmp)
   ls.set_switch_credentials(ip, ssh, snmp)
 end
 
+# Gets the logical switch object from Oneview
 def get_ls(message = nil)
   Puppet.notice("\n\n#{message}\n") if message
   ls = OneviewSDK::LogicalSwitch.new(@client, name: @data['name'])

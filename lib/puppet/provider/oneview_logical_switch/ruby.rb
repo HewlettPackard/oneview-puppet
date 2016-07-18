@@ -50,8 +50,7 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
 
   def destroy
     ls = get_ls
-    puts ls.methods
-    ls.delete if ls.retrieve!
+    ls.delete
   end
 
   def found
@@ -76,11 +75,13 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
 
   def get_schema
     ls = get_ls
-    true if pretty ls.schema
+    pretty ls.schema
+    true
   end
 
   def refresh
     ls = get_ls
-    true if pretty ls.refresh
+    ls.refresh
+    true
   end
 end
