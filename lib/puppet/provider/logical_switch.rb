@@ -19,7 +19,7 @@ def new_ssh(username, password)
 end
 
 def new_snmp(port, version, string: nil)
-	OneviewSDK::LogicalSwitch::CredentialsSNMPV1.new(port, version, string)
+  OneviewSDK::LogicalSwitch::CredentialsSNMPV1.new(port, version, string)
 end
 
 def set_credentials(ls, ip, ssh, snmp)

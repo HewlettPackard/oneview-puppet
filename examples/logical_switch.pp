@@ -30,9 +30,9 @@ oneview_logical_switch{'Logical Switch Create':
 }
 
 oneview_logical_switch{'Logical Switch Found':
-  ensure           => 'found',
-  require          => Oneview_logical_switch['Logical Switch Create'],
-  data             =>
+  ensure  => 'found',
+  require => Oneview_logical_switch['Logical Switch Create'],
+  data    =>
   {
     name                  => 'myds new',
     logicalSwitchGroupUri => '1'
@@ -40,9 +40,9 @@ oneview_logical_switch{'Logical Switch Found':
 }
 
 oneview_logical_switch{'Logical Switch Get Schema':
-  ensure           => 'get_schema',
-  require          => Oneview_logical_switch['Logical Switch Found'],
-  data             =>
+  ensure  => 'get_schema',
+  require => Oneview_logical_switch['Logical Switch Found'],
+  data    =>
   {
     name                  => 'myds new',
     logicalSwitchGroupUri => '1'
@@ -50,14 +50,14 @@ oneview_logical_switch{'Logical Switch Get Schema':
 }
 
 oneview_logical_switch{'Logical Switch Get All':
-  ensure           => 'get_logical_switches',
-  require          => Oneview_logical_switch['Logical Switch Get Schema'],
+  ensure  => 'get_logical_switches',
+  require => Oneview_logical_switch['Logical Switch Get Schema'],
 }
 
 oneview_logical_switch{'Logical Switch Destroy':
-  ensure           => 'absent',
-  require          => Oneview_logical_switch['Logical Switch Get All'],
-  data             =>
+  ensure  => 'absent',
+  require => Oneview_logical_switch['Logical Switch Get All'],
+  data    =>
   {
     name                  => 'myds new',
     logicalSwitchGroupUri => '1'
