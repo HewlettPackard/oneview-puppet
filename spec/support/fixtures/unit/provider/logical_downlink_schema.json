@@ -1,0 +1,160 @@
+{
+  "type": "object",
+  "optional": true,
+  "properties": {
+    "networkUris": {
+      "type": "array",
+      "optional": true,
+      "items": {
+        "type": "string",
+        "optional": true
+      }
+    },
+    "downlinkCapabilities": {
+      "type": "array",
+      "optional": true,
+      "items": {
+        "type": "string",
+        "optional": true
+      }
+    },
+    "downlinkPortCapability": {
+      "type": "object",
+      "optional": true,
+      "properties": {
+        "maxBandwidthInGbps": {
+          "type": "integer",
+          "readonly": "true",
+          "required": "true"
+        },
+        "totalSubPort": {
+          "type": "integer",
+          "readonly": "true",
+          "required": "true"
+        },
+        "portCapabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "optional": true
+          },
+          "readonly": "true",
+          "required": "true"
+        },
+        "downlinkSubPorts": {
+          "type": "object",
+          "readonly": "true",
+          "required": "true"
+        },
+        "description": {
+          "type": "string",
+          "optional": true
+        },
+        "status": {
+          "type": "string",
+          "optional": true
+        },
+        "name": {
+          "type": "string",
+          "optional": true
+        },
+        "state": {
+          "type": "string",
+          "optional": true
+        },
+        "eTag": {
+          "type": "string",
+          "optional": true
+        },
+        "modified": {
+          "type": "string",
+          "optional": true
+        },
+        "created": {
+          "type": "string",
+          "optional": true
+        },
+        "category": {
+          "type": "string",
+          "optional": true
+        },
+        "uri": {
+          "type": "string",
+          "optional": true
+        }
+      }
+    },
+    "maxNetworks": {
+      "type": "integer",
+      "optional": true
+    },
+    "minNetworks": {
+      "type": "integer",
+      "optional": true
+    },
+    "permittedSpeedRange": {
+      "type": "array",
+      "optional": true,
+      "items": {
+        "type": "string",
+        "optional": true
+      }
+    },
+    "maxSpeed": {
+      "type": "string",
+      "optional": true,
+      "enum": [
+        "Speed0M",
+        "Speed1M",
+        "Speed10M",
+        "Speed100M",
+        "Speed1G",
+        "Speed2G",
+        "Speed2_5G",
+        "Speed4G",
+        "Speed8G",
+        "Speed10G",
+        "Auto",
+        "Speed20G",
+        "Speed40G",
+        "Unknown"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "optional": true
+    },
+    "status": {
+      "type": "string",
+      "optional": true
+    },
+    "name": {
+      "type": "string",
+      "optional": true
+    },
+    "state": {
+      "type": "string",
+      "optional": true
+    },
+    "eTag": {
+      "type": "string",
+      "optional": true
+    },
+    "modified": {
+      "type": "string",
+      "optional": true
+    },
+    "created": {
+      "type": "string",
+      "optional": true
+    },
+    "category": {
+      "type": "string",
+      "optional": true
+    },
+    "uri": {
+      "type": "string",
+      "optional": true
+    }
+  }
+}

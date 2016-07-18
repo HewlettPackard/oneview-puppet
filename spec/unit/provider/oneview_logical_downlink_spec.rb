@@ -87,11 +87,11 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_downlink).new(
         name: 'Logical Downlink',
+        ensure: 'get_schema',
         data:
-            {
-              'name' => 'Logical Downlink',
-              'logicalSwitchGroupUri' => '/rest/'
-            }
+        {
+          name: 'Logical Downlink'
+        }
       )
     end
 
@@ -99,9 +99,132 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:ruby)
+    it 'should be able to get the logical downlink schema' do
+      schema = 'spec/support/fixtures/unit/provider/logical_downlink_schema.json'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(schema))
+      expect(provider.exists?).to eq(true)
+      expect(provider.get_schema).to eq(true)
     end
   end
 
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_downlink).new(
+        name: 'Logical Downlink',
+        ensure: 'get_logical_downlinks',
+        data:
+        {
+          name: 'Logical Downlink'
+        }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should be able to get all the logical downlinks' do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect(provider.get_logical_downlinks).to eq(true)
+    end
+  end
+
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_downlink).new(
+        name: 'Logical Downlink',
+        ensure: 'get_logical_downlinks',
+        data:
+        {
+          name: 'Logical Downlink'
+        }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should be able to get all the logical downlinks with no filters' do
+      data = {}
+      test = resourcetype.new(@client, data)
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect(provider.get_logical_downlinks).to eq(true)
+    end
+
+    it 'should not be able to get all the logical downlinks' do
+      data = {}
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect(provider.get_logical_downlinks).to eq(false)
+    end
+
+    it 'should be able to get all the logical downlinks' do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect(provider.get_logical_downlinks).to eq(true)
+    end
+  end
+
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_downlink).new(
+        name: 'Logical Downlink',
+        ensure: 'get_without_ethernet',
+        data:
+        {
+          name: 'Logical Downlink'
+        }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should not be able to get all the logical downlinks w/o ethernet' do
+      data = {}
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect(provider.get_without_ethernet).to eq(false)
+    end
+
+    # TODO: to be finished tomorrow
+    # it 'should be able to get this logical downlink w/o ethernet' do
+    #   test = resourcetype.new(@client, name: resource['data']['name'])
+    #   allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+    #   expect(provider.exists?).to eq(true)
+    #   expect(provider.get_without_ethernet).to eq(true)
+    # end
+  end
+
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_downlink).new(
+        name: 'Logical Downlink',
+        ensure: 'found',
+        data:
+        {
+          name: 'Logical Downlink'
+        }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should be able to find this logical downlink' do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect(provider.found).to eq(true)
+    end
+  end
 end
