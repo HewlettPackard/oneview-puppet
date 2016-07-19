@@ -14,9 +14,26 @@
 # limitations under the License.
 ################################################################################
 
-Gemfile.lock
-spec/fixtures/
-lib/puppet/provider/login.rb
-docker/*.sh
-docker/tests/
-coverage/
+FROM ruby:2.2.0
+
+# Install dependencies
+RUN apt-get -qqy update && \
+	apt-get -qqy install \
+	curl \
+	make \
+	vim  \
+	mlocate && \
+	updatedb  
+
+
+RUN gem install --no-ri --no-rdoc bundler
+
+RUN mkdir /puppet
+WORKDIR /puppet
+RUN echo `pwd` > ./pwd
+COPY . /puppet
+
+RUN bundle
+
+#Point puppet rubylib to our code
+ENV RUBYLIB=/puppet/lib
