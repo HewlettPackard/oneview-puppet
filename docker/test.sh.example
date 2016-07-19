@@ -23,7 +23,7 @@ fi
 proxy='{proxy}'
 
 docker run  -it \
-			-v $(pwd)/puppet:/puppet \
+			-v $(pwd)/:/puppet \
 			-e ONEVIEW_URL='{url}' \
 			-e ONEVIEW_USER='{user}' \
 			-e ONEVIEW_PASSWORD='{password}' \
