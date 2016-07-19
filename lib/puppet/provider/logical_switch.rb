@@ -16,12 +16,22 @@
 
 # Methods used to treat and create credentials manually
 
+def set_switches(ls, resource)
+  resource['switches'].each do |switch|
+    switch['version'] = nil unless switch['version']
+    set_credentials(ls,
+                    switch['ip'],
+                    new_ssh(switch['ssh_username'], switch['ssh_password']),
+                    new_snmp(switch['snmp_port'], switch['community_string'], switch['version']))
+  end
+end
+
 def new_ssh(username, password)
   OneviewSDK::LogicalSwitch::CredentialsSSH.new(username, password)
 end
 
-def new_snmp(port, version, string: nil)
-  OneviewSDK::LogicalSwitch::CredentialsSNMPV1.new(port, version, string)
+def new_snmp(port, community_string, version = nil)
+  OneviewSDK::LogicalSwitch::CredentialsSNMPV1.new(port, community_string, version)
 end
 
 def set_credentials(ls, ip, ssh, snmp)

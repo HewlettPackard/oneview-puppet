@@ -40,11 +40,8 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
   end
 
   def create
-    ssh = new_ssh(resource['ssh_username'], resource['ssh_password'])
-    snmp = new_snmp(resource['snmp_port'], resource['community_string'])
     ls = @resourcetype.new(@client, @data)
-    set_credentials(ls, resource['switch1_ip'], ssh, snmp)
-    set_credentials(ls, resource['switch2_ip'], ssh, snmp)
+    set_switches(ls, resource)
     true if ls.create
   end
 

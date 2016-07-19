@@ -45,36 +45,8 @@ Puppet::Type.newtype(:oneview_logical_switch) do
     desc 'Logical Switch name'
   end
 
-  newparam(:ssh_username) do
-    desc 'Logical Switch ssh username'
-  end
-
-  newparam(:ssh_password) do
-    desc 'Logical Switch ssh password'
-  end
-
-  newparam(:snmp_port) do
-    desc 'Logical Switch snmp port'
-  end
-
-  newparam(:snmp_version) do
-    desc 'Logical Switch snmp version'
-  end
-
-  newparam(:snmp_connection_string) do
-    desc 'Logical Switch snmp connection string'
-  end
-
-  newparam(:community_string) do
-    desc 'Logical Switch snmp community string'
-  end
-
-  newparam(:switch1_ip) do
-    desc 'Logical Switch switch 1 ip'
-  end
-
-  newparam(:switch2_ip) do
-    desc 'Logical Switch switch 2 ip'
+  newparam(:switches) do
+    desc 'Switches to be used in Logical Switch'
   end
 
   newparam(:data) do
