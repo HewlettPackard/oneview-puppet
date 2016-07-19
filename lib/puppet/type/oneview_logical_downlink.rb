@@ -20,7 +20,6 @@ Puppet::Type.newtype(:oneview_logical_downlink) do
   ensurable do
     defaultvalues
     # :nocov:
-    # Creating the find operation for the ensure method
     newvalue(:found) do
       provider.found
     end
@@ -39,15 +38,17 @@ Puppet::Type.newtype(:oneview_logical_downlink) do
     end
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Interconnect name"
+  newparam(:name, namevar: true) do
+    desc 'Logical Downlink name'
   end
   # :nocov:
+
   newparam(:data) do
-    desc "Logical downlink data hash containing all specifications for the
-    resource"
+    desc 'Logical Downlink attributes'
     validate do |value|
-      raise Puppet::Error, "Inserted value for data is not valid" unless value.class == Hash
+      unless value.class == Hash
+        raise Puppet::Error, 'Inserted value for data is not valid'
+      end
     end
   end
 end

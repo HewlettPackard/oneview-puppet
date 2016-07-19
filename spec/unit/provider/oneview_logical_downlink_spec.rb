@@ -17,8 +17,6 @@
 require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
-# support to the new version
-require_relative 'logical_downlink'
 
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:ruby)
 resourcetype = OneviewSDK::LogicalDownlink
@@ -71,13 +69,11 @@ describe provider_class, unit: true do
     end
 
     it 'should not be able to create the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:create).and_return(false)
       expect(provider.create).to eq(false)
     end
 
     it 'should not be able to destroy the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:destroy).and_return(false)
       expect(provider.create).to eq(false)
     end
@@ -150,7 +146,6 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be able to get all the logical downlinks with no filters' do
-      data = {}
       test = resourcetype.new(@client, data)
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
@@ -158,7 +153,6 @@ describe provider_class, unit: true do
     end
 
     it 'should not be able to get all the logical downlinks' do
-      data = {}
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect(provider.get_logical_downlinks).to eq(false)
@@ -189,7 +183,6 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should not be able to get the logical downlinks w/o ethernet' do
-      data = {}
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect(provider.get_without_ethernet).to eq(false)
@@ -235,7 +228,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_downlink).new(
         name: 'Logical Downlink',
-      ensure: 'absent',
+        ensure: 'absent',
         data:
         {
           name: 'Logical Downlink'
