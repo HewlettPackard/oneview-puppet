@@ -188,18 +188,21 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should not be able to get all the logical downlinks w/o ethernet' do
+    it 'should not be able to get the logical downlinks w/o ethernet' do
       data = {}
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect(provider.get_without_ethernet).to eq(false)
     end
 
-    # TODO: to be finished tomorrow
-    # it 'should be able to get this logical downlink w/o ethernet' do
-    #   test = resourcetype.new(@client, name: resource['data']['name'])
-    #   allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+    # TODO: stuck at get_without_ethernet method
+    # it 'should be able to get the logical downlinks w/o ethernet' do
+    #   test = resourcetype.new(@client, resource['data'])
+    #   allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
     #   expect(provider.exists?).to eq(true)
+    #   new_test = resourcetype.new(@client, resource['data'])
+    #   new_test.data['uri'] = "#{test.data['uri']}/withoutEthernet"
+    #   allow(resourcetype).to receive(:get_without_ethernet).and_return([new_test])
     #   expect(provider.get_without_ethernet).to eq(true)
     # end
   end
@@ -225,6 +228,30 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
       expect(provider.found).to eq(true)
+    end
+  end
+
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_downlink).new(
+        name: 'Logical Downlink',
+      ensure: 'absent',
+        data:
+        {
+          name: 'Logical Downlink'
+        }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should not be able to delete this resource' do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect(provider.destroy).to eq(false)
     end
   end
 end

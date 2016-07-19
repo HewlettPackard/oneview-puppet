@@ -32,7 +32,12 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
     return true unless resource['data']
     @data = resource['data']
     ld = @resourcetype.new(@client, @data)
-    ld.exists?
+    unless ld.exists?
+      Puppet.warning('There are no logical downlinks with these attributes \
+      in the Oneview appliance.')
+      return false
+    end
+    true
   end
 
   def create
@@ -48,11 +53,6 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
   def found
     Puppet.notice("\nLogical Downlink\n")
     ld = @resourcetype.find_by(@client, @data)
-    unless ld.first.exists?
-      Puppet.warning('There are no logical downlinks with these attributes \
-      in the Oneview appliance.')
-      return false
-    end
     puts "Found\n\s\sName: #{ld.first['name']}\n\s\sURI: #{ld.first['uri']}\n\n"
     true
   end
@@ -60,11 +60,6 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
   def get_schema
     Puppet.notice("\nLogical Downlink Get Schema\n")
     ld = @resourcetype.find_by(@client, @data)
-    unless ld.first.exists?
-      Puppet.warning('There are no logical downlinks with these attributes \
-      in the Oneview appliance.')
-      return false
-    end
     pretty ld.first.schema
     true
   end

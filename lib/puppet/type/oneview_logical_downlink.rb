@@ -19,7 +19,7 @@ Puppet::Type.newtype(:oneview_logical_downlink) do
 
   ensurable do
     defaultvalues
-
+    # :nocov:
     # Creating the find operation for the ensure method
     newvalue(:found) do
       provider.found
@@ -42,7 +42,7 @@ Puppet::Type.newtype(:oneview_logical_downlink) do
   newparam(:name, :namevar => true) do
     desc "Interconnect name"
   end
-
+  # :nocov:
   newparam(:data) do
     desc "Logical downlink data hash containing all specifications for the
     resource"
