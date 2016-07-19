@@ -3,7 +3,6 @@ def login
     url: ENV['ONEVIEW_URL'] ||= 'https://172.16.101.19',
     ssl_enabled: ['true', '1', 'yes'].include?(ENV['ONEVIEW_SSL_ENABLED']),
     logger: Logger.new(STDOUT),
-    log_level: :info,
     log_level: ENV['ONEVIEW_LOG_LEVEL'] ||= 'info',
   }
 
