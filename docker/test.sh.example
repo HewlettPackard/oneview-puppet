@@ -21,6 +21,7 @@ if [ $# -eq 0 ]
 fi
 
 proxy='{proxy}'
+no_proxy='{no-proxy}'
 
 docker run  -it \
 			-v $(pwd)/:/puppet \
@@ -34,6 +35,7 @@ docker run  -it \
 			-e HTTPS_PROXY=$proxy \
 			-e http_proxy=$proxy \
 			-e https_proxy=$proxy	\
+			-e no_proxy=$no_proxy \
 			puppet-oneview-ruby puppet apply examples/$1 --debug --trace
 
 #Example param for using token instead of username/password
