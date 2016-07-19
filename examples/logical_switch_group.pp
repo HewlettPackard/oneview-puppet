@@ -18,10 +18,11 @@ oneview_logical_switch_group{'Logical Switch Group Create':
   ensure => 'present',
   data   =>
     {
-      name               => 'Test Logical Switch Group',
+      name               => 'OneViewSDK Test Logical Switch Group',
       category           => 'logical-switch-groups',
       state              => 'Active',
       type               => 'logical-switch-group',
+      # Number of switches and its model
       groupingParameters =>
       {
         1 => 'Cisco Nexus 50xx'
@@ -62,7 +63,7 @@ oneview_logical_switch_group{'Logical Switch Group Destroy':
   require => Oneview_logical_switch_group['Logical Switch Group Get Schema'],
   data    =>
     {
-      name     => 'Test Logical Switch Group',
+      name     => 'OneViewSDK Test Logical Switch Group',
       category => 'logical-switch-groups',
       state    => 'Active',
       type     => 'logical-switch-group'
