@@ -146,7 +146,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be able to get all the logical downlinks with no filters' do
-      test = resourcetype.new(@client, data)
+      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect(provider.get_logical_downlinks).to eq(true)
