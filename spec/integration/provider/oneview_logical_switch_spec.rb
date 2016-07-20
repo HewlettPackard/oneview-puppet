@@ -21,19 +21,29 @@ provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
 describe provider_class do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_switch).new(
-      name: 'Test_LS',
+      name: 'LS',
       ensure: 'present',
-      ssh_username: 'dcs',
-      ssh_password: 'dcs',
-      snmp_port: '161',
-      snmp_version: 'public',
-      switch1_ip: '172.18.20.1',
-      switch2_ip: '172.18.20.2',
-      community_string: 'string',
+      switches:
+      [
+        {
+          'ip' => '172.18.20.1',
+          'ssh_username' => 'dcs',
+          'ssh_password' => 'dcs',
+          'snmp_port' => '161',
+          'community_string' => 'public'
+        },
+        {
+          'ip' => '172.18.20.1',
+          'ssh_username' => 'dcs',
+          'ssh_password' => 'dcs',
+          'snmp_port' => '161',
+          'community_string' => 'public'
+        }
+      ],
       data:
           {
-            'name'                  => 'Test_SPT',
-            'logicalSwitchGroupUri' => 'EG'
+            'name' => 'LS',
+            'logicalSwitchGroupUri' => '/rest/logical-switch-groups/32a67e21-c5c6-4855-aed5-443720b2c921'
           }
     )
   end
@@ -56,7 +66,7 @@ describe provider_class do
     end
 
     it 'should return that the logical switch was not found' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error
     end
 
     it 'should be able to create a new logical switch' do
