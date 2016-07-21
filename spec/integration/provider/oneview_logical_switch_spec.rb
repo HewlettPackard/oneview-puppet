@@ -23,27 +23,27 @@ describe provider_class do
     Puppet::Type.type(:oneview_logical_switch).new(
       name: 'LS',
       ensure: 'present',
-      switches:
-      [
-        {
-          'ip' => '172.18.20.1',
-          'ssh_username' => 'dcs',
-          'ssh_password' => 'dcs',
-          'snmp_port' => '161',
-          'community_string' => 'public'
-        },
-        {
-          'ip' => '172.18.20.1',
-          'ssh_username' => 'dcs',
-          'ssh_password' => 'dcs',
-          'snmp_port' => '161',
-          'community_string' => 'public'
-        }
-      ],
       data:
           {
             'name' => 'LS',
-            'logicalSwitchGroupUri' => '/rest/logical-switch-groups/32a67e21-c5c6-4855-aed5-443720b2c921'
+            'logicalSwitchGroupUri' => '/rest/logical-switch-groups/32a67e21-c5c6-4855-aed5-443720b2c921',
+            'switches' =>
+            [
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              },
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              }
+            ]
           }
     )
   end
@@ -66,7 +66,7 @@ describe provider_class do
     end
 
     it 'should return that the logical switch was not found' do
-      expect { provider.found }.to raise_error
+      expect { provider.found }.to raise_error(Puppet::Error, 'No Logical Switches were found in the Appliance.')
     end
 
     it 'should be able to create a new logical switch' do

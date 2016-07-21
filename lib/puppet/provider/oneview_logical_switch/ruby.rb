@@ -53,9 +53,10 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
 
   def found
     ls = @resourcetype.find_by(@client, @data)
+    raise(Puppet::Error, 'No Logical Switches were found in the Appliance.') unless ls.first
     Puppet.notice("\n\n\s\sFound Logical Switch"\
     " #{ls.first.data['name']} (URI: #{ls.first.data['uri']}) in Oneview Appliance\n")
-    true if ls.first
+    true
   end
 
   def get_logical_switches

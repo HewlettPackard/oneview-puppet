@@ -76,7 +76,7 @@ oneview_logical_switch{'Logical Switch Destroy':
   }
 }
 
-# This operation is not supported by this switch model
+# This operation is not supported by the switch currently in use (Cisco Nexus 55xx)
 # oneview_logical_switch{'Logical Switch Refresh':
 #   ensure           => 'refresh',
 #   data             =>
