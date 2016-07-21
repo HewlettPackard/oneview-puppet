@@ -58,7 +58,8 @@ Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
 
   def get_schema
     ct = @resourcetype.new(@client, @data)
-    true if pretty ct.schema
+    pretty ct.schema
+    true
   end
 
   def get_connection_templates

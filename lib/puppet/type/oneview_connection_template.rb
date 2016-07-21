@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+
 require_relative 'common'
 
 Puppet::Type.newtype(:oneview_connection_template) do
