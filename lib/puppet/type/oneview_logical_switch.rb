@@ -45,10 +45,6 @@ Puppet::Type.newtype(:oneview_logical_switch) do
     desc 'Logical Switch name'
   end
 
-  newparam(:switches) do
-    desc 'Switches to be used in Logical Switch'
-  end
-
   newparam(:data) do
     desc 'Logical Switch data hash containing all specifications for the system'
     validate do |value|

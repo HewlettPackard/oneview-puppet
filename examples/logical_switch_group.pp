@@ -21,13 +21,13 @@ oneview_logical_switch_group{'Logical Switch Group Create':
       name     => 'OneViewSDK Test Logical Switch Group',
       category => 'logical-switch-groups',
       state    => 'Active',
-      type     => 'logical-switch-group'
+      type     => 'logical-switch-group',
+      switches =>
+      {
+        number_of_switches => '2',
+        type               => 'Cisco Nexus 50xx'
+      }
     },
-  switches =>
-  {
-    number_of_switches => '2',
-    type               => 'Cisco Nexus 50xx'
-  }
 }
 
 oneview_logical_switch_group{'Logical Switch Group Edit':

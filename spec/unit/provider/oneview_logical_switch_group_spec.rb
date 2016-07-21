@@ -33,13 +33,13 @@ describe provider_class, unit: true do
             'name' => 'OneViewSDK Test Logical Switch Group',
             'category' => 'logical-switch-groups',
             'state' => 'Active',
-            'type' => 'logical-switch-group'
-          },
-      switches:
-      {
-        'number_of_switches' => '1',
-        'type' => 'Cisco Nexus 50xx'
-      }
+            'type' => 'logical-switch-group',
+            'switches' =>
+            {
+              'number_of_switches' => '1',
+              'type' => 'Cisco Nexus 50xx'
+            }
+          }
     )
   end
 
@@ -54,9 +54,10 @@ describe provider_class, unit: true do
               'category' => 'logical-switch-groups',
               'state' => 'Active',
               'type' => 'logical-switch-group',
-              'groupingParameters' =>
+              'switches' =>
               {
-                '1' => 'Cisco Nexus 50xx'
+                'number_of_switches' => '1',
+                'type' => 'Cisco Nexus 50xx'
               }
             }
       )
@@ -110,14 +111,14 @@ describe provider_class, unit: true do
     #   allow_any_instance_of(resourcetype).to receive(:exists?).and_return(false)
     #   expect(provider.exists?).to eq(false)
     #   allow_any_instance_of(resourcetype).to receive(:set_grouping_parameters)
-    #     .with(data['groupingParameters'].keys[0].to_i, data['groupingParameters'].values[0])
+    #     .with(switches['groupingParameters'].keys[0].to_i, switches['groupingParameters'].values[0])
     #     .and_return(true)
-    #   data.delete('groupingParameters')
-      # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-      #   .with('/rest/logical-switch-groups', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      # allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switch-groups/100')
-      # expect(provider.create).to eq(true)
-    end
+    #   data.delete('switches')
+    #   # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+    #   #   .with('/rest/logical-switch-groups', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+    #   # allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switch-groups/100')
+    #   # expect(provider.create).to eq(true)
+    # end
   end
 
   context 'given the min parameters' do
@@ -131,9 +132,10 @@ describe provider_class, unit: true do
               'category' => 'logical-switch-groups',
               'state' => 'Active',
               'type' => 'logical-switch-group',
-              'groupingParameters' =>
+              'switches' =>
               {
-                '1' => 'Cisco Nexus 50xx'
+                'number_of_switches' => '1',
+                'type' => 'Cisco Nexus 50xx'
               }
             }
       )

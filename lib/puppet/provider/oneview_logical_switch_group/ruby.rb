@@ -26,11 +26,13 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     @client = OneviewSDK::Client.new(login)
     @resourcetype = OneviewSDK::LogicalSwitchGroup
     @data = {}
+    @switches = {}
   end
 
   def exists?
     return true unless resource['data']
     @data = data_parse
+    @switches = @data.delete('switches') if @data['switches']
     lsg = @resourcetype.new(@client, name: @data['name'])
     if lsg.retrieve! && resource['ensure'] == :present
       resource_update(@data, @resourcetype)
@@ -39,9 +41,8 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def create
-    switches = resource['switches']
     lsg = @resourcetype.new(@client, @data)
-    lsg.set_grouping_parameters(switches['number_of_switches'].to_i, switches['type'].to_s)
+    lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s)
     lsg.create!
   end
 

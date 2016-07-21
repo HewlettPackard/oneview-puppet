@@ -47,13 +47,4 @@ Puppet::Type.newtype(:oneview_logical_switch_group) do
       end
     end
   end
-
-  newparam(:switches) do
-    desc 'Logical Switch Group switches attributes'
-    validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for switches is not valid'
-      end
-    end
-  end
 end
