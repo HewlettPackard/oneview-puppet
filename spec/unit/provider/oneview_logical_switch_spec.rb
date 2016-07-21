@@ -28,27 +28,27 @@ describe provider_class, unit: true do
     Puppet::Type.type(:oneview_logical_switch).new(
       name: 'LS',
       ensure: 'present',
-      switches:
-      [
-        {
-          'ip' => '172.18.20.1',
-          'ssh_username' => 'dcs',
-          'ssh_password' => 'dcs',
-          'snmp_port' => '161',
-          'community_string' => 'public'
-        },
-        {
-          'ip' => '172.18.20.1',
-          'ssh_username' => 'dcs',
-          'ssh_password' => 'dcs',
-          'snmp_port' => '161',
-          'community_string' => 'public'
-        }
-      ],
       data:
           {
             'name' => 'LS',
-            'logicalSwitchGroupUri' => '/rest/'
+            'logicalSwitchGroupUri' => '/rest/',
+            'switches' =>
+            [
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              },
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              }
+            ]
           }
     )
   end

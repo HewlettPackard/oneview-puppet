@@ -17,27 +17,27 @@
 oneview_logical_switch{'Logical Switch Create':
   ensure   => 'present',
   # SSH and SNMP credentials information per switch
-  switches =>
-  [
-    {
-      ip               => '172.18.20.1',
-      ssh_username     => 'dcs',
-      ssh_password     => 'dcs',
-      snmp_port        => '161',
-      community_string => 'public'
-    },
-    {
-      ip               => '172.18.20.2',
-      ssh_username     => 'dcs',
-      ssh_password     => 'dcs',
-      snmp_port        => '161',
-      community_string => 'public'
-    }
-  ],
   data     =>
   {
     name                  => 'Test Logical Switch',
     logicalSwitchGroupUri => 'LSG 1',
+    switches              =>
+    [
+      {
+        ip               => '172.18.20.1',
+        ssh_username     => 'dcs',
+        ssh_password     => 'dcs',
+        snmp_port        => '161',
+        community_string => 'public'
+      },
+      {
+        ip               => '172.18.20.2',
+        ssh_username     => 'dcs',
+        ssh_password     => 'dcs',
+        snmp_port        => '161',
+        community_string => 'public'
+      }
+    ]
   }
 }
 
