@@ -43,7 +43,7 @@ oneview_connection_template{'Connection Template Edit':
   data   =>
   {
     name     => 'CT',
-    new_name => 'Edited Name',
+    new_name => 'Edited Name'
   }
 }
 
