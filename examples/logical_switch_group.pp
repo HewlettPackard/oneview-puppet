@@ -15,8 +15,8 @@
 ################################################################################
 
 oneview_logical_switch_group{'Logical Switch Group Create':
-  ensure   => 'present',
-  data     =>
+  ensure => 'present',
+  data   =>
     {
       name     => 'OneViewSDK Test Logical Switch Group',
       category => 'logical-switch-groups',

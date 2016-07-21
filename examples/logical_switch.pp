@@ -15,9 +15,9 @@
 ################################################################################
 
 oneview_logical_switch{'Logical Switch Create':
-  ensure   => 'present',
+  ensure => 'present',
   # SSH and SNMP credentials information per switch
-  data     =>
+  data   =>
   {
     name                  => 'Test Logical Switch',
     logicalSwitchGroupUri => 'LSG 1',
