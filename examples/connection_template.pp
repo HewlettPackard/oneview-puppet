@@ -53,7 +53,7 @@ oneview_connection_template{'Connection Template Create':
   ensure => 'present',
   data   =>
   {
-    name     => 'Random Template'
+    name => 'Random Template'
   }
 }
 
@@ -62,6 +62,6 @@ oneview_connection_template{'Connection Template Destroy':
   require => Oneview_connection_template['Connection Template Edit'],
   data    =>
   {
-    name     => 'Edited Name'
+    name => 'Edited Name'
   }
 }
