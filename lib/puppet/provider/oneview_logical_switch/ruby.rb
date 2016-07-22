@@ -16,7 +16,6 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logical_switch'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
@@ -26,12 +25,14 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
     super(*args)
     @client = OneviewSDK::Client.new(login)
     @resourcetype = OneviewSDK::LogicalSwitch
-    @data
+    @data = {}
+    @switches = []
   end
 
   def exists?
     return true unless resource['data']
     @data = data_parse
+    @switches = @data.delete('switches') if @data['switches']
     ls = @resourcetype.new(@client, name: @data['name'])
     if ls.retrieve! && resource['ensure'] == :present
       resource_update(@data, @resourcetype)
@@ -40,11 +41,8 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
   end
 
   def create
-    ssh = new_ssh(resource['ssh_username'], resource['ssh_password'])
-    snmp = new_snmp(resource['snmp_port'], resource['community_string'])
     ls = @resourcetype.new(@client, @data)
-    set_credentials(ls, resource['switch1_ip'], ssh, snmp)
-    set_credentials(ls, resource['switch2_ip'], ssh, snmp)
+    set_switches(ls, @switches)
     true if ls.create
   end
 
@@ -55,9 +53,10 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
 
   def found
     ls = @resourcetype.find_by(@client, @data)
+    raise(Puppet::Error, 'No Logical Switches were found in the Appliance.') unless ls.first
     Puppet.notice("\n\n\s\sFound Logical Switch"\
     " #{ls.first.data['name']} (URI: #{ls.first.data['uri']}) in Oneview Appliance\n")
-    true if ls.first
+    true
   end
 
   def get_logical_switches
@@ -83,5 +82,37 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
     ls = get_ls
     ls.refresh
     true
+  end
+
+  # Helper Methods to treat switches and set credentials
+
+  def set_switches(ls, resource)
+    resource.each do |switch|
+      switch['version'] = nil unless switch['version']
+      set_credentials(ls,
+                      switch['ip'],
+                      new_ssh(switch['ssh_username'], switch['ssh_password']),
+                      new_snmp(switch['snmp_port'], switch['community_string'], switch['version']))
+    end
+  end
+
+  def new_ssh(username, password)
+    OneviewSDK::LogicalSwitch::CredentialsSSH.new(username, password)
+  end
+
+  def new_snmp(port, community_string, version = nil)
+    OneviewSDK::LogicalSwitch::CredentialsSNMPV1.new(port, community_string, version)
+  end
+
+  def set_credentials(ls, ip, ssh, snmp)
+    ls.set_switch_credentials(ip, ssh, snmp)
+  end
+
+  # Gets the logical switch object from Oneview
+  def get_ls(message = nil)
+    Puppet.notice("\n\n#{message}\n") if message
+    ls = OneviewSDK::LogicalSwitch.new(@client, name: @data['name'])
+    raise 'No Logical Switches were found in Oneview Appliance.' unless ls.retrieve!
+    ls
   end
 end

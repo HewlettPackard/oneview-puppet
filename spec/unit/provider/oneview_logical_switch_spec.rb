@@ -17,8 +17,6 @@
 require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
-# support to the new version
-# require_relative 'logical_switch'
 
 provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
 resourcetype = OneviewSDK::LogicalSwitch
@@ -30,16 +28,27 @@ describe provider_class, unit: true do
     Puppet::Type.type(:oneview_logical_switch).new(
       name: 'LS',
       ensure: 'present',
-      ssh_username: 'dcs',
-      ssh_password: 'dcs',
-      snmp_port: '161',
-      community_string: 'public',
-      switch1_ip: '172.18.20.1',
-      switch2_ip: '172.18.20.2',
       data:
           {
             'name' => 'LS',
-            'logicalSwitchGroupUri' => '/rest/'
+            'logicalSwitchGroupUri' => '/rest/',
+            'switches' =>
+            [
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              },
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              }
+            ]
           }
     )
   end
@@ -47,18 +56,29 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_switch).new(
-        name: 'ls',
+        name: 'LS',
         ensure: 'present',
-        ssh_username: 'dcs',
-        ssh_password: 'dcs',
-        snmp_port: '161',
-        community_string: 'public',
-        switch1_ip: '172.18.20.1',
-        switch2_ip: '172.18.20.2',
         data:
             {
-              'name'                  => 'LS',
-              'logicalSwitchGroupUri' => '/rest/'
+              'name' => 'LS',
+              'logicalSwitchGroupUri' => '/rest/',
+              'switches' =>
+              [
+                {
+                  'ip' => '172.18.20.1',
+                  'ssh_username' => 'dcs',
+                  'ssh_password' => 'dcs',
+                  'snmp_port' => '161',
+                  'community_string' => 'public'
+                },
+                {
+                  'ip' => '172.18.20.1',
+                  'ssh_username' => 'dcs',
+                  'ssh_password' => 'dcs',
+                  'snmp_port' => '161',
+                  'community_string' => 'public'
+                }
+              ]
             }
       )
     end

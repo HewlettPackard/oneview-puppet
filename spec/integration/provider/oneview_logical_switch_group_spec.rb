@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_switch_group).provider(:ruby)
@@ -21,20 +20,25 @@ provider_class = Puppet::Type.type(:oneview_logical_switch_group).provider(:ruby
 describe provider_class do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_switch_group).new(
-      name: 'Logical Switch Group',
+      name: 'LSG',
       ensure: 'present',
       data:
           {
-            'name'               => 'Logical Switch Group',
-            'category'           => 'logical-switch-groups',
-            'state'              => 'Active',
-            'type'               => 'logical-switch-group',
-            'groupingParameters' =>
-              {
-                '1' => 'Cisco Nexus 50xx'
-              }
+            'name' => 'OneViewSDK Test Logical Switch Group',
+            'category' => 'logical-switch-groups',
+            'state' => 'Active',
+            'type' => 'logical-switch-group',
+            'switches' =>
+            {
+              'number_of_switches' => '1',
+              'type' => 'Cisco Nexus 50xx'
+            }
           }
     )
+  end
+
+  before(:each) do
+    provider.exists?
   end
 
   let(:provider) { resource.provider }

@@ -15,18 +15,29 @@
 ################################################################################
 
 oneview_logical_switch{'Logical Switch Create':
-  ensure           => 'present',
-  # SSH and SNMP credentials information
-  ssh_username     => 'dcs',
-  ssh_password     => 'dcs',
-  snmp_port        => '161',
-  community_string => 'public',
-  switch1_ip       => '172.18.20.1',
-  switch2_ip       => '172.18.20.2',
-  data             =>
+  ensure => 'present',
+  # SSH and SNMP credentials information per switch
+  data   =>
   {
-    name                  => 'myds new',
-    logicalSwitchGroupUri => '1',
+    name                  => 'Test Logical Switch',
+    logicalSwitchGroupUri => 'LSG 1',
+    switches              =>
+    [
+      {
+        ip               => '172.18.20.1',
+        ssh_username     => 'dcs',
+        ssh_password     => 'dcs',
+        snmp_port        => '161',
+        community_string => 'public'
+      },
+      {
+        ip               => '172.18.20.2',
+        ssh_username     => 'dcs',
+        ssh_password     => 'dcs',
+        snmp_port        => '161',
+        community_string => 'public'
+      }
+    ]
   }
 }
 
@@ -35,8 +46,8 @@ oneview_logical_switch{'Logical Switch Found':
   require => Oneview_logical_switch['Logical Switch Create'],
   data    =>
   {
-    name                  => 'myds new',
-    logicalSwitchGroupUri => '1'
+    name                  => 'Test Logical Switch',
+    logicalSwitchGroupUri => 'LSG 1'
   }
 }
 
@@ -45,8 +56,8 @@ oneview_logical_switch{'Logical Switch Get Schema':
   require => Oneview_logical_switch['Logical Switch Found'],
   data    =>
   {
-    name                  => 'myds new',
-    logicalSwitchGroupUri => '1'
+    name                  => 'Test Logical Switch',
+    logicalSwitchGroupUri => 'LSG 1'
   }
 }
 
@@ -60,17 +71,17 @@ oneview_logical_switch{'Logical Switch Destroy':
   require => Oneview_logical_switch['Logical Switch Get All'],
   data    =>
   {
-    name                  => 'myds new',
-    logicalSwitchGroupUri => '1'
+    name                  => 'Test Logical Switch',
+    logicalSwitchGroupUri => 'LSG 1'
   }
 }
 
-# This operation is not supported by this switch model
+# This operation is not supported by all switch types
 # oneview_logical_switch{'Logical Switch Refresh':
 #   ensure           => 'refresh',
 #   data             =>
 #   {
-#     name                  => 'myds new',
+#     name                  => 'Test Logical Switch',
 #     logicalSwitchGroupUri => '1'
 #   }
 # }
