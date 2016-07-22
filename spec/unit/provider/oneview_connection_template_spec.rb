@@ -44,21 +44,24 @@ describe provider_class, unit: true do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:ruby)
     end
 
-    it 'should be able to return that the resource exists' do
-      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(true)
+    it 'should return that the resource exists' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
     end
 
     it 'should be able to get the schema' do
       schema = 'spec/support/fixtures/unit/provider/logical_downlink_schema.json'
-      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(true)
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       allow_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(schema))
       expect(provider.get_schema).to eq(true)
     end
 
     it 'should be able to find the connection template' do
-      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(true)
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect(provider.found).to eq(true)
     end
@@ -76,9 +79,9 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be able to get all the connection templates' do
+    it 'should be able to find the connection template' do
       test = resourcetype.new(@client, name: 'new ct')
-      allow_any_instance_of(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect(provider.get_connection_templates).to eq(true)
     end
@@ -101,8 +104,6 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should not be able to create the resource' do
-      allow_any_instance_of(resourcetype).to receive(:retrieve).and_return(false)
-      expect(provider.exists?).to eq(false)
       expect { provider.create }.to raise_error(Puppet::Error, 'This resource cannot be created.')
     end
   end
@@ -124,8 +125,6 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should not be able to destroy the resource' do
-      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(false)
-      expect(provider.exists?).to eq(false)
       expect { provider.destroy }.to raise_error(Puppet::Error, 'This resource cannot be destroyed.')
     end
   end
