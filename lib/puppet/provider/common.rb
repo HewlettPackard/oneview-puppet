@@ -53,7 +53,7 @@ def resource_update(data, resourcetype)
   new_name_validation(data, resourcetype)
   raw_merged_data = current_attributes.merge(data)
   updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
-  current_resource.update(updated_data) if updated_data.size > 0
+  current_resource.update(updated_data) unless updated_data.empty?
 end
 
 def new_name_validation(data, resourcetype)
@@ -69,4 +69,15 @@ def objectfromstring(str)
   # capitalizing the first letter + getting the remaining ones as they are
   # '.capitalize' alone will return something like Firstlettercapitalizedonly
   Object.const_get("OneviewSDK::#{str.to_s[0].upcase}#{str[1..str.size]}")
+end
+
+# Returns a resource's unique identifier (name or uri)
+def unique_id
+  raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') if !@data['name'] && !@data['uri']
+  id = {}
+  if @data['name']
+    id.merge!(name: @data['name'])
+  else
+    id.merge!(uri: @data['uri'])
+  end
 end

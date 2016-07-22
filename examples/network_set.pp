@@ -15,9 +15,11 @@
 ################################################################################
 
 oneview_network_set{'Network Set':
-  ensure => 'present',
+  ensure => 'get_without_ethernet',
   data   =>
   {
-    name => 'ns1'
+    name => 'ns1',
+    ethernetNetworks => ['NET', 'net2'],
+    # nativeNetwork =>
   }
 }

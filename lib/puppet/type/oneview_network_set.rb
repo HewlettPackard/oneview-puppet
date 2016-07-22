@@ -28,16 +28,29 @@ Puppet::Type.newtype(:oneview_network_set) do
     end
 
     # GETs
-    newvalue(:get_connection_templates) do
-      provider.get_connection_templates
+    newvalue(:get_network_sets) do
+      provider.get_network_sets
     end
 
-    newvalue(:get_default_connection_template) do
-      provider.get_default_connection_template
+    newvalue(:get_without_ethernet) do
+      provider.get_without_ethernet
     end
 
     newvalue(:get_schema) do
       provider.get_schema
+    end
+
+    # PUTs
+    newvalue(:set_native_network) do
+      provider.set_native_network
+    end
+
+    newvalue(:add_ethernet_network) do
+      provider.add_ethernet_network
+    end
+
+    newvalue(:remove_ethernet_network) do
+      provider.remove_ethernet_network
     end
   end
 
