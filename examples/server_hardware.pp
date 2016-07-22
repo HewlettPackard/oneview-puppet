@@ -73,7 +73,7 @@ oneview_server_hardware{'server_hardware_7':
     },
 }
 
-# NOTE: This resource accepts a optional field 'queryParameters' to filter out information
+# NOTE: This resource accepts an optional field 'queryParameters' to filter out information
 oneview_server_hardware{'server_hardware_8':
     ensure => 'get_utilization',
     data   => {
@@ -100,7 +100,7 @@ oneview_server_hardware{'server_hardware_10':
 }
 
 # NOTE: This resource requires a state of 'RefreshPending'
-# NOTE: This resource accepts a optional field 'options' for refreshing the server hardware
+# NOTE: This resource accepts an optional field 'options' for refreshing the server hardware
 oneview_server_hardware{'server_hardware_11':
     ensure => 'set_refresh_state',
     data   => {
