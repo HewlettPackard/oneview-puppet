@@ -102,7 +102,10 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
 
   def remove_ethernet_network
     ns = @resourcetype.find_by(@client, @id).first
-    remove_ethernet_network_helper(ns)
+    @ethernet_networks.each do |net|
+      ethernet = @ethernet.find_by(@client, name: net).first
+      ns.remove_ethernet_network(ethernet)
+    end
     ns.update
   end
 
@@ -112,13 +115,6 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
     @ethernet_networks.each do |net|
       ethernet = @ethernet.find_by(@client, name: net).first
       ns.add_ethernet_network(ethernet)
-    end
-  end
-
-  def remove_ethernet_network_helper(ns)
-    @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net).first
-      ns.remove_ethernet_network(ethernet)
     end
   end
 
