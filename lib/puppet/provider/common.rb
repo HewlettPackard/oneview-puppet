@@ -53,7 +53,7 @@ def resource_update(data, resourcetype)
   new_name_validation(data, resourcetype)
   raw_merged_data = current_attributes.merge(data)
   updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
-  current_resource.update(updated_data) unless updated_data.empty?
+  current_resource.update(updated_data) if updated_data.size > 0
 end
 
 def new_name_validation(data, resourcetype)
@@ -91,13 +91,3 @@ def find_resources
   end
   true
 end
-
-# Returns a resource's unique identifier (name or uri)
-def unique_id
-  raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') if !@data['name'] && !@data['uri']
-  id = {}
-  if @data['name']
-    id.merge!(name: @data['name'])
-  else
-    id.merge!(uri: @data['uri'])
-  end
