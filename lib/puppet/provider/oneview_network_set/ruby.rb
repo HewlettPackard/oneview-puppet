@@ -39,11 +39,12 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
     # end of assigments
     ns = @resourcetype.new(@client, @id)
     @exists = ns.retrieve!
-    resource_update(@data, @resourcetype) if @exists == true
+    resource_update(@data, @resourcetype) if @exists
     @exists
   end
 
   def create
+    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.new(@client, @data)
     set_native_network_helper(ns) if @native_network
     add_ethernet_network_helper(ns) if @ethernet_networks
@@ -55,7 +56,7 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def found
-    raise(Puppet::Error, 'The Network Set does not exists.') unless @exists == true
+    raise('The Network Set does not exists.') unless @exists
     ns = @resourcetype.find_by(@client, @data).first
     Puppet.notice("\n\n\s\sFound Network Set"\
     " '#{ns.data['name']}' (URI: #{ns.data['uri']}) in Oneview Appliance\n")
@@ -89,18 +90,21 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def set_native_network
+    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, @id).first
     set_native_network_helper(ns)
     ns.update
   end
 
   def add_ethernet_network
+    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, @id).first
     add_ethernet_network_helper(ns)
     ns.update
   end
 
   def remove_ethernet_network
+    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, @id).first
     @ethernet_networks.each do |net|
       ethernet = @ethernet.find_by(@client, name: net).first

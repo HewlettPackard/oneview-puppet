@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-# This resource needs Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
+# This example needs two Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
 
 oneview_network_set{'Network Set Get Schema':
   ensure => 'get_schema'

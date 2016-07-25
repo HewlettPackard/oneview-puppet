@@ -60,7 +60,7 @@ describe provider_class, unit: true do
     it 'should return that the resource does not exists' do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
-      expect { provider.found }.to raise_error(Puppet::Error, 'The Network Set does not exists.')
+      expect { provider.found }.to raise_error('The Network Set does not exists.')
     end
 
     it 'should return that the resource exists' do
@@ -175,14 +175,11 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should require a data hash' do
-      modified_config = lsg_config
-      modified_config[:data] = ''
-      resource_type = type_class.to_s.split('::')
-      expect do
-        type_class.new(modified_config)
-      end.to raise_error(Puppet::Error, 'Parameter data failed on' \
-      " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
+    it 'should be able to get all the network sets without ethernet' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return('Test')
+      expect(provider.get_without_ethernet).to be
     end
   end
 end

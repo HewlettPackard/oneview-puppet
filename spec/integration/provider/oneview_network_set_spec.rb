@@ -47,7 +47,7 @@ describe provider_class do
 
     it 'should not be able to find this resource before it has been created' do
       expect(provider.exists?).not_to be
-      expect { provider.found }.to raise_error(Puppet::Error, 'The Network Set does not exists.')
+      expect { provider.found }.to raise_error('The Network Set does not exists.')
     end
 
     it 'should be able to create the resource' do
