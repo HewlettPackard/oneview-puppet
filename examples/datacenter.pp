@@ -36,11 +36,29 @@ oneview_datacenter{'Datacenter Edit':
   }
 }
 
-oneview_datacenter{'Datacenter Remove':
-  ensure  => 'absent',
+oneview_datacenter{'Datacenter Get Visual Content':
+  ensure  => 'get_visual_content',
   require => Oneview_datacenter['Datacenter Edit'],
   data    =>
   {
     name => 'Edited Datacenter'
   }
+}
+
+oneview_datacenter{'Datacenter Remove':
+  ensure  => 'absent',
+  require => Oneview_datacenter['Datacenter Get Visual Content'],
+  data    =>
+  {
+    name => 'Edited Datacenter'
+  }
+}
+
+oneview_datacenter{'Datacenter Get All':
+  ensure  => 'get_datacenters'
+  # Optional filters
+  # data    =>
+  # {
+  #   name => 'Edited Datacenter'
+  # }
 }

@@ -39,10 +39,31 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
   end
 
   def create
+    raise('There is no data provided in the manifest.') if @data == {}
     dc = @resourcetype.new(@client, @data).add
   end
 
   def destroy
+    raise('There is no data provided in the manifest.') if @data == {}
     @resourcetype.find_by(@client, @id).first.remove
+  end
+
+  def get_datacenters
+    Puppet.notice("\n\nDatacenters\n")
+    dc = @resourcetype.find_by(@client, @data)
+    if dc.empty?
+      Puppet.warning('No Datacenters were found in the Appliance.')
+    end
+    dc.each do |item|
+      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
+    end
+    true
+  end
+
+  def get_visual_content
+    Puppet.notice("\n\nDatacenter Visual Content\n")
+    dc = @resourcetype.find_by(@client, @id).first
+    raise('The Datacenter has not been found.') unless dc
+    pretty dc.get_visual_content
   end
 end

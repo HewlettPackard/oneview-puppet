@@ -29,11 +29,11 @@ Puppet::Type.newtype(:oneview_datacenter) do
 
     # GETs
     newvalue(:get_datacenters) do
-      provider.get_connection_templates
+      provider.get_datacenters
     end
 
     newvalue(:get_visual_content) do
-      provider.get_connection_templates
+      provider.get_visual_content
     end
   end
 
