@@ -122,4 +122,14 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
     ethernet = @ethernet.find_by(@client, name: @native_network).first
     ns.set_native_network(ethernet)
   end
+
+  def unique_id
+    raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') if !@data['name'] && !@data['uri']
+    id = {}
+    if @data['name']
+      id.merge!(name: @data['name'])
+    else
+      id.merge!(uri: @data['uri'])
+    end
+  end
 end
