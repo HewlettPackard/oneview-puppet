@@ -16,18 +16,15 @@
 
 require 'spec_helper'
 
-type_class = Puppet::Type.type(:oneview_server_hardware)
+type_class = Puppet::Type.type(:oneview_server_hardware_type)
 
-def server_hardware_config
+def server_hardware_type_config
   {
-    name: 'server_hardware_1',
+    name: 'server_hardware_type_1',
     ensure: 'present',
     data:
         {
-          'hostname'        => '172.18.6.5',
-          'username'        => 'dcs',
-          'password'        => 'dcs',
-          'licensingIntent' => 'OneView'
+          'name' => 'BL460c Gen8 1'
         }
   }
 end
@@ -43,16 +40,7 @@ describe type_class do
 
   let :special_ensurables do
     [
-      :found,
-      :get_bios,
-      :get_ilo_sso_url,
-      :get_java_remote_sso_url,
-      :get_remote_console_url,
-      :get_environmental_configuration,
-      :get_utilization,
-      :update_ilo_firmware,
-      :set_refresh_state,
-      :set_power_state
+      :found
     ]
   end
 
@@ -78,7 +66,7 @@ describe type_class do
   end
 
   it 'should require a data hash' do
-    modified_config = server_hardware_config
+    modified_config = server_hardware_type_config
     modified_config[:data] = ''
     resource_type = type_class.to_s.split('::')
     expect do

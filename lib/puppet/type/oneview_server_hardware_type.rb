@@ -17,65 +17,29 @@
 require 'oneview-sdk'
 require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
 
-Puppet::Type.newtype(:oneview_server_hardware) do
-  desc "Oneview's Server Hardware"
+Puppet::Type.newtype(:oneview_server_hardware_type) do
+  desc "Oneview's Server Hardware Type"
 
   ensurable do
     defaultvalues
     # :nocov:
+
     # Get Methods
     newvalue(:found) do
       provider.found
     end
 
-    newvalue(:get_bios) do
-      provider.get_bios
-    end
-
-    newvalue(:get_ilo_sso_url) do
-      provider.get_ilo_sso_url
-    end
-
-    newvalue(:get_java_remote_sso_url) do
-      provider.get_java_remote_sso_url
-    end
-
-    newvalue(:get_remote_console_url) do
-      provider.get_remote_console_url
-    end
-
-    newvalue(:get_environmental_configuration) do
-      provider.get_environmental_configuration
-    end
-
-    newvalue(:get_utilization) do
-      provider.get_utilization
-    end
-
-    # Set methods
-
-    newvalue(:update_ilo_firmware) do
-      provider.update_ilo_firmware
-    end
-
-    newvalue(:set_refresh_state) do
-      provider.set_refresh_state
-    end
-
-    newvalue(:set_power_state) do
-      provider.set_power_state
-    end
     # :nocov:
   end
 
   newparam(:name, namevar: true) do
-    desc 'Logical Server Hardware name'
+    desc 'Logical Server Hardware Type name'
   end
 
   newparam(:data) do
-    desc 'Server Hardware data hash containing all specifications for the system'
+    desc 'Server Hardware Type data hash containing all specifications for the system'
     validate do |value|
-      fail Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
+      raise Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
       # fail Puppet::Error, 'A data hash parameter is required' unless value
       uri_validation(value)
     end
