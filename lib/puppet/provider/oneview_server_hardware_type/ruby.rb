@@ -39,8 +39,7 @@ Puppet::Type.type(:oneview_server_hardware_type).provide(:ruby) do
       data = line.inspect
       new(name: name,
           ensure: :present,
-          data: data
-         )
+          data: data)
     end
   end
 

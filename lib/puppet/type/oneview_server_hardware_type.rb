@@ -39,7 +39,7 @@ Puppet::Type.newtype(:oneview_server_hardware_type) do
   newparam(:data) do
     desc 'Server Hardware Type data hash containing all specifications for the system'
     validate do |value|
-      fail Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
+      raise Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
       # fail Puppet::Error, 'A data hash parameter is required' unless value
       uri_validation(value)
     end
