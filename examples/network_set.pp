@@ -14,12 +14,75 @@
 # limitations under the License.
 ################################################################################
 
-oneview_network_set{'Network Set':
-  ensure => 'get_without_ethernet',
+# This resource needs Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
+
+oneview_network_set{'Network Set Get Schema':
+  ensure => 'get_schema'
+}
+
+oneview_network_set{'Network Set Get All':
+  ensure => 'get_network_sets'
+  # Optional filters
+  # data   =>
+  # {
+  #   name => 'ns1'
+  # }
+}
+
+oneview_network_set{'Network Set Create':
+  ensure => 'present',
   data   =>
   {
-    name => 'ns1',
-    ethernetNetworks => ['NET', 'net2'],
-    # nativeNetwork =>
+    name          => 'Test Network Set',
+    nativeNetwork => 'Ethernet 1'
+  }
+}
+
+oneview_network_set{'Network Set Add Network':
+  ensure  => 'add_ethernet_network',
+  require => Oneview_network_set['Network Set Create'],
+  data    =>
+  {
+    name             => 'Test Network Set',
+    ethernetNetworks => ['Ethernet 1', 'Ethernet 2']
+  }
+}
+
+oneview_network_set{'Network Set Set Native Network':
+  ensure  => 'set_native_network',
+  require => Oneview_network_set['Network Set Add Network'],
+  data    =>
+  {
+    name          => 'Test Network Set',
+    nativeNetwork => 'Ethernet 2'
+  }
+}
+
+oneview_network_set{'Network Set Remove Network':
+  ensure  => 'remove_ethernet_network',
+  require => Oneview_network_set['Network Set Set Native Network'],
+  data    =>
+  {
+    name             => 'Test Network Set',
+    ethernetNetworks => ['Ethernet 1']
+  }
+}
+
+oneview_network_set{'Network Set Edit':
+  ensure  => 'present',
+  require => Oneview_network_set['Network Set Remove Network'],
+  data    =>
+  {
+    name     => 'Test Network Set',
+    new_name => 'Edited Name'
+  }
+}
+
+oneview_network_set{'Network Set Delete':
+  ensure  => 'absent',
+  require => Oneview_network_set['Network Set Edit'],
+  data    =>
+  {
+    name => 'Edited Name'
   }
 }

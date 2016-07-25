@@ -25,6 +25,7 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
     super(*args)
     @client = OneviewSDK::Client.new(login)
     @resourcetype = OneviewSDK::NetworkSet
+    @ethernet = OneviewSDK::EthernetNetwork
     @data = {}
   end
 
@@ -33,8 +34,8 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
     # assignments and deletions from @data
     @data = data_parse
     @id = unique_id
-    @ethernetNetworks = @data.delete('ethernetNetworks') if @data['ethernetNetworks']
-    @nativeNetwork = @data.delete('nativeNetwork') if @data['nativeNetwork']
+    @ethernet_networks = @data.delete('ethernetNetworks') if @data['ethernetNetworks']
+    @native_network = @data.delete('nativeNetwork') if @data['nativeNetwork']
     # end of assigments
     ns = @resourcetype.new(@client, @id)
     @exists = ns.retrieve!
@@ -43,7 +44,10 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def create
-    @resourcetype.new(@client, @data).create
+    ns = @resourcetype.new(@client, @data)
+    set_native_network_helper(ns) if @native_network
+    add_ethernet_network_helper(ns) if @ethernet_networks
+    ns.create
   end
 
   def destroy
@@ -71,8 +75,8 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def get_without_ethernet
-    ns = @resourcetype.find_by(@client, @data).first
     Puppet.notice("\n\n\s\sNetwork Set Without Ethernet\n")
+    ns = @resourcetype.find_by(@client, @data).first.get_without_ethernet
     puts "\s\sName: #{ns['name']}\n\s\sURI: #{ns['uri']}\n\n"
     true
   end
@@ -85,28 +89,41 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def set_native_network
-    raise(Puppet::Error, 'The Network Set does not exists.') unless @exists == true
     ns = @resourcetype.find_by(@client, @id).first
-    ethernet = OneviewSDK::EthernetNetwork.find_by(@client, name: @nativeNetwork).first
-    ns.set_native_network(ethernet)
-    true
+    set_native_network_helper(ns)
+    ns.update
   end
 
   def add_ethernet_network
-    raise(Puppet::Error, 'The Network Set does not exists.') unless @exists == true
     ns = @resourcetype.find_by(@client, @id).first
-    @ethernetNetworks.each do |net|
-      ethernet = OneviewSDK::EthernetNetwork.find_by(@client, name: net).first
+    add_ethernet_network_helper(ns)
+    ns.update
+  end
+
+  def remove_ethernet_network
+    ns = @resourcetype.find_by(@client, @id).first
+    remove_ethernet_network_helper(ns)
+    ns.update
+  end
+
+  # Helper methods
+
+  def add_ethernet_network_helper(ns)
+    @ethernet_networks.each do |net|
+      ethernet = @ethernet.find_by(@client, name: net).first
       ns.add_ethernet_network(ethernet)
     end
   end
 
-  def remove_ethernet_network
-    raise(Puppet::Error, 'The Network Set does not exists.') unless @exists == true
-    ns = @resourcetype.find_by(@client, @id).first
-    @ethernetNetworks.each do |net|
-      ethernet = OneviewSDK::EthernetNetwork.find_by(@client, name: net).first
+  def remove_ethernet_network_helper(ns)
+    @ethernet_networks.each do |net|
+      ethernet = @ethernet.find_by(@client, name: net).first
       ns.remove_ethernet_network(ethernet)
     end
+  end
+
+  def set_native_network_helper(ns)
+    ethernet = @ethernet.find_by(@client, name: @native_network).first
+    ns.set_native_network(ethernet)
   end
 end
