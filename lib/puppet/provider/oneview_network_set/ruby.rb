@@ -52,6 +52,7 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def destroy
+    raise('There is no data provided in the manifest.') if @data == {}
     @resourcetype.find_by(@client, @id).first.delete
   end
 
