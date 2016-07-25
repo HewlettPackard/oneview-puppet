@@ -60,13 +60,34 @@ def new_name_validation(data, resourcetype)
   # Validation for name change on resource through flag 'new_name'
   if data['new_name']
     new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
-    data['name'] = data['new_name'] unless new_resource_name_used
-    data.delete('new_name')
+    data['name'] = data.delete('new_name') unless new_resource_name_used
   end
+end
+
+def get_single_resource_instance
+  # Expects to find exactly 1 resources with the data provided, otherwise fails
+  # This should NOT be used for deletes/destroys as it can be used without a unique identifier in a context where only one resouce exists.
+  found_resource = @resourcetype.find_by(@client, @data)
+  fail 'More than one resource matched the data specified. Specify a unique identifier on data.' if found_resource.size > 1
+  fail 'No resources with the specified data specified were found. Specify a valid unique identifier on data.' if found_resource.size < 1
+  found_resource.first
 end
 
 def objectfromstring(str)
   # capitalizing the first letter + getting the remaining ones as they are
   # '.capitalize' alone will return something like Firstlettercapitalizedonly
   Object.const_get("OneviewSDK::#{str.to_s[0].upcase}#{str[1..str.size]}")
+end
+
+def find_resources
+  # Searches ServerHardware with data matching the manifest data
+  retrieved_resources = @resourcetype.find_by(@client, @data)
+  resource_name = @resourcetype.to_s.split('::')
+  # If resources are found, iterate through them and notify. Else just notify.
+  fail "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
+  retrieved_resources.each do |retrieved_resource|
+    Puppet.notice "\n\n Found matching #{resource_name[1]} #{retrieved_resource['name']} "\
+    "(URI: #{retrieved_resource['uri']}) on Oneview Appliance\n"
+  end
+  true
 end
