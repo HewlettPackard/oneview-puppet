@@ -35,6 +35,10 @@ Puppet::Type.newtype(:oneview_datacenter) do
     newvalue(:get_visual_content) do
       provider.get_visual_content
     end
+
+    newvalue(:get_schema) do
+      provider.get_schema
+    end
   end
 
   newparam(:name, namevar: true) do

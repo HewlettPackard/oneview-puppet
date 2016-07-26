@@ -14,6 +14,10 @@
 # limitations under the License.
 ################################################################################
 
+oneview_datacenter{'Datacenter Get Schema':
+  ensure => 'get_schema'
+}
+
 oneview_datacenter{'Datacenter Add':
   ensure => 'present',
   data   =>
@@ -24,9 +28,18 @@ oneview_datacenter{'Datacenter Add':
   }
 }
 
+oneview_datacenter{'Datacenter Found':
+  ensure => 'found',
+  require => Oneview_datacenter['Datacenter Add'],
+  data   =>
+  {
+    name  => 'Datacenter 1'
+  }
+}
+
 oneview_datacenter{'Datacenter Edit':
   ensure  => 'present',
-  require => Oneview_datacenter['Datacenter Add'],
+  require => Oneview_datacenter['Datacenter Found'],
   data    =>
   {
     name     => 'Datacenter 1',
@@ -36,9 +49,19 @@ oneview_datacenter{'Datacenter Edit':
   }
 }
 
+oneview_datacenter{'Datacenter Get All':
+  ensure  => 'get_datacenters',
+  require => Oneview_datacenter['Datacenter Edit']
+  # Optional filters
+  # data    =>
+  # {
+  #   name => 'Edited Datacenter'
+  # }
+}
+
 oneview_datacenter{'Datacenter Get Visual Content':
   ensure  => 'get_visual_content',
-  require => Oneview_datacenter['Datacenter Edit'],
+  require => Oneview_datacenter['Datacenter Get All'],
   data    =>
   {
     name => 'Edited Datacenter'
@@ -52,13 +75,4 @@ oneview_datacenter{'Datacenter Remove':
   {
     name => 'Edited Datacenter'
   }
-}
-
-oneview_datacenter{'Datacenter Get All':
-  ensure  => 'get_datacenters'
-  # Optional filters
-  # data    =>
-  # {
-  #   name => 'Edited Datacenter'
-  # }
 }

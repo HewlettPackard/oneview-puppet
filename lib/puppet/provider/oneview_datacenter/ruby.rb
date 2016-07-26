@@ -40,12 +40,20 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
 
   def create
     raise('There is no data provided in the manifest.') if @data == {}
-    dc = @resourcetype.new(@client, @data).add
+    @resourcetype.new(@client, @data).add
   end
 
   def destroy
     raise('There is no data provided in the manifest.') if @data == {}
     @resourcetype.find_by(@client, @id).first.remove
+  end
+
+  def found
+    found_general('Datacenter')
+  end
+
+  def get_schema
+    schema_general('Datacenter')
   end
 
   def get_datacenters

@@ -1,0 +1,17 @@
+[
+  {
+    "height": 2004,
+    "depth": 1000,
+    "healthStatus": "OK",
+    "metric": 0.0,
+    "metricTimeStamp": null,
+    "inferred": true,
+    "width": 600,
+    "uri": "/rest/racks/Rack-177",
+    "name": "Rack-177",
+    "resourceUri": "/rest/racks/Rack-177",
+    "rotation": 0.0,
+    "y": 600.0,
+    "x": 600.0
+  }
+]

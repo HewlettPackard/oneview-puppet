@@ -92,6 +92,7 @@ def find_resources
   true
 end
 
+# Gets a resource by its unique identifier (generally name or uri)
 def unique_id
   raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') if !@data['name'] && !@data['uri']
   id = {}
@@ -100,4 +101,27 @@ def unique_id
   else
     id.merge!(uri: @data['uri'])
   end
+end
+
+# This should be used in the Found methods across resources
+# You only need to specify the resource name in its call
+# Ex.: found_general('Datacenter')
+def found_general(resource)
+  raise('There is no data provided in the manifest.') if @data == {}
+  Puppet.notice("\n\nThe #{resource} has been found in the Appliance\n")
+  find = @resourcetype.find_by(@client, @id)
+  if find.first
+    puts "\s\sName: #{find.first['name']}\n\s\sURI: #{find.first['uri']}\n\n"
+    true
+  else
+    Puppet.warning('The resource could not be found in the Appliance.')
+    false
+  end
+end
+
+# Same as the method above, but for schemas
+def schema_general(resource)
+  Puppet.notice("\n\n#{resource} Schema\n")
+  pretty @resourcetype.new(@client, {}).schema
+  true
 end
