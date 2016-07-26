@@ -32,10 +32,10 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
     return false unless resource['data']
     @data = data_parse
     @id = unique_id
-    dc = @resourcetype.new(@client, @id)
-    @exists = dc.retrieve!
-    resource_update(@data, @resourcetype) if @exists == true
-    @exists
+    dc = @resourcetype.find_by(@client, @id)
+    return false unless dc.first
+    resource_update(@data, @resourcetype)
+    true
   end
 
   def create
@@ -49,7 +49,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
   end
 
   def found
-    found_general('Datacenter')
+    found_general
   end
 
   def get_schema
@@ -57,15 +57,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
   end
 
   def get_datacenters
-    Puppet.notice("\n\nDatacenters\n")
-    dc = @resourcetype.find_by(@client, @data)
-    if dc.empty?
-      Puppet.warning('No Datacenters were found in the Appliance.')
-    end
-    dc.each do |item|
-      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
-    end
-    true
+    find_resources
   end
 
   def get_visual_content
@@ -73,5 +65,6 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
     dc = @resourcetype.find_by(@client, @id).first
     raise('The Datacenter has not been found.') unless dc
     pretty dc.get_visual_content
+    true
   end
 end

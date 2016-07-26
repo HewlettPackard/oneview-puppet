@@ -1,0 +1,150 @@
+{
+  "type": "object",
+  "optional": true,
+  "properties": {
+    "width": {
+      "type": "integer",
+      "description": "The width in millimeters of the data center. This is associated with the Phy
+      "maximum": "50000",
+      "minimum": "1000",
+      "required": "true"
+    },
+    "depth": {
+      "type": "integer",
+      "description": "The depth in millimeters of the data center. This is associated with the Phy
+      "maximum": "50000",
+      "minimum": "1000",
+      "required": "true"
+    },
+    "coolingCapacity": {
+      "type": "integer",
+      "optional": true,
+      "description": "Maximum cooling capacity for the datacenter in watts.",
+      "minimum": "0"
+    },
+    "costPerKilowattHour": {
+      "type": "number",
+      "optional": true,
+      "description": "The energy cost per kilowatt-hour."
+    },
+    "currency": {
+      "type": "string",
+      "description": "The currency unit for energy costs.",
+      "required": "true",
+      "default": "USD"
+    },
+    "deratingType": {
+      "type": "string",
+      "enum": [
+        "None",
+        "Custom",
+        "NaJp"
+      ],
+      "description": "The electrical derating type.  Values include Custom, None, NaJp.   None ind
+rcentage.",
+      "required": "true",
+      "default": "NaJp"
+    },
+    "deratingPercentage": {
+      "type": "number",
+      "description": "The electrical derating percentage. This value is specified by the derating
+      "required": "true",
+      "default": "20"
+    },
+    "coolingMultiplier": {
+      "type": "number",
+      "description": "The ratio of cooling costs to power costs of the IT equipment. This value re
+f 1.5 indicates that it costs 1.5 as much to cool the system as it does to power the system. This
+n the analysis section of graphs that display power consumption.",
+      "required": "true",
+      "default": "1.5"
+    },
+    "contents": {
+      "type": "array",
+      "optional": true,
+      "items": {
+        "type": "object",
+        "optional": true,
+        "properties": {
+          "resourceUri": {
+            "type": "string",
+            "optional": true,
+            "description": "The uri of the rack resource whose position is described. "
+          },
+          "rotation": {
+            "type": "number",
+            "optional": true,
+            "description": "The rotation (degrees) from 0-359 around the center of the resource.",
+            "default": "0"
+          },
+          "y": {
+            "type": "number",
+            "description": "The coordinate of the front left corner of the unrotated resource in t
+            "required": "true"
+          },
+          "x": {
+            "type": "number",
+            "description": "The coordinate of the front left corner of the unrotated resource in t
+            "required": "true"
+          }
+        }
+      },
+      "description": "The collection of physical resources (racks) in the data center and their po
+    },
+    "defaultPowerLineVoltage": {
+      "type": "integer",
+      "description": "The default power line voltage used for watts/amps translation when voltage
+      "minimum": "0",
+      "required": "true",
+      "default": "220"
+    },
+    "uri": {
+      "type": "string",
+      "optional": true
+    },
+    "created": {
+      "type": "string",
+      "optional": true
+    },
+    "uuid": {
+      "type": "string",
+      "optional": true,
+      "description": "The universally unique identifier of the resource.   ",
+      "readonly": "true"
+    },
+    "eTag": {
+      "type": "string",
+      "optional": true
+    },
+    "modified": {
+      "type": "string",
+      "optional": true
+    },
+    "status": {
+      "type": "string",
+      "optional": true
+    },
+    "name": {
+      "type": "string",
+      "optional": true
+    },
+    "id": {
+      "type": "string",
+      "description": "The internal identifier of the resource.",
+      "readonly": "true",
+      "required": "true"
+    },
+    "state": {
+      "type": "string",
+      "optional": true,
+      "description": "The current state of the resource.  Valid values include Adding, AddError,
+      "readonly": "true"
+    },
+    "category": {
+      "type": "string",
+      "optional": true
+    }
+  },
+  "description": "A data center object represents a facility used to house computer systems and as
+cks containing IT equipment."
+}                                                                                                                                               

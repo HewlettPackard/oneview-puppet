@@ -106,17 +106,12 @@ end
 # This should be used in the Found methods across resources
 # You only need to specify the resource name in its call
 # Ex.: found_general('Datacenter')
-def found_general(resource)
+def found_general
   raise('There is no data provided in the manifest.') if @data == {}
-  Puppet.notice("\n\nThe #{resource} has been found in the Appliance\n")
-  find = @resourcetype.find_by(@client, @id)
-  if find.first
-    puts "\s\sName: #{find.first['name']}\n\s\sURI: #{find.first['uri']}\n\n"
-    true
-  else
-    Puppet.warning('The resource could not be found in the Appliance.')
-    false
-  end
+  item = @resourcetype.find_by(@client, @id)
+  raise('The resource has not been found in the Appliance.') unless item.first
+  puts "\nFound #{resource} in the Appliance:\n\s\sName: #{item.first['name']}\n\s\sURI: #{item.first['uri']}\n\n"
+  true
 end
 
 # Same as the method above, but for schemas
