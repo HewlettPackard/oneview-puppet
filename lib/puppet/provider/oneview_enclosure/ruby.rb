@@ -97,14 +97,14 @@ Puppet::Type.type(:oneview_enclosure).provide(:ruby) do
     data = data_parse(resource['data'])
     data.delete('new_name') if data['new_name']
     enclosure = OneviewSDK::Enclosure.new(@client, data)
-    enclosure.create
+    enclosure.add
     @property_hash[:ensure] = :present
     @property_hash[:data] = data
   end
 
   def destroy
     enclosure = get_enclosure(resource['data']['name'])
-    enclosure.first.delete
+    enclosure.first.remove
     @property_hash.clear
   end
 

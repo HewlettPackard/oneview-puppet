@@ -80,7 +80,7 @@ Puppet::Type.type(:oneview_switch).provide(:ruby) do
     # so the validation bellow will always fail. This should be re-enabled once the sdk is able to
     # handle that oneview issue
     # fail 'More than one resource located with the specified data.' if switch.size > 1
-    switch.first.delete
+    switch.first.remove
   end
 
   def found

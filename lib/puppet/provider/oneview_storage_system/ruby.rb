@@ -77,14 +77,14 @@ Puppet::Type.type(:oneview_storage_system).provide(:ruby) do
     data = data_parse(resource['data'])
     data.delete('new_name') if data['new_name']
     storage_system = OneviewSDK::StorageSystem.new(@client, data)
-    storage_system.create
+    storage_system.add
     @property_hash[:ensure] = :present
     @property_hash[:data] = data
   end
 
   def destroy
     storage_system = OneviewSDK::StorageSystem.new(@client, credentials: resource['data']['credentials'])
-    storage_system.delete if storage_system.retrieve!
+    storage_system.remove if storage_system.retrieve!
     @property_hash.clear
   end
 

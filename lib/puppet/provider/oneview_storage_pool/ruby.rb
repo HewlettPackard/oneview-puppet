@@ -79,7 +79,7 @@ Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
     end
     # Creates the storage pool
     storage_pool = OneviewSDK::StoragePool.new(@client, data)
-    storage_pool.create
+    storage_pool.add
     @property_hash[:ensure] = :present
     @property_hash[:data] = data
   end
@@ -88,7 +88,7 @@ Puppet::Type.type(:oneview_storage_pool).provide(:ruby) do
     data = helper_data
     storage_pool = OneviewSDK::StoragePool.find_by(@client, name: data['name']).first
     if storage_pool
-      storage_pool.delete
+      storage_pool.remove
     else
       Puppet.notice("#{resource} '#{data['name']}' not located in Oneview Appliance")
     end
