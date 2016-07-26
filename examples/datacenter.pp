@@ -29,9 +29,9 @@ oneview_datacenter{'Datacenter Add':
 }
 
 oneview_datacenter{'Datacenter Found':
-  ensure => 'found',
+  ensure  => 'found',
   require => Oneview_datacenter['Datacenter Add'],
-  data   =>
+  data    =>
   {
     name  => 'Datacenter 1'
   }

@@ -4,14 +4,14 @@
   "properties": {
     "width": {
       "type": "integer",
-      "description": "The width in millimeters of the data center. This is associated with the Phy
+      "description": "The width in millimeters of the data center. This is associated with the PhysicalLocation x position.",
       "maximum": "50000",
       "minimum": "1000",
       "required": "true"
     },
     "depth": {
       "type": "integer",
-      "description": "The depth in millimeters of the data center. This is associated with the Phy
+      "description": "The depth in millimeters of the data center. This is associated with the PhysicalLocation y position.",
       "maximum": "50000",
       "minimum": "1000",
       "required": "true"
@@ -40,22 +40,19 @@
         "Custom",
         "NaJp"
       ],
-      "description": "The electrical derating type.  Values include Custom, None, NaJp.   None ind
-rcentage.",
+      "description": "The electrical derating type.  Values include Custom, None, NaJp.   None indicates no derating.   NaJp indicates 20 percent derating.  Custom enables specification of a specific derating percentage.",
       "required": "true",
       "default": "NaJp"
     },
     "deratingPercentage": {
       "type": "number",
-      "description": "The electrical derating percentage. This value is specified by the derating
+      "description": "The electrical derating percentage. This value is specified by the derating type, unless the type is Custom.",
       "required": "true",
       "default": "20"
     },
     "coolingMultiplier": {
       "type": "number",
-      "description": "The ratio of cooling costs to power costs of the IT equipment. This value re
-f 1.5 indicates that it costs 1.5 as much to cool the system as it does to power the system. This
-n the analysis section of graphs that display power consumption.",
+      "description": "The ratio of cooling costs to power costs of the IT equipment. This value represents the relative cost of cooling the system compared to the cost of powering the system. The default value of 1.5 indicates that it costs 1.5 as much to cool the system as it does to power the system. This value is multiplied by the kilowatt-hours used by the system to obtain the cooling kilowatt-hours that are used in the analysis section of graphs that display power consumption.",
       "required": "true",
       "default": "1.5"
     },
@@ -79,21 +76,21 @@ n the analysis section of graphs that display power consumption.",
           },
           "y": {
             "type": "number",
-            "description": "The coordinate of the front left corner of the unrotated resource in t
+            "description": "The coordinate of the front left corner of the unrotated resource in the data center layout depth axis where the given resource is located. Units are in millimeters.",
             "required": "true"
           },
           "x": {
             "type": "number",
-            "description": "The coordinate of the front left corner of the unrotated resource in t
+            "description": "The coordinate of the front left corner of the unrotated resource in the data center layout width axis where the given resource is located. Units are in millimeters.",
             "required": "true"
           }
         }
       },
-      "description": "The collection of physical resources (racks) in the data center and their po
+      "description": "The collection of physical resources (racks) in the data center and their position."
     },
     "defaultPowerLineVoltage": {
       "type": "integer",
-      "description": "The default power line voltage used for watts/amps translation when voltage
+      "description": "The default power line voltage used for watts/amps translation when voltage is not otherwise available (for example when summarizing power at the rack or data center level).",
       "minimum": "0",
       "required": "true",
       "default": "220"
@@ -137,7 +134,7 @@ n the analysis section of graphs that display power consumption.",
     "state": {
       "type": "string",
       "optional": true,
-      "description": "The current state of the resource.  Valid values include Adding, AddError,
+      "description": "The current state of the resource.  Valid values include Adding, AddError,  Configured, CredentialError, Refreshing, RefreshError, Removing, RemoveError, and Unmanaged.",
       "readonly": "true"
     },
     "category": {
@@ -145,6 +142,5 @@ n the analysis section of graphs that display power consumption.",
       "optional": true
     }
   },
-  "description": "A data center object represents a facility used to house computer systems and as
-cks containing IT equipment."
-}                                                                                                                                               
+  "description": "A data center object represents a facility used to house computer systems and associated components, such as telecommunications and storage systems. Generally represents a contiguous area of racks containing IT equipment."
+}
