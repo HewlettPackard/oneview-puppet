@@ -16,119 +16,86 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'enclosure_group'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
-
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
+    @resourcetype = OneviewSDK::EnclosureGroup
+    @data = {}
   end
 
-  # def self.instances
-  #   @client = OneviewSDK::Client.new(login)
-  #   matches = OneviewSDK::EnclosureGroup.get_all(@client)
-  #   matches.collect do |line|
-  #     name = line['name']
-  #     data = line.data
-  #     new(  :name   => name,
-  #           :ensure => :present,
-  #           :data   => data
-  #         )
-  #   end
-  # end
-
   def exists?
-    state = resource['ensure']
-    data = enclosure_group_parse(resource['data'])
-    enclosure_group = OneviewSDK::EnclosureGroup.new(@client, name: data['name'])
-    if enclosure_group.retrieve! && state == :present
-      Puppet.notice("#{resource} '#{resource['data']['name']}' located"+
-      " in Oneview Appliance")
-      enclosure_group_update(data, enclosure_group, resource)
-      true
-    elsif enclosure_group.retrieve! && state == :absent
-      true
-    elsif state == :found
-      true
-    end
-    # @property_hash[:ensure] == :present
+    return false unless resource['data']
+    @data = enclosure_group_parse(data_parse)
+    @id = unique_id
+    eg = @resourcetype.find_by(@client, @id)
+    return false unless eg.first
+    resource_update(@data, @resourcetype)
+    true
   end
 
   def create
-    data = enclosure_group_parse(resource['data'])
-    data.delete('new_name') if data['new_name']
-    enclosure_group = OneviewSDK::EnclosureGroup.new(@client, data)
+    enclosure_group = @resourcetype.new(@client, @data)
     enclosure_group.create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = data
   end
 
   def destroy
-    enclosure_group = get_enclosure_group(resource['data']['name'])
+    enclosure_group = @resourcetype.find_by(@client, @id).first
     enclosure_group.delete
-    @property_hash.clear
   end
 
   def found
-    # Searches enclosure groups with data matching the manifest data
-    data = data_parse(resource['data'])
-    matches = OneviewSDK::EnclosureGroup.find_by(@client, data)
-    # If matches are found, iterate through them and notify. Else just notify.
-    if matches
-       matches.each { |enclosure| Puppet.notice ("\n\n Found matching enclosure "+
-      "group #{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n") }
-      true
-    else
-      Puppet.notice("No enclosure groups with the specified data were found on the "+
-      " Oneview Appliance")
-      false
-    end
+    find_resources
   end
 
   def get_script
-    data = data_parse(resource['data'])
-    matches = OneviewSDK::EnclosureGroup.find_by(@client, data)
+    matches = OneviewSDK::EnclosureGroup.find_by(@client, @data)
     unless matches.empty?
-      matches.each { |enclosure| Puppet.notice ( "\n\nFound enclosure group"+
-      " #{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n")
-      Puppet.notice ( "Its script contents are:\n#{enclosure.get_script}\n" )}
-      true
-    else
-      Puppet.notice("\n\nNo enclosure groups with the specified data were"+
-      " found on the Oneview Appliance\n")
-      false
+      matches.each do |enclosure|
+        Puppet.notice("Its script contents are:\n#{enclosure.get_script}\n")
+      end
+      return true
     end
+    Puppet.notice("\n\nNo enclosure groups with the specified data were"+
+    " found on the Oneview Appliance\n")
+    false
   end
 
   def set_script
-   data = data_parse(resource['data'])
-   script = data['script'] if data['script']
-   data.delete('script') if data['script']
+   script = @data.delete('script') if @data['script']
    if script
-     matches = OneviewSDK::EnclosureGroup.find_by(@client, data)
+     matches = @resourcetype.find_by(@client, @data)
      unless matches.empty?
-       matches.each { |enclosure| Puppet.notice ( "\n\nFound enclosure group"+
-       " #{enclosure['name']} (URI: #{enclosure['uri']}) on Oneview Appliance\n")
+       matches.each do |enclosure|
        Puppet.notice ("Setting its script to:\n'#{script}'\n")
-       enclosure.set_script(script)}
-       puts 'set'
-       true
-     else
-       Puppet.notice("\n\nNo enclosure groups with the specified data were"+
-       " found on the Oneview Appliance\n")
-       puts 'not found'
-       false
+       enclosure.set_script(script)
+       return true
+     end
+     Puppet.notice("\n\nNo enclosure groups with the specified data were"+
+     " found in the Appliance\n")
+     false
      end
    else
      Puppet.notice ( "\n\nThe 'script' field is required in data hash to run"+
       " the set_script option")
-      puts 'missing scrpt'
       false
    end
  end
 
+ def enclosure_group_parse(data)
+   if data['interconnectBayMappingCount']
+     data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount'])
+   end
+   if data['interconnectBayMappings']
+     data['interconnectBayMappings'].each do |mapping_attr|
+       mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
+       mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == "nil"
+     end
+   end
+   data
+ end
 end

@@ -98,5 +98,4 @@ describe type_class do
     }.to raise_error(Puppet::Error, "Parameter data failed on" +
     " #{resource_type[2]}[#{modified_config[:name]}]: Invalid Data Hash")
   end
-
 end
