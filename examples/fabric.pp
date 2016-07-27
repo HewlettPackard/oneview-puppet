@@ -23,7 +23,7 @@ oneview_fabric{'Fabric Get Reserved Vlan Range':
 }
 
 oneview_fabric{'Fabric Found':
-    ensure => 'found',
+    ensure => 'found'
     # Optional filters
     # data   =>
     # {
