@@ -29,7 +29,7 @@ oneview_datacenter{'Datacenter Found':
   require => Oneview_datacenter['Datacenter Add'],
   data    =>
   {
-    name  => 'Datacenter 1'
+    name => 'Datacenter 1'
   }
 }
 
