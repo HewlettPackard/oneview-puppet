@@ -43,7 +43,7 @@ describe provider_class do
       ensure: 'present',
       data:
       {
-        name: 'CT'
+        name: 'Edited Name'
       }
     )
   end
@@ -62,14 +62,6 @@ describe provider_class do
 
   it 'should be able to get the default connection template' do
     expect(provider.get_default_connection_template).to be
-  end
-
-  it 'should be able to get all the connection templates' do
-    expect(provider.get_connection_templates).to be
-  end
-
-  it 'should be able to get the schema' do
-    expect(provider.get_schema).to be
   end
 
   it 'should be able to find the connection template when it exists' do
@@ -91,10 +83,6 @@ describe provider_class do
 
     before(:each) do
       provider.exists?
-    end
-
-    it 'should not be able to find the connection template when it does not exits' do
-      expect { provider.found }.to raise_error(Puppet::Error, 'This resource cannot be found.')
     end
 
     it 'should not be able to create the resource' do
