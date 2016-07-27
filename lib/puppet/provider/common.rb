@@ -113,7 +113,7 @@ def found_general
 end
 
 # Same as the method above, but for schemas
-def schema_general(resource)
+def schema_general
   Puppet.notice("\n\n#{@resourcetype.to_s[12..-1]} Schema\n")
   pretty @resourcetype.new(@client, {}).schema
   true
