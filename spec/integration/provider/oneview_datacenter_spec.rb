@@ -69,14 +69,6 @@ describe provider_class do
       expect(provider.found).to be
     end
 
-    it 'should be able to get the schema' do
-      expect(provider.get_schema).to be
-    end
-
-    it 'should be able to get the datacenters' do
-      expect(provider.get_datacenters).to be
-    end
-
     it 'should be able to get the visual content' do
       expect(provider.get_visual_content).to be
     end

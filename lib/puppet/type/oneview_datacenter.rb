@@ -23,13 +23,10 @@ Puppet::Type.newtype(:oneview_datacenter) do
   ensurable do
     defaultvalues
 
+    # GETs
+
     newvalue(:found) do
       provider.found
-    end
-
-    # GETs
-    newvalue(:get_datacenters) do
-      provider.get_datacenters
     end
 
     newvalue(:get_visual_content) do

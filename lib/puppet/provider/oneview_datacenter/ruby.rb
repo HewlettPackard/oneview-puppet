@@ -49,22 +49,14 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
   end
 
   def found
-    found_general
-  end
-
-  def get_schema
-    schema_general
-  end
-
-  def get_datacenters
     find_resources
   end
 
   def get_visual_content
     Puppet.notice("\n\nDatacenter Visual Content\n")
-    dc = @resourcetype.find_by(@client, @id).first
-    raise('The Datacenter has not been found.') unless dc
-    pretty dc.get_visual_content
+    dc = @resourcetype.find_by(@client, @id)
+    raise('The Datacenter has not been found.') unless dc.first
+    pretty dc.first.get_visual_content
     true
   end
 end

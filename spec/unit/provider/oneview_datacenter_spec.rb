@@ -49,13 +49,6 @@ describe provider_class, unit: true do
     it 'should return that the resource does not exists' do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
-      expect { provider.found }.to raise_error(RuntimeError, 'The resource has not been found in the Appliance.')
-    end
-
-    it 'should be able to get the schema' do
-      schema = 'spec/support/fixtures/unit/provider/datacenter_schema.json'
-      allow_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(schema))
-      expect(provider.get_schema).to eq(true)
     end
 
     it 'should be able to create the resource' do
@@ -74,7 +67,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_datacenter).new(
         name: 'Datacenter',
-        ensure: 'get_datacenters'
+        ensure: 'found'
       )
     end
 
@@ -85,7 +78,7 @@ describe provider_class, unit: true do
     it 'should not return any datacenters' do
       allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([])
       expect(provider.exists?).to eq(false)
-      expect { provider.get_datacenters }.to raise_error(/No Datacenter with the specified data were found on the Oneview Appliance/)
+      expect { provider.found }.to raise_error(/No Datacenter with the specified data were found on the Oneview Appliance/)
     end
   end
 
@@ -109,7 +102,6 @@ describe provider_class, unit: true do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
       expect(provider.exists?).to eq(true)
-      expect(provider.found).to eq(true)
     end
 
     it 'should be able to get the visual content' do
