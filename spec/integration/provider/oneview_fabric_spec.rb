@@ -24,7 +24,7 @@ describe provider_class do
   let(:resource) do
     Puppet::Type.type(:oneview_fabric).new(
       name: 'Fabric',
-      ensure: 'get_fabrics',
+      ensure: 'present',
       data:
       {
         'name' => 'DefaultFabric'
