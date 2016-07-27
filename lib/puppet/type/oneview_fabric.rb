@@ -31,6 +31,10 @@ Puppet::Type.newtype(:oneview_fabric) do
       provider.get_fabrics
     end
 
+    newvalue(:get_schema) do
+      provider.get_schema
+    end
+
     newvalue(:get_reserved_vlan_range) do
       provider.get_reserved_vlan_range
     end

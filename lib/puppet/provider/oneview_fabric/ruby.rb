@@ -52,7 +52,7 @@ Puppet::Type.type(:oneview_fabric).provide(:ruby) do
   end
 
   def found
-    found_general('Fabric')
+    found_general
   end
 
   def get_reserved_vlan_range
