@@ -102,19 +102,3 @@ def unique_id
     id.merge!(uri: @data['uri'])
   end
 end
-
-# This should be used in the Found methods across resources
-def found_general
-  raise('There is no data provided in the manifest.') if @data == {}
-  item = @resourcetype.find_by(@client, @id)
-  raise('The resource has not been found in the Appliance.') unless item.first
-  puts "\nFound #{@resourcetype.to_s[12..-1]} in the Appliance:\n\s\sName: #{item.first['name']}\n\s\sURI: #{item.first['uri']}\n\n"
-  true
-end
-
-# Same as the method above, but for schemas
-def schema_general
-  Puppet.notice("\n\n#{@resourcetype.to_s[12..-1]} Schema\n")
-  pretty @resourcetype.new(@client, {}).schema
-  true
-end

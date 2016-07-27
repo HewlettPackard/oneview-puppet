@@ -47,12 +47,8 @@ Puppet::Type.type(:oneview_fabric).provide(:ruby) do
     raise('This resource cannot be destroyed.')
   end
 
-  def get_fabrics
-    find_resources
-  end
-
   def found
-    found_general
+    find_resources
   end
 
   def get_reserved_vlan_range

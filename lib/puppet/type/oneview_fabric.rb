@@ -27,10 +27,6 @@ Puppet::Type.newtype(:oneview_fabric) do
       provider.found
     end
 
-    newvalue(:get_fabrics) do
-      provider.get_fabrics
-    end
-
     newvalue(:get_schema) do
       provider.get_schema
     end

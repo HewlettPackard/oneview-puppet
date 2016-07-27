@@ -22,19 +22,11 @@ oneview_fabric{'Fabric Get Reserved Vlan Range':
     }
 }
 
-oneview_fabric{'Fabric Get All':
-    ensure => 'get_fabrics'
+oneview_fabric{'Fabric Found':
+    ensure => 'found',
     # Optional filters
     # data   =>
     # {
-    #   name => 'DefaultFabric'
+    #     name => 'DefaultFabric'
     # }
-}
-
-oneview_fabric{'Fabric Found':
-    ensure => 'found',
-    data   =>
-    {
-        name => 'DefaultFabric'
-    }
 }
