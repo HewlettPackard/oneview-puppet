@@ -53,7 +53,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
   end
 
   def get_schema
-    schema_general('Datacenter')
+    schema_general
   end
 
   def get_datacenters
