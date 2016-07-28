@@ -29,13 +29,14 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
   end
 
   def exists?
-    return false unless resource['data']
     @data = data_parse
-    @id = unique_id
-    dc = @resourcetype.find_by(@client, @id)
-    return false unless dc.first
-    resource_update(@data, @resourcetype)
-    true
+    dc = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !dc.empty?
   end
 
   def create
@@ -45,7 +46,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
 
   def destroy
     raise('There is no data provided in the manifest.') if @data == {}
-    @resourcetype.find_by(@client, @id).first.remove
+    @resourcetype.find_by(@client, unique_id).first.remove
   end
 
   def found
@@ -54,7 +55,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
 
   def get_visual_content
     Puppet.notice("\n\nDatacenter Visual Content\n")
-    dc = @resourcetype.find_by(@client, @id)
+    dc = @resourcetype.find_by(@client, unique_id)
     raise('The Datacenter has not been found.') unless dc.first
     pretty dc.first.get_visual_content
     true
