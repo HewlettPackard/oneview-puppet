@@ -26,10 +26,10 @@ describe provider_class do
       ensure: 'present',
         data:
           {
-              'name'                  =>'OneViewSDK Test FC Network',
-              'connectionTemplateUri' =>'nil',
-              'vlanId'                =>300,
-              'type'                  =>'fcoe-network',
+              'name'                  => 'OneViewSDK Test FC Network',
+              'connectionTemplateUri' => 'nil',
+              'vlanId'                => '300',
+              'type'                  => 'fcoe-network',
           },
     )
   }
@@ -37,6 +37,10 @@ describe provider_class do
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  before(:each) do
+    provider.exists?
+  end
 
   it 'should be an instance of the provider Ruby' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:ruby)
@@ -51,6 +55,23 @@ describe provider_class do
     it 'should create a new network' do
       expect(provider.create).to be
     end
+  end
+
+  context 'given the search parameters' do
+    let(:resource) {
+      Puppet::Type.type(:oneview_fcoe_network).new(
+        name: 'fcoe',
+        ensure: 'present',
+          data:
+            {
+                'name' => 'OneViewSDK Test FC Network'
+            },
+      )
+    }
+
+    before(:each) do
+      provider.exists?
+    end
 
     it 'exists? should find a network' do
       expect(provider.exists?).to be
@@ -63,8 +84,5 @@ describe provider_class do
     it 'should run destroy' do
       expect(provider.destroy).to be
     end
-
   end
-
-
 end
