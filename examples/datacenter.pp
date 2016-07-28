@@ -33,10 +33,10 @@ oneview_datacenter{'Datacenter Found':
   }
 }
 
+# Optional filters
 oneview_datacenter{'Datacenter Get All':
   ensure  => 'found',
   require => Oneview_datacenter['Datacenter Found']
-  # Optional filters
   # data    =>
   # {
   #   name => 'Edited Datacenter'
