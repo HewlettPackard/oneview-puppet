@@ -37,26 +37,21 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  before(:each) do
+    provider.exists?
+  end
+
   it 'should be an instance of the provider Ruby' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group).provider(:ruby)
   end
 
   context 'given the minimum parameters' do
-
-    it 'should not be able to find the logical interconnect group' do
-      expect(provider.found).not_to be
-    end
-
     it 'should create the logical interconnect group' do
       expect(provider.create).to be
     end
 
     it 'should be able to find the logical interconnect group' do
       expect(provider.found).to be
-    end
-
-    it 'should be able to get the schema' do
-      expect(provider.get_schema).to be
     end
 
     it 'should be able to get the default settings' do
