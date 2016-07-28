@@ -23,16 +23,6 @@ Puppet::Type.newtype(:oneview_logical_switch_group) do
     newvalue(:found) do
       provider.found
     end
-
-    # GETs ===============================
-
-    newvalue(:get_logical_switch_groups) do
-      provider.get_logical_switch_groups
-    end
-
-    newvalue(:get_schema) do
-      provider.get_schema
-    end
   end
 
   newparam(:name, namevar: true) do

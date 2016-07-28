@@ -45,28 +45,23 @@ oneview_logical_switch_group{'Logical Switch Group Found':
   require => Oneview_logical_switch_group['Logical Switch Group Edit'],
   data    =>
     {
-      name     => 'OneViewSDK Logical Switch Group'
-    }
-}
-
-oneview_logical_switch_group{'Logical Switch Group Get Schema':
-  ensure  => 'get_schema',
-  require => Oneview_logical_switch_group['Logical Switch Group Found'],
-  data    =>
-    {
-      name     => 'OneViewSDK Logical Switch Group'
+      name => 'OneViewSDK Logical Switch Group'
     }
 }
 
 oneview_logical_switch_group{'Logical Switch Group Get All':
-  ensure => 'get_logical_switch_groups',
+  ensure => 'found'
+  # data  =>
+  #   {
+  #     name => 'OneViewSDK Logical Switch Group'
+  #   }
 }
 
 oneview_logical_switch_group{'Logical Switch Group Destroy':
   ensure  => 'absent',
-  require => Oneview_logical_switch_group['Logical Switch Group Get Schema'],
+  require => Oneview_logical_switch_group['Logical Switch Group Found'],
   data    =>
     {
-      name     => 'OneViewSDK Logical Switch Group'
+      name => 'OneViewSDK Logical Switch Group'
     }
 }

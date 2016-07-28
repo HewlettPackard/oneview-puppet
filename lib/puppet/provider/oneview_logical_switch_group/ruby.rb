@@ -30,15 +30,16 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def exists?
-    return true unless resource['data']
-    @data = data_parse
-    @switches = @data.delete('switches') if @data['switches']
-    lsg = @resourcetype.new(@client, name: @data['name'])
-    if lsg.retrieve! && resource['ensure'] == :present
-      resource_update(@data, @resourcetype)
-    end
-    lsg.exists?
-  end
+  @data = data_parse
+  @switches = @data.delete('switches')
+  lsg = if resource['ensure'] == :present
+          resource_update(@data, @resourcetype)
+          @resourcetype.find_by(@client, unique_id)
+        else
+          @resourcetype.find_by(@client, @data)
+       end
+  !lsg.empty?
+end
 
   def create
     lsg = @resourcetype.new(@client, @data)
@@ -47,34 +48,11 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def destroy
-    lsg = @resourcetype.new(@client, @data)
-    lsg.delete if lsg.retrieve!
+    lsg = @resourcetype.find_by(@client, unique_id)
+    lsg.first.delete
   end
 
   def found
-    lsg = @resourcetype.new(@client, @data)
-    if lsg.retrieve!
-      Puppet.notice("\nLogical Switch Group found in Oneview Appliance "\
-      "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
-      true
-    end
-  end
-
-  def get_logical_switch_groups
-    Puppet.notice("\n\nLogical Switch Groups\n")
-    lsg_list = @resourcetype.get_all(@client)
-    lsg_list.each do |lsg|
-      Puppet.notice("\nLogical Switch Group found in Oneview Appliance "\
-      "'#{lsg[:name]}' sucessfully.\n  uri = '#{lsg[:uri]}'")
-    end
-    true unless lsg_list.empty?
-  end
-
-  def get_schema
-    Puppet.notice("\n\nLogical Switch Groups Schema\n")
-    lsg = @resourcetype.new(@client, @data)
-    lsg.retrieve!
-    pretty lsg.schema
-    true
+    find_resources
   end
 end
