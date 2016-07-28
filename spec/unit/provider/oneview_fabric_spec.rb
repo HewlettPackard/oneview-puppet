@@ -45,20 +45,20 @@ describe provider_class, unit: true do
     end
 
     it 'should not be able to create a new fabric' do
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(provider.exists?).to eq(false)
       expect { provider.create }.to raise_error('This resource cannot be created.')
     end
 
     it 'should not be able to destroy the fabric' do
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(provider.exists?).to eq(false)
       expect { provider.destroy }.to raise_error('This resource cannot be destroyed.')
     end
 
     it 'should be able to return that the fabric exists' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
     end
   end
@@ -67,7 +67,11 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_fabric).new(
         name: 'DefaultFabric',
-        ensure: 'found'
+        ensure: 'found',
+        data:
+        {
+          'name' => 'DefaultFabric'
+        }
       )
     end
 
@@ -75,11 +79,13 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be able to find the fabrics' do
-      expect(provider.exists?).to eq(false)
-      test = resourcetype.new(@client, {})
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
-      expect(provider.found).to be
+    it 'should return true if resource is found' do
+      resource['data']['uri'] = '/rest/fabrics/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect(provider.found).to eq(true)
     end
   end
 

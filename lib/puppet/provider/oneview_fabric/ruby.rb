@@ -29,14 +29,16 @@ Puppet::Type.type(:oneview_fabric).provide(:ruby) do
   end
 
   def exists?
-    return false unless resource['data']
     @data = data_parse
-    @id = unique_id
-    fabric = @resourcetype.find_by(@client, @id)
-    return false unless fabric.first
-    # The fabric update is currently unavailable, although it should be possible as the API Reference says
-    # resource_update(@data, @resourcetype)
-    true
+    # This is commented out as the update function is disabled for this resource at the moment
+    # dc = if resource['ensure'] == :present
+    #        resource_update(@data, @resourcetype)
+    #        @resourcetype.find_by(@client, unique_id)
+    #      else
+    #        @resourcetype.find_by(@client, @data)
+    #      end
+    fabrics = @resourcetype.find_by(@client, @data)
+    !fabrics.empty?
   end
 
   def create
