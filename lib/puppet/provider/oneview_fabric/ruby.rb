@@ -30,13 +30,6 @@ Puppet::Type.type(:oneview_fabric).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    # This is commented out as the update function is disabled for this resource at the moment
-    # dc = if resource['ensure'] == :present
-    #        resource_update(@data, @resourcetype)
-    #        @resourcetype.find_by(@client, unique_id)
-    #      else
-    #        @resourcetype.find_by(@client, @data)
-    #      end
     fabrics = @resourcetype.find_by(@client, @data)
     !fabrics.empty?
   end
@@ -51,15 +44,5 @@ Puppet::Type.type(:oneview_fabric).provide(:ruby) do
 
   def found
     find_resources
-  end
-
-  def get_reserved_vlan_range
-    raise('There is no data provided in the manifest.') if @data == {}
-    Puppet.notice("\n\nFabric Reserved Vlan Range")
-    fabric = get_single_resource_instance
-    range = fabric.data['reservedVlanRange']
-    puts "\n- The Vlan IDs range from #{range['start']} to #{range['length'].to_i + range['start'].to_i}\
-          \n#{pretty range}\n"
-    true
   end
 end

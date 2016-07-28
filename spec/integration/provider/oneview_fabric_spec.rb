@@ -48,10 +48,6 @@ describe provider_class do
     expect(provider.found).to be
   end
 
-  it 'should be able to find the fabric' do
-    expect(provider.get_reserved_vlan_range).to be
-  end
-
   it 'should not be able to create the fabric' do
     expect { provider.create }.to raise_error('This resource cannot be created.')
   end

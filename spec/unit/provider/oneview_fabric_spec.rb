@@ -88,30 +88,4 @@ describe provider_class, unit: true do
       expect(provider.found).to eq(true)
     end
   end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_fabric).new(
-        name: 'DefaultFabric',
-        ensure: 'get_reserved_vlan_range',
-        data:
-            {
-              'name' => 'DefaultFabric'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    # TODO: place a stub message (it returns an object with unexpected attributes)
-    # it 'should be able to get the fabrics reserved vlan id range' do
-    #   test = resourcetype.new(@client, name: resource['data']['name'])
-    #   allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-    #   expect(provider.exists?).to eq(true)
-    #   allow_any_instance_of(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-    #   expect(provider.get_reserved_vlan_range).to be
-    # end
-  end
 end

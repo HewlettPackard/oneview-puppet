@@ -14,14 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-oneview_fabric{'Fabric Get Reserved Vlan Range':
-    ensure => 'get_reserved_vlan_range',
-    data   =>
-    {
-        name => 'DefaultFabric'
-    }
-}
-
 oneview_fabric{'Fabric Found':
     ensure => 'found'
     # Optional filters

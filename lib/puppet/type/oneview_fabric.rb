@@ -26,10 +26,6 @@ Puppet::Type.newtype(:oneview_fabric) do
     newvalue(:found) do
       provider.found
     end
-
-    newvalue(:get_reserved_vlan_range) do
-      provider.get_reserved_vlan_range
-    end
     # :nocov:
   end
 
