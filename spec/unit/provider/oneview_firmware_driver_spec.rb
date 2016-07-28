@@ -67,11 +67,6 @@ describe provider_class, unit: true do
       allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
       allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][0]).and_return([test])
       allow(OneviewSDK::FirmwareDriver).to receive(:get_all).with(anything).and_return([test])
-      # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_put).and_return(FakeResponse.new('Fake Get Statistics'))
-      # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('Fake Get Statistics'))
-      # path = 'spec/support/fixtures/unit/provider/server_hardware.json'
-      # fake_json_response = File.read(path)
-      # allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(fake_json_response)
       provider.exists?
     end
 
