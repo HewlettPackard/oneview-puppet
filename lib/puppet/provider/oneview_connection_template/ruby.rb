@@ -29,13 +29,14 @@ Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
   end
 
   def exists?
-    return false unless resource['data']
     @data = data_parse
-    @id = unique_id
-    ct = @resourcetype.find_by(@client, @id)
-    return false unless ct.first
-    resource_update(@data, @resourcetype)
-    true
+    ct = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !ct.empty?
   end
 
   def create
@@ -52,7 +53,7 @@ Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
 
   def get_default_connection_template
     Puppet.notice("\n\nDefault Connection Template")
-    default = OneviewSDK::ConnectionTemplate.get_default(@client)
+    default = @resourcetype.get_default(@client)
     if default['uri']
       puts "\nName: '#{default['name']}'"
       puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"

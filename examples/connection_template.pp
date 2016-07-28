@@ -30,8 +30,8 @@ oneview_connection_template{'Connection Template Edit':
   ensure => 'present',
   data   =>
   {
-    name     => 'Edited Name',
-    new_name => 'CT'
+    name     => 'My CT',
+    new_name => 'Edited CT'
   }
 }
 

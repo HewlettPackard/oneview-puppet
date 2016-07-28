@@ -110,7 +110,7 @@ describe provider_class, unit: true do
         ensure: 'absent',
         data:
         {
-          'name' => 'new ct'
+          'name' => 'CT'
         }
       )
     end
