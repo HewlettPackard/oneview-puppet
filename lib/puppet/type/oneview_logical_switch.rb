@@ -28,16 +28,8 @@ Puppet::Type.newtype(:oneview_logical_switch) do
       provider.found
     end
 
-    newvalue(:get_schema) do
-      provider.get_schema
-    end
-
     newvalue(:refresh) do
       provider.refresh
-    end
-
-    newvalue(:get_logical_switches) do
-      provider.get_logical_switches
     end
   end
 
