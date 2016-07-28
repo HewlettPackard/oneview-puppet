@@ -17,48 +17,7 @@
 require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
-module OneviewSDK
-  # Logical downlink resource implementation
-  class LogicalDownlink < Resource
-    BASE_URI = '/rest/logical-downlinks'.freeze
 
-    # Method is not available
-    # @raise [OneviewSDK::MethodUnavailable] method is not available
-    def create
-      unavailable_method
-    end
-
-    # Method is not available
-    # @raise [OneviewSDK::MethodUnavailable] method is not available
-    def update
-      unavailable_method
-    end
-
-    # Method is not available
-    # @raise [OneviewSDK::MethodUnavailable] method is not available
-    def delete
-      unavailable_method
-    end
-
-    # Gets a list of logical downlinks, excluding any existing ethernet network
-    # @param [OneviewSDK::Client] client The client object for the OneView appliance
-    # @return [Array<OneviewSDK::LogicalDownlink] Logical downlink array
-    def self.get_without_ethernet(client)
-      result = []
-      response = client.rest_get(BASE_URI + '/withoutEthernet')
-      members = client.response_handler(response)['members']
-      members.each { |member| result << new(client, member) }
-      result
-    end
-
-    # Gets a logical downlink, excluding any existing ethernet network
-    # @return [OneviewSDK::LogicalDownlink] Logical downlink array
-    def get_without_ethernet
-      response = @client.rest_get(@data['uri'] + '/withoutEthernet')
-      OneviewSDK::LogicalDownlink.new(@client, @client.response_handler(response))
-    end
-  end
-end
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:ruby)
 resourcetype = OneviewSDK::LogicalDownlink
 
