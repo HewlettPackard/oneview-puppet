@@ -25,13 +25,12 @@
 
 oneview_server_profile_template{'Server Profile Template Create':
   ensure => 'present',
-
   data   =>
     {
       name                  => 'New SPT',
       # You can either declare the name or the uri of the following parameters:
       enclosureGroupUri     => 'EG',
-      serverHardwareTypeUri => 'BL460c Gen8 1',
+      serverHardwareTypeUri => 'BL460c Gen8 1'
     }
 }
 
@@ -67,8 +66,8 @@ oneview_server_profile_template{'Server Profile Template Create #2':
 }
 
 oneview_server_profile_template{'Server Profile Template Get All':
-  ensure  => 'get_server_profile_templates',
-  require => Oneview_server_profile_template['Server Profile Template Create #2'],
+  ensure  => 'found',
+  require => Oneview_server_profile_template['Server Profile Template Create #2']
 }
 
 oneview_server_profile_template{'Server Profile Template Destroy':
@@ -79,7 +78,6 @@ oneview_server_profile_template{'Server Profile Template Destroy':
       name => 'Edited SPT',
     }
 }
-
 
 oneview_server_profile_template{'Server Profile Create':
   ensure  => 'set_new_profile',
