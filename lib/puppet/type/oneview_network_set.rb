@@ -28,16 +28,8 @@ Puppet::Type.newtype(:oneview_network_set) do
     end
 
     # GETs
-    newvalue(:get_network_sets) do
-      provider.get_network_sets
-    end
-
     newvalue(:get_without_ethernet) do
       provider.get_without_ethernet
-    end
-
-    newvalue(:get_schema) do
-      provider.get_schema
     end
 
     # PUTs
