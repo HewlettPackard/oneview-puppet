@@ -29,22 +29,23 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
   end
 
   def exists?
-    return false unless resource['data']
-    @data = enclosure_group_parse(data_parse)
-    @id = unique_id
-    eg = @resourcetype.find_by(@client, @id)
-    return false unless eg.first
-    resource_update(@data, @resourcetype)
-    true
+    @data = data_parse
+    en = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !en.empty?
   end
 
   def create
-    enclosure_group = @resourcetype.new(@client, @data)
+    enclosure_group = @resourcetype.new(@client, enclosure_group_parse(@data))
     enclosure_group.create
   end
 
   def destroy
-    enclosure_group = @resourcetype.find_by(@client, @id).first
+    enclosure_group = @resourcetype.find_by(@client, unique_id).first
     enclosure_group.delete
   end
 

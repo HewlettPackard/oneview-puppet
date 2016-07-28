@@ -94,8 +94,8 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
-    it 'should return that an enclosure group was found' do
-      expect(provider.found).to be
+    it 'should not return that an enclosure group was found, since the LIG are not nil' do
+      expect { provider.found }.to raise_error("\n\nNo EnclosureGroup with the specified data were found on the Oneview Appliance\n")
     end
 
     it 'should destroy the enclosure group' do
