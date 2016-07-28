@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-require 'spec_helper',
+require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fabric).provider(:ruby)
 

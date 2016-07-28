@@ -106,7 +106,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     # TODO: place a stub message (it returns an object with unexpected attributes)
-    # it 'should be able to get the fabric´s reserved vlan id range' do
+    # it 'should be able to get the fabrics reserved vlan id range' do
     #   test = resourcetype.new(@client, name: resource['data']['name'])
     #   allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
     #   expect(provider.exists?).to eq(true)
