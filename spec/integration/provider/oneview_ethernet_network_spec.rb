@@ -19,23 +19,22 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_ethernet_network).new(
       name: 'ethernet',
       ensure: 'present',
-        data:
+      data:
           {
-            'name'                    =>'Puppet Network',
-            'vlanId'                  => 100,
-            'purpose'                 =>'General',
-            'smartLink'               =>'false',
-            'privateNetwork'          =>'true',
-            'connectionTemplateUri'   =>'nil',
-            'type'                    =>'ethernet-networkV3',
-          },
+            'name' => 'Puppet Network',
+            'vlanId' => 100,
+            'purpose' => 'General',
+            'smartLink' => 'false',
+            'privateNetwork' => 'true',
+            'connectionTemplateUri' => 'nil',
+            'type' => 'ethernet-networkV3'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
@@ -50,7 +49,6 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-
     it 'exists? that the network does not exist' do
       expect(provider.exists?).not_to be
     end
@@ -61,16 +59,16 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_ethernet_network).new(
         name: 'ethernet',
         ensure: 'present',
-          data:
+        data:
             {
               'name' => 'Puppet Network'
             }
       )
-    }
+    end
 
     let(:provider) { resource.provider }
 

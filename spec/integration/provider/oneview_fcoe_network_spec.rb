@@ -19,20 +19,19 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_fcoe_network).new(
       name: 'fcoe',
       ensure: 'present',
-        data:
+      data:
           {
-              'name'                  => 'OneViewSDK Test FC Network',
-              'connectionTemplateUri' => 'nil',
-              'vlanId'                => '300',
-              'type'                  => 'fcoe-network',
-          },
+            'name' => 'OneViewSDK Test FC Network',
+            'connectionTemplateUri' => 'nil',
+            'vlanId'                => '300',
+            'type'                  => 'fcoe-network'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
@@ -47,7 +46,6 @@ describe provider_class do
   end
 
   context 'given the min parameters' do
-
     it 'exists? should return false at first' do
       expect(provider.exists?).not_to be
     end
@@ -58,16 +56,16 @@ describe provider_class do
   end
 
   context 'given the search parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_fcoe_network).new(
         name: 'fcoe',
         ensure: 'present',
-          data:
+        data:
             {
-                'name' => 'OneViewSDK Test FC Network'
-            },
+              'name' => 'OneViewSDK Test FC Network'
+            }
       )
-    }
+    end
 
     before(:each) do
       provider.exists?

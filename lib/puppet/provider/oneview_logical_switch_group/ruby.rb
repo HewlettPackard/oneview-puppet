@@ -30,15 +30,15 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def exists?
-  @data = data_parse
-  @switches = @data.delete('switches')
-  lsg = if resource['ensure'] == :present
-          resource_update(@data, @resourcetype)
-          @resourcetype.find_by(@client, unique_id)
-        else
-          @resourcetype.find_by(@client, @data)
-       end
-  !lsg.empty?
+    @data = data_parse
+    @switches = @data.delete('switches')
+    lsg = if resource['ensure'] == :present
+            resource_update(@data, @resourcetype)
+            @resourcetype.find_by(@client, unique_id)
+          else
+            @resourcetype.find_by(@client, @data)
+         end
+    !lsg.empty?
 end
 
   def create

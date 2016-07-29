@@ -57,7 +57,7 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_connection_template).new(
         name: 'Connection Template',
-      ensure: 'absent',
+        ensure: 'absent',
         data:
         {
           'name' => 'Another CT'

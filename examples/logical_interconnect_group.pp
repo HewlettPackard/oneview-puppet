@@ -34,13 +34,15 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Found':
   ensure => 'found',
-  data   => {
-    name => 'Edited LIG'
-  }
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Edit'],
+  # data   => {
+  #   name => 'Edited LIG'
+  # }
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Settings':
   ensure => 'get_default_settings',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Found'],
   data   => {
     name => 'Edited LIG'
   }
@@ -48,6 +50,7 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Setti
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
   ensure => 'get_settings',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Default Settings'],
   data   => {
     name => 'Edited LIG'
   }
@@ -55,7 +58,7 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Destroy':
   ensure  => 'absent',
-  require => Oneview_logical_interconnect_group['Logical Interconnect Group Edit'],
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Settings'],
   data    => {
     name => 'Edited LIG'
   }

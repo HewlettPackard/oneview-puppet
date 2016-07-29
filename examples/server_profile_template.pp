@@ -49,7 +49,7 @@ oneview_server_profile_template{'Server Profile Template Edit':
   data    =>
     {
       name     => 'New SPT',
-      new_name => 'Edited SPT',
+      new_name => 'Edited SPT'
     }
 }
 

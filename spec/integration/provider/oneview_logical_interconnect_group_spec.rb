@@ -19,19 +19,18 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_logical_interconnect_group).new(
       name: 'Test LIG',
-    ensure: 'present',
-        data:
+      ensure: 'present',
+      data:
           {
-              'name'                    => 'Test LIG',
-              'enclosureType'           => 'C7000',
-              'type'                    => 'logical-interconnect-groupV3'
-          },
+            'name' => 'Test LIG',
+            'enclosureType'           => 'C7000',
+            'type'                    => 'logical-interconnect-groupV3'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 

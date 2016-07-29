@@ -14,13 +14,11 @@
 # limitations under the License.
 ################################################################################
 
-
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
-
   mk_resource_methods
 
   def initialize(*args)
@@ -47,7 +45,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
     @data = data_parse
     # Bulk
     if @data['vlanIdRange']
-      ethernet_network = @resourcetype.bulk_create(@client, bulk_parse(@data))
+      @resourcetype.bulk_create(@client, bulk_parse(@data))
     else
       ethernet_network = @resourcetype.new(@client, @data)
       ethernet_network.create
@@ -65,8 +63,8 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
   end
 
   def bulk_parse(data)
-    data = Hash[data.map{ |k, v| [k.to_sym, v] }]
-    data[:bandwidth] = Hash[data[:bandwidth].map{ |k, v| [k.to_sym, v.to_i] }]
+    data = Hash[data.map { |k, v| [k.to_sym, v] }]
+    data[:bandwidth] = Hash[data[:bandwidth].map { |k, v| [k.to_sym, v.to_i] }]
     data
   end
 end

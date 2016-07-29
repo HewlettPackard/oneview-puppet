@@ -30,13 +30,13 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    dc = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !dc.empty?
+    spt = if resource['ensure'] == :present
+            resource_update(@data, @resourcetype)
+            @resourcetype.find_by(@client, unique_id)
+          else
+            @resourcetype.find_by(@client, @data)
+          end
+    !spt.empty?
   end
 
   def create
@@ -46,6 +46,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
 
   def destroy
     spt = @resourcetype.find_by(@client, unique_id)
+    spt.first.delete
   end
 
   def found
