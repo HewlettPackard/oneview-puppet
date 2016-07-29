@@ -92,3 +92,14 @@ def find_resources
   end
   true
 end
+
+# Gets a resource by its unique identifier (generally name or uri)
+def unique_id
+  raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') unless @data['name'] || @data['uri']
+  id = {}
+  if @data['name']
+    id.merge!(name: @data['name'])
+  else
+    id.merge!(uri: @data['uri'])
+  end
+end
