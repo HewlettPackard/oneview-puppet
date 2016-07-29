@@ -26,26 +26,23 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
+    @resourcetype = OneviewSDK::LogicalInterconnect
+    @data = {}
   end
 
   def exists?
-    data = data_parse(resource['data'])
-    log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
-    return log_int.retrieve!
+    @data = data_parse
+    li = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !li.empty?
   end
 
   def found
-    data = data_parse(resource['data'])
-    log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
-    if log_int.retrieve!
-      Puppet.notice ( "\n\nFound logical interconnect"+
-      " #{log_int['name']} on Oneview Appliance\n")
-      return true
-    else
-      Puppet.notice("\n\nNo logical interconnects with the specified data were"+
-      " found on the Oneview Appliance\n")
-      return false
-    end
+    find_resources
   end
 
   # GET ENDPOINTS =======================================
@@ -82,12 +79,8 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
     get_endpoints(resource['data'], 'forwardingInformation')
   end
 
-  def get_schema
-    get_endpoints(resource['data'], 'schema')
-  end
-
   # PUT/SET ENDPOINTS =======================================
-  
+
   def set_ethernet_settings
     set_endpoints(resource['data'], 'ethernetSettings')
   end
@@ -123,5 +116,5 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   def set_forwarding_information_base
     set_endpoints(resource['data'], 'forwardingInformation')
   end
-  
+
 end

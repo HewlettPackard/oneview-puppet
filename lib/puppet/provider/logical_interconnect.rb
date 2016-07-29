@@ -15,7 +15,6 @@
 ################################################################################
 
 require 'deep_merge'
-require_relative 'ethernet_network'
 
 def get_endpoints(data, action)
     case action
@@ -33,7 +32,7 @@ def get_endpoints(data, action)
         label  = 'Ethernet Settings'
     when 'telemetryConfiguration'
         action = 'telemetryConfiguration'
-        label  = 'Telemetry Configuration' 
+        label  = 'Telemetry Configuration'
     when 'firmware'
         action = 'firmware'
         label  = 'Firmware'
@@ -117,13 +116,13 @@ def set_endpoints(data, action)
         action = 'internalNetworks'
         label  = 'Internal Networks'
     end
-    
+
     data = data_parse_interconnect(data)
     log_int = OneviewSDK::LogicalInterconnect.new(@client, name: data['name'])
     log_int_current = log_int
     log_int_current.retrieve!
     if log_int.retrieve! && data[action]
-        
+
         case action
         when 'qosConfiguration'
             log_int[action].deep_merge!(data[action])
