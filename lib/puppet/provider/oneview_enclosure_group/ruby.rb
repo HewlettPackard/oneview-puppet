@@ -54,49 +54,28 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
   end
 
   def get_script
-    matches = OneviewSDK::EnclosureGroup.find_by(@client, @data)
-    unless matches.empty?
-      matches.each do |enclosure|
-        Puppet.notice("Its script contents are:\n#{enclosure.get_script}\n")
-      end
-      return true
-    end
-    Puppet.notice("\n\nNo enclosure groups with the specified data were"+
-    " found on the Oneview Appliance\n")
-    false
+    enclosure = @resourcetype.find_by(@client, unique_id)
+    raise("\n\nNo enclosure groups with the specified data were found in the Appliance\n") if enclosure.empty?
+    Puppet.notice("Enclosure Group's current script: \n#{enclosure.first.get_script}\n")
   end
 
   def set_script
-   script = @data.delete('script') if @data['script']
-   if script
-     matches = @resourcetype.find_by(@client, @data)
-     unless matches.empty?
-       matches.each do |enclosure|
-       Puppet.notice ("Setting its script to:\n'#{script}'\n")
-       enclosure.set_script(script)
-       return true
-     end
-     Puppet.notice("\n\nNo enclosure groups with the specified data were"+
-     " found in the Appliance\n")
-     false
-     end
-   else
-     Puppet.notice ( "\n\nThe 'script' field is required in data hash to run"+
-      " the set_script option")
-      false
-   end
- end
+    script = @data.delete('script') if @data['script']
+    raise("\nThe 'script' field is required in data hash to run the set_script action.") unless script
+    enclosure = @resourcetype.find_by(@client, unique_id)
+    raise("\n\nNo enclosure groups with the specified data were found in the Appliance\n") if enclosure.empty?
+    enclosure.first.set_script(script)
+    Puppet.notice("Enclosure Group script set to:\n#{script}\n")
+  end
 
- def enclosure_group_parse(data)
-   if data['interconnectBayMappingCount']
-     data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount'])
-   end
-   if data['interconnectBayMappings']
-     data['interconnectBayMappings'].each do |mapping_attr|
-       mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
-       mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == "nil"
-     end
-   end
-   data
- end
+  def enclosure_group_parse(data)
+    data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount']) if data['interconnectBayMappingCount']
+    if data['interconnectBayMappings']
+      data['interconnectBayMappings'].each do |mapping_attr|
+        mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
+        mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == 'nil'
+      end
+    end
+    data
+  end
 end

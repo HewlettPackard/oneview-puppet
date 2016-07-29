@@ -19,55 +19,54 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_enclosure_group).new(
       name: 'Enclosure Group',
       ensure: 'present',
-        data:
-          {
-            'name'                         =>'Enclosure Group',
-            'interconnectBayMappingCount'  => 8,
-            'stackingMode'                 =>'Enclosure',
-            'type'                         =>'EnclosureGroupV200',
-            'interconnectBayMappings'      =>
-            [
-              {
-                'interconnectBay' => "1",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "2",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "3",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "4",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "5",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "6",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "7",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "8",
-                'logicalInterconnectGroupUri' => nil
-              }
-            ]
-          },
+      data:
+        {
+          'name'                         => 'Enclosure Group',
+          'interconnectBayMappingCount'  => '8',
+          'stackingMode'                 => 'Enclosure',
+          'type'                         => 'EnclosureGroupV200',
+          'interconnectBayMappings'      =>
+          [
+            {
+              'interconnectBay' => '1',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '2',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '3',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '4',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '5',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '6',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '7',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '8',
+              'logicalInterconnectGroupUri' => nil
+            }
+          ]
+        }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
