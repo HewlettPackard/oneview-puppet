@@ -53,7 +53,8 @@ def resource_update(data, resourcetype)
   new_name_validation(data, resourcetype)
   raw_merged_data = current_attributes.merge(data)
   updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
-  current_resource.update(updated_data) if updated_data.size > 0
+  current_resource.update(updated_data) unless updated_data.empty?
+  updated_data.empty? ? false : true
 end
 
 def new_name_validation(data, resourcetype)
@@ -68,8 +69,8 @@ def get_single_resource_instance
   # Expects to find exactly 1 resources with the data provided, otherwise fails
   # This should NOT be used for deletes/destroys as it can be used without a unique identifier in a context where only one resouce exists.
   found_resource = @resourcetype.find_by(@client, @data)
-  fail 'More than one resource matched the data specified. Specify a unique identifier on data.' if found_resource.size > 1
-  fail 'No resources with the specified data specified were found. Specify a valid unique identifier on data.' if found_resource.size < 1
+  raise 'More than one resource matched the data specified. Specify a unique identifier on data.' if found_resource.size > 1
+  raise 'No resources with the specified data specified were found. Specify a valid unique identifier on data.' if found_resource.empty?
   found_resource.first
 end
 
@@ -84,7 +85,7 @@ def find_resources
   retrieved_resources = @resourcetype.find_by(@client, @data)
   resource_name = @resourcetype.to_s.split('::')
   # If resources are found, iterate through them and notify. Else just notify.
-  fail "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
+  raise "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
   retrieved_resources.each do |retrieved_resource|
     Puppet.notice "\n\n Found matching #{resource_name[1]} #{retrieved_resource['name']} "\
     "(URI: #{retrieved_resource['uri']}) on Oneview Appliance\n"
