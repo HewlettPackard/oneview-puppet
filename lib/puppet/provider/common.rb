@@ -48,12 +48,15 @@ def data_parse_interconnect(data)
 end
 
 def resource_update(data, resourcetype)
-  current_resource = resourcetype.find_by(@client, name: data['name']).first
-  current_resource ? current_attributes = current_resource.data : return
+  current_resource = resourcetype.find_by(@client, unique_id).first
+  return false unless current_resource
+  current_attributes = current_resource.data
   new_name_validation(data, resourcetype)
   raw_merged_data = current_attributes.merge(data)
   updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
-  current_resource.update(updated_data) if updated_data.size > 0
+  current_resource.update(updated_data) unless updated_data.empty?
+  @property_hash[:data] = current_resource.data
+  true
 end
 
 def new_name_validation(data, resourcetype)
@@ -68,8 +71,8 @@ def get_single_resource_instance
   # Expects to find exactly 1 resources with the data provided, otherwise fails
   # This should NOT be used for deletes/destroys as it can be used without a unique identifier in a context where only one resouce exists.
   found_resource = @resourcetype.find_by(@client, @data)
-  fail 'More than one resource matched the data specified. Specify a unique identifier on data.' if found_resource.size > 1
-  fail 'No resources with the specified data specified were found. Specify a valid unique identifier on data.' if found_resource.size < 1
+  raise 'More than one resource matched the data specified. Specify a unique identifier on data.' if found_resource.size > 1
+  raise 'No resources with the specified data specified were found. Specify a valid unique identifier on data.' if found_resource.empty?
   found_resource.first
 end
 
@@ -84,7 +87,7 @@ def find_resources
   retrieved_resources = @resourcetype.find_by(@client, @data)
   resource_name = @resourcetype.to_s.split('::')
   # If resources are found, iterate through them and notify. Else just notify.
-  fail "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
+  raise "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
   retrieved_resources.each do |retrieved_resource|
     Puppet.notice "\n\n Found matching #{resource_name[1]} #{retrieved_resource['name']} "\
     "(URI: #{retrieved_resource['uri']}) on Oneview Appliance\n"
@@ -94,11 +97,14 @@ end
 
 # Gets a resource by its unique identifier (generally name or uri)
 def unique_id
-  raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') unless @data['name'] || @data['uri']
+  raise('A resource name or uri must be declared in data for the current operation') unless @data['name'] || @data['uri'] || @data['id']
   id = {}
   if @data['name']
-    id.merge!(name: @data['name'])
+    id[:name] = @data['name']
+  elsif @data['uri']
+    id[:uri] = @data['uri']
   else
-    id.merge!(uri: @data['uri'])
+    id[:id] = @data['id']
   end
+  id
 end
