@@ -20,8 +20,8 @@ oneview_ethernet_network{'net1':
     name                  => 'Puppet network',
     vlanId                => '1045',
     purpose               => 'General',
-    smartLink             => 'true',
-    privateNetwork        => 'false',
+    smartLink             => true,
+    privateNetwork        => false,
     connectionTemplateUri => 'nil',
     type                  => 'ethernet-networkV3'
   }
@@ -68,8 +68,8 @@ oneview_ethernet_network{'Bulk Create':
       vlanIdRange    => '26-27',
       purpose        => 'General',
       namePrefix     => 'Puppet',
-      smartLink      => 'false',
-      privateNetwork => 'false',
+      smartLink      => false,
+      privateNetwork => false,
       bandwidth      =>
       {
         maximumBandwidth => '10_000',

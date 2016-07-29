@@ -24,7 +24,7 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Create':
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_logical_interconnect_group['Logical Interconnect Group Create'],
   data    => {
     name     => 'My LIG',
@@ -54,9 +54,9 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Destroy':
-  ensure => 'absent',
+  ensure  => 'absent',
   require => Oneview_logical_interconnect_group['Logical Interconnect Group Edit'],
-  data   => {
+  data    => {
     name => 'Edited LIG'
   }
 }
