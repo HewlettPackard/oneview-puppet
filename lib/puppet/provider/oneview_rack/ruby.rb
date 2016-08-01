@@ -28,6 +28,7 @@ Puppet::Type.type(:oneview_rack).provide(:ruby) do
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
     @data = {}
+    @rack_resource = {}
   end
 
   def self.instances
@@ -72,34 +73,42 @@ Puppet::Type.type(:oneview_rack).provide(:ruby) do
     find_resources
   end
 
-  # def data_parse_for_general
-  #   @data['name'] = @data.delete('customBaselineName') if @data['customBaselineName']
-  #   @data.each do |key, _value|
-  #     case key
-  #     when 'baselineUri' then
-  #       @attributes['baselineUri'] = @data.delete('baselineUri')
-  #       parse_uris_for_rack('baselineUri', @attributes['baselineUri'])
-  #     when 'hotfixUris' then
-  #       @attributes['hotfixUris'] = @data.delete('hotfixUris')
-  #       parse_uris_for_rack('hotfixUris', @attributes['hotfixUris'])
-  #     end
-  #   end
-  # end
-  #
-  # def parse_uris_for_rack(key, value, extra = nil)
-  #   if value.is_a? Array
-  #     value.each_with_index do |array_value, array_key|
-  #       parse_uris_for_rack(key, array_value, array_key)
-  #       return true
-  #     end
-  #   end
-  #   return if value.to_s[0..6].include?('/rest/')
-  #   rack = @resourcetype.find_by(@client, name: value)
-  #   raise "No #{key}s found on the appliance matching the provided name #{value}. Provide a valid name or uri." if rack.empty?
-  #   if extra
-  #     @attributes[key][extra] = rack.first['uri']
-  #   else
-  #     @attributes[key] = rack.first['uri']
-  #   end
-  # end
+  def get_device_topology
+    rack = get_single_resource_instance
+    pretty rack.get_device_topology
+    true
+  end
+
+  def add_rack_resource
+    raise 'A "rackMounts" attribute is required within data with the options of the resource to be added' unless @data['rackMounts']
+    rack_resources = @data.delete('rackMounts')
+    rack = get_single_resource_instance
+    rack_resources.each do |new_resources|
+      uri = get_mount_uri(new_resources)
+      rack.add_rack_resource(uri, new_resources)
+    end
+    rack.update
+    @property_hash[:data] = rack.data
+    true
+  end
+
+  def remove_rack_resource
+    raise 'A "rackMounts" attribute is required within data with the options of the resource to be removed' unless @data['rackMounts']
+    rack_resources = @data.delete('rackMounts')
+    rack = get_single_resource_instance
+    rack_resources.each do |new_resources|
+      uri = get_mount_uri(new_resources)
+      rack.remove_rack_resource(uri)
+    end
+    rack.update
+    @property_hash[:data] = rack.data
+    true
+  end
+
+  def get_mount_uri(new_resource)
+    uri = {}
+    uri['uri'] = new_resource.delete('uri') if new_resource['uri']
+    uri['uri'] = new_resource.delete('mountUri') if new_resource['mountUri']
+    uri
+  end
 end
