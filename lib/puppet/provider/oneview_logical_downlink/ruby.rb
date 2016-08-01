@@ -29,15 +29,14 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
   end
 
   def exists?
-    return true unless resource['data']
-    @data = resource['data']
-    ld = @resourcetype.new(@client, @data)
-    unless ld.exists?
-      Puppet.warning('There are no logical downlinks with these attributes \
-      in the Oneview appliance.')
-      return false
-    end
-    true
+    @data = data_parse
+    ld = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !ld.empty?
   end
 
   def create
@@ -51,30 +50,7 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
   end
 
   def found
-    Puppet.notice("\nLogical Downlink\n")
-    ld = @resourcetype.find_by(@client, @data)
-    puts "Found\n\s\sName: #{ld.first['name']}\n\s\sURI: #{ld.first['uri']}\n\n"
-    true
-  end
-
-  def get_schema
-    Puppet.notice("\nLogical Downlink Get Schema\n")
-    ld = @resourcetype.find_by(@client, @data)
-    pretty ld.first.schema
-    true
-  end
-
-  def get_logical_downlinks
-    Puppet.notice("\nLogical Downlinks\n")
-    ld = @resourcetype.find_by(@client, @data)
-    if ld.empty?
-      Puppet.warning('There are no logical downlinks in the Oneview appliance.')
-      return false
-    end
-    ld.each do |item|
-      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
-    end
-    true
+    find_resources
   end
 
   def get_without_ethernet

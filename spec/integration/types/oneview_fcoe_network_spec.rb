@@ -16,55 +16,47 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:ruby)
+type_class = Puppet::Type.type(:oneview_fcoe_network)
 
-describe provider_class do
-
-  let(:resource) {
-    Puppet::Type.type(:oneview_fcoe_network).new(
-      name: 'fcoe',
-      ensure: 'present',
-        data:
-          {
-              'name'                  =>'OneViewSDK Test FC Network',
-              'connectionTemplateUri' =>'nil',
-              'vlanId'                =>300,
-              'type'                  =>'fcoe-network',
-          },
-    )
+def fcoe_config
+  {
+    name: 'fcoe',
+    data:
+      {
+          'name'           => 'Test FCOE'
+      },
   }
+end
 
-  let(:provider) { resource.provider }
+describe type_class do
 
-  let(:instance) { provider.class.instances.first }
-
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:ruby)
+  let :params do
+  [
+    :name,
+    :data,
+    :provider,
+  ]
   end
 
-  context 'given the min parameters' do
-
-    it 'exists? should return false at first' do
-      expect(provider.exists?).not_to be
+  it 'should have expected parameters' do
+    params.each do |param|
+      expect(type_class.parameters).to be_include(param)
     end
-
-    it 'should create a new network' do
-      expect(provider.create).to be
-    end
-
-    it 'exists? should find a network' do
-      expect(provider.exists?).to be
-    end
-
-    it 'should return that no network was found' do
-      expect(provider.found).to be
-    end
-
-    it 'should run destroy' do
-      expect(provider.destroy).to be
-    end
-
   end
 
+  it 'should require a name' do
+    expect {
+      type_class.new({})
+    }.to raise_error(Puppet::Error, 'Title or name must be provided')
+  end
 
+  it 'should require a data hash' do
+    modified_config = fcoe_config
+    modified_config[:data] = ''
+    resource_type = type_class.to_s.split('::')
+    expect do
+      type_class.new(modified_config)
+    end.to raise_error(Puppet::Error, 'Parameter data failed on' \
+    " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
+  end
 end

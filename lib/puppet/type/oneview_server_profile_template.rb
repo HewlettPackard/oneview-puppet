@@ -29,17 +29,11 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
     end
 
     # GETs
-
-    newvalue(:get_server_profile_templates) do
-      provider.get_server_profile_templates
-    end
-
     newvalue(:get_available_hardware) do
       provider.get_available_hardware
     end
 
     # PUTs
-
     newvalue(:set_new_profile) do
       provider.set_new_profile
     end

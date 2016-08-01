@@ -29,13 +29,14 @@ Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
   end
 
   def exists?
-    return true unless resource['data']
     @data = data_parse
-    ct = @resourcetype.new(@client, @data)
-    if ct.retrieve! && resource['ensure'] == :present
-      resource_update(@data, @resourcetype)
-    end
-    ct.exists?
+    ct = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !ct.empty?
   end
 
   def create
@@ -47,37 +48,12 @@ Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
   end
 
   def found
-    Puppet.notice("\nConnection Template\n")
-    ct = @resourcetype.find_by(@client, @data)
-    unless ct.empty?
-      puts "Found\n\s\sName: #{ct.first['name']}\n\s\sURI: #{ct.first['uri']}\n\n"
-      return true
-    end
-    raise(Puppet::Error, 'This resource cannot be found.')
-  end
-
-  def get_schema
-    ct = @resourcetype.new(@client, @data)
-    pretty ct.schema
-    true
-  end
-
-  def get_connection_templates
-    Puppet.notice("\nAll Connection Templates\n")
-    ct = @resourcetype.find_by(@client, @data)
-    if ct.empty?
-      Puppet.warning('There are no connection templates in the Oneview appliance.')
-      return false
-    end
-    ct.each do |item|
-      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
-    end
-    true
+    find_resources
   end
 
   def get_default_connection_template
     Puppet.notice("\n\nDefault Connection Template")
-    default = OneviewSDK::ConnectionTemplate.get_default(@client)
+    default = @resourcetype.get_default(@client)
     if default['uri']
       puts "\nName: '#{default['name']}'"
       puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"

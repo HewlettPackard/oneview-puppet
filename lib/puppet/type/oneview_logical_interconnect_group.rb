@@ -37,13 +37,9 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
     newvalue(:get_settings) do
       provider.get_settings
     end
-
-    newvalue(:get_schema) do
-      provider.get_schema
-    end
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'Logical Interconnect Group process name'
   end
 

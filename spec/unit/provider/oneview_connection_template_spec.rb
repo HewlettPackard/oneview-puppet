@@ -50,20 +50,11 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(true)
     end
 
-    it 'should be able to get the schema' do
-      schema = 'spec/support/fixtures/unit/provider/logical_downlink_schema.json'
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      allow_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(schema))
-      expect(provider.get_schema).to eq(true)
-    end
-
     it 'should be able to find the connection template' do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
-      expect(provider.found).to eq(true)
+      expect(provider.found).to be
     end
   end
 
@@ -71,7 +62,11 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_connection_template).new(
         name: 'Connection Template',
-        ensure: 'get_connection_templates'
+        ensure: 'found',
+        data:
+        {
+          'name' => 'new ct'
+        }
       )
     end
 
@@ -80,10 +75,10 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be able to find the connection template' do
-      test = resourcetype.new(@client, name: 'new ct')
+      test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
-      expect(provider.get_connection_templates).to eq(true)
+      expect(provider.found).to be
     end
   end
 
@@ -115,7 +110,7 @@ describe provider_class, unit: true do
         ensure: 'absent',
         data:
         {
-          'name' => 'new ct'
+          'name' => 'CT'
         }
       )
     end

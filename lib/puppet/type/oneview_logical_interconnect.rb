@@ -92,26 +92,17 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
     newvalue(:get_forwarding_information_base) do
       provider.get_forwarding_information_base
     end
-
-    newvalue(:get_schema) do
-      provider.get_schema
-    end
-
   end
 
   newparam(:name, :namevar => true) do
     desc "Logical interconnect process name"
   end
-  
+
 
   newparam(:data) do
-    desc "Logical Interconnect data hash containing all specifications for the
-    resource"
+    desc 'Logical Interconnect data hash containing all specifications for the resource'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
-      end
+      raise(Puppet::Error, 'Inserted value for data is not valid') unless value.class == Hash
     end
   end
-
 end

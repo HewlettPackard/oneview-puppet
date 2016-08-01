@@ -19,63 +19,71 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_ethernet_network).new(
       name: 'ethernet',
       ensure: 'present',
-        data:
+      data:
           {
-            'name'                    =>'Puppet Network',
-            'vlanId'                  => 100,
-            'purpose'                 =>'General',
-            'smartLink'               =>'false',
-            'privateNetwork'          =>'true',
-            'connectionTemplateUri'   =>'nil',
-            'type'                    =>'ethernet-networkV3',
-          },
+            'name' => 'Puppet Network',
+            'vlanId' => 100,
+            'purpose' => 'General',
+            'smartLink' => 'false',
+            'privateNetwork' => 'true',
+            'connectionTemplateUri' => 'nil',
+            'type' => 'ethernet-networkV3'
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  before(:each) do
+    provider.exists?
+  end
 
   it 'should be an instance of the provider Ruby' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
   end
 
   context 'given the minimum parameters' do
-
-    it 'exists? should return false at first' do
+    it 'exists? that the network does not exist' do
       expect(provider.exists?).not_to be
     end
 
-    it 'found should return false at first' do
-      expect(provider.found).not_to be
-    end
-
-    # it 'should not have a network to destroy' do
-    #   expect(provider.destroy).not_to be
-    # end
-
-    it 'should create a new network' do
+    it 'should create the network' do
       expect(provider.create).to be
     end
-
-    it 'exists? should find a network' do
-      expect(provider.exists?).to be
-    end
-
-    # it 'found should return the matching network' do
-    #   expect(provider.found).to be
-    # end
-
-    it 'should run destroy' do
-      expect(provider.destroy).to be
-    end
-
   end
 
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_ethernet_network).new(
+        name: 'ethernet',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'Puppet Network'
+            }
+      )
+    end
 
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    before(:each) do
+      provider.exists?
+    end
+
+    it 'exists? should return the found networks' do
+      expect(provider.found).to be
+    end
+
+    it 'should destroy the network' do
+      expect(provider.destroy).to be
+    end
+  end
 end

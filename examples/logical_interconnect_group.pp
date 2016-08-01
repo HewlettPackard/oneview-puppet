@@ -15,62 +15,51 @@
 ################################################################################
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Create':
-    ensure => 'present',
-    data   => {
-      name          => 'My LIG',
-      # new_name      => 'Edited Name',
-      enclosureType => 'C7000',
-      type          => 'logical-interconnect-groupV3'
-    }
+  ensure => 'present',
+  data   => {
+    name          => 'My LIG',
+    enclosureType => 'C7000',
+    type          => 'logical-interconnect-groupV3'
+  }
 }
 
-oneview_logical_interconnect_group{'Logical Interconnect Group Get LIGs':
-    ensure => 'get_logical_interconnect_group',
-    data   => {
-    }
-}
-
-oneview_logical_interconnect_group{'Logical Interconnect Get LIG':
-    ensure => 'get_logical_interconnect_group',
-    data   => {
-      name          => 'My LIG',
-      enclosureType => 'C7000',
-      type          => 'logical-interconnect-groupV3'
-    }
+oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
+  ensure  => 'present',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Create'],
+  data    => {
+    name     => 'My LIG',
+    new_name => 'Edited LIG'
+  }
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Found':
-    ensure => 'found',
-    data   => {
-      name          => 'My LIG',
-      enclosureType => 'C7000',
-      type          => 'logical-interconnect-groupV3'
-    }
-}
-
-oneview_logical_interconnect_group{'Logical Interconnect Group Get Schema':
-    ensure => 'get_schema',
-    data   => {
-      name          => 'My LIG',
-      enclosureType => 'C7000',
-      type          => 'logical-interconnect-groupV3'
-    }
+  ensure => 'found',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Edit'],
+  # data   => {
+  #   name => 'Edited LIG'
+  # }
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Settings':
-    ensure => 'get_default_settings',
-    data   => {
-      name          => 'My LIG',
-      enclosureType => 'C7000',
-      type          => 'logical-interconnect-groupV3'
-    }
+  ensure => 'get_default_settings',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Found'],
+  data   => {
+    name => 'Edited LIG'
+  }
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
-    ensure => 'get_settings',
-    data   => {
-      name          => 'My LIG',
-      enclosureType => 'C7000',
-      type          => 'logical-interconnect-groupV3'
-    }
+  ensure => 'get_settings',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Default Settings'],
+  data   => {
+    name => 'Edited LIG'
+  }
+}
+
+oneview_logical_interconnect_group{'Logical Interconnect Group Destroy':
+  ensure  => 'absent',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Settings'],
+  data    => {
+    name => 'Edited LIG'
+  }
 }

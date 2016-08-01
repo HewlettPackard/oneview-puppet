@@ -23,21 +23,14 @@ Puppet::Type.newtype(:oneview_connection_template) do
   ensurable do
     defaultvalues
 
+    # GETs
+
     newvalue(:found) do
       provider.found
     end
 
-    # GETs
-    newvalue(:get_connection_templates) do
-      provider.get_connection_templates
-    end
-
     newvalue(:get_default_connection_template) do
       provider.get_default_connection_template
-    end
-
-    newvalue(:get_schema) do
-      provider.get_schema
     end
   end
 

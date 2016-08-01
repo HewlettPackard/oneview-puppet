@@ -16,40 +16,45 @@
 
 require 'spec_helper'
 
+# you must have the interconnect in your appliance
+
 provider_class = Puppet::Type.type(:oneview_interconnect).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_interconnect).new(
       name: 'interconnect',
       ensure: 'present',
-        data:
+      data:
           {
-              'name'    => 'Encl2, interconnect 1',
-              'ports'   =>
-              {
-                'd1' =>
-                {
-                  'portName'  => 'newName',
-                  'available' => 'false'
-                }
-              }
-          },
+            'name' => 'Encl2, interconnect 1',
+            'ports' =>
+                [
+                  {
+                    'name' => 'X1',
+                    'attributes' =>
+                    {
+                      'enabled' => true
+                    }
+                  }
+                ]
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  before(:each) do
+    provider.exists?
+  end
 
   it 'should be an instance of the provider Ruby' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:ruby)
   end
 
   context 'given the min parameters' do
-
-    # you must have the interconnect in your appliance
     it 'exists? should return true' do
       expect(provider.exists?).to be
     end
@@ -58,31 +63,20 @@ describe provider_class do
       expect(provider.get_statistics).to be
     end
 
-    it 'should return the interconnect' do
+    it 'should return the interconnects' do
       expect(provider.found).to be
     end
 
-    it 'should display the interconnect schema' do
-      expect(provider.get_schema).to be
-    end
-
-    it 'should dsplay the interconnect statistics' do
-      expect(provider.get_statistics).to be
-    end
-
     it 'should run destroy and display an error' do
-      expect(provider.destroy).not_to be
+      expect { provider.destroy }.to raise_error('This resource depends on other resources to be destroyed.')
     end
 
     it 'should run create and display an error' do
-      expect(provider.create).not_to be
+      expect { provider.create }.to raise_error('This resource depends on other resources to be created.')
     end
 
     it 'should update the interconnect port d1' do
       expect(provider.update_ports).to be
     end
-
   end
-
-
 end

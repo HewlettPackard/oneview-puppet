@@ -65,10 +65,6 @@ describe provider_class do
       expect(provider.exists?).not_to be
     end
 
-    it 'should return that the logical switch was not found' do
-      expect { provider.found }.to raise_error(Puppet::Error, 'No Logical Switches were found in the Appliance.')
-    end
-
     it 'should be able to create a new logical switch' do
       expect(provider.create).to be
     end

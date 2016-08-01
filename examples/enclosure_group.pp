@@ -14,6 +14,10 @@
 # limitations under the License.
 ################################################################################
 
+oneview_enclosure_group{'Enclosure Group Get All':
+    ensure  => 'found'
+}
+
 oneview_enclosure_group{'Enclosure Group Create':
     ensure => 'present',
     data   => {

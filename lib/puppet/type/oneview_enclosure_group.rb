@@ -1,31 +1,46 @@
-Puppet::Type.newtype(:oneview_enclosure_group) do
+################################################################################
+# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
 
+require_relative 'common'
+
+Puppet::Type.newtype(:oneview_enclosure_group) do
   ensurable do
     defaultvalues
 
     newvalue(:found) do
       provider.found
     end
+
     newvalue(:get_script) do
-        provider.get_script
+      provider.get_script
     end
+
     newvalue(:set_script) do
-        provider.set_script
+      provider.set_script
     end
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Enclosure Group name"
+  newparam(:name, namevar: true) do
+    desc 'Enclosure Group name'
   end
 
   newparam(:data) do
-    desc "Enclosure Group data hash containing all specifications for the
-    resource"
+    desc 'Enclosure Group data hash containing all specifications for the resource'
     validate do |value|
-      unless value.class == Hash
-        raise(ArgumentError, "Invalid Data Hash")
-      end
+      raise(ArgumentError, 'Invalid data hash') unless value.class == Hash
     end
   end
-
 end

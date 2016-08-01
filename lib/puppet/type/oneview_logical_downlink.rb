@@ -28,14 +28,6 @@ Puppet::Type.newtype(:oneview_logical_downlink) do
     newvalue(:get_without_ethernet) do
       provider.get_without_ethernet
     end
-
-    newvalue(:get_logical_downlinks) do
-      provider.get_logical_downlinks
-    end
-
-    newvalue(:get_schema) do
-      provider.get_schema
-    end
   end
 
   newparam(:name, namevar: true) do

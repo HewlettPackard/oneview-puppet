@@ -55,10 +55,9 @@ describe type_class do
     modified_config = logical_interconnect_group_config
     modified_config[:data] = ''
     resource_type = type_class.to_s.split('::')
-    expect {
-        type_class.new(modified_config)
-    }.to raise_error(Puppet::Error, "Parameter data failed on"\
-    " #{resource_type[2]}[#{modified_config[:name]}]: Invalid Data Hash")
+    expect do
+      type_class.new(modified_config)
+    end.to raise_error(Puppet::Error, 'Parameter data failed on' \
+    " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
   end
-
 end

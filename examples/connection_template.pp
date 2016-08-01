@@ -16,22 +16,10 @@
 
 oneview_connection_template{'Connection Template Found':
   ensure => 'found',
-  data   =>
-  {
-    name => 'CT'
-  }
-}
-
-oneview_connection_template{'Connection Template Get Schema':
-  ensure => 'get_schema',
-  data   =>
-  {
-    name => 'CT'
-  }
-}
-
-oneview_connection_template{'Connection Template Get All':
-  ensure => 'get_connection_templates'
+  # data   =>
+  # {
+  #   name => 'Edited Name'
+  # }
 }
 
 oneview_connection_template{'Connection Template Default Connection Template':
@@ -42,26 +30,26 @@ oneview_connection_template{'Connection Template Edit':
   ensure => 'present',
   data   =>
   {
-    name     => 'CT',
-    new_name => 'Edited Name'
+    name     => 'My CT',
+    new_name => 'Edited CT'
   }
 }
 
 # The following operations should display an error, as this resource can neither be created nor destroyed
 
-oneview_connection_template{'Connection Template Create':
-  ensure => 'present',
-  data   =>
-  {
-    name => 'Random Template'
-  }
-}
-
-oneview_connection_template{'Connection Template Destroy':
-  ensure  => 'absent',
-  require => Oneview_connection_template['Connection Template Edit'],
-  data    =>
-  {
-    name => 'Edited Name'
-  }
-}
+# oneview_connection_template{'Connection Template Create':
+#   ensure => 'present',
+#   data   =>
+#   {
+#     name => 'Random Template'
+#   }
+# }
+#
+# oneview_connection_template{'Connection Template Destroy':
+#   ensure  => 'absent',
+#   require => Oneview_connection_template['Connection Template Edit'],
+#   data    =>
+#   {
+#     name => 'Edited Name'
+#   }
+# }

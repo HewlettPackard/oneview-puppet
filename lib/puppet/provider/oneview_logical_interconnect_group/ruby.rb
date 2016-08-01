@@ -24,75 +24,40 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
+    @resourcetype = OneviewSDK::LogicalInterconnectGroup
+    @data = {}
   end
 
   def exists?
-    return true if !resource['data'] || resource['data'].empty?
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
-    # TODO: Update is currently not supported in sdk, this should be enabled it becomes supported
-    # looking for potential updates
-    # the sdk update method returns an error
-    # it has to be checked later on
-    # lig_data_update = data_parse_interconnect(lig.data.merge(data))
-    # lig_data_update['name'] = data['new_name'] if data['new_name']
-    # lig_data_update.delete('new_name') if data['new_name']
-    # if lig_data_update != lig.data
-    #   puts lig.data
-    #   puts lig_data_update
-    #   lig.data = lig_data_update
-    #   lig.update
-    # end
-    lig.retrieve!
+    @data = data_parse
+    lig = if resource['ensure'] == :present
+            resource_update(@data, @resourcetype)
+            @resourcetype.find_by(@client, unique_id)
+          else
+            @resourcetype.find_by(@client, @data)
+          end
+    !lig.empty?
   end
 
   def found
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
-    if lig.retrieve!
-      Puppet.notice("\n\nFound logical interconnect group"\
-      " #{lig['name']} in Oneview Appliance\n")
-      true
-    else
-      Puppet.notice("\n\nNo logical interconnect groups with the specified data were"\
-      " found on the Oneview Appliance\n")
-      false
-    end
+    find_resources
   end
 
   def create
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
+    lig = @resourcetype.new(@client, @data)
     lig.create
-    lig.retrieve!
   end
 
   def destroy
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, name: data['name'])
-    lig.retrieve!
-    lig.delete
-  end
-
-  # GET ENDPOINTS =======================================
-
-  def get_logical_interconnect_group
-    Puppet.notice("\n\nLogical Interconnect Groups\n")
-    options = {}
-    options = data_parse(resource['data']) if resource['data']
-    OneviewSDK::LogicalInterconnectGroup.find_by(@client, options).each do |lig|
-      Puppet.notice("\n\nFound logical interconnect group"\
-      " #{lig['name']} (URI #{lig['uri']}) in Oneview Appliance\n")
-    end
-    true
+    lig = @resourcetype.find_by(@client, unique_id)
+    lig.first.delete
   end
 
   def get_settings
     Puppet.notice("\n\nLogical Interconnect Group Settings\n")
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, data)
-    if lig.retrieve!
-      pretty lig.get_settings
+    lig = @resourcetype.find_by(@client, unique_id)
+    if lig.first
+      pretty lig.first.get_settings
       true
     else
       Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
@@ -102,28 +67,13 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
 
   def get_default_settings
     Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, data)
-    if lig.retrieve!
-      pretty lig.get_default_settings
+    lig = @resourcetype.find_by(@client, unique_id)
+    if lig.first
+      pretty lig.first.get_default_settings
       true
     else
       Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
       false
     end
   end
-
-  def get_schema
-    Puppet.notice("\n\nLogical Interconnect Group Schema\n")
-    data = data_parse(resource['data'])
-    lig = OneviewSDK::LogicalInterconnectGroup.new(@client, data)
-    if lig.retrieve!
-      pretty lig.schema
-      true
-    else
-      Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
-      false
-    end
-  end
-
 end

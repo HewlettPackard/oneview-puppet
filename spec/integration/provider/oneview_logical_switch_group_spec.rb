@@ -61,14 +61,6 @@ describe provider_class do
     expect(provider.found).to be
   end
 
-  it 'should get the schema of the LSG' do
-    expect(provider.get_schema).to be
-  end
-
-  it 'should return all the LSGs' do
-    expect(provider.get_logical_switch_groups).to be
-  end
-
   it 'should destroy the LSG' do
     expect(provider.destroy).to be
   end

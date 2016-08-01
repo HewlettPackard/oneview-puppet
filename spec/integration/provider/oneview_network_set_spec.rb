@@ -45,11 +45,6 @@ describe provider_class do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:ruby)
     end
 
-    it 'should not be able to find this resource before it has been created' do
-      expect(provider.exists?).not_to be
-      expect { provider.found }.to raise_error('The Network Set does not exists.')
-    end
-
     it 'should be able to create the resource' do
       expect(provider.create).to be
     end
@@ -58,7 +53,7 @@ describe provider_class do
       expect(provider.get_without_ethernet).to be
     end
 
-    it 'should not be able to find this resource' do
+    it 'should be able to find this resource' do
       expect(provider.exists?).to be
       expect(provider.found).to be
     end
@@ -73,32 +68,6 @@ describe provider_class do
 
     it 'should be able to delete the resource' do
       expect(provider.destroy).to be
-    end
-  end
-
-  context 'given the minimum parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_network_set).new(
-        name: 'Network Set',
-        ensure: 'get_schema'
-      )
-    end
-
-    it 'should be able to get the schema' do
-      expect(provider.get_schema).to be
-    end
-  end
-
-  context 'given the minimum parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_network_set).new(
-        name: 'Network Set',
-        ensure: 'get_network_sets'
-      )
-    end
-
-    it 'should be able to get all the network sets' do
-      expect(provider.get_network_sets).to be
     end
   end
 end
