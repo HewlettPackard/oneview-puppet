@@ -27,9 +27,10 @@ oneview_power_device{'Power Device Discover':
   }
 }
 
-# Optional filters
+# # Optional filters
 oneview_power_device{'Power Device Found':
-  ensure => 'found'
+  ensure  => 'found',
+  require => Oneview_power_device['Power Device Discover']
   # data   =>
   # {
   #   name => '172.18.8.11, PDU 1'
@@ -37,8 +38,9 @@ oneview_power_device{'Power Device Found':
 }
 
 oneview_power_device{'Power Device Refresh':
-  ensure => 'set_refresh_state',
-  data   =>
+  ensure  => 'set_refresh_state',
+  require => Oneview_power_device['Power Device Found'],
+  data    =>
   {
     name           => '172.18.8.11, PDU 1',
     refreshOptions =>
@@ -52,8 +54,9 @@ oneview_power_device{'Power Device Refresh':
 
 # Optional filters
 oneview_power_device{'Power Device Get Utilization':
-  ensure => 'get_utilization',
-  data   =>
+  ensure  => 'get_utilization',
+  require => Oneview_power_device['Power Device Refresh'],
+  data    =>
   {
     name            => '172.18.8.11, PDU 1',
     queryParameters =>
@@ -65,13 +68,23 @@ oneview_power_device{'Power Device Get Utilization':
   }
 }
 
-# Caution: more than one Power Device can be deleted at once by adding optional filters
-oneview_power_device{'Power Device Remove':
-  ensure  => 'absent',
-  require => Oneview_power_device['Power Device Discover'],
+oneview_power_device{'Power Device Edit':
+  ensure  => 'present',
+  require => Oneview_power_device['Power Device Get Utilization'],
   data    =>
   {
-    name => '172.18.8.11, PDU 1'
+    name     => '172.18.8.11, PDU 1',
+    new_name => 'Power Device'
+  }
+}
+
+# Caution: more than one matching Power Device can be deleted at once by adding optional filters
+oneview_power_device{'Power Device Remove':
+  ensure  => 'absent',
+  require => Oneview_power_device['Power Device Edit'],
+  data    =>
+  {
+    name => 'Power Device'
   }
 }
 
