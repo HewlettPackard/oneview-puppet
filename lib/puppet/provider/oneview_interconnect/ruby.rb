@@ -75,9 +75,9 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
     if @statistics
       @statistics['portName'] = nil unless @statistics['portName']
       @statistics['subportNumber'] = nil unless @statistics['subportNumber']
-      puts interconnect.first.statistics(@statistics['portName'], @statistics['subportNumber'])
+      pretty interconnect.first.statistics(@statistics['portName'], @statistics['subportNumber'])
     else
-      puts interconnect.first.statistics
+      pretty interconnect.first.statistics
     end
     true
   end
@@ -86,7 +86,7 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
     Puppet.notice("\n\nInterconnect Name Servers\n")
     interconnect = @resourcetype.find_by(@client, unique_id)
     raise('No Interconnects with the given specifications were found.') unless interconnect.first
-    puts interconnect.first.name_servers
+    pretty interconnect.first.name_servers
   end
 
   # PUT endpoints ============================================================
@@ -113,7 +113,7 @@ Puppet::Type.type(:oneview_interconnect).provide(:ruby) do
     if @data['patch']
       @patch = @data.delete('patch')
       ic = @resourcetype.find_by(@client, unique_id).first
-      ic.update_attribute(@patch['op'], @patch['path'], @patch['value'])
+      ic.patch(@patch['op'], @patch['path'], @patch['value'])
     end
   end
 end

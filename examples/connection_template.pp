@@ -14,6 +14,8 @@
 # limitations under the License.
 ################################################################################
 
+# This resource cannot be created or deleted through 'present' and 'absent'
+
 oneview_connection_template{'Connection Template Found':
   ensure => 'found',
   # data   =>
@@ -34,22 +36,3 @@ oneview_connection_template{'Connection Template Edit':
     new_name => 'Edited CT'
   }
 }
-
-# The following operations should display an error, as this resource can neither be created nor destroyed
-
-# oneview_connection_template{'Connection Template Create':
-#   ensure => 'present',
-#   data   =>
-#   {
-#     name => 'Random Template'
-#   }
-# }
-#
-# oneview_connection_template{'Connection Template Destroy':
-#   ensure  => 'absent',
-#   require => Oneview_connection_template['Connection Template Edit'],
-#   data    =>
-#   {
-#     name => 'Edited Name'
-#   }
-# }

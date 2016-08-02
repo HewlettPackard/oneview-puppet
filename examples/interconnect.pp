@@ -71,25 +71,10 @@ oneview_interconnect{'Interconnect Patch Interconnect':
     }
 }
 
-oneview_interconnect{'Interconnect Destroy (warning)':
-    ensure => 'absent',
-    data   => {
-      name => 'Encl2, interconnect 1'
-    }
-}
-
-# Trying to create a new Interconnect
-oneview_interconnect{'Interconnect Create (warning)':
-    ensure => 'present',
-    data   => {
-      name => 'New Interconnect'
-    }
-}
-
 oneview_interconnect{'Interconnect Reset Port Protection':
     ensure => 'reset_port_protection',
     data   => {
-      name  => 'Encl2, interconnect 1',
+      name => 'Encl2, interconnect 1',
     }
 }
 
