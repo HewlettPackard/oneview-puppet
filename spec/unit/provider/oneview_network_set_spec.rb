@@ -60,27 +60,20 @@ describe provider_class, unit: true do
     it 'should return that the resource does not exists' do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
-      expect { provider.found }.to raise_error('The Network Set does not exists.')
     end
 
     it 'should return that the resource exists' do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
-      expect(provider.found).to eq(true)
-    end
-
-    it 'should be able to get the schema' do
-      schema = 'spec/support/fixtures/unit/provider/network_set_schema.json'
-      allow_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(schema))
-      expect(provider.get_schema).to eq(true)
+      expect(provider.found).to be
     end
 
     it 'should be able to create the resource' do
       data = { 'name' => 'Network Set', 'connectionTemplateUri' => nil, 'nativeNetworkUri' => nil, 'networkUris' => [],
                'type' => 'network-set' }
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(false)
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
         .with('/rest/network-sets', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
@@ -96,29 +89,6 @@ describe provider_class, unit: true do
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.exists?).to eq(true)
       expect(provider.destroy).to eq(true)
-    end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_network_set).new(
-        name: 'Network Set',
-        ensure: 'get_network_sets',
-        data:
-            {
-              'name' => 'Network Set'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    it 'should be able to get all the network sets' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.get_network_sets).to eq(true)
     end
   end
 

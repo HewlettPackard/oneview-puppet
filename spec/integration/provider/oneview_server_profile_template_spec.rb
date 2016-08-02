@@ -49,10 +49,6 @@ describe provider_class do
       expect(provider.exists?).not_to be
     end
 
-    it 'should return that the server profile template was not found' do
-      expect(provider.found).not_to be
-    end
-
     it 'should be able to create a new server profile template' do
       expect(provider.create).to be
     end

@@ -18,7 +18,6 @@ oneview_fcoe_network{'FCoE Create':
     ensure => 'present',
     data   => {
       name                  => 'FCoE Network',
-      new_name              => 'Test name', #This will be dropped at first
       vlanId                => '100',
       connectionTemplateUri => 'nil',
       type                  => 'fcoe-network'
@@ -29,11 +28,8 @@ oneview_fcoe_network{'FCoE Update':
     ensure  => 'present',
     require => Oneview_fcoe_network['FCoE Create'],
     data    => {
-      name                  => 'FCoE Network',
-      new_name              => 'New FCoE Network Name',
-      vlanId                => '100',
-      connectionTemplateUri => 'nil',
-      type                  => 'fcoe-network'
+      name     => 'FCoE Network',
+      new_name => 'New FCoE Network Name'
     }
 }
 
@@ -41,10 +37,7 @@ oneview_fcoe_network{'FCoE Found':
     ensure  => 'found',
     require => Oneview_fcoe_network['FCoE Update'],
     data    => {
-      name                  => 'New FCoE Network Name',
-      vlanId                => '100',
-      connectionTemplateUri => 'nil',
-      type                  => 'fcoe-network'
+      vlanId => '100'
     }
 }
 
@@ -53,9 +46,6 @@ oneview_fcoe_network{'FCoE Delete':
     ensure  => 'absent',
     require => Oneview_fcoe_network['FCoE Found'],
     data    => {
-      name                  => 'New FCoE Network Name',
-      vlanId                => '100',
-      connectionTemplateUri => 'nil',
-      type                  => 'fcoe-network'
+      name => 'New FCoE Network Name'
     }
 }

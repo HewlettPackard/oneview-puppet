@@ -30,14 +30,16 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
   end
 
   def exists?
-    return true unless resource['data']
     @data = data_parse
+    # Removes switch (treated separately) from data hash
     @switches = @data.delete('switches') if @data['switches']
-    ls = @resourcetype.new(@client, name: @data['name'])
-    if ls.retrieve! && resource['ensure'] == :present
-      resource_update(@data, @resourcetype)
-    end
-    ls.exists?
+    ls = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !ls.empty?
   end
 
   def create
@@ -47,41 +49,17 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
   end
 
   def destroy
-    ls = get_ls
-    ls.delete
+    ls = @resourcetype.find_by(@client, unique_id)
+    ls.first.delete
   end
 
   def found
-    ls = @resourcetype.find_by(@client, @data)
-    raise(Puppet::Error, 'No Logical Switches were found in the Appliance.') unless ls.first
-    Puppet.notice("\n\n\s\sFound Logical Switch"\
-    " #{ls.first.data['name']} (URI: #{ls.first.data['uri']}) in Oneview Appliance\n")
-    true
-  end
-
-  def get_logical_switches
-    Puppet.notice("\n\nLogical Switches\n")
-    ls = @resourcetype.get_all(@client)
-    if ls.empty?
-      Puppet.warning('No Logical Switches were found in the Appliance.')
-      return false
-    end
-    ls.each do |item|
-      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
-    end
-    true
-  end
-
-  def get_schema
-    ls = get_ls
-    pretty ls.schema
-    true
+    find_resources
   end
 
   def refresh
-    ls = get_ls
-    ls.refresh
-    true
+    ls = @resourcetype.find_by(@client, unique_id)
+    ls.first.refresh
   end
 
   # Helper Methods to treat switches and set credentials
@@ -106,13 +84,5 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
 
   def set_credentials(ls, ip, ssh, snmp)
     ls.set_switch_credentials(ip, ssh, snmp)
-  end
-
-  # Gets the logical switch object from Oneview
-  def get_ls(message = nil)
-    Puppet.notice("\n\n#{message}\n") if message
-    ls = OneviewSDK::LogicalSwitch.new(@client, name: @data['name'])
-    raise 'No Logical Switches were found in Oneview Appliance.' unless ls.retrieve!
-    ls
   end
 end

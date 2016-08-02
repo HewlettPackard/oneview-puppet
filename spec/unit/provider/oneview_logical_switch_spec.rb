@@ -114,30 +114,12 @@ describe provider_class, unit: true do
       expect(provider.destroy).to eq(true)
     end
 
-    it 'prints the logical switch schema' do
-      path = 'spec/support/fixtures/unit/provider/logical_switch_schema.json'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(path))
-      expect(provider.exists?).to eq(true)
-      expect(provider.get_schema).to eq(true)
-    end
-
-    it 'prints the logical switch schema' do
-      schema = 'spec/support/fixtures/unit/provider/logical_switch_schema.json'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:schema).and_return(File.read(schema))
-      expect(provider.exists?).to eq(true)
-      expect(provider.get_schema).to eq(true)
-    end
-
     it 'should refresh the logical switch' do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
       expect_any_instance_of(resourcetype).to receive(:refresh).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.exists?).to eq(true)
-      expect(provider.refresh).to eq(true)
+      expect(provider.refresh).to be
     end
 
     # TODO: get the stub data hash to be the response

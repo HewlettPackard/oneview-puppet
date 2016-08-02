@@ -43,32 +43,17 @@ oneview_logical_switch{'Logical Switch Create':
 
 oneview_logical_switch{'Logical Switch Found':
   ensure  => 'found',
-  require => Oneview_logical_switch['Logical Switch Create'],
-  data    =>
-  {
-    name                  => 'Test Logical Switch',
-    logicalSwitchGroupUri => 'LSG 1'
-  }
-}
-
-oneview_logical_switch{'Logical Switch Get Schema':
-  ensure  => 'get_schema',
-  require => Oneview_logical_switch['Logical Switch Found'],
-  data    =>
-  {
-    name                  => 'Test Logical Switch',
-    logicalSwitchGroupUri => 'LSG 1'
-  }
-}
-
-oneview_logical_switch{'Logical Switch Get All':
-  ensure  => 'get_logical_switches',
-  require => Oneview_logical_switch['Logical Switch Get Schema'],
+  require => Oneview_logical_switch['Logical Switch Create']
+  # data    =>
+  # {
+  #   name                  => 'Test Logical Switch',
+  #   logicalSwitchGroupUri => 'LSG 1'
+  # }
 }
 
 oneview_logical_switch{'Logical Switch Destroy':
   ensure  => 'absent',
-  require => Oneview_logical_switch['Logical Switch Get All'],
+  require => Oneview_logical_switch['Logical Switch Found'],
   data    =>
   {
     name                  => 'Test Logical Switch',

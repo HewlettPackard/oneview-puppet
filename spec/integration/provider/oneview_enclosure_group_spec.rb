@@ -19,67 +19,68 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_enclosure_group).new(
       name: 'Enclosure Group',
       ensure: 'present',
-        data:
-          {
-            'name'                         =>'Enclosure Group',
-            'interconnectBayMappingCount'  => 8,
-            'stackingMode'                 =>'Enclosure',
-            'type'                         =>'EnclosureGroupV200',
-            'interconnectBayMappings'      =>
-            [
-              {
-                'interconnectBay' => "1",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "2",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "3",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "4",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "5",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "6",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "7",
-                'logicalInterconnectGroupUri' => nil
-              },
-              {
-                'interconnectBay' => "8",
-                'logicalInterconnectGroupUri' => nil
-              }
-            ]
-          },
+      data:
+        {
+          'name'                         => 'Enclosure Group',
+          'interconnectBayMappingCount'  => '8',
+          'stackingMode'                 => 'Enclosure',
+          'type'                         => 'EnclosureGroupV200',
+          'interconnectBayMappings'      =>
+          [
+            {
+              'interconnectBay' => '1',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '2',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '3',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '4',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '5',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '6',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '7',
+              'logicalInterconnectGroupUri' => nil
+            },
+            {
+              'interconnectBay' => '8',
+              'logicalInterconnectGroupUri' => nil
+            }
+          ]
+        }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
+  before(:each) do
+    provider.exists?
+  end
+
   it 'should be an instance of the provider Ruby' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure_group).provider(:ruby)
   end
 
-
   context 'given the minimum parameters' do
-
     it 'exists? should not find an enclosure group' do
       expect(provider.exists?).not_to be
     end
@@ -92,42 +93,12 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
-    it 'should return that an enclosure group was found' do
-      expect(provider.found).to be
+    it 'should not return that an enclosure group was found, since the LIG are not nil' do
+      expect { provider.found }.to raise_error("\n\nNo EnclosureGroup with the specified data were found on the Oneview Appliance\n")
     end
-
-    it 'should not be able to get the script from the enclosure group' do
-      expect(provider.get_script).not_to be
-    end
-
-    let(:resource_with_script) {
-      Puppet::Type.type(:oneview_enclosure_group).new(
-        name: 'Enclosure Group',
-        ensure: 'present',
-        data:
-            {
-                'name'                    => 'Enclosure Group',
-                'script'                  => 'This is a script example',
-            },
-      )
-    }
-
-    context 'given the script parameter' do
-
-      # It does work, but the test returns that the script field is missing in
-      # the example
-
-      # it 'should be able to set the script on the enclosure group' do
-      #   expect(provider.set_script).to be
-      # end
-
-    end
-
 
     it 'should destroy the enclosure group' do
       expect(provider.destroy).to be
     end
-
   end
-
 end

@@ -16,13 +16,9 @@
 
 # This example needs two Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
 
-oneview_network_set{'Network Set Get Schema':
-  ensure => 'get_schema'
-}
-
+# Optional filters
 oneview_network_set{'Network Set Get All':
-  ensure => 'get_network_sets'
-  # Optional filters
+  ensure => 'found'
   # data   =>
   # {
   #   name => 'ns1'

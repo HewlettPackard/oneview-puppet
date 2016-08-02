@@ -30,16 +30,8 @@ Puppet::Type.newtype(:oneview_interconnect) do
       provider.get_interconnect_type
     end
 
-    newvalue(:get_schema) do
-      provider.get_schema
-    end
-
     newvalue(:get_statistics) do
       provider.get_statistics
-    end
-
-    newvalue(:get_subport_statistics) do
-      provider.get_subport_statistics
     end
 
     newvalue(:get_name_servers) do

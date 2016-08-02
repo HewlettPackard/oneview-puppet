@@ -15,45 +15,38 @@
 ################################################################################
 
 oneview_interconnect{'Interconnect Get Types':
-ensure => 'get_types'
+  ensure => 'get_types',
+  # data   => {
+  #   name => 'Encl2, interconnect 1'
+  # }
 }
 
 oneview_interconnect{'Interconnect Found':
-    ensure => 'found',
-    data   => {
-      name                  => 'Encl2, interconnect 1'
-    }
+  ensure => 'found',
+  data   => {
+    name => 'Encl2, interconnect 1'
+  }
 }
 
-
-oneview_interconnect{'Interconnect Get Type':
-    ensure => 'get_interconnect_type',
-    data   => {
-      name                  => 'Encl2, interconnect 1'
-    }
-}
-
-oneview_interconnect{'Interconnect Get Schema':
-    ensure => 'get_schema',
-    data   => {
-      name                  => 'Encl2, interconnect 1',
-    }
+oneview_interconnect{'Interconnect Found All':
+    ensure => 'found'
 }
 
 oneview_interconnect{'Interconnect Get Statistics':
     ensure => 'get_statistics',
     data   => {
-      name                  => 'Encl2, interconnect 1',
+      name => 'Encl2, interconnect 1'
     }
 }
 
 oneview_interconnect{'Interconnect Get Specific Statistics':
     ensure => 'get_statistics',
     data   => {
-      name              => 'Encl2, interconnect 1',
-      subportStatistics =>
+      name       => 'Encl2, interconnect 1',
+      statistics =>
       {
-        portName => 'X8'
+        portName => 'X1'
+        # subportNumber => ''
       }
     }
 }
@@ -61,66 +54,51 @@ oneview_interconnect{'Interconnect Get Specific Statistics':
 oneview_interconnect{'Interconnect Get Name Servers':
     ensure => 'get_name_servers',
     data   => {
-      name                  => 'Encl2, interconnect 1'
+      name => 'Encl2, interconnect 1'
     }
 }
 
-oneview_interconnect{'Interconnect Patch One Interconnect':
+oneview_interconnect{'Interconnect Patch Interconnect':
     ensure => 'present',
     data   => {
       name  => 'Encl2, interconnect 1',
-      op    => 'replace',
-      path  => '/uidState',
-      value => 'Off',
-    }
-}
-
-oneview_interconnect{'Interconnect Patch All Interconnects':
-    ensure => 'present',
-    data   => {
-      op    => 'replace',
-      path  => '/powerState',
-      value => 'Off',
-    }
-}
-
-oneview_interconnect{'Interconnect Destroy (warning)':
-    ensure => 'absent',
-    data   => {
-      name                  => 'Encl2, interconnect 1'
-    }
-}
-
-# Trying to create a new Interconnect
-oneview_interconnect{'Interconnect Create (warning)':
-    ensure => 'present',
-    data   => {
-      name                  => 'New Interconnect'
+      patch =>
+      {
+        op    => 'replace',
+        path  => '/uidState',
+        value => 'Off'
+      }
     }
 }
 
 oneview_interconnect{'Interconnect Reset Port Protection':
     ensure => 'reset_port_protection',
     data   => {
-      name  => 'Encl2, interconnect 1',
+      name => 'Encl2, interconnect 1',
     }
 }
 
 oneview_interconnect{'Interconnect Update Ports':
     ensure => 'update_ports',
-    data   => {
+    data   =>
+    {
       name  => 'Encl2, interconnect 1',
       ports =>
-      {
-        d1 =>
-        {
-          portName  => 'newPortName',
-          available => false,
-        },
-        d2 =>
-        {
-          available => true,
-        }
-      },
+        [
+          {
+            name       => 'X1',
+            attributes =>
+            {
+              enabled => true
+            }
+          },
+          {
+            name       => 'X2',
+            attributes =>
+            {
+              enabled => true
+            }
+          }
+        ]
     }
 }

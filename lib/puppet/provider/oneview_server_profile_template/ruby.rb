@@ -25,20 +25,18 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
     super(*args)
     @client = OneviewSDK::Client.new(login)
     @resourcetype = OneviewSDK::ServerProfileTemplate
-    @data
+    @data = {}
   end
 
   def exists?
-    # in case there is no data, it just skips this entire block
-    return true unless resource['data']
-    # assigning data a new value to be used within until the end
     @data = data_parse
-    spt = @resourcetype.new(@client, name: @data['name'])
-    # checking for updates once the state is present
-    if spt.retrieve! && resource['ensure'] == :present
-      resource_update(@data, @resourcetype)
-    end
-    spt.exists?
+    spt = if resource['ensure'] == :present
+            resource_update(@data, @resourcetype)
+            @resourcetype.find_by(@client, unique_id)
+          else
+            @resourcetype.find_by(@client, @data)
+          end
+    !spt.empty?
   end
 
   def create
@@ -47,36 +45,12 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   end
 
   def destroy
-    spt = get_spt
-    true if spt.delete
+    spt = @resourcetype.find_by(@client, unique_id)
+    spt.first.delete
   end
 
   def found
-    spt = @resourcetype.find_by(@client, @data)
-    unless spt.first
-      Puppet.warning("\n\nNo Server Profile Templates with the specified data were"\
-      " found the Oneview Appliance\n")
-      return false
-    end
-    Puppet.notice("\n\n\s\sFound Server Profile Template"\
-    " #{spt.first.data['name']} (URI: #{spt.first.data['uri']}) in Oneview Appliance\n")
-    true
-  end
-
-  def get_server_profile_templates
-    Puppet.notice("\n\nServer Profile Templates\n")
-    # in case there is no data, it sends an empty hash
-    @data = {} unless resource['data']
-    spt = @resourcetype.find_by(@client, @data)
-    if spt.empty?
-      Puppet.warning("\n\nNo Server Profile Templates with the specified data were"\
-      " found on the Oneview Appliance\n")
-      return false
-    end
-    spt.each do |item|
-      puts "\s\sName: #{item['name']}\n\s\sURI: #{item['uri']}\n\n"
-    end
-    true
+    find_resources
   end
 
   def get_available_hardware
@@ -171,7 +145,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:ruby) do
   # Fails if the spt does not exist in the Appliance
   def get_spt(message = nil)
     Puppet.notice("\n\n#{message}\n") if message
-    spt = OneviewSDK::ServerProfileTemplate.new(@client, name: @data['name'])
+    spt = OneviewSDK::ServerProfileTemplate.new(@client, unique_id)
     raise 'No Server Profile Templates were found in Oneview Appliance.' unless spt.retrieve!
     spt
   end
