@@ -21,37 +21,37 @@
 oneview_rack{'rack_1':
     ensure => 'present',
     data   => {
-      'name'   => 'myrack'
+      name   => 'myrack'
     },
 }
 
 oneview_rack{'rack_2':
     ensure => 'present',
     data   => {
-      'name'   => 'myrack',
-      'depth'  => 1500,
-      'height' => 2500,
-      'width'  => 1200,
+      name   => 'myrack',
+      depth  => 1500,
+      height => 2500,
+      width  => 1200,
     },
 }
 
 oneview_rack{'rack_3':
     ensure => 'get_device_topology',
     data   => {
-      'name'   => 'myrack'
+      name   => 'myrack'
     },
 }
 
 oneview_rack{'rack_4':
     ensure => 'add_rack_resource',
     data   => {
-      'name'       => 'myrack',
-      'rackMounts' => [
+      name       => 'myrack',
+      rackMounts => [
       # {"mountUri" => '/rest/enclosures/09SGH100X6J1', "topUSlot"=> 20, "uHeight"=> 10}
       {
-      'mountUri' => 'Encl1, enclosure',
-      'topUSlot' => 20,
-      'uHeight'  => 10}
+      mountUri => 'Encl1, enclosure',
+      topUSlot => 20,
+      uHeight  => 10}
       ]
     },
 }
@@ -59,13 +59,13 @@ oneview_rack{'rack_4':
 oneview_rack{'rack_5':
     ensure => 'remove_rack_resource',
     data   => {
-      'name'       => 'myrack',
-      'rackMounts' => [
+      name       => 'myrack',
+      rackMounts => [
       # {"mountUri" => '/rest/enclosures/09SGH100X6J1', "topUSlot"=> 20, "uHeight"=> 10}
       {
-        'mountUri' => 'Encl1, enclosure',
-        'topUSlot' => 20,
-        'uHeight'  => 10}
+        mountUri => 'Encl1, enclosure',
+        topUSlot => 20,
+        uHeight  => 10}
       ]
     },
 }
@@ -75,6 +75,6 @@ oneview_rack{'rack_5':
 oneview_rack{'rack_6':
     ensure => 'absent',
     data   => {
-          'name' => 'myrack'
+          name => 'myrack'
     },
 }
