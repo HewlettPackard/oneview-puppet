@@ -68,7 +68,7 @@ Puppet::Type.type(:oneview_server_hardware_type).provide(:ruby) do
 
   def destroy
     server_hardware_type = get_single_resource_instance
-    server_hardware_type.delete
+    server_hardware_type.remove
     @property_hash.clear
   end
 

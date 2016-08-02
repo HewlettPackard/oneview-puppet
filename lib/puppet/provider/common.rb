@@ -48,13 +48,15 @@ def data_parse_interconnect(data)
 end
 
 def resource_update(data, resourcetype)
-  current_resource = resourcetype.find_by(@client, name: data['name']).first
-  current_resource ? current_attributes = current_resource.data : return
+  current_resource = resourcetype.find_by(@client, unique_id).first
+  return false unless current_resource
+  current_attributes = current_resource.data
   new_name_validation(data, resourcetype)
   raw_merged_data = current_attributes.merge(data)
   updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
   current_resource.update(updated_data) unless updated_data.empty?
-  updated_data.empty? ? false : true
+  @property_hash[:data] = current_resource.data
+  true
 end
 
 def new_name_validation(data, resourcetype)
@@ -95,11 +97,14 @@ end
 
 # Gets a resource by its unique identifier (generally name or uri)
 def unique_id
-  raise(Puppet::Error, 'Must set resource name or uri before trying to retrieve it!') unless @data['name'] || @data['uri']
+  raise('A resource name or uri must be declared in data for the current operation') unless @data['name'] || @data['uri'] || @data['id']
   id = {}
   if @data['name']
-    id.merge!(name: @data['name'])
+    id[:name] = @data['name']
+  elsif @data['uri']
+    id[:uri] = @data['uri']
   else
-    id.merge!(uri: @data['uri'])
+    id[:id] = @data['id']
   end
+  id
 end
