@@ -59,6 +59,6 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
   end
 
   def empty_data_check
-    raise('There is no data provided in the manifest.') if (@data.empty? && resource['ensure'] != :found)
+    raise('There is no data provided in the manifest.') if @data.empty? && resource['ensure'] != :found
   end
 end
