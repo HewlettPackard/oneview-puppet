@@ -50,9 +50,9 @@ Puppet::Type.newtype(:oneview_power_device) do
   end
   # :nocov:
 
-    newparam(:name, namevar: true) do
-      desc 'Power Device name'
-    end
+  newparam(:name, namevar: true) do
+    desc 'Power Device name'
+  end
 
   newparam(:data) do
     desc 'Power Device attributes'
