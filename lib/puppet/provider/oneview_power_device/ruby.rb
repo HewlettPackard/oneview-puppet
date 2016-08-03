@@ -30,6 +30,7 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
 
   def exists?
     @data = data_parse
+    empty_data_check
     pd = if resource['ensure'] == :present
            resource_update(@data, @resourcetype)
            @resourcetype.find_by(@client, unique_id)
@@ -40,13 +41,11 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   end
 
   def create
-    empty_data_check
     @resourcetype.new(@client, @data).add
   end
 
   # Remove
   def destroy
-    empty_data_check
     pd = @resourcetype.find_by(@client, @data)
     raise('There were no matching Power Devices in the Appliance.') if pd.empty?
     pd.map(&:remove)
@@ -57,37 +56,31 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   end
 
   def discover
-    empty_data_check
     pd = @resourcetype.discover(@client, @data)
     Puppet.notice("IPDU #{pd['name']} has been discovered!")
   end
 
   def set_refresh_state
-    empty_data_check
     pd = @resourcetype.find_by(@client, unique_id)
     pd.first.set_refresh_state(@data['refreshOptions'])
   end
 
   def set_power_state
-    empty_data_check
     pd = @resourcetype.find_by(@client, unique_id)
     pd.first.set_power_state(@data['powerState'])
   end
 
   def set_uid_state
-    empty_data_check
     pd = @resourcetype.find_by(@client, unique_id)
     pd.first.set_uid_state(@data['uidState'])
   end
 
   def get_uid_state
-    empty_data_check
     pd = @resourcetype.find_by(@client, unique_id)
     pretty pd.first.get_uid_state
   end
 
   def get_utilization
-    empty_data_check
     pd = @resourcetype.find_by(@client, unique_id)
     parameters = if @data['queryParameters']
                    @data['queryParameters']
@@ -100,6 +93,6 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   # Helper
 
   def empty_data_check
-    raise('There is no data provided in the manifest.') if @data == {}
+    raise('There is no data provided in the manifest.') if @data.empty? && resource['ensure'] != :found
   end
 end
