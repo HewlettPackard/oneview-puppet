@@ -123,13 +123,13 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
-      ensure: 'get_utilization',
+        ensure: 'get_utilization',
         data:
             {
               'name' => '172.18.8.11, PDU 1',
               'queryParameters' =>
               {
-                'fields'    => ['AveragePower']
+                'fields' => ['AveragePower']
               }
             }
       )
@@ -210,7 +210,7 @@ describe provider_class, unit: true do
     end
   end
 
-  context 'given the absent parameters' do
+  context 'given the minimum parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
@@ -226,7 +226,7 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should delete the power device' do
+    it 'should delete the resource' do
       resource['data']['uri'] = '/rest/fake/'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
@@ -235,8 +235,13 @@ describe provider_class, unit: true do
       expect(provider.destroy).to be
     end
 
-    it 'should not be able to create the power device' do
-      expect { provider.create }.to raise_error('This resource cannot be created.')
+    it 'should add the resource' do
+      body = { 'name' => '172.18.8.11, PDU 1', 'deviceType' => 'BranchCircuit', 'phaseType' => 'Unknown', 'powerConnections' => [] }
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return('body' => body)
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+        .with('/rest/power-devices', { 'body' => body }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.create).to be
     end
   end
 
@@ -259,7 +264,6 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(provider.exists?).not_to be
     end

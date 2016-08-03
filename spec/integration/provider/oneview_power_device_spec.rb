@@ -136,4 +136,59 @@ describe provider_class do
       end
     end
   end
+
+  describe provider_class do
+    let(:resource) do
+      Puppet::Type.type(:oneview_power_device).new(
+        name: 'Power Device',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'New Power Device',
+              'ratedCapacity' => 40
+            }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    before(:each) do
+      provider.exists?
+    end
+
+    context 'given the minimum' do
+      it 'should be able to add a power device' do
+        expect(provider.create).to be
+      end
+    end
+  end
+
+  describe provider_class do
+    let(:resource) do
+      Puppet::Type.type(:oneview_power_device).new(
+        name: 'Power Device',
+        ensure: 'absent',
+        data:
+            {
+              'name' => 'New Power Device'
+            }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    before(:each) do
+      provider.exists?
+    end
+
+    context 'given the minimum parameters after resource creation' do
+      it 'should be able to destroy the resource' do
+        expect(provider.destroy).to be
+      end
+    end
+  end
 end

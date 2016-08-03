@@ -17,6 +17,24 @@
 # The uID and power state operations (commented-out blocks at the bottom)
 # are not supported by all Power Device models
 
+oneview_power_device{'Power Device Add':
+  ensure => 'present',
+  data   =>
+  {
+    name          => 'Power Device',
+    ratedCapacity => '40'
+  }
+}
+
+oneview_power_device{'Power Device Remove':
+  ensure  => 'absent',
+  require => Oneview_power_device['Power Device Add'],
+  data    =>
+  {
+    name => 'Power Device'
+  }
+}
+
 oneview_power_device{'Power Device Discover':
   ensure => 'discover',
   data   =>
@@ -78,8 +96,8 @@ oneview_power_device{'Power Device Edit':
   }
 }
 
-# Caution: more than one matching Power Device can be deleted at once by adding optional filters
-oneview_power_device{'Power Device Remove':
+# Caution: more than one matching Power Device can be deleted at once
+oneview_power_device{'Power Device Remove Discovered':
   ensure  => 'absent',
   require => Oneview_power_device['Power Device Edit'],
   data    =>

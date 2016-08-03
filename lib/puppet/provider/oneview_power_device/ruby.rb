@@ -40,13 +40,16 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   end
 
   def create
-    raise('This resource cannot be created.')
+    empty_data_check
+    @resourcetype.new(@client, @data).add
   end
 
   # Remove
   def destroy
     empty_data_check
-    @resourcetype.find_by(@client, @data).map(&:remove)
+    pd = @resourcetype.find_by(@client, @data)
+    raise('There were no matching Power Devices in the Appliance.') if pd.empty?
+    pd.map(&:remove)
   end
 
   def found
