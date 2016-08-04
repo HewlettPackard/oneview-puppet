@@ -31,16 +31,11 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
   def exists?
     @data = data_parse
     empty_data_check
-    ud = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !ud.empty?
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
+    return true if resource_update(@data, @resourcetype)
     @resourcetype.new(@client, @data).add
   end
 

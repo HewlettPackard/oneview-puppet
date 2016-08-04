@@ -107,7 +107,7 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
     end
 
-    it 'should delete the resource' do
+    it 'should delete/remove the resource' do
       resource['data']['uri'] = '/rest/fake/'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
@@ -116,12 +116,20 @@ describe provider_class, unit: true do
       expect(provider.destroy).to be
     end
 
-    it 'should add the resource' do
-      body = { 'name' => 'Unmanaged Device', 'model' => 'Procurve 4200VL', 'deviceType' => 'Server' }
+    it 'should create/add the resource' do
       test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return('body' => body)
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/unmanaged-devices', { 'body' => body }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      expect(provider.create).to be
+    end
+
+    it 'should update the resource' do
+      test = resourcetype.new(@client, resource['data'])
+      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      provider.exists?
       expect(provider.create).to be
     end
   end
