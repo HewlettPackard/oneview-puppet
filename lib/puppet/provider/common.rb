@@ -97,14 +97,8 @@ end
 
 # Gets a resource by its unique identifier (generally name or uri)
 def unique_id
-  raise('A resource name or uri must be declared in data for the current operation') unless @data['name'] || @data['uri'] || @data['id']
   id = {}
-  if @data['name']
-    id[:name] = @data['name']
-  elsif @data['uri']
-    id[:uri] = @data['uri']
-  else
-    id[:id] = @data['id']
-  end
+  %w(uri name id providerDisplayName).each { |key| id[key] = @data[key] if @data[key] }
+  raise 'A unique identifier for the resource must be declared in data for the current operation' if id.empty?
   id
 end
