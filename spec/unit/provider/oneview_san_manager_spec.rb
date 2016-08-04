@@ -93,13 +93,12 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'should create/add the san manager' do
+    it 'should update the san manager' do
       test = OneviewSDK::SANManager.new(@client, resource['data'])
       expect(OneviewSDK::SANManager).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(OneviewSDK::SANManager).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
         .and_return([test])
       provider.exists?
-      # allow_any_instance_of(OneviewSDK::SANManager).to receive(:add).and_return(test)
       expect(provider.create).to be
     end
   end
