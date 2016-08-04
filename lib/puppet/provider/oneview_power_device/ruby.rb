@@ -31,16 +31,11 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   def exists?
     @data = data_parse
     empty_data_check
-    pd = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !pd.empty?
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
+    return true if resource_update(@data, @resourcetype)
     @resourcetype.new(@client, @data).add
   end
 
@@ -88,11 +83,5 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
                    {}
                  end
     pretty pd.first.utilization(parameters)
-  end
-
-  # Helper
-
-  def empty_data_check
-    raise('There is no data provided in the manifest.') if @data.empty? && resource['ensure'] != :found
   end
 end

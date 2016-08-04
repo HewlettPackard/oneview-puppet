@@ -103,3 +103,9 @@ def unique_id
     id.merge!(uri: @data['uri'])
   end
 end
+
+# Returns an error in case the state requires @data not to be empty
+# Takes as arguments the states that can be executed without data
+def empty_data_check(states = [:found])
+  raise('This action requires the resource data to be declared in the manifest.') if @data.empty? && !states.include?(resource['ensure'])
+end
