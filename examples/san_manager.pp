@@ -14,6 +14,9 @@
 # limitations under the License.
 ################################################################################
 
+# NOTE: Other than the 'found' method, all methods require an unique identifier
+  # for a san manager to be specified
+
 oneview_san_manager{'san_manager_1':
     ensure => 'present',
     data   => {
@@ -51,7 +54,15 @@ oneview_san_manager{'san_manager_2':
     },
 }
 
+# This method accepts data as an optional field to filter results
 oneview_san_manager{'san_manager_3':
+    ensure => 'found',
+    data   => {
+      # providerDisplayName => 'Brocade Network Advisor',
+    },
+}
+
+oneview_san_manager{'san_manager_4':
     ensure => 'absent',
     data   => {
       providerDisplayName => 'Brocade Network Advisor'
