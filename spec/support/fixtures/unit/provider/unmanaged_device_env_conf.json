@@ -1,0 +1,35 @@
+{
+  "powerHistorySupported": false,
+  "thermalHistorySupported": false,
+  "utilizationHistorySupported": false,
+  "capHistorySupported": false,
+  "historySampleIntervalSeconds": 0,
+  "historyBufferSize": 0,
+  "powerCapType": null,
+  "idleMaxPower": -1,
+  "calibratedMaxPower": -1,
+  "psuList": [
+    {
+      "capacity": -1,
+      "psuId": 1,
+      "inputVoltage": -1,
+      "side": "A",
+      "powerType": "AC"
+    },
+    {
+      "capacity": -1,
+      "psuId": 2,
+      "inputVoltage": -1,
+      "side": "B",
+      "powerType": "AC"
+    }
+  ],
+  "height": -1,
+  "rackId": null,
+  "uSlot": -1,
+  "rackName": null,
+  "relativeOrder": -1,
+  "rackModel": "",
+  "rackUHeight": 42,
+  "licenseRequirement": "None"
+}

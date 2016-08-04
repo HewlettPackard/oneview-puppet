@@ -45,7 +45,9 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
   end
 
   def destroy
-    @resourcetype.find_by(@client, unique_id).first.remove
+    ud = @resourcetype.find_by(@client, @data)
+    raise('There were no matching Unmanaged Devices in the Appliance.') if ud.empty?
+    ud.map(&:remove)
   end
 
   def found
@@ -53,9 +55,10 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
   end
 
   def get_environmental_configuration
-    resource = @resourcetype.find_by(@data, unique_id)
+    Puppet.notice("\n\nEnvironmental Configuration\n")
+    resource = @resourcetype.find_by(@client, unique_id)
     raise('There were no matching Unmanaged Devices in the Appliance.') unless resource.first
-    resource.first.get_environmental_configuration
+    pretty resource.first.environmental_configuration
   end
 
   def empty_data_check

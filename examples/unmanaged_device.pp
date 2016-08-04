@@ -15,7 +15,7 @@
 ################################################################################
 
 oneview_unmanaged_device{'Unmanaged Device Add':
-  ensure => 'absent',
+  ensure => 'present',
   data   =>
   {
     name       => 'Unmanaged Device',
@@ -24,10 +24,36 @@ oneview_unmanaged_device{'Unmanaged Device Add':
   }
 }
 
-oneview_unmanaged_device{'Unmanaged Device Found':
-  ensure => 'found',
-  # data   =>
-  # {
-  #   name => 'Unmanaged Device',
-  # }
+oneview_unmanaged_device{'Unmanaged Device Find':
+  ensure  => 'found',
+  require => Oneview_unmanaged_device['Unmanaged Device Add'],
+  data    =>
+  {
+    name => 'Unmanaged Device',
+  }
+}
+
+oneview_unmanaged_device{'Unmanaged Device Find All':
+  ensure  => 'found',
+  require => Oneview_unmanaged_device['Unmanaged Device Find']
+}
+
+oneview_unmanaged_device{'Unmanaged Device Get Environmental Configuration':
+  ensure  => 'get_environmental_configuration',
+  require => Oneview_unmanaged_device['Unmanaged Device Find All'],
+  data    =>
+  {
+    name => 'Unmanaged Device'
+  }
+}
+
+oneview_unmanaged_device{'Unmanaged Device Remove':
+  ensure  => 'absent',
+  require => Oneview_unmanaged_device['Unmanaged Device Get Environmental Configuration'],
+  data    =>
+  {
+    name       => 'Unmanaged Device',
+    model      => 'Procurve 4200VL',
+    deviceType => 'Server'
+  }
 }
