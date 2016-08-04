@@ -55,7 +55,7 @@ describe provider_class, unit: true do
 
     it 'should create/add the rack' do
       test = OneviewSDK::Rack.new(@client, resource['data'])
-      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([])
+      expect(OneviewSDK::Rack).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
         .with('/rest/racks', anything, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.create).to be
