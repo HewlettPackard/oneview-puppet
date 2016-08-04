@@ -102,3 +102,9 @@ def unique_id
   raise 'A unique identifier for the resource must be declared in data for the current operation' if id.empty?
   id
 end
+
+# Returns an error in case the state requires @data not to be empty
+# Takes as arguments the states that can be executed without data
+def empty_data_check(states = [:found])
+  raise('This action requires the resource data to be declared in the manifest.') if @data.empty? && !states.include?(resource['ensure'])
+end
