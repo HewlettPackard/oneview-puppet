@@ -51,14 +51,14 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(false)
     end
 
-    it 'should be able to create the resource' do
-      data = { 'name' => 'Datacenter', 'width' => '5000', 'depth' => '5000', 'contents' => [] }
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([])
-      expect(provider.exists?).to eq(false)
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/datacenters', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/datacenters/fake')
+
+    it 'should create/add the datacenter' do
+      test = resourcetype.new(@client, resource['data'])
+      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name'])
+        .and_return([])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
       expect(provider.create).to be
     end
   end
@@ -99,23 +99,23 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should return that the resource exists' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
     end
 
     it 'should be able to get the visual content' do
       visual_content = 'spec/support/fixtures/unit/provider/datacenter_visual_content.json'
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
       allow_any_instance_of(resourcetype).to receive(:get_visual_content).and_return(File.read(visual_content))
       expect(provider.get_visual_content).to eq(true)
     end
 
     it 'should be able to remove the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
       allow_any_instance_of(resourcetype).to receive(:remove).and_return('Test')
       expect(provider.destroy).to be
