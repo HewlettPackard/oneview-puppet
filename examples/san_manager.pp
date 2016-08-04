@@ -14,10 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-# NOTE: The names are not unique identifiers for this resource, but we highly suggest avoiding
-# duplicate names for your san_managers in order to allow for updates using the names. This module will
-# enforce name as a unique identifier for that reason.
-
 oneview_san_manager{'san_manager_1':
     ensure => 'present',
     data   => {
