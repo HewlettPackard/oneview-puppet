@@ -47,12 +47,22 @@ oneview_unmanaged_device{'Unmanaged Device Get Environmental Configuration':
   }
 }
 
-oneview_unmanaged_device{'Unmanaged Device Remove':
-  ensure  => 'absent',
+oneview_unmanaged_device{'Unmanaged Device Edit':
+  ensure  => 'present',
   require => Oneview_unmanaged_device['Unmanaged Device Get Environmental Configuration'],
   data    =>
   {
-    name       => 'Unmanaged Device',
+    name     => 'Unmanaged Device',
+    new_name => 'Edited UD'
+  }
+}
+
+oneview_unmanaged_device{'Unmanaged Device Remove':
+  ensure  => 'absent',
+  require => Oneview_unmanaged_device['Unmanaged Device Edit'],
+  data    =>
+  {
+    # name       => 'Edited UD',
     model      => 'Procurve 4200VL',
     deviceType => 'Server'
   }
