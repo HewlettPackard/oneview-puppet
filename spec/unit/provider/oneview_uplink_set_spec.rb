@@ -91,8 +91,10 @@ describe provider_class, unit: true do
     end
 
     it 'should return true if resource is found' do
+      unique_id = { 'uri' => '/rest/uplink-sets/fake', 'name' => 'Puppet Uplink Set' }
       resource['data']['uri'] = '/rest/uplink-sets/fake'
       test = OneviewSDK::UplinkSet.new(@client, resource['data'])
+      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, unique_id).and_return([test])
       allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
       allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::UplinkSet).to receive(:update).and_return(FakeResponse.new('uri' => '/rest/fake'))
@@ -114,16 +116,6 @@ describe provider_class, unit: true do
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/uplink-sets/fake')
       expect(provider.create).to eq(true)
     end
-
-    it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
-      test = OneviewSDK::UplinkSet.new(@client, resource['data'])
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::UplinkSet).to receive(:update).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.exists?).to eq(true)
-      expect(provider.destroy).to eq({})
-    end
   end
 
   # TODO: Fix type test eventually
@@ -143,6 +135,43 @@ describe provider_class, unit: true do
   #   end
   #
   # end
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_uplink_set).new(
+        name: 'uplink_set_1',
+        ensure: 'absent',
+        data:
+            {
+              'nativeNetworkUri'               => 'nil',
+              'reachability'                   => 'Reachable',
+              'manualLoginRedistributionState' => 'NotSupported',
+              'connectionMode'                 => 'Auto',
+              'lacpTimer'                      => 'Short',
+              'networkType'                    => 'Ethernet',
+              'ethernetNetworkType'            => 'Tagged',
+              'description'                    => 'nil',
+              'name'                           => 'Puppet Uplink Set',
+              'portConfigInfos' =>
+              [
+                '/rest/interconnects/8e48bbd0-b651-46e1-afdf-334332a3a233',
+                'Auto',
+                [{ value: 1, type: 'Bay' }, { value: '/rest/enclosures/09SGH100X6J1', type: 'Enclosure' }, { value: 'X1', type: 'Port' }]
+              ]
+            },
+        network: 'Puppet Test EthNetwork',
+        logical_interconnect: 'Encl1-Test Oneview'
+      )
+    end
+    it 'deletes the resource' do
+      resource['data']['uri'] = '/rest/fake'
+      test = OneviewSDK::UplinkSet.new(@client, resource['data'])
+      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      provider.exists?
+      expect(provider.destroy).to eq({})
+    end
+  end
 
   context 'Run ensure with a different option than present' do
     let(:resource) do
