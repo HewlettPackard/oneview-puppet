@@ -178,14 +178,13 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
     end
 
-    # it 'should be able to set the power state' do
-    #   power_state = resource['data'].delete('powerState')
-    #   test = resourcetype.new(@client, resource['data'])
-    #   allow(resourcetype).to receive(:find_by).and_return([test])
-    #   provider.exists?
-    #   allow_any_instance_of(resourcetype).to receive(:set_power_state).with(power_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   expect(provider.set_power_state).to be
-    # end
+    it 'should set the power state' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_power_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_power_state).to be
+    end
   end
 
   context 'given the set_uid_state parameters' do
@@ -211,14 +210,13 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
     end
 
-    # it 'should be able to set_uid_state' do
-    #   uid_state = resource['data'].delete('uidState')
-    #   test = resourcetype.new(@client, resource['data'])
-    #   allow(resourcetype).to receive(:find_by).and_return([test])
-    #   provider.exists?
-    #   expect_any_instance_of(resourcetype).to receive(:set_uid_state).with(uid_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   expect(provider.set_uid_state).to be
-    # end
+    it 'should set the uid state' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_uid_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_uid_state).to be
+    end
   end
 
   context 'given the minimum parameters' do

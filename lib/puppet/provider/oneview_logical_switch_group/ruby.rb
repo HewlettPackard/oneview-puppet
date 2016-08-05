@@ -34,17 +34,17 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
     empty_data_check
     @switches = @data.delete('switches')
     !@resourcetype.find_by(@client, @data).empty?
-end
+  end
 
   def create
     return true if resource_update(@data, @resourcetype)
     lsg = @resourcetype.new(@client, @data)
     lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s)
-    lsg.create!
+    lsg.create
   end
 
   def destroy
-    lsg = @resourcetype.find_by(@client, unique_id).first.delete
+    @resourcetype.find_by(@client, unique_id).first.delete
   end
 
   def found
