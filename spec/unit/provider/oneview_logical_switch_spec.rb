@@ -23,36 +23,6 @@ resourcetype = OneviewSDK::LogicalSwitch
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_logical_switch).new(
-      name: 'LS',
-      ensure: 'present',
-      data:
-          {
-            'name' => 'LS',
-            'logicalSwitchGroupUri' => '/rest/',
-            'switches' =>
-            [
-              {
-                'ip' => '172.18.20.1',
-                'ssh_username' => 'dcs',
-                'ssh_password' => 'dcs',
-                'snmp_port' => '161',
-                'community_string' => 'public'
-              },
-              {
-                'ip' => '172.18.20.1',
-                'ssh_username' => 'dcs',
-                'ssh_password' => 'dcs',
-                'snmp_port' => '161',
-                'community_string' => 'public'
-              }
-            ]
-          }
-    )
-  end
-
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_switch).new(
@@ -99,31 +69,30 @@ describe provider_class, unit: true do
     it 'should be able to find the resource' do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
+      provider.exists?
       expect(provider.found).to be
     end
 
     it 'should refresh the logical switch' do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
+      provider.exists?
       expect_any_instance_of(resourcetype).to receive(:refresh).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.exists?).to eq(true)
       expect(provider.refresh).to be
     end
 
-    # TODO: get the stub data hash to be the response
-    # it 'runs through the create method' do
-    #   # data = {'logicalSwitchCredentials' =>
-    #   expect_any_instance_of(resourcetype).to receive(:retrieve!).and_return(false)
-    #   expect_any_instance_of(resourcetype).to receive(:exists?).and_return(false)
-    #   expect(provider.exists?).to eq(false)
-    #   test = resourcetype.new(@client, resource['data'])
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-    #     .with('/rest/logical-switches', { 'body' => resource['data'] }, test.api_version)
-    #     .and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switches/100')
-    #   expect(provider.create).to eq(true)
-    # end
+    it 'should be able to create the resource' do
+      data = { 'logicalSwitchCredentials' => [], 'logicalSwitch' => { 'name' => 'LS', 'logicalSwitchGroupUri' => '/rest/',
+                                                                      'type' => 'logical-switch', 'switchCredentialConfiguration' => [] } }
+      resource['data'].delete('switches')
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+        .with('/rest/logical-switches', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switches/fake')
+      expect(provider.create).to be
+    end
   end
 end

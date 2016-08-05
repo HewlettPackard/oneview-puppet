@@ -48,7 +48,7 @@ describe provider_class, unit: true do
 
     it 'should return that the resource does not exists' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
+      expect(provider.exists?).not_to be
     end
 
 
@@ -77,7 +77,7 @@ describe provider_class, unit: true do
 
     it 'should not return any datacenters' do
       allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([])
-      expect(provider.exists?).to eq(false)
+      expect(provider.exists?).not_to be
       expect { provider.found }.to raise_error(/No Datacenter with the specified data were found on the Oneview Appliance/)
     end
   end
@@ -108,7 +108,7 @@ describe provider_class, unit: true do
       visual_content = 'spec/support/fixtures/unit/provider/datacenter_visual_content.json'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to eq(true)
+      provider.exists?
       allow_any_instance_of(resourcetype).to receive(:get_visual_content).and_return(File.read(visual_content))
       expect(provider.get_visual_content).to eq(true)
     end
@@ -116,7 +116,7 @@ describe provider_class, unit: true do
     it 'should be able to remove the resource' do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to eq(true)
+      provider.exists?
       allow_any_instance_of(resourcetype).to receive(:remove).and_return('Test')
       expect(provider.destroy).to be
     end
