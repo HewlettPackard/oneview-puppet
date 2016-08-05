@@ -31,21 +31,16 @@ Puppet::Type.type(:oneview_logical_switch).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    # Removes switch (treated separately) from data hash
     @switches = @data.delete('switches') if @data['switches']
-    ls = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !ls.empty?
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
+    return true if resource_update(@data, @resourcetype)
     ls = @resourcetype.new(@client, @data)
     set_switches(ls, @switches)
-    true if ls.create
+    ls.create
   end
 
   def destroy

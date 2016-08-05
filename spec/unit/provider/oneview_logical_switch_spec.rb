@@ -96,27 +96,17 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(false)
     end
 
-    it 'should be able to find the resource once it has been created' do
+    it 'should be able to find the resource' do
       test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:update).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
-      expect(provider.found).to eq(true)
-    end
-
-    it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.exists?).to eq(true)
-      expect(provider.destroy).to eq(true)
+      expect(provider.found).to be
     end
 
     it 'should refresh the logical switch' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:refresh).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.exists?).to eq(true)
       expect(provider.refresh).to be
