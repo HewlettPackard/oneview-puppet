@@ -81,14 +81,14 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'deletes the resource' do
+    it 'should be able to delete the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      # expect_any_instance_of(resourcetype).to receive(:update).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.exists?).to eq(true)
-      expect(provider.destroy).to eq(true)
+      provider.exists?
+      expect(provider.destroy).to be
     end
   end
 

@@ -32,19 +32,13 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   def exists?
     # assignments and deletions from @data
     @data = data_parse
-    @ethernet_networks = @data.delete('ethernetNetworks') if @data['ethernetNetworks']
-    @native_network = @data.delete('nativeNetwork') if @data['nativeNetwork']
-    ns = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !ns.empty?
+    variable_assignments
+    empty_data_check([:found, :get_without_ethernet])
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    raise('There is no data provided in the manifest.') if @data == {}
+    return true if resource_update(@data, @resourcetype)
     ns = @resourcetype.new(@client, @data)
     set_native_network_helper(ns) if @native_network
     add_ethernet_network_helper(ns) if @ethernet_networks
@@ -52,7 +46,6 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def destroy
-    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, unique_id)
     ns.first.delete
   end
@@ -69,21 +62,18 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def set_native_network
-    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, unique_id).first
     set_native_network_helper(ns)
     ns.update
   end
 
   def add_ethernet_network
-    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, unique_id).first
     add_ethernet_network_helper(ns)
     ns.update
   end
 
   def remove_ethernet_network
-    raise('There is no data provided in the manifest.') if @data == {}
     ns = @resourcetype.find_by(@client, unique_id).first
     @ethernet_networks.each do |net|
       ethernet = @ethernet.find_by(@client, name: net).first
@@ -104,5 +94,10 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   def set_native_network_helper(ns)
     ethernet = @ethernet.find_by(@client, name: @native_network).first
     ns.set_native_network(ethernet)
+  end
+
+  def variable_assignments
+    @ethernet_networks = @data.delete('ethernetNetworks') if @data['ethernetNetworks']
+    @native_network = @data.delete('nativeNetwork') if @data['nativeNetwork']
   end
 end
