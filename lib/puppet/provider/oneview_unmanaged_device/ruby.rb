@@ -55,8 +55,4 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
     raise('There were no matching Unmanaged Devices in the Appliance.') unless resource.first
     pretty resource.first.environmental_configuration
   end
-
-  def empty_data_check
-    raise('There is no data provided in the manifest.') if @data.empty? && resource['ensure'] != :found
-  end
 end

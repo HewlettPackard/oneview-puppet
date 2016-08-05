@@ -43,7 +43,7 @@ describe provider_class, unit: true do
     it 'should be able to find the resource' do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to be
+      provider.exists?
       expect(provider.found).to be
     end
 
@@ -52,36 +52,6 @@ describe provider_class, unit: true do
       expect(provider.exists?).not_to be
       expect { provider.found }.to raise_error(/No UnmanagedDevice with the specified data were found on the Oneview Appliance/)
     end
-  end
-
-  context 'given the get_environmental_configuration parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_unmanaged_device).new(
-        name: 'Unmanaged Device',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'Unmanaged Device'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    # TODO: test returning unexpected stuff
-    # it 'should be able to get it' do
-    #   path = 'spec/support/fixtures/unit/provider/unmanaged_device_env_conf.json'
-    #   env_conf = File.read(path)
-    #   resource['data']['uri'] = '/rest/fake'
-    #   test = resourcetype.new(@client, name: resource['data']['name'])
-    #   allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-    #   expect(provider.exists?).to eq(true)
-    #   allow_any_instance_of(resourcetype).to receive(:environmental_configuration).and_return('Test')
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(env_conf))
-    #   # expect(provider.get_environmental_configuration).to be
-    # end
   end
 
   context 'given the add parameters' do
@@ -104,7 +74,7 @@ describe provider_class, unit: true do
 
     before(:each) do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
-      expect(provider.exists?).to be
+      provider.exists?
     end
 
     it 'should delete/remove the resource' do
