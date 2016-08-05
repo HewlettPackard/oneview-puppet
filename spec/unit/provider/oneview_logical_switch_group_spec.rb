@@ -23,26 +23,6 @@ resourcetype = OneviewSDK::LogicalSwitchGroup
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_logical_switch_group).new(
-      name: 'LSG',
-      ensure: 'present',
-      data:
-          {
-            'name' => 'OneViewSDK Test Logical Switch Group',
-            'category' => 'logical-switch-groups',
-            'state' => 'Active',
-            'type' => 'logical-switch-group',
-            'switches' =>
-            {
-              'number_of_switches' => '1',
-              'type' => 'Cisco Nexus 50xx'
-            }
-          }
-    )
-  end
-
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_switch_group).new(
