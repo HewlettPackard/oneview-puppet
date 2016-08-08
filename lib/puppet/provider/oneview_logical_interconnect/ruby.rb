@@ -16,11 +16,9 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logical_interconnect'))
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
-
   mk_resource_methods
 
   def initialize(*args)
@@ -32,6 +30,8 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
 
   def exists?
     @data = data_parse
+    empty_data_check
+    variable_assignments
     li = if resource['ensure'] == :present
            resource_update(@data, @resourcetype)
            @resourcetype.find_by(@client, unique_id)
@@ -47,74 +47,132 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
 
   # GET ENDPOINTS =======================================
 
-  def get_ethernet_settings
-    get_endpoints(resource['data'], 'ethernetSettings')
-  end
-
   def get_telemetry_configuration
-    get_endpoints(resource['data'], 'telemetryConfiguration')
+    get_info('Telemetry Configuration', 'telemetryConfiguration')
   end
 
   def get_qos_aggregated_configuration
-    get_endpoints(resource['data'], 'qosConfiguration')
+    get_info('QoS Aggregated Configuration', 'qosConfiguration')
   end
 
   def get_snmp_configuration
-    get_endpoints(resource['data'], 'snmpConfiguration')
+    get_info('SNMP Configuration', 'snmpConfiguration')
   end
 
   def get_port_monitor
-    get_endpoints(resource['data'], 'portMonitor')
+    get_info('Port Monitor', 'portMonitor')
   end
 
   def get_firmware
-    get_endpoints(resource['data'], 'firmware')
+    Puppet.notice("\n\nFirmware\n")
+    pretty get_single_resource_instance.get_firmware
   end
 
   def get_internal_vlans
-    get_endpoints(resource['data'], 'vlanNetworks')
-  end
-
-  def get_forwarding_information_base
-    get_endpoints(resource['data'], 'forwardingInformation')
+    Puppet.notice("\n\nVLAN Internal Networks\n")
+    vlan_networks = get_single_resource_instance.list_vlan_networks
+    Puppet.warning('There are no VLAN Networks to be displayed.') if vlan_networks.empty?
+    vlan_networks.each { |net| pretty "Name: #{net[:name]}\nURI:  #{net[:uri]}\n\n" }
   end
 
   # PUT/SET ENDPOINTS =======================================
 
+  def set_compliance
+    Puppet.notice('Setting Logical Interconnect compliance...')
+    get_single_resource_instance.compliance
+  end
+
   def set_ethernet_settings
-    set_endpoints(resource['data'], 'ethernetSettings')
+    resource = set_info('Ethernet Settings', 'ethernetSettings', @ethernet_settings)
+    resource.update_ethernet_settings
   end
 
   def set_telemetry_configuration
-    set_endpoints(resource['data'], 'telemetryConfiguration')
+    resource = set_info('Telemetry Configuration', 'telemetryConfiguration', @telemetry_configuration)
+    resource.update_telemetry_configuration
   end
 
   def set_qos_aggregated_configuration
-    set_endpoints(resource['data'], 'qosConfiguration')
+    resource = set_info('QoS Configuration', 'qosConfiguration', @qos_configuration)
+    resource.update_qos_configuration
   end
 
   def set_snmp_configuration
-    set_endpoints(resource['data'], 'snmpConfiguration')
+    resource = set_info('SNMP Configuration', 'snmpConfiguration', @snmp_configuration)
+    resource.update_snmp_configuration
   end
 
   def set_port_monitor
-    set_endpoints(resource['data'], 'portMonitor')
+    resource = set_info('Port Monitor', 'portMonitor', @port_monitor)
+    resource.update_port_monitor
   end
 
   def set_firmware
-    set_endpoints(resource['data'], 'firmware')
-  end
-
-  def set_compliance
-    set_endpoints(resource['data'], 'compliance')
+    Puppet.notice('Updating Firmware...')
+    command = @firmware_options.delete('command')
+    fw_object = OneviewSDK::FirmwareDriver.find_by(@client, fw_unique_id)
+    raise('No matching firmware drivers were found in the Appliance.') unless fw_object.first
+    get_single_resource_instance.firmware_update(command, fw_object.first, @firmware_options)
   end
 
   def set_internal_networks
-    set_endpoints(resource['data'], 'internalNetworks')
+    list = []
+    @internal_networks.each do |net|
+      type = net.delete('type')
+      object = objectfromstring(type).find_by(@client, net)
+      raise('No matching networks were found in the Appliance.') unless object.first
+      list.push(object.first)
+    end
+    get_single_resource_instance.update_internal_networks(*list)
   end
 
-  def set_forwarding_information_base
-    set_endpoints(resource['data'], 'forwardingInformation')
+  # Helpers
+
+  def variable_assignments
+    @ethernet_settings = @data.delete('ethernetSettings')
+    @port_monitor = @data.delete('portMonitor')
+    @snmp_configuration = @data.delete('snmpConfiguration')
+    @qos_configuration = @data.delete('qosConfiguration')
+    @telemetry_configuration = @data.delete('telemetryConfiguration')
+    @internal_networks = @data.delete('internalNetworks')
+    @firmware_options = @data.delete('firmware')
   end
 
+  def get_info(notice, parameter)
+    Puppet.notice("\n\n#{notice}\n")
+    pretty get_single_resource_instance.data[parameter]
+  end
+
+  def set_info(notice, parameter, global_var)
+    Puppet.notice("Updating #{notice}...")
+    resource = get_single_resource_instance
+    updated_hash = hash_merge(resource[parameter], global_var)
+    resource[parameter] = updated_hash
+    resource
+  end
+
+  def hash_merge(base_hash, new_hash)
+    base_hash.each do |key, _value|
+      # checks if the value is present in the new hash
+      next unless new_hash[key]
+      if base_hash[key].is_a?(Hash)
+        base_hash[key].merge!(new_hash[key])
+      else
+        base_hash[key] = new_hash[key]
+      end
+    end
+    base_hash
+  end
+
+  def fw_unique_id
+    id = {}
+    if @firmware_options['isoFileName']
+      id['isoFileName'] = @firmware_options.delete('isoFileName')
+    elsif @firmware_options['uri']
+      id['uri'] = @firmware_options.delete('uri')
+    else
+      raise('Either the firmware iso file name or uri needs to be specified.')
+    end
+    id
+  end
 end

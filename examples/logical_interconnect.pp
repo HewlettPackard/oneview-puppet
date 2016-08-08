@@ -18,7 +18,7 @@ oneview_logical_interconnect{'Logical Interconnect Found':
   ensure => 'found',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -26,7 +26,7 @@ oneview_logical_interconnect{'Logical Interconnect QoS Get':
   ensure => 'get_qos_aggregated_configuration',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -39,7 +39,6 @@ oneview_logical_interconnect{'Logical Interconnect QoS Set':
       {
         activeQosConfig =>
         {
-
           uplinkClassificationType => 'DOT1P'
         }
       }
@@ -62,7 +61,7 @@ oneview_logical_interconnect{'Logical Interconnect Port Monitor Get':
   ensure => 'get_port_monitor',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group',
     }
 }
 
@@ -70,7 +69,7 @@ oneview_logical_interconnect{'Logical Interconnect Internal Vlan':
   ensure => 'get_internal_vlans',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -104,7 +103,7 @@ oneview_logical_interconnect{'Logical Interconnect Compliance':
   ensure => 'set_compliance',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -114,11 +113,11 @@ oneview_logical_interconnect{'Logical Interconnect Internal Networks':
     {
       name             => 'Encl2-my enclosure logical interconnect group',
       internalNetworks =>
-      {
-        e1 =>
+      [
         {
           name => 'NET',
+          type => 'EthernetNetwork'
         }
-      }
+      ]
     }
 }
