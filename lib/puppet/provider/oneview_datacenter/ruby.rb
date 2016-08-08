@@ -30,22 +30,16 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    dc = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !dc.empty?
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    raise('There is no data provided in the manifest.') if @data == {}
+    return true if resource_update(@data, @resourcetype)
     @resourcetype.new(@client, @data).add
   end
 
   def destroy
-    raise('There is no data provided in the manifest.') if @data == {}
     @resourcetype.find_by(@client, unique_id).first.remove
   end
 

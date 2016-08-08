@@ -17,12 +17,23 @@
 # The uID and power state operations (commented-out blocks at the bottom)
 # are not supported by all Power Device models
 
+# In case you want to set power connections, you can either specify the Power Connection URI or simply its name/type as follows:
 oneview_power_device{'Power Device Add':
   ensure => 'present',
   data   =>
   {
     name          => 'Power Device',
     ratedCapacity => '40'
+    # powerConnections =>
+    # [
+    #   {
+    #     connectionName => 'Ethernet 1',
+    #     connectionType => 'EthernetNetwork'
+    #   },
+    #   {
+    #     connectionUri => '/rest/...'
+    #   }
+    # ]
   }
 }
 

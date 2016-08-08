@@ -31,6 +31,8 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   def exists?
     @data = data_parse
     empty_data_check
+    pd_uri_parser
+    variable_assignments
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -56,18 +58,21 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   end
 
   def set_refresh_state
+    raise('The refresh options need to be specified in the manifest.') unless @refresh_options
     pd = @resourcetype.find_by(@client, unique_id)
-    pd.first.set_refresh_state(@data['refreshOptions'])
+    pd.first.set_refresh_state(@refresh_options)
   end
 
   def set_power_state
+    raise('The power state needs to be specified in the manifest.') unless @power_state
     pd = @resourcetype.find_by(@client, unique_id)
-    pd.first.set_power_state(@data['powerState'])
+    pd.first.set_power_state(@power_state)
   end
 
   def set_uid_state
+    raise('The uid state needs to be specified in the manifest.') unless @uid_state
     pd = @resourcetype.find_by(@client, unique_id)
-    pd.first.set_uid_state(@data['uidState'])
+    pd.first.set_uid_state(@uid_state)
   end
 
   def get_uid_state
@@ -76,12 +81,35 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
   end
 
   def get_utilization
+    raise('The query parameters need to be specified in the manifest.') unless @query_parameters
     pd = @resourcetype.find_by(@client, unique_id)
-    parameters = if @data['queryParameters']
-                   @data['queryParameters']
+    parameters = if @query_parameters
+                   @query_parameters
                  else
                    {}
                  end
     pretty pd.first.utilization(parameters)
+  end
+
+  # Gets values from @data and deletes them, if they're available
+  def variable_assignments
+    @refresh_options = @data.delete('refreshOptions') if @data['refreshOptions']
+    @power_state = @data.delete('powerState') if @data['powerState']
+    @uid_state = @data.delete('uidState') if @data['uidState']
+    @query_parameters = @data.delete('queryParameters') if @data['queryParameters']
+  end
+
+  # Retrieves the connection uri in case it has not been specified
+  def pd_uri_parser
+    if @data['powerConnections']
+      @data['powerConnections'].each do |pc|
+        next if pc['connectionUri']
+        type = pc.delete('connectionType')
+        name = pc.delete('connectionName')
+        uri = objectfromstring(type).find_by(@client, name: name)
+        raise('The connection uri could not be found in the Appliance.') unless uri.first
+        pc['connectionUri'] = uri.first.data['uri']
+      end
+    end
   end
 end

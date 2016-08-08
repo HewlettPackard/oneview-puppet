@@ -23,26 +23,6 @@ resourcetype = OneviewSDK::LogicalSwitchGroup
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_logical_switch_group).new(
-      name: 'LSG',
-      ensure: 'present',
-      data:
-          {
-            'name' => 'OneViewSDK Test Logical Switch Group',
-            'category' => 'logical-switch-groups',
-            'state' => 'Active',
-            'type' => 'logical-switch-group',
-            'switches' =>
-            {
-              'number_of_switches' => '1',
-              'type' => 'Cisco Nexus 50xx'
-            }
-          }
-    )
-  end
-
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_switch_group).new(
@@ -74,18 +54,6 @@ describe provider_class, unit: true do
     it 'return false when the resource does not exists' do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
-    end
-
-    it 'deletes the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.exists?).to eq(true)
-      expect(provider.destroy).to eq(true)
     end
 
     it 'should be able to find the connection template' do
@@ -141,6 +109,33 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect(provider.found).to be
+    end
+  end
+
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_switch_group).new(
+        name: 'LSG',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'OneViewSDK Test Logical Switch Group'
+            }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should be able to delete the resource' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      provider.exists?
+      expect(provider.destroy).to be
     end
   end
 end

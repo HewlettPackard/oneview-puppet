@@ -113,8 +113,11 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
     end
 
-    it 'should be able to set the refresh state' do
-      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).with(resource['data']['refreshOptions']).and_return('Test')
+    it 'should refresh the power device' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_refresh_state).to be
     end
   end
@@ -175,8 +178,11 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
     end
 
-    it 'should be able to set the power state' do
-      allow_any_instance_of(resourcetype).to receive(:set_power_state).with(resource['data']['powerState']).and_return('Test')
+    it 'should set the power state' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_power_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_power_state).to be
     end
   end
@@ -204,8 +210,11 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
     end
 
-    it 'should be able to set the uid state' do
-      allow_any_instance_of(resourcetype).to receive(:set_uid_state).with(resource['data']['uidState']).and_return('Test')
+    it 'should set the uid state' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_uid_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_uid_state).to be
     end
   end
@@ -238,7 +247,7 @@ describe provider_class, unit: true do
     it 'should be able to create the resource' do
       body = { 'name' => '172.18.8.11, PDU 1', 'deviceType' => 'BranchCircuit', 'phaseType' => 'Unknown', 'powerConnections' => [] }
       test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
       provider.exists?
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
         .with('/rest/power-devices', { 'body' => body }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
