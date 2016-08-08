@@ -51,8 +51,8 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
 
   def get_environmental_configuration
     Puppet.notice("\n\nEnvironmental Configuration\n")
-    resource = @resourcetype.find_by(@client, unique_id)
-    raise('There were no matching Unmanaged Devices in the Appliance.') unless resource.first
-    pretty resource.first.environmental_configuration
+    resource = get_single_resource_instance
+    pretty resource.environmental_configuration
+    true
   end
 end

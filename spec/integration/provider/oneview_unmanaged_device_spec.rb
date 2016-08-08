@@ -52,10 +52,9 @@ describe provider_class do
     expect(provider.found).to be
   end
 
-  # FIXME: The environmental config shows up but it returns 'expected nil to evaluate to true'
-  # it 'should be able to get the environmental configuration' do
-  #   expect(provider.get_environmental_configuration).to be
-  # end
+  it 'should be able to get the environmental configuration' do
+    expect(provider.get_environmental_configuration).to be
+  end
 
   it 'should be able to remove the unmanaged device' do
     expect(provider.destroy).to be

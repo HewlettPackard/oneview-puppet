@@ -57,6 +57,8 @@ oneview_unmanaged_device{'Unmanaged Device Edit':
   }
 }
 
+# The unmanaged device can be deleted without a unique identifier provided
+# Caution: more than one matching UD can be deleted at once
 oneview_unmanaged_device{'Unmanaged Device Remove':
   ensure  => 'absent',
   require => Oneview_unmanaged_device['Unmanaged Device Edit'],
