@@ -17,39 +17,65 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '../provider', 'login'))
 
 def uri_validation(data)
-  client = OneviewSDK::Client.new(login)
-  uri_recursive_hash(client, data)
+  @client = OneviewSDK::Client.new(login)
+  uri_recursive_hash(data)
   data
 end
 
-def uri_recursive_hash(client, data)
+def uri_recursive_hash(data)
   data.each do |key, value|
+    @value = value
     # in case the key is either an array or hash
-    hash_array_check(client, data[key])
+    hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri-
     next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include? 'Uri')
-    # looks for the resource
-    resource = get_class(key).find_by(client, name: value)
-    # fails if resource returns an empty hash (no results)
-    raise 'One or more resources have not been found in the Appliance.' if resource.empty?
-    # replaces the parameter name by its uri
-    data[key] = resource.first.data['uri']
+    data[key] = get_uri(key)
   end
 end
 
 # Broken-down blocks
 
+# Gets the Uri for the resource
+def get_uri(key)
+  parsed_key = special_resources_check(key)
+  # looks for the resource
+  resource = get_class(parsed_key).find_by(@client, name: @value)
+  # fails if resource returns an empty hash (no results)
+  raise "'#{@value}' has not been found in the Appliance." if resource.empty?
+  # replaces the parameter name by its uri
+  resource.first.data['uri']
+end
+
+# Check for special/exceptions to the uri default search
+def special_resources_check(key)
+  return key unless %w(firmwareBaselineUri resourceUri).include?(key)
+  # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
+  # to make it compatible with the get_class method which will be called after this
+  new_key = case key
+            when 'firmwareBaselineUri' then 'FirmwareDriver'
+            when 'resourceUri' then generic_resource_fixer
+            end
+  new_key + 'Uri'
+end
+
+# This is used on generic resources calls like 'resourceUri', where the type is required with the name
+def generic_resource_fixer
+  value_array = @value.strip.split(',').map(&:strip)
+  @value = value_array[0]
+  value_array[1]
+end
+
 # keeps uri_recursive_hash going in case of String, sends to another method
 # in case of arrays or hashes
-def hash_array_check(client, data)
-  uri_recursive_hash(client, data) if data.is_a?(Hash)
-  uri_recursive_array(client, data) if data.is_a?(Array)
+def hash_array_check(data)
+  uri_recursive_hash(data) if data.is_a?(Hash)
+  uri_recursive_array(data) if data.is_a?(Array)
 end
 
 # turns the array into a hash
-def uri_recursive_array(client, data)
+def uri_recursive_array(data)
   data.each do |item|
-    uri_recursive_hash(client, item) if item.is_a?(Hash)
+    uri_recursive_hash(item) if item.is_a?(Hash)
   end
 end
 
