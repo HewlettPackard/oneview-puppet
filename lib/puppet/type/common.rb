@@ -28,7 +28,7 @@ def uri_recursive_hash(data)
     # in case the key is either an array or hash
     hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri- or -value is nil-
-    next if value.to_s[0..6].include?('/rest/') || !(key.to_s.downcase.include? 'uri') || value.to_s == 'nil'
+    next if value.to_s[0..6].include?('/rest/') || !((key.to_s.include? 'Uri') || (key.to_s == 'uri')) || value.to_s == 'nil'
     data[key] = get_uri(key)
   end
 end
