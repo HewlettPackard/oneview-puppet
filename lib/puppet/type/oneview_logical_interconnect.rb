@@ -14,11 +14,13 @@
 # limitations under the License.
 ################################################################################
 
+require 'oneview-sdk'
+require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
+
 Puppet::Type.newtype(:oneview_logical_interconnect) do
   desc "Oneview's Logical Interconnect"
 
   ensurable do
-
     defaultvalues
 
     newvalue(:found) do
@@ -47,6 +49,10 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
 
     newvalue(:set_snmp_configuration) do
       provider.set_snmp_configuration
+    end
+
+    newvalue(:set_configuration) do
+      provider.set_configuration
     end
 
     newvalue(:get_port_monitor) do
@@ -84,25 +90,17 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
     newvalue(:set_internal_networks) do
       provider.set_internal_networks
     end
-
-    newvalue(:set_forwarding_information_base) do
-      provider.set_forwarding_information_base
-    end
-
-    newvalue(:get_forwarding_information_base) do
-      provider.get_forwarding_information_base
-    end
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Logical interconnect process name"
+  newparam(:name, namevar: true) do
+    desc 'Logical interconnect process name'
   end
-
 
   newparam(:data) do
     desc 'Logical Interconnect data hash containing all specifications for the resource'
     validate do |value|
-      raise(Puppet::Error, 'Inserted value for data is not valid') unless value.class == Hash
+      raise('Inserted value for data is not valid') unless value.class == Hash
+      uri_validation(value)
     end
   end
 end

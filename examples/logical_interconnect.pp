@@ -18,31 +18,19 @@ oneview_logical_interconnect{'Logical Interconnect Found':
   ensure => 'found',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
+}
+
+oneview_logical_interconnect{'Logical Interconnect Get All':
+  ensure => 'found'
 }
 
 oneview_logical_interconnect{'Logical Interconnect QoS Get':
   ensure => 'get_qos_aggregated_configuration',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect QoS Set':
-  ensure => 'set_qos_aggregated_configuration',
-  data   =>
-    {
-      name             => 'Encl2-my enclosure logical interconnect group',
-      qosConfiguration =>
-      {
-        activeQosConfig =>
-        {
-
-          uplinkClassificationType => 'DOT1P'
-        }
-      }
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -62,7 +50,7 @@ oneview_logical_interconnect{'Logical Interconnect Port Monitor Get':
   ensure => 'get_port_monitor',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group',
     }
 }
 
@@ -70,7 +58,7 @@ oneview_logical_interconnect{'Logical Interconnect Internal Vlan':
   ensure => 'get_internal_vlans',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -98,13 +86,11 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
     }
 }
 
-
-
 oneview_logical_interconnect{'Logical Interconnect Compliance':
   ensure => 'set_compliance',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
 
@@ -113,12 +99,29 @@ oneview_logical_interconnect{'Logical Interconnect Internal Networks':
   data   =>
     {
       name             => 'Encl2-my enclosure logical interconnect group',
-      internalNetworks =>
+      internalNetworks => ['NET', 'Ethernet 1']
+    }
+}
+
+# Both the firmware iso file name and command need to be specified
+oneview_logical_interconnect{'Logical Interconnect Set Firmware':
+  ensure => 'set_firmware',
+  data   =>
+    {
+      name     => 'Encl2-my enclosure logical interconnect group',
+      firmware =>
       {
-        e1 =>
-        {
-          name => 'NET',
-        }
+        command     => 'Stage',
+        isoFileName => 'fake_firmware.iso',
+        force       => false
       }
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect Set Configuration':
+  ensure => 'set_configuration',
+  data   =>
+    {
+      name => 'Encl2-my enclosure logical interconnect group'
     }
 }
