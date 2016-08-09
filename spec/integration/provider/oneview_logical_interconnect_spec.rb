@@ -16,27 +16,29 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:oneview_logical_interconnect)
 
 describe provider_class do
 
   let(:resource) {
     Puppet::Type.type(:oneview_logical_interconnect).new(
       name: 'Test Logical Interconnect',
-    ensure: 'present',
-        data:
+      ensure: 'present',
+      data:
           {
-              'name'                    => 'Encl2-my enclosure logical interconnect group',
-              'portMonitor'             =>
+              'name' => 'Encl2-my enclosure logical interconnect group',
+              'internalNetworks' => ['NET'],
+              'snmpConfiguration' =>
               {
-                'enablePortMonitor' => 'false'
+                'enabled' => true
               },
-              'snmpConfiguration'   =>
+              'firmware' =>
               {
-                'enabled' => 'false'
+                'command' => 'Stage',
+                'isoFileName' => 'fake_firmware.iso',
+                'force' => false
               }
-
-          },
+          }
     )
   }
 
@@ -44,8 +46,12 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  before(:each) do
+    provider.exists?
+  end
+
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect).provider(:oneview_logical_interconnect)
   end
 
   it 'should find the interconnect' do
@@ -56,25 +62,39 @@ describe provider_class do
     expect(provider.get_snmp_configuration).to be
   end
 
+  it 'should get the firmware from the logical interconnect' do
+    expect(provider.get_firmware).to be
+  end
+
   it 'should get the port monitor from the logical interconnect' do
     expect(provider.get_port_monitor).to be
+  end
+
+  it 'should get the list of internal networks from the logical interconnect' do
+    expect(provider.get_internal_vlans).to be
   end
 
   it 'should get the qos configuration from the logical interconnect' do
     expect(provider.get_qos_aggregated_configuration).to be
   end
 
-  # These may fail due to ongoing activity in the LI
-  # it 'should get the logical interconnect compliant' do
-  #   expect(provider.set_compliance).to be
-  # end
-  #
-  # it 'should update the snmp configuration' do
-  #   expect(provider.set_snmp_configuration).to be
-  # end
-  #
-  # it 'should update the port monitor configuration' do
-  #   expect(provider.set_port_monitor).to be
-  # end
+  it 'should get the logical interconnect compliant' do
+    expect(provider.set_compliance).to be
+  end
 
+  it 'should update the snmp configuration' do
+    expect(provider.set_snmp_configuration).to be
+  end
+
+  it 'should set the firmware configuration' do
+    expect(provider.set_firmware).to be
+  end
+
+  it 'should set the LI configuration' do
+    expect(provider.set_configuration).to be
+  end
+
+  it 'should update the the internal networks' do
+    expect(provider.set_internal_networks).to be
+  end
 end

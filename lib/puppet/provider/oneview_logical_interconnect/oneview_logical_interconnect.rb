@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
+Puppet::Type.type(:oneview_logical_interconnect).provide(:oneview_logical_interconnect) do
   mk_resource_methods
 
   def initialize(*args)
@@ -45,6 +45,14 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
     find_resources
   end
 
+  def create
+    raise('This resource cannot be created.')
+  end
+
+  def destroy
+    raise('This resource cannot be destroyed.')
+  end
+
   # GET ENDPOINTS =======================================
 
   def get_telemetry_configuration
@@ -66,6 +74,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   def get_firmware
     Puppet.notice("\n\nFirmware\n")
     pretty get_single_resource_instance.get_firmware
+    true
   end
 
   def get_internal_vlans
@@ -77,53 +86,68 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
 
   # PUT/SET ENDPOINTS =======================================
 
+  def set_configuration
+    Puppet.notice('Setting Logical Interconnect configuration...')
+    get_single_resource_instance.configuration
+    true
+  end
+
   def set_compliance
     Puppet.notice('Setting Logical Interconnect compliance...')
     get_single_resource_instance.compliance
+    true
   end
 
   def set_ethernet_settings
     resource = set_info('Ethernet Settings', 'ethernetSettings', @ethernet_settings)
     resource.update_ethernet_settings
+    true
   end
 
   def set_telemetry_configuration
     resource = set_info('Telemetry Configuration', 'telemetryConfiguration', @telemetry_configuration)
     resource.update_telemetry_configuration
+    true
   end
 
   def set_qos_aggregated_configuration
     resource = set_info('QoS Configuration', 'qosConfiguration', @qos_configuration)
     resource.update_qos_configuration
+    true
   end
 
   def set_snmp_configuration
     resource = set_info('SNMP Configuration', 'snmpConfiguration', @snmp_configuration)
     resource.update_snmp_configuration
+    true
   end
 
   def set_port_monitor
     resource = set_info('Port Monitor', 'portMonitor', @port_monitor)
     resource.update_port_monitor
+    true
   end
 
   def set_firmware
     Puppet.notice('Updating Firmware...')
     command = @firmware_options.delete('command')
-    fw_object = OneviewSDK::FirmwareDriver.find_by(@client, fw_unique_id)
+    name = @firmware_options.delete('isoFileName')
+    fw_object = OneviewSDK::FirmwareDriver.find_by(@client, isoFileName: name)
     raise('No matching firmware drivers were found in the Appliance.') unless fw_object.first
     get_single_resource_instance.firmware_update(command, fw_object.first, @firmware_options)
+    true
   end
 
   def set_internal_networks
+    Puppet.notice('Updating Internal Networks...')
     list = []
     @internal_networks.each do |net|
-      type = net.delete('type')
-      object = objectfromstring(type).find_by(@client, net)
+      object = OneviewSDK::EthernetNetwork.find_by(@client, name: net)
       raise('No matching networks were found in the Appliance.') unless object.first
       list.push(object.first)
     end
     get_single_resource_instance.update_internal_networks(*list)
+    true
   end
 
   # Helpers
@@ -141,6 +165,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
   def get_info(notice, parameter)
     Puppet.notice("\n\n#{notice}\n")
     pretty get_single_resource_instance.data[parameter]
+    true
   end
 
   def set_info(notice, parameter, global_var)
@@ -162,17 +187,5 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:ruby) do
       end
     end
     base_hash
-  end
-
-  def fw_unique_id
-    id = {}
-    if @firmware_options['isoFileName']
-      id['isoFileName'] = @firmware_options.delete('isoFileName')
-    elsif @firmware_options['uri']
-      id['uri'] = @firmware_options.delete('uri')
-    else
-      raise('Either the firmware iso file name or uri needs to be specified.')
-    end
-    id
   end
 end
