@@ -27,8 +27,8 @@ def uri_recursive_hash(data)
     @value = value
     # in case the key is either an array or hash
     hash_array_check(data[key])
-    # next if -the uri is already declared- or -the parameter name does not require a uri-
-    next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include? 'Uri')
+    # next if -the uri is already declared- or -the parameter name does not require a uri- or -value is nil-
+    next if value.to_s[0..6].include?('/rest/') || !(key.to_s.downcase.include? 'uri') || value.to_s == 'nil'
     data[key] = get_uri(key)
   end
 end
@@ -48,14 +48,20 @@ end
 
 # Check for special/exceptions to the uri default search
 def special_resources_check(key)
-  return key unless %w(firmwareBaselineUri resourceUri).include?(key)
+  return key unless %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri).include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
   # to make it compatible with the get_class method which will be called after this
-  new_key = case key
-            when 'firmwareBaselineUri' then 'FirmwareDriver'
-            when 'resourceUri' then generic_resource_fixer
-            end
+  new_key = special_resources_assign(key)
   new_key + 'Uri'
+end
+
+# Helper for special_resource_check to assign the correct values to the special resources
+def special_resources_assign(key)
+  return generic_resource_fixer if %w(resourceUri actualNetworkUri expectedNetworkUri uri).include?(key)
+  case key
+  when 'firmwareBaselineUri' then 'FirmwareDriver'
+  when 'actualNetworkSanUri' then 'ManagedSAN'
+  end
 end
 
 # This is used on generic resources calls like 'resourceUri', where the type is required with the name

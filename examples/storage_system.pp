@@ -14,13 +14,18 @@
 # limitations under the License.
 ################################################################################
 
+# NOTE: Oneview does not change the name of Storage Systems. If one is listed incorrectly
+  # on the creation/adding of the Storage System it may lead to issues. It should not be
+  # used for updates at any given time.
+# NOTE 2: Updating a storage_system requires both the ip_hostname and username to be listed inside
+  # the credentials tag in data. If a password is also provided it will be updated.
+
 oneview_storage_system{'storage_system_1':
     ensure => 'present',
     data   => {
-      name          => 'OneViewSDK Test Storage System',
       managedDomain => 'TestDomain',
       credentials   => {
-        ip_hostname => '172.18.11.11',
+        ip_hostname => '172.18.11.12',
         username    => 'dcs',
         password    => 'dcs',
       }
@@ -31,21 +36,17 @@ oneview_storage_system{'storage_system_2':
     ensure  => 'present',
     require => Oneview_storage_system['storage_system_1'],
     data    => {
-      name        => 'OneViewSDK Test Storage System',
       credentials => {
-        ip_hostname  => '172.18.11.11',
-      }
+        ip_hostname => '172.18.11.12',
+        username    => 'dcs',
+      },
+      description => 'Standard Description for Sample Purposes',
     }
 }
 
 oneview_storage_system{'storage_system_3':
     ensure  => 'found',
     require => Oneview_storage_system['storage_system_2'],
-    data    => {
-      credentials => {
-        ip_hostname  => '172.18.11.11',
-      }
-    }
 }
 
 oneview_storage_system{'storage_system_4':
@@ -53,7 +54,7 @@ oneview_storage_system{'storage_system_4':
     require => Oneview_storage_system['storage_system_3'],
     data    => {
       credentials => {
-        ip_hostname  => '172.18.11.11',
+        ip_hostname  => '172.18.11.12',
       }
     }
 }
@@ -63,7 +64,7 @@ oneview_storage_system{'storage_system_5':
     require => Oneview_storage_system['storage_system_4'],
     data    => {
       credentials => {
-        ip_hostname  => '172.18.11.11',
+        ip_hostname  => '172.18.11.12',
       }
     }
 }
@@ -73,7 +74,7 @@ oneview_storage_system{'storage_system_6':
     require => Oneview_storage_system['storage_system_5'],
     data    => {
       credentials => {
-        ip_hostname  => '172.18.11.11',
+        ip_hostname  => '172.18.11.12',
       }
     }
 }
@@ -82,7 +83,7 @@ oneview_storage_system{'storage_system_7':
     require => Oneview_storage_system['storage_system_6'],
     data    => {
       credentials => {
-        ip_hostname  => '172.18.11.11',
+        ip_hostname  => '172.18.11.12',
       }
     }
 }
