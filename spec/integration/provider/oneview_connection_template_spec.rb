@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_connection_template).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
 
 # you must have this connection template in your appliance
 
@@ -41,7 +41,7 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
   end
 
   it 'should be able to get the default connection template' do
@@ -70,11 +70,11 @@ describe provider_class do
     end
 
     it 'should not be able to create the resource' do
-      expect { provider.create }.to raise_error(Puppet::Error, 'This resource cannot be created.')
+      expect { provider.create }.to raise_error('This resource cannot be created.')
     end
 
     it 'should not be able to destroy the resource' do
-      expect { provider.destroy }.to raise_error(Puppet::Error, 'This resource cannot be destroyed.')
+      expect { provider.destroy }.to raise_error('This resource cannot be destroyed.')
     end
   end
 end

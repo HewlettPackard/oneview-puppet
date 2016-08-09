@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_connection_template).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
 resourcetype = OneviewSDK::ConnectionTemplate
 
 describe provider_class, unit: true do
@@ -41,7 +41,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
     end
 
     it 'should return that the resource exists' do
