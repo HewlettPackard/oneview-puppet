@@ -14,23 +14,38 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_enclosure) do
   desc "Oneview's Enclosure"
 
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
+    # Get methods
     newvalue(:found) do
       provider.found
     end
 
-    newvalue(:configured) do
-      provider.configured
+    newvalue(:get_environmental_configuration) do
+      provider.get_environmental_configuration
     end
 
-    newvalue(:retrieved_environmental_configuration) do
-      provider.retrieved_environmental_configuration
+    newvalue(:get_script) do
+      provider.get_script
+    end
+
+    newvalue(:get_single_sign_on) do
+      provider.get_single_sign_on
+    end
+
+    newvalue(:get_utilization) do
+      provider.get_utilization
+    end
+
+    # Set methods
+    newvalue(:set_configuration) do
+      provider.set_configuration
     end
 
     newvalue(:set_environmental_configuration) do
@@ -40,36 +55,18 @@ Puppet::Type.newtype(:oneview_enclosure) do
     newvalue(:set_refresh_state) do
       provider.set_refresh_state
     end
-
-    newvalue(:script_retrieved) do
-      provider.script_retrieved
-    end
-
-    newvalue(:retrieved_single_sign_on) do
-      provider.retrieved_single_sign_on
-    end
-
-    newvalue(:retrieved_utilization) do
-      provider.retrieved_utilization
-    end
-
   end
 
-
-  newparam(:name, :namevar => true) do
-    desc "Enclosure name"
+  newparam(:name, namevar: true) do
+    desc 'Enclosure name'
   end
 
   newparam(:data) do
     desc "Enclosure data hash containing all specifications for the
     enclosure"
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
-      end
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
   end
-
-
-
 end
