@@ -21,7 +21,6 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
   desc "Oneview's Logical Interconnect"
 
   ensurable do
-
     defaultvalues
 
     newvalue(:found) do
@@ -93,7 +92,7 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
     end
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'Logical interconnect process name'
   end
 

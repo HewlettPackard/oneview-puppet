@@ -19,20 +19,19 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:oneview_logical_interconnect)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_logical_interconnect).new(
       name: 'Test Logical Interconnect',
       ensure: 'present',
       data:
           {
-              'name' => 'Encl2-my enclosure logical interconnect group',
-              'internalNetworks' => ['NET'],
-              'snmpConfiguration' =>
+            'name' => 'Encl2-my enclosure logical interconnect group',
+            'internalNetworks' => ['NET'],
+            'snmpConfiguration' =>
               {
                 'enabled' => true
               },
-              'firmware' =>
+            'firmware' =>
               {
                 'command' => 'Stage',
                 'isoFileName' => 'fake_firmware.iso',
@@ -40,7 +39,7 @@ describe provider_class do
               }
           }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
