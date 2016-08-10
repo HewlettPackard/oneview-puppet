@@ -40,11 +40,11 @@ Puppet::Type.type(:oneview_connection_template).provide(:oneview_connection_temp
   end
 
   def create
-    raise(Puppet::Error, 'This resource cannot be created.')
+    raise('This resource relies on others to be created.')
   end
 
   def destroy
-    raise(Puppet::Error, 'This resource cannot be destroyed.')
+    raise('This resource relies on others to be destroyed.')
   end
 
   def found

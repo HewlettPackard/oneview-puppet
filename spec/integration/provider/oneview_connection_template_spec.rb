@@ -70,11 +70,11 @@ describe provider_class do
     end
 
     it 'should not be able to create the resource' do
-      expect { provider.create }.to raise_error('This resource cannot be created.')
+      expect { provider.create }.to raise_error(RuntimeError, 'This resource relies on others to be created.')
     end
 
     it 'should not be able to destroy the resource' do
-      expect { provider.destroy }.to raise_error('This resource cannot be destroyed.')
+      expect { provider.destroy }.to raise_error(RuntimeError, 'This resource relies on others to be destroyed.')
     end
   end
 end
