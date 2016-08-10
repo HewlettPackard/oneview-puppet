@@ -49,9 +49,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
 
   def get_visual_content
     Puppet.notice("\n\nDatacenter Visual Content\n")
-    dc = @resourcetype.find_by(@client, unique_id)
-    raise('The Datacenter has not been found.') unless dc.first
-    pretty dc.first.get_visual_content
+    pretty get_single_resource_instance.get_visual_content
     true
   end
 end
