@@ -76,9 +76,25 @@ describe type_class do
     ]
   end
 
+  let :special_ensurables do
+    [
+      :found
+    ]
+  end
+
   it 'should have expected parameters' do
     params.each do |param|
-      expect(type_class.parameters).to be_include(param)
+      expect(type_class.parameters).to include(param)
+    end
+  end
+
+  it 'should accept special ensurables' do
+    special_ensurables.each do |value|
+      expect do
+        described_class.new(name: 'Teste',
+                            ensure: value,
+                            data: {})
+      end.to_not raise_error
     end
   end
 
@@ -93,6 +109,7 @@ describe type_class do
     modified_config[:data] = ''
     expect do
       type_class.new(modified_config)
-    end.to raise_error('Parameter data failed on Oneview_enclosure_group[Enclosure Group]: Invalid data hash')
+    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_enclosure_group[Enclosure Group]: '\
+                                              'Validate method failed for class data: Inserted value for data is not valid')
   end
 end

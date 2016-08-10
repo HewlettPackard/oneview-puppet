@@ -28,7 +28,8 @@ def uri_recursive_hash(data)
     # in case the key is either an array or hash
     hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri-
-    next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include? 'Uri')
+    # the uri can also be set to nil in some cases (ie. Ethernet Network and Enclosure Group)
+    next if value.to_s == 'nil' || value.to_s[0..6].include?('/rest/') || !(key.to_s.include? 'Uri')
     data[key] = get_uri(key)
   end
 end
