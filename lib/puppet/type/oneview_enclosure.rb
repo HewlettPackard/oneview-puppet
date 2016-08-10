@@ -22,6 +22,7 @@ Puppet::Type.newtype(:oneview_enclosure) do
   ensurable do
     defaultvalues
 
+    # :nocov:
     # Get methods
     newvalue(:found) do
       provider.found
@@ -55,6 +56,7 @@ Puppet::Type.newtype(:oneview_enclosure) do
     newvalue(:set_refresh_state) do
       provider.set_refresh_state
     end
+    # :nocov:
   end
 
   newparam(:name, namevar: true) do

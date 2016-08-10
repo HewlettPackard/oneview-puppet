@@ -48,7 +48,9 @@ end
 
 # Check for special/exceptions to the uri default search
 def special_resources_check(key)
-  return key unless %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri).include?(key)
+  special_resources = %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri dependentResourceUri
+                         sspUri)
+  return key unless special_resources.include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
   # to make it compatible with the get_class method which will be called after this
   new_key = special_resources_assign(key)
@@ -61,6 +63,8 @@ def special_resources_assign(key)
   case key
   when 'firmwareBaselineUri' then 'FirmwareDriver'
   when 'actualNetworkSanUri' then 'ManagedSAN'
+  when 'sspUri' then 'FirmwareDriver'
+  when 'dependentResourceUri' then 'LogicalInterconnect'
   end
 end
 
