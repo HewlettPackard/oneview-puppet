@@ -64,7 +64,6 @@ def special_resources_assign(key)
   when 'firmwareBaselineUri' then 'FirmwareDriver'
   when 'actualNetworkSanUri' then 'ManagedSAN'
   when 'sspUri' then 'FirmwareDriver'
-  when 'actualNetworkSanUri' then 'ManagedSAN'
   when 'dependentResourceUri' then 'LogicalInterconnect'
   end
 end
