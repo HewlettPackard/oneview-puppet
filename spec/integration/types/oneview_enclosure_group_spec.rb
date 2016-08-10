@@ -85,7 +85,7 @@ describe type_class do
   it 'should require a name' do
     expect do
       type_class.new({})
-    end.to raise_error(Puppet::Error, 'Title or name must be provided')
+    end.to raise_error('Title or name must be provided')
   end
 
   it 'should require a data hash' do

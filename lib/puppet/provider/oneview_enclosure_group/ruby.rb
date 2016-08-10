@@ -30,23 +30,16 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    en = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !en.empty?
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    enclosure_group = @resourcetype.new(@client, enclosure_group_parse(@data))
-    enclosure_group.create
+    return true if resource_update(@data, @resourcetype)
+    @resourcetype.new(@client, enclosure_group_parse(@data)).create
   end
 
   def destroy
-    enclosure_group = @resourcetype.find_by(@client, unique_id).first
-    enclosure_group.delete
+    get_single_resource_instance.delete
   end
 
   def found
@@ -54,17 +47,14 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:ruby) do
   end
 
   def get_script
-    enclosure = @resourcetype.find_by(@client, unique_id)
-    raise("\n\nNo enclosure groups with the specified data were found in the Appliance\n") if enclosure.empty?
-    Puppet.notice("Enclosure Group's current script: \n#{enclosure.first.get_script}\n")
+    Puppet.notice("Enclosure Group's current script: \n#{get_single_resource_instance.get_script}\n")
   end
 
   def set_script
     script = @data.delete('script') if @data['script']
     raise("\nThe 'script' field is required in data hash to run the set_script action.") unless script
     enclosure = @resourcetype.find_by(@client, unique_id)
-    raise("\n\nNo enclosure groups with the specified data were found in the Appliance\n") if enclosure.empty?
-    enclosure.first.set_script(script)
+    get_single_resource_instance.set_script(script)
     Puppet.notice("Enclosure Group script set to:\n#{script}\n")
   end
 

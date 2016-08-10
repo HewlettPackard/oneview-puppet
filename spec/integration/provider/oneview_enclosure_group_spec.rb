@@ -88,13 +88,31 @@ describe provider_class do
     it 'should create a new enclosure group' do
       expect(provider.create).to be
     end
+  end
+
+  context 'given the unique id parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure_group).new(
+        name: 'Enclosure Group',
+        ensure: 'present',
+        data:
+          {
+            'name' => 'Enclosure Group'
+          }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    before(:each) do
+      provider.exists?
+    end
 
     it 'exists? should find an enclosure group' do
       expect(provider.exists?).to be
-    end
-
-    it 'should not return that an enclosure group was found, since the LIG are not nil' do
-      expect { provider.found }.to raise_error("\n\nNo EnclosureGroup with the specified data were found on the Oneview Appliance\n")
+      expect(provider.found).to be
     end
 
     it 'should destroy the enclosure group' do
