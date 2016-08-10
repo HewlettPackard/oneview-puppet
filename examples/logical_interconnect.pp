@@ -103,7 +103,16 @@ oneview_logical_interconnect{'Logical Interconnect Internal Networks':
     }
 }
 
-# Both the firmware iso file name and command need to be specified
+oneview_logical_interconnect{'Logical Interconnect Set Configuration':
+  ensure => 'set_configuration',
+  data   =>
+  {
+    name => 'Encl2-my enclosure logical interconnect group'
+  }
+}
+
+# Both the firmware driver identifier and a command need to be specified
+# The firmrware driver identifier can be either its name or uri, as follows:
 oneview_logical_interconnect{'Logical Interconnect Set Firmware':
   ensure => 'set_firmware',
   data   =>
@@ -111,17 +120,10 @@ oneview_logical_interconnect{'Logical Interconnect Set Firmware':
       name     => 'Encl2-my enclosure logical interconnect group',
       firmware =>
       {
-        command     => 'Stage',
-        isoFileName => 'fake_firmware.iso',
-        force       => false
+        command => 'Stage',
+        sspUri  => 'fake_firmware.iso',
+        # sspUri  => '/rest/firmware-drivers/fake_firmware',
+        force   => false
       }
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect Set Configuration':
-  ensure => 'set_configuration',
-  data   =>
-    {
-      name => 'Encl2-my enclosure logical interconnect group'
     }
 }

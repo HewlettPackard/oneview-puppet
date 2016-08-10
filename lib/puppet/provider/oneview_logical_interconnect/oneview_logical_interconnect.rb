@@ -131,8 +131,8 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:oneview_logical_interc
   def set_firmware
     Puppet.notice('Updating Firmware...')
     command = @firmware_options.delete('command')
-    name = @firmware_options.delete('isoFileName')
-    fw_object = OneviewSDK::FirmwareDriver.find_by(@client, isoFileName: name)
+    fw_uri = @firmware_options.delete('sspUri')
+    fw_object = OneviewSDK::FirmwareDriver.find_by(@client, uri: fw_uri)
     raise('No matching firmware drivers were found in the Appliance.') unless fw_object.first
     get_single_resource_instance.firmware_update(command, fw_object.first, @firmware_options)
     true
