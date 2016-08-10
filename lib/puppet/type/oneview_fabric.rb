@@ -36,9 +36,7 @@ Puppet::Type.newtype(:oneview_fabric) do
   newparam(:data) do
     desc 'Fabric data hash containing all specifications for the system'
     validate do |value|
-      unless value.class == Hash
-        raise(Puppet::Error, 'Inserted value for data is not valid')
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
       uri_validation(value)
     end
   end

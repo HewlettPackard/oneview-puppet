@@ -41,19 +41,19 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:oneview_fabric)
     end
 
     it 'should not be able to create a new fabric' do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(provider.exists?).to eq(false)
-      expect { provider.create }.to raise_error('This resource cannot be created.')
+      expect { provider.create }.to raise_error('This resource relies on others to be created.')
     end
 
     it 'should not be able to destroy the fabric' do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(provider.exists?).to eq(false)
-      expect { provider.destroy }.to raise_error('This resource cannot be destroyed.')
+      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
 
     it 'should be able to return that the fabric exists' do
