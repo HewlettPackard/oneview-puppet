@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
 
 describe provider_class do
   let(:resource) do
@@ -45,7 +45,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
   end
 
   context 'given the minimum parameters' do
@@ -85,5 +85,65 @@ describe provider_class do
     it 'should destroy the network' do
       expect(provider.destroy).to be
     end
+  end
+end
+
+context 'given the minimum parameters of bulk creation' do
+  let(:resource) do
+    Puppet::Type.type(:oneview_ethernet_network).new(
+      name: 'ethernet',
+      ensure: 'present',
+      data:
+          {
+            'vlanIdRange' => '26-27',
+            'purpose' => 'General',
+            'namePrefix' => 'Puppet',
+            'smartLink' => false,
+            'privateNetwork' => false,
+            'bandwidth' =>
+            {
+              'maximumBandwidth' => '10_000',
+              'typicalBandwidth' => '2000'
+            }
+          }
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  it 'should be able to create multiple networks' do
+    expect(provider.exists?).to eq(true)
+  end
+end
+
+context 'given the minimum parameters' do
+  let(:resource) do
+    Puppet::Type.type(:oneview_ethernet_network).new(
+      name: 'ethernet',
+    ensure: 'absent',
+      data:
+          {
+            'name' => 'Puppet_26'
+          }
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  before(:each) do
+    provider.exists?
+  end
+
+  it 'should be able to delete the first one' do
+    expect(provider.destroy).to be
+  end
+
+  it 'should be able to delete the last one' do
+    resource['data']['name'] = 'Puppet_27'
+    expect(provider.destroy).to be
   end
 end

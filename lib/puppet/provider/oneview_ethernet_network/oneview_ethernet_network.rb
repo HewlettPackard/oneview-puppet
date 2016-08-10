@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
+Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) do
   mk_resource_methods
 
   def initialize(*args)
@@ -30,36 +30,28 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    # Skips to bulk
-    return false if @data['vlanIdRange']
-    en = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !en.empty?
+    empty_data_check
+    return true if bulk_create_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    @data = data_parse
-    # Bulk
-    if @data['vlanIdRange']
-      @resourcetype.bulk_create(@client, bulk_parse(@data))
-    else
-      ethernet_network = @resourcetype.new(@client, @data)
-      ethernet_network.create
-    end
+    return true if resource_update(@data, @resourcetype)
+    @resourcetype.new(@client, @data).create
   end
 
   def destroy
-    ethernet_network = @resourcetype.find_by(@client, unique_id)
-    ethernet_network.first.delete
-    @property_hash.clear
+    get_single_resource_instance.delete
   end
 
   def found
     find_resources
+  end
+
+  # Helpers
+
+  def bulk_create_check
+    @data['vlanIdRange'] ? @resourcetype.bulk_create(@client, bulk_parse(@data)) : nil
   end
 
   def bulk_parse(data)
