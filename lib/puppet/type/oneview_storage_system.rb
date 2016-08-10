@@ -14,13 +14,16 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_storage_system) do
   desc "Oneview's Storage System"
 
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
+    # :nocov:
+    # Get methods
     newvalue(:found) do
       provider.found
     end
@@ -36,24 +39,19 @@ Puppet::Type.newtype(:oneview_storage_system) do
     newvalue(:get_host_types) do
       provider.get_host_types
     end
-
+    # :nocov:
   end
 
-
-  newparam(:name, :namevar => true) do
-    desc "Storage System name"
+  newparam(:name, namevar: true) do
+    desc 'Storage System name'
   end
 
   newparam(:data) do
     desc "Storage System data hash containing all specifications for the
     system"
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
-      end
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
   end
-
-
-
 end

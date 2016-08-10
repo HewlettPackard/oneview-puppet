@@ -34,7 +34,7 @@ Puppet::Type.type(:oneview_enclosure).provide(:oneview_enclosure) do
 
   def self.instances
     @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::Enclosure.get_all(@client)
+    matches = OneviewSDK::Enclosure.find_by(@client, {})
     matches.collect do |line|
       name = line['name']
       data = line.inspect

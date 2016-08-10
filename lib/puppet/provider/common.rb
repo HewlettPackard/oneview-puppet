@@ -98,7 +98,7 @@ end
 # Gets a resource by its unique identifier (generally name or uri)
 def unique_id
   id = {}
-  %w(uri name id providerDisplayName).each { |key| id[key] = @data[key] if @data[key] }
+  %w(uri name id providerDisplayName credentials).each { |key| id[key] = @data[key] if @data[key] }
   raise 'A unique identifier for the resource must be declared in data for the current operation' if id.empty?
   id
 end
