@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:oneview_enclosure_group)
 
 describe provider_class do
   let(:resource) do
@@ -77,7 +77,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure_group).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure_group).provider(:oneview_enclosure_group)
   end
 
   context 'given the minimum parameters' do

@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_datacenter).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_datacenter).provider(:oneview_datacenter)
 
 describe provider_class do
   let(:resource) do
@@ -41,7 +41,7 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:oneview_datacenter)
   end
 
   it 'should not be able to find the resource' do

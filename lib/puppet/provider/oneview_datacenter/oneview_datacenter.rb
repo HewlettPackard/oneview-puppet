@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_datacenter).provide(:ruby) do
+Puppet::Type.type(:oneview_datacenter).provide(:oneview_datacenter) do
   mk_resource_methods
 
   def initialize(*args)
