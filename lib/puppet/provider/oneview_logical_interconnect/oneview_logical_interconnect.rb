@@ -46,11 +46,11 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:oneview_logical_interc
   end
 
   def create
-    raise('This resource cannot be created.')
+    raise('This resource relies on others to be created.')
   end
 
   def destroy
-    raise('This resource cannot be destroyed.')
+    raise('This resource relies on others to be destroyed.')
   end
 
   # GET ENDPOINTS =======================================
