@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_fcoe_network).provide(:ruby) do
+Puppet::Type.type(:oneview_fcoe_network).provide(:oneview_fcoe_network) do
   mk_resource_methods
 
   def initialize(*args)
@@ -30,23 +30,17 @@ Puppet::Type.type(:oneview_fcoe_network).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    fcoe = if resource['ensure'] == :present
-             resource_update(@data, @resourcetype)
-             @resourcetype.find_by(@client, unique_id)
-           else
-             @resourcetype.find_by(@client, @data)
-           end
-    !fcoe.empty?
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    fcoe = @resourcetype.new(@client, @data)
-    fcoe.create
+    return true if resource_update(@data, @resourcetype)
+    @resourcetype.new(@client, @data).create
   end
 
   def destroy
-    fcoe = @resourcetype.find_by(@client, unique_id)
-    fcoe.first.delete
+    get_single_resource_instance.delete
   end
 
   def found

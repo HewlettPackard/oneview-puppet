@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:oneview_fcoe_network)
 
 describe provider_class do
   let(:resource) do
@@ -26,7 +26,7 @@ describe provider_class do
       data:
           {
             'name' => 'OneViewSDK Test FC Network',
-            'connectionTemplateUri' => 'nil',
+            'connectionTemplateUri' => nil,
             'vlanId'                => '300',
             'type'                  => 'fcoe-network'
           }
@@ -42,7 +42,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:oneview_fcoe_network)
   end
 
   context 'given the min parameters' do
