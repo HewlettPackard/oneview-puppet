@@ -30,7 +30,7 @@ describe provider_class do
             'purpose' => 'General',
             'smartLink' => 'false',
             'privateNetwork' => 'true',
-            'connectionTemplateUri' => 'nil',
+            'connectionTemplateUri' => nil,
             'type' => 'ethernet-networkV3'
           }
     )

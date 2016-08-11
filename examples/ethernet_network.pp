@@ -22,7 +22,7 @@ oneview_ethernet_network{'Ethernet Network Create':
     purpose               => 'General',
     smartLink             => true,
     privateNetwork        => false,
-    connectionTemplateUri => 'nil',
+    connectionTemplateUri => nil,
     type                  => 'ethernet-networkV3'
   }
 }
