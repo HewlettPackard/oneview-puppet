@@ -29,8 +29,8 @@ Puppet::Type.newtype(:oneview_fcoe_network) do
   end
   # :nocov:
 
-  newparam(:name, :namevar => true) do
-    desc "FCoE network name"
+  newparam(:name, namevar: true) do
+    desc 'FCoE network name'
   end
 
   newparam(:data) do
