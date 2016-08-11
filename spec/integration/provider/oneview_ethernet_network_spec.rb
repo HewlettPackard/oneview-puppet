@@ -78,6 +78,14 @@ describe provider_class do
       provider.exists?
     end
 
+    it 'should get the associated uplink groups' do
+      expect(provider.get_associated_uplink_groups).to be
+    end
+
+    it 'should get the associated profiles' do
+      expect(provider.get_associated_profiles).to be
+    end
+
     it 'exists? should return the found networks' do
       expect(provider.found).to be
     end
@@ -122,7 +130,7 @@ context 'given the minimum parameters' do
   let(:resource) do
     Puppet::Type.type(:oneview_ethernet_network).new(
       name: 'ethernet',
-    ensure: 'absent',
+      ensure: 'absent',
       data:
           {
             'name' => 'Puppet_26'

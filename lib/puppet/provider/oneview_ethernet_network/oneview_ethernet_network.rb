@@ -48,6 +48,20 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     find_resources
   end
 
+  def get_associated_profiles
+    Puppet.notice("\n\nAssociated Profiles\n")
+    list = get_single_resource_instance.get_associated_uplink_groups
+    list == '[]' ? Puppet.warning('There are no associated profiles to show.') : Puppet.notice(list)
+    true
+  end
+
+  def get_associated_uplink_groups
+    Puppet.notice("\n\nAssociated Uplink Groups\n")
+    list = get_single_resource_instance.get_associated_uplink_groups
+    list == '[]' ? Puppet.warning('There are no associated uplink groups to show.') : Puppet.notice(list)
+    true
+  end
+
   # Helpers
 
   def bulk_create_check

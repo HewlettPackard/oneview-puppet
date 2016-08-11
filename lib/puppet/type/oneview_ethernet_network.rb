@@ -25,6 +25,14 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
     newvalue(:found) do
       provider.found
     end
+
+    newvalue(:get_associated_profiles) do
+      provider.get_associated_profiles
+    end
+
+    newvalue(:get_associated_uplink_groups) do
+      provider.get_associated_uplink_groups
+    end
   end
 
   newparam(:name, namevar: true) do
