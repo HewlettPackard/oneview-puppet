@@ -31,6 +31,7 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:oneview_logical_downlink) 
   def exists?
     @data = data_parse
     empty_data_check([:found, :get_without_ethernet])
+    network_uris
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -49,11 +50,21 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:oneview_logical_downlink) 
   def get_without_ethernet
     Puppet.notice("\nLogical Downlinks\n")
     ld = @resourcetype.find_by(@client, @data)
-    if ld.empty?
-      Puppet.warning('There are no logical downlinks without ethernet in the Oneview appliance.')
-    else
-      ld.each { |item| pretty item.get_without_ethernet.data }
-    end
+    raise('There are no logical downlinks without ethernet in the Oneview appliance.') if ld.empty?
+    ld.each { |item| pretty item.get_without_ethernet.data }
     true
+  end
+
+  # Converts network's name and type into its uri
+  def network_uris
+    if @data['networkUris']
+      list = []
+      @data['networkUris'].each do |item|
+        net = objectfromstring(item['type']).find_by(@client, name: item['name'])
+        raise('The network #{name} does not exist.') unless net.first
+        list.push(net.first['uri'])
+      end
+      @data['networkUris'] = list
+    end
   end
 end

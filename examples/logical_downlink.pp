@@ -18,11 +18,19 @@
 # At least 1 logical downlink
 # 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
 
+# If you need to filter your results by networkUris, declare the network name and its type
 oneview_logical_downlink{'Logical Downlink Found':
     ensure => 'found',
     data   =>
     {
-      name => 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
+      name => 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)',
+      # networkUris =>
+      # [
+      #   {
+      #     name => 'Ethernet 1',
+      #     type => 'EthernetNetwork'
+      #   },
+      # ]
     }
 }
 
