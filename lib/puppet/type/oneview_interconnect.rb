@@ -14,13 +14,15 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_interconnect) do
   desc "Oneview's Interconnect"
 
+  # :nocov:
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
     newvalue(:found) do
       provider.found
     end
@@ -43,7 +45,6 @@ Puppet::Type.newtype(:oneview_interconnect) do
     end
 
     # PUTs
-
     newvalue(:reset_port_protection) do
       provider.reset_port_protection
     end
@@ -51,20 +52,18 @@ Puppet::Type.newtype(:oneview_interconnect) do
     newvalue(:update_ports) do
       provider.update_ports
     end
-
   end
+  # :nocov:
 
-
-  newparam(:name, :namevar => true) do
-    desc "Interconnect name"
+  newparam(:name, namevar: true) do
+    desc 'Interconnect name'
   end
 
   newparam(:data) do
-    desc "Interconnect data hash containing all specifications for the
-    resource"
+    desc 'Interconnect data hash containing all specifications for the resource'
     validate do |value|
-        raise Puppet::Error, "Inserted value for data is not valid" unless value.class == Hash
+      raise('Inserted value for data is not valid') unless value.class == Hash
+      uri_validation(value)
     end
   end
-
 end

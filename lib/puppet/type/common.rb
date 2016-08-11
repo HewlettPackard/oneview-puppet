@@ -50,7 +50,7 @@ end
 # Check for special/exceptions to the uri default search
 def special_resources_check(key)
   special_resources = %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri dependentResourceUri
-                         sspUri)
+                         sspUri associatedUplinkSetUri associatedTaskUri parentTaskUri)
   return key unless special_resources.include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
   # to make it compatible with the get_class method which will be called after this
@@ -62,10 +62,11 @@ end
 def special_resources_assign(key)
   return generic_resource_fixer if %w(resourceUri actualNetworkUri expectedNetworkUri uri).include?(key)
   case key
-  when 'firmwareBaselineUri' then 'FirmwareDriver'
+  when 'firmwareBaselineUri', 'sspUri' then 'FirmwareDriver'
   when 'actualNetworkSanUri' then 'ManagedSAN'
-  when 'sspUri' then 'FirmwareDriver'
   when 'dependentResourceUri' then 'LogicalInterconnect'
+  when 'associatedUplinkSetUri' then 'UplinkSet'
+  when 'parentTaskUri', 'associatedTaskUri' then 'Task'
   end
 end
 

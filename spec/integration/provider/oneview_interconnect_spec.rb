@@ -18,7 +18,7 @@ require 'spec_helper'
 
 # you must have the interconnect in your appliance
 
-provider_class = Puppet::Type.type(:oneview_interconnect).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
 
 describe provider_class do
   let(:resource) do
@@ -31,11 +31,8 @@ describe provider_class do
             'ports' =>
                 [
                   {
-                    'name' => 'X1',
-                    'attributes' =>
-                    {
-                      'enabled' => true
-                    }
+                    'portName' => 'X1',
+                    'enabled' => false
                   }
                 ]
           }
@@ -51,7 +48,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
   end
 
   context 'given the min parameters' do
@@ -68,14 +65,14 @@ describe provider_class do
     end
 
     it 'should run destroy and display an error' do
-      expect { provider.destroy }.to raise_error('This resource depends on other resources to be destroyed.')
+      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
 
     it 'should run create and display an error' do
-      expect { provider.create }.to raise_error('This resource depends on other resources to be created.')
+      expect { provider.create }.to raise_error('This resource relies on others to be created.')
     end
 
-    it 'should update the interconnect port d1' do
+    it 'should update the interconnect port x1' do
       expect(provider.update_ports).to be
     end
   end
