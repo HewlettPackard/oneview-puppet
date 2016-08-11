@@ -30,6 +30,7 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:oneview_enclosure_group) do
 
   def exists?
     @data = data_parse
+    empty_data_check
     !@resourcetype.find_by(@client, @data).empty?
   end
 

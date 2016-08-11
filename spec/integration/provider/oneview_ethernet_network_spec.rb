@@ -122,7 +122,8 @@ context 'given the minimum parameters of bulk creation' do
   let(:instance) { provider.class.instances.first }
 
   it 'should be able to create multiple networks' do
-    expect(provider.exists?).to eq(true)
+    provider.exists?
+    expect(provider.create).to eq(true)
   end
 end
 

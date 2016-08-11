@@ -17,6 +17,9 @@
 require_relative 'common'
 
 Puppet::Type.newtype(:oneview_enclosure_group) do
+  desc "Oneview's Enclosure Group"
+
+  # :nocov:
   ensurable do
     defaultvalues
 
@@ -32,6 +35,7 @@ Puppet::Type.newtype(:oneview_enclosure_group) do
       provider.set_script
     end
   end
+  # :nocov:
 
   newparam(:name, namevar: true) do
     desc 'Enclosure Group name'

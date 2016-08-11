@@ -31,12 +31,12 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
   def exists?
     @data = data_parse
     empty_data_check
-    return true if bulk_create_check
     !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
+    # Checks if the operation is an update, bulk create or neither
+    return true if bulk_create_check || resource_update(@data, @resourcetype)
     @resourcetype.new(@client, @data).create
   end
 
@@ -64,8 +64,9 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
 
   # Helpers
 
+  # Creates bulk networks if there is @data['vlanIdRange']
   def bulk_create_check
-    @data['vlanIdRange'] ? @resourcetype.bulk_create(@client, bulk_parse(@data)) : nil
+    @data['vlanIdRange'] ? @resourcetype.bulk_create(@client, bulk_parse(@data)) : false
   end
 
   def bulk_parse(data)

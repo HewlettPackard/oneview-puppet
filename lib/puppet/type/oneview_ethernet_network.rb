@@ -17,8 +17,9 @@
 require_relative 'common'
 
 Puppet::Type.newtype(:oneview_ethernet_network) do
-  desc "Oneview's ethernet network"
+  desc "Oneview's Ethernet Network"
 
+  # :nocov:
   ensurable do
     defaultvalues
 
@@ -34,6 +35,7 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
       provider.get_associated_uplink_groups
     end
   end
+  # :nocov:
 
   newparam(:name, namevar: true) do
     desc 'Ethernet network name'
