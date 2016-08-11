@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_connection_template).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
 resourcetype = OneviewSDK::ConnectionTemplate
 
 describe provider_class, unit: true do
@@ -41,7 +41,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
     end
 
     it 'should return that the resource exists' do
@@ -99,7 +99,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should not be able to create the resource' do
-      expect { provider.create }.to raise_error(Puppet::Error, 'This resource cannot be created.')
+      expect { provider.create }.to raise_error('This resource relies on others to be created.')
     end
   end
 
@@ -120,7 +120,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should not be able to destroy the resource' do
-      expect { provider.destroy }.to raise_error(Puppet::Error, 'This resource cannot be destroyed.')
+      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
   end
 end

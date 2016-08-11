@@ -14,36 +14,38 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.newtype(:oneview_ethernet_network) do
-  desc "Oneview's ethernet network"
+require_relative 'common'
 
+Puppet::Type.newtype(:oneview_ethernet_network) do
+  desc "Oneview's Ethernet Network"
+
+  # :nocov:
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
     newvalue(:found) do
       provider.found
     end
 
+    newvalue(:get_associated_profiles) do
+      provider.get_associated_profiles
+    end
+
+    newvalue(:get_associated_uplink_groups) do
+      provider.get_associated_uplink_groups
+    end
   end
+  # :nocov:
 
-  # Debug warning
-  # Puppet.warning("Puppet has passed through the type")
-
-  newparam(:name, :namevar => true) do
-    desc "Ethernet network name"
+  newparam(:name, namevar: true) do
+    desc 'Ethernet network name'
   end
 
   newparam(:data) do
-    desc "Ethernet network data hash containing all specifications for the
-    network"
+    desc 'Ethernet Network data hash containing all specifications for the resource'
     validate do |value|
-      unless value.class == Hash
-        raise(ArgumentError, "Invalid Data Hash")
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
+      uri_validation(value)
     end
   end
-
-
-
 end

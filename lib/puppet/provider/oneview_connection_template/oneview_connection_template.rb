@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
+Puppet::Type.type(:oneview_connection_template).provide(:oneview_connection_template) do
   mk_resource_methods
 
   def initialize(*args)
@@ -40,11 +40,11 @@ Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
   end
 
   def create
-    raise(Puppet::Error, 'This resource cannot be created.')
+    raise('This resource relies on others to be created.')
   end
 
   def destroy
-    raise(Puppet::Error, 'This resource cannot be destroyed.')
+    raise('This resource relies on others to be destroyed.')
   end
 
   def found
