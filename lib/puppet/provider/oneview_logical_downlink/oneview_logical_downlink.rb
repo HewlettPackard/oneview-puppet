@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
+Puppet::Type.type(:oneview_logical_downlink).provide(:oneview_logical_downlink) do
   mk_resource_methods
 
   def initialize(*args)
@@ -30,23 +30,16 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    ld = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !ld.empty?
+    empty_data_check([:found, :get_without_ethernet])
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    Puppet.warning('This resource relies on others to be created.')
-    false
+    raise('This resource relies on others to be created.')
   end
 
   def destroy
-    Puppet.warning('This resource relies on others to be destroyed.')
-    false
+    raise('This resource relies on others to be destroyed.')
   end
 
   def found
@@ -58,10 +51,8 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
     ld = @resourcetype.find_by(@client, @data)
     if ld.empty?
       Puppet.warning('There are no logical downlinks without ethernet in the Oneview appliance.')
-      return false
-    end
-    ld.each do |item|
-      pretty item.get_without_ethernet.data
+    else
+      ld.each { |item| pretty item.get_without_ethernet.data }
     end
     true
   end

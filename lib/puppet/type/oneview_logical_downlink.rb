@@ -17,9 +17,10 @@
 Puppet::Type.newtype(:oneview_logical_downlink) do
   desc "Oneview's Logical Downlink"
 
+  # :nocov:
   ensurable do
     defaultvalues
-    # :nocov:
+
     newvalue(:found) do
       provider.found
     end
@@ -29,18 +30,16 @@ Puppet::Type.newtype(:oneview_logical_downlink) do
       provider.get_without_ethernet
     end
   end
+  # :nocov:
 
   newparam(:name, namevar: true) do
     desc 'Logical Downlink name'
   end
-  # :nocov:
 
   newparam(:data) do
     desc 'Logical Downlink attributes'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
     end
   end
 end

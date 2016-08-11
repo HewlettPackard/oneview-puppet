@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
 
 # you must have this logical downlink in your appliance
 name = 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
@@ -38,7 +38,7 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:ruby)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
   end
 
   context 'given the min parameters' do
@@ -46,61 +46,19 @@ describe provider_class do
       expect(provider.exists?).to be
     end
 
-    it 'should not be able to create the resource' do
-      expect(provider.create).not_to be
-    end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_downlink).new(
-        name: 'Logical Downlink',
-        ensure: 'found',
-        data:
-        {
-          name: name
-        }
-      )
+    it 'should not be able to create/destroy the resource' do
+      expect { provider.create }.to raise_error('This resource relies on others to be created.')
+      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
 
     it 'should be able to find the resource' do
-      expect(provider.exists?).to be
+      provider.exists?
       expect(provider.found).to be
-    end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_downlink).new(
-        name: 'Logical Downlink',
-        ensure: 'get_without_ethernet',
-        data:
-        {
-          name: name
-        }
-      )
     end
 
     it 'should be able to get the logical downlink without ethernet' do
-      expect(provider.exists?).to be
+      provider.exists?
       expect(provider.get_without_ethernet).to be
-    end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_downlink).new(
-        name: 'Logical Downlink',
-        ensure: 'absent',
-        data:
-        {
-          name: name
-        }
-      )
-    end
-
-    it 'should not be able to delete the resource' do
-      expect(provider.destroy).not_to be
     end
   end
 end
