@@ -14,13 +14,16 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_volume_attachment) do
   desc "Oneview's Volume Attachment"
 
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
+    # :nocov:
+    # Get methods
     newvalue(:found) do
       provider.found
     end
@@ -29,13 +32,15 @@ Puppet::Type.newtype(:oneview_volume_attachment) do
       provider.get_extra_unmanaged_volumes
     end
 
-    newvalue(:remove_extra_unmanaged_volume) do
-      provider.remove_extra_unmanaged_volume
-    end
-
     newvalue(:get_paths) do
       provider.get_paths
     end
+
+    # Set methods
+    newvalue(:remove_extra_unmanaged_volume) do
+      provider.remove_extra_unmanaged_volume
+    end
+    # :nocov:
   end
 
   newparam(:name, namevar: true) do
@@ -45,9 +50,8 @@ Puppet::Type.newtype(:oneview_volume_attachment) do
   newparam(:data) do
     desc 'Volume Attachment data hash containing all specifications for the system'
     validate do |value|
-      unless value.class == Hash
-        fail Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
   end
 end
