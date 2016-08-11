@@ -14,11 +14,16 @@
 # limitations under the License.
 ################################################################################
 
+# NOTE: There is no update/PUT method for storage pools on oneview. If 'present' is run
+  # against an already existing storage pool but with different configs, it will try to
+  # drop the existing storage pool to create the new one with the wanted specifications.
+
 oneview_storage_pool{'storage_pool_1':
     ensure => 'present',
     data   => {
-      poolName         => 'FST_CPG2',
-      storageSystemUri => '/rest/storage-systems/TXQ1000307'
+      poolName         => 'CPG-SSD-AO',
+      storageSystemUri => 'ThreePAR7200-8392'
+      # storageSystemUri => '/rest/storage-systems/TXQ1000307'
     }
 }
 
@@ -27,14 +32,22 @@ oneview_storage_pool{'storage_pool_2':
     # require => Oneview_storage_pool['storage_pool_1'],
     # This resource accepts a data hash to filter out results or no data hash to display all
     # data   => {
-    #   poolName                   => 'FST_CPG2',
+    #   poolName                   => 'CPG-SSD-AO',
     # }
 }
 
+oneview_storage_pool{'storage_pool_4':
+    ensure => 'present',
+    data   => {
+      poolName         => 'CPG-SSD-AO',
+      storageSystemUri => 'ThreePAR7200-8392'
+      # storageSystemUri => '/rest/storage-systems/TXQ1000307'
+    }
+}
 oneview_storage_pool{'storage_pool_3':
     ensure  => 'absent',
     require => Oneview_storage_pool['storage_pool_2'],
     data    => {
-      poolName         => 'FST_CPG2',
+      poolName         => 'CPG-SSD-AO',
     }
 }
