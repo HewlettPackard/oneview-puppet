@@ -42,9 +42,7 @@ Puppet::Type.newtype(:oneview_datacenter) do
   newparam(:data) do
     desc 'Datacenter attributes'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
       uri_validation(value)
     end
   end

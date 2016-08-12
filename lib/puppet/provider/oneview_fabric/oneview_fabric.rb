@@ -18,47 +18,31 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_connection_template).provide(:ruby) do
+Puppet::Type.type(:oneview_fabric).provide(:oneview_fabric) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ConnectionTemplate
+    @resourcetype = OneviewSDK::Fabric
     @data = {}
   end
 
   def exists?
     @data = data_parse
-    ct = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
-         else
-           @resourcetype.find_by(@client, @data)
-         end
-    !ct.empty?
+    fabrics = @resourcetype.find_by(@client, @data)
+    !fabrics.empty?
   end
 
   def create
-    raise(Puppet::Error, 'This resource cannot be created.')
+    raise('This resource relies on others to be created.')
   end
 
   def destroy
-    raise(Puppet::Error, 'This resource cannot be destroyed.')
+    raise('This resource relies on others to be destroyed.')
   end
 
   def found
     find_resources
-  end
-
-  def get_default_connection_template
-    Puppet.notice("\n\nDefault Connection Template")
-    default = @resourcetype.get_default(@client)
-    if default['uri']
-      puts "\nName: '#{default['name']}'"
-      puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"
-      puts "(- typicalBandwidth: #{default['bandwidth']['typicalBandwidth']})\n\n"
-      true
-    end
   end
 end

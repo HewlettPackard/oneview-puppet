@@ -18,11 +18,37 @@
 # At least 1 logical downlink
 # 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
 
+# This resource depends on other resources to be created or destroyed. Therefore,
+# you may receive an error when trying to declare it as present or absent (unless it exists or not in your appliance, respectively).
+# oneview_logical_downlink{'Logical Downlink Create':
+#     ensure => 'present',
+#     data   =>
+#     {
+#       name => 'New Logical Downlink',
+#     }
+# }
+#
+# oneview_logical_downlink{'Logical Downlink Destroy':
+#     ensure => 'absent',
+#     data   =>
+#     {
+#       name => 'New Logical Downlink',
+#     }
+# }
+
+# If you need to filter your results by networkUris, declare the network name and its type
 oneview_logical_downlink{'Logical Downlink Found':
     ensure => 'found',
     data   =>
     {
-      name => 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
+      name => 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)',
+      # networkUris =>
+      # [
+      #   {
+      #     name => 'Ethernet 1',
+      #     type => 'EthernetNetwork'
+      #   },
+      # ]
     }
 }
 
@@ -36,21 +62,4 @@ oneview_logical_downlink{'Logical Downlink (without ethernet)':
     {
       name => 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
     }
-}
-
-# Displays an error, as this resource cannot be created/destroyed
-oneview_logical_downlink{'Logical Downlink Destroy':
-  ensure => 'absent',
-  data   =>
-  {
-    name => 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
-  }
-}
-
-oneview_logical_downlink{'Logical Downlink Create':
-  ensure => 'present',
-  data   =>
-  {
-    name => 'Logical Downlink'
-  }
 }

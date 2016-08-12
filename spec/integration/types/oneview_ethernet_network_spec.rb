@@ -18,7 +18,7 @@ require 'spec_helper'
 
 type_class = Puppet::Type.type(:oneview_ethernet_network)
 
-def ethernet_config
+def resource_config
   {
     name:                           'test_net',
     data:
@@ -34,35 +34,48 @@ def ethernet_config
 end
 
 describe type_class do
-
   let :params do
-  [
-    :name,
-    :data,
-    :provider,
-  ]
+    [
+      :name,
+      :data,
+      :provider
+    ]
+  end
+
+  let :special_ensurables do
+    [
+      :found
+    ]
   end
 
   it 'should have expected parameters' do
     params.each do |param|
-      expect(type_class.parameters).to be_include(param)
+      expect(type_class.parameters).to include(param)
+    end
+  end
+
+  it 'should accept special ensurables' do
+    special_ensurables.each do |value|
+      expect do
+        described_class.new(name: 'Test',
+                            ensure: value,
+                            data: {})
+      end.to_not raise_error
     end
   end
 
   it 'should require a name' do
-    expect {
+    expect do
       type_class.new({})
-    }.to raise_error(Puppet::Error, 'Title or name must be provided')
+    end.to raise_error('Title or name must be provided')
   end
 
   it 'should require a data hash' do
-    modified_config = ethernet_config
+    modified_config = resource_config
     modified_config[:data] = ''
-    resource_type = type_class.to_s.split('::')
-    expect {
-        type_class.new(modified_config)
-    }.to raise_error(Puppet::Error, "Parameter data failed on" +
-    " #{resource_type[2]}[#{modified_config[:name]}]: Invalid Data Hash")
+    expect do
+      type_class.new(modified_config)
+    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_ethernet_network[test_net]: '\
+                                              'Validate method failed for class data: Inserted value for data is not valid')
   end
-
 end

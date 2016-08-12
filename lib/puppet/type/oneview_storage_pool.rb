@@ -14,32 +14,31 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_storage_pool) do
   desc "Oneview's Storage Pool"
 
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
+    # :nocov:
+    # Get methods
     newvalue(:found) do
       provider.found
     end
-
+    # :nocov:
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Storage pool name"
+  newparam(:name, namevar: true) do
+    desc 'Storage pool name'
   end
 
   newparam(:data) do
-    desc "Storage pool data hash containing all specifications for the system"
+    desc 'Storage pool data hash containing all specifications for the system'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
-      end
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
   end
-
-
-
 end

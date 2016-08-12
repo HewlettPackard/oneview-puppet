@@ -17,6 +17,9 @@
 require_relative 'common'
 
 Puppet::Type.newtype(:oneview_enclosure_group) do
+  desc "Oneview's Enclosure Group"
+
+  # :nocov:
   ensurable do
     defaultvalues
 
@@ -32,6 +35,7 @@ Puppet::Type.newtype(:oneview_enclosure_group) do
       provider.set_script
     end
   end
+  # :nocov:
 
   newparam(:name, namevar: true) do
     desc 'Enclosure Group name'
@@ -40,7 +44,8 @@ Puppet::Type.newtype(:oneview_enclosure_group) do
   newparam(:data) do
     desc 'Enclosure Group data hash containing all specifications for the resource'
     validate do |value|
-      raise(ArgumentError, 'Invalid data hash') unless value.class == Hash
+      raise('Inserted value for data is not valid') unless value.class == Hash
+      uri_validation(value)
     end
   end
 end

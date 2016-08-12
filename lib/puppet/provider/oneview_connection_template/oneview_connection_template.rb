@@ -18,51 +18,47 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_logical_downlink).provide(:ruby) do
+Puppet::Type.type(:oneview_connection_template).provide(:oneview_connection_template) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::LogicalDownlink
+    @resourcetype = OneviewSDK::ConnectionTemplate
     @data = {}
   end
 
   def exists?
     @data = data_parse
-    ld = if resource['ensure'] == :present
+    ct = if resource['ensure'] == :present
            resource_update(@data, @resourcetype)
            @resourcetype.find_by(@client, unique_id)
          else
            @resourcetype.find_by(@client, @data)
          end
-    !ld.empty?
+    !ct.empty?
   end
 
   def create
-    Puppet.warning('This resource relies on others to be created.')
-    false
+    raise('This resource relies on others to be created.')
   end
 
   def destroy
-    Puppet.warning('This resource relies on others to be destroyed.')
-    false
+    raise('This resource relies on others to be destroyed.')
   end
 
   def found
     find_resources
   end
 
-  def get_without_ethernet
-    Puppet.notice("\nLogical Downlinks\n")
-    ld = @resourcetype.find_by(@client, @data)
-    if ld.empty?
-      Puppet.warning('There are no logical downlinks without ethernet in the Oneview appliance.')
-      return false
+  def get_default_connection_template
+    Puppet.notice("\n\nDefault Connection Template")
+    default = @resourcetype.get_default(@client)
+    if default['uri']
+      puts "\nName: '#{default['name']}'"
+      puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"
+      puts "(- typicalBandwidth: #{default['bandwidth']['typicalBandwidth']})\n\n"
+      true
     end
-    ld.each do |item|
-      pretty item.get_without_ethernet.data
-    end
-    true
   end
 end

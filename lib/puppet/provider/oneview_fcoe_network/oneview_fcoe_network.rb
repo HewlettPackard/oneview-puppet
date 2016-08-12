@@ -18,28 +18,29 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_fabric).provide(:ruby) do
+Puppet::Type.type(:oneview_fcoe_network).provide(:oneview_fcoe_network) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Fabric
+    @resourcetype = OneviewSDK::FCoENetwork
     @data = {}
   end
 
   def exists?
     @data = data_parse
-    fabrics = @resourcetype.find_by(@client, @data)
-    !fabrics.empty?
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    raise('This resource cannot be created.')
+    return true if resource_update(@data, @resourcetype)
+    @resourcetype.new(@client, @data).create
   end
 
   def destroy
-    raise('This resource cannot be destroyed.')
+    get_single_resource_instance.delete
   end
 
   def found

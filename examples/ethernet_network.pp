@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-oneview_ethernet_network{'net1':
+oneview_ethernet_network{'Ethernet Network Create':
   ensure => 'present',
   data   => {
     name                  => 'Puppet network',
@@ -22,39 +22,56 @@ oneview_ethernet_network{'net1':
     purpose               => 'General',
     smartLink             => true,
     privateNetwork        => false,
-    connectionTemplateUri => 'nil',
+    connectionTemplateUri => nil,
     type                  => 'ethernet-networkV3'
   }
 }
-oneview_ethernet_network{'net2':
+
+oneview_ethernet_network{'Ethernet Network Associated Profiles':
+  ensure  => 'get_associated_profiles',
+  require => Oneview_ethernet_network['Ethernet Network Create'],
+  data    => {
+    name => 'Puppet network'
+  }
+}
+
+oneview_ethernet_network{'Ethernet Network Uplink Groups':
+  ensure  => 'get_associated_uplink_groups',
+  require => Oneview_ethernet_network['Ethernet Network Associated Profiles'],
+  data    => {
+    name => 'Puppet network'
+  }
+}
+
+oneview_ethernet_network{'Ethernet Network Update':
   ensure  => 'present',
-  require => Oneview_ethernet_network['net1'],
+  require => Oneview_ethernet_network['Ethernet Network Uplink Groups'],
   data    => {
     name     => 'Puppet network',
     new_name => 'Updated'
   }
 }
 
-oneview_ethernet_network{'net3':
+oneview_ethernet_network{'Ethernet Network Found #1':
   ensure  => 'found',
-  require => Oneview_ethernet_network['net2'],
+  require => Oneview_ethernet_network['Ethernet Network Update'],
   data    => {
     name => 'Updated'
   }
 }
 
-oneview_ethernet_network{'net4':
+oneview_ethernet_network{'Ethernet Network Found #2':
   ensure  => 'found',
-  require => Oneview_ethernet_network['net3'],
+  require => Oneview_ethernet_network['Ethernet Network Found #1'],
   data    => {
     vlanId => '1045',
   }
 }
 
 
-oneview_ethernet_network{'net5':
+oneview_ethernet_network{'Ethernet Network Delete':
   ensure  => 'absent',
-  require => Oneview_ethernet_network['net4'],
+  require => Oneview_ethernet_network['Ethernet Network Found #2'],
   data    => {
     name => 'Updated'
   }

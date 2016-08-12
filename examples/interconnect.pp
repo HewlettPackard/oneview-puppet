@@ -15,10 +15,7 @@
 ################################################################################
 
 oneview_interconnect{'Interconnect Get Types':
-  ensure => 'get_types',
-  # data   => {
-  #   name => 'Encl2, interconnect 1'
-  # }
+  ensure => 'get_types'
 }
 
 oneview_interconnect{'Interconnect Found':
@@ -29,76 +26,66 @@ oneview_interconnect{'Interconnect Found':
 }
 
 oneview_interconnect{'Interconnect Found All':
-    ensure => 'found'
+  ensure => 'found'
 }
 
-oneview_interconnect{'Interconnect Get Statistics':
-    ensure => 'get_statistics',
-    data   => {
-      name => 'Encl2, interconnect 1'
-    }
-}
-
+# Statistics filters are optional
 oneview_interconnect{'Interconnect Get Specific Statistics':
-    ensure => 'get_statistics',
-    data   => {
-      name       => 'Encl2, interconnect 1',
-      statistics =>
-      {
-        portName => 'X1'
-        # subportNumber => ''
-      }
+  ensure => 'get_statistics',
+  data   => {
+    name       => 'Encl2, interconnect 2',
+    statistics =>
+    {
+      portName => 'X1'
+      # subportNumber => '1'
     }
+  }
 }
 
 oneview_interconnect{'Interconnect Get Name Servers':
-    ensure => 'get_name_servers',
-    data   => {
-      name => 'Encl2, interconnect 1'
-    }
+  ensure => 'get_name_servers',
+  data   => {
+    name => 'Encl2, interconnect 1'
+  }
 }
 
 oneview_interconnect{'Interconnect Patch Interconnect':
-    ensure => 'present',
-    data   => {
-      name  => 'Encl2, interconnect 1',
-      patch =>
-      {
-        op    => 'replace',
-        path  => '/uidState',
-        value => 'Off'
-      }
+  ensure => 'present',
+  data   => {
+    name  => 'Encl2, interconnect 1',
+    patch =>
+    {
+      op    => 'replace',
+      path  => '/uidState',
+      value => 'Off'
     }
+  }
 }
 
 oneview_interconnect{'Interconnect Reset Port Protection':
-    ensure => 'reset_port_protection',
-    data   => {
-      name => 'Encl2, interconnect 1',
-    }
+  ensure => 'reset_port_protection',
+  data   => {
+    name => 'Encl2, interconnect 1',
+  }
 }
 
+# Each item in the array is a port to be updated
+# The portName field needs to be declared, as it is the port identifier
 oneview_interconnect{'Interconnect Update Ports':
-    ensure => 'update_ports',
-    data   =>
-    {
-      name  => 'Encl2, interconnect 1',
-      ports =>
-        [
-          {
-            name       => 'X1',
-            attributes =>
-            {
-              enabled => true
-            }
-          },
-          {
-            name       => 'X2',
-            attributes =>
-            {
-              enabled => true
-            }
-          }
-        ]
-    }
+  ensure => 'update_ports',
+  data   =>
+  {
+    name  => 'Encl2, interconnect 1',
+    ports =>
+      [
+        {
+          portName => 'X1',
+          enabled  => false
+        },
+        {
+          portName => 'X2',
+          enabled  => false
+        }
+      ]
+  }
 }
