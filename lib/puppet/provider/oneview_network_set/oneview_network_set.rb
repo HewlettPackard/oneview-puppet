@@ -55,8 +55,7 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
 
   def get_without_ethernet
     Puppet.notice("\n\n\s\sNetwork Set Without Ethernet\n")
-    ns = get_single_resource_instance.get_without_ethernet
-    puts "\s\sName: #{ns['name']}\n\s\sURI: #{ns['uri']}\n\n"
+    pretty @resourcetype.get_without_ethernet(@client)
     true
   end
 
