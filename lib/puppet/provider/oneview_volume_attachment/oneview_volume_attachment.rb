@@ -69,6 +69,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
     extra_unmanaged_volumes.each do |unmanaged_volume|
       Puppet.notice "\n- #{unmanaged_volume['ownerUri']}\n"
     end
+    true
   end
 
   def remove_extra_unmanaged_volume
@@ -76,10 +77,11 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
     raise "\n\nSpecified Server Profile does not exist.\n" unless server_profile
     @resourcetype.remove_extra_unmanaged_volume(@client, server_profile)
     # @resourcetype.remove_extra_unmanaged_volume(@client, server_profile['uri'])
+    true
   end
 
+  # List extra unmanaged storage volumes
   def get_paths
-    # List extra unmanaged storage volumes
     id = @data.delete('id')
     storage_volume_attachment = get_single_resource_instance
     if id
@@ -87,6 +89,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
     else
       get_all_paths(storage_volume_attachment)
     end
+    true
   end
 
   def get_path_by_id(storage_volume_attachment, id)
