@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_power_device).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
 resourcetype = OneviewSDK::PowerDevice
 
 describe provider_class, unit: true do
@@ -46,7 +46,7 @@ describe provider_class, unit: true do
 
   context 'given the minimum parameters before server creation' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
     end
   end
 

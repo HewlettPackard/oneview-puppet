@@ -114,33 +114,6 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
-        ensure: 'absent',
-        data:
-            {
-              'name' => '172.18.8.11, PDU 1'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      provider.exists?
-    end
-
-    context 'given the minimum parameters after resource creation' do
-      it 'should be able to destroy the resource' do
-        expect(provider.destroy).to be
-      end
-    end
-  end
-
-  describe provider_class do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
         ensure: 'present',
         data:
             {
@@ -186,6 +159,11 @@ describe provider_class do
     end
 
     context 'given the minimum parameters after resource creation' do
+
+      it 'should be able to find the power devices' do
+        expect(provider.found).to be
+      end
+
       it 'should be able to destroy the resource' do
         expect(provider.destroy).to be
       end
