@@ -14,13 +14,16 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_volume) do
   desc "Oneview's Volume"
 
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
+    # :nocov:
+    # Get methods
     newvalue(:found) do
       provider.found
     end
@@ -33,6 +36,11 @@ Puppet::Type.newtype(:oneview_volume) do
       provider.get_extra_managed_volume_paths
     end
 
+    newvalue(:get_snapshot) do
+      provider.get_snapshot
+    end
+
+    # SET/POST/PUT/DELETE methods
     newvalue(:repair) do
       provider.repair
     end
@@ -44,26 +52,18 @@ Puppet::Type.newtype(:oneview_volume) do
     newvalue(:delete_snapshot) do
       provider.delete_snapshot
     end
-
-    newvalue(:get_snapshot) do
-      provider.get_snapshot
-    end
-
+    # :nocov:
   end
 
-  newparam(:name, :namevar => true) do
-    desc "Volume name"
+  newparam(:name, namevar: true) do
+    desc 'Volume name'
   end
 
   newparam(:data) do
-    desc "Volume data hash containing all specifications for the system"
+    desc 'Volume data hash containing all specifications for the system'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, "Inserted value for data is not valid"
-      end
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
   end
-
-
-
 end
