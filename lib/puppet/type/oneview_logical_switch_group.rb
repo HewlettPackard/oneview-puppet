@@ -14,9 +14,12 @@
 # limitations under the License.
 ################################################################################
 
+require_relative('common')
+
 Puppet::Type.newtype(:oneview_logical_switch_group) do
   desc "Oneview's Logical Switch Group"
 
+  # :nocov:
   ensurable do
     defaultvalues
 
@@ -24,6 +27,7 @@ Puppet::Type.newtype(:oneview_logical_switch_group) do
       provider.found
     end
   end
+  # :nocov:
 
   newparam(:name, namevar: true) do
     desc 'Logical Switch Group name'
@@ -32,9 +36,8 @@ Puppet::Type.newtype(:oneview_logical_switch_group) do
   newparam(:data) do
     desc 'Logical Switch Group attributes'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
+      uri_validation(value)
     end
   end
 end
