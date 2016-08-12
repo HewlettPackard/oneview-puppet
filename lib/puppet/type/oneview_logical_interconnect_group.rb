@@ -14,6 +14,8 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_logical_interconnect_group) do
   desc "Oneview's Logical Interconnect Group"
 
@@ -44,12 +46,10 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
   end
 
   newparam(:data) do
-    desc 'Logical Interconnect Group data hash containing all specifications for the
-    resource'
+    desc 'Logical Interconnect Group data hash containing all specifications for the resource'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
+      uri_validation(value)
     end
   end
 end
