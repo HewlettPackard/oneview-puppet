@@ -14,34 +14,27 @@
 # limitations under the License.
 ################################################################################
 
-oneview_volume_attachment{'volume_attachment_1':
-    ensure => 'present',
-    # This method is actually unavailable and will not run
-}
-
-oneview_volume_attachment{'volume_attachment_2':
-    ensure  => 'absent',
-    require => Oneview_volume_attachment['volume_attachment_1'],
-    # This method is actually unavailable and will not run
-}
+# NOTE: The 'present' and 'absent' ensurables are disabled for this resource
+  # as it is created/updated/deleted through other resources/dependencies.
 
 oneview_volume_attachment{'volume_attachment_3':
     ensure  => 'found',
     require => Oneview_volume_attachment['volume_attachment_2'],
-    # This resource accepts a data hash to filter out results or no data hash to display all
     # data   => {
     #   name                   => 'ONEVIEW_PUPPET_TEST VA1',
     # }
 }
 
+# This resource does not require a data hash as it will return all extra unmanaged volumes.
 oneview_volume_attachment{'volume_attachment_4':
     ensure  => 'get_extra_unmanaged_volumes',
     require => Oneview_volume_attachment['volume_attachment_3'],
-    data    => {
-      name       => 'ONEVIEW_PUPPET_TEST VA1',
-    }
+    # data    => {
+    #   name       => 'ONEVIEW_PUPPET_TEST VA1',
+    # }
 }
 
+# This requires the name of the server profile from which to remove the Volume Attachments
 oneview_volume_attachment{'volume_attachment_5':
     ensure => 'remove_extra_unmanaged_volume',
     data   => {
@@ -49,6 +42,8 @@ oneview_volume_attachment{'volume_attachment_5':
     }
 }
 
+# get_paths requires the volume attachment name and accepts the path id to filter out,
+  # or displays all paths within the volume attachment
 oneview_volume_attachment{'volume_attachment_6':
     ensure => 'get_paths',
     data   => {
