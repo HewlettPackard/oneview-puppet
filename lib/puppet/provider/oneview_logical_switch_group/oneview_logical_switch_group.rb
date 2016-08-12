@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
+Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch_group) do
   mk_resource_methods
 
   def initialize(*args)
@@ -44,7 +44,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:ruby) do
   end
 
   def destroy
-    @resourcetype.find_by(@client, unique_id).first.delete
+    get_single_resource_instance.delete
   end
 
   def found
