@@ -18,24 +18,11 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_network_set).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
 resourcetype = OneviewSDK::NetworkSet
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_network_set).new(
-      name: 'Network Set',
-      ensure: 'present',
-      data:
-          {
-            'name' => 'Network Set',
-            'nativeNetwork' => 'Ethernet 1',
-            'ethernetNetworks' => ['Ethernet 1', 'Ethernet 2']
-          }
-    )
-  end
 
   context 'given the min parameters' do
     let(:resource) do
@@ -54,7 +41,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
     end
 
     it 'should return that the resource does not exists' do
@@ -90,41 +77,6 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.destroy).to be
     end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_network_set).new(
-        name: 'Network Set',
-        ensure: 'add_ethernet_network',
-        data:
-            {
-              'name' => 'Network Set',
-              'nativeNetwork' => 'Ethernet 1',
-              'ethernetNetworks' => ['Ethernet 1']
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    # TODO: something is preventing the method from passing the update
-    #       finish covering network update methods
-    # it 'should be able to add the ethernet network' do
-    #   test = resourcetype.new(@client, name: resource['data']['name'])
-    #   allow(resourcetype).to receive(:find_by).and_return([test])
-    #   expect(provider.exists?).to eq(true)
-    #   expect(provider.found).to eq(true)
-    #   ethernet = OneviewSDK::EthernetNetwork.new(@client, name: 'Ethernet 1')
-    #   allow_any_instance_of(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'Ethernet 1').and_return([ethernet])
-    #   test['networkUris'] << ethernet['uri']
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_put).and_return(FakeResponse.new('Fake Get Statistics'))
-    #   expect_any_instance_of(resourcetype).to receive(:update).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   allow(resourcetype).to receive(:set_native_network).with(ethernet).and_return(test)
-    #   expect(provider.add_ethernet_network).to be
-    # end
   end
 
   context 'given the min parameters' do

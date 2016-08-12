@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_network_set).provide(:ruby) do
+Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
   mk_resource_methods
 
   def initialize(*args)
@@ -46,8 +46,7 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def destroy
-    ns = @resourcetype.find_by(@client, unique_id)
-    ns.first.delete
+    get_single_resource_instance.delete
   end
 
   def found
@@ -56,25 +55,25 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
 
   def get_without_ethernet
     Puppet.notice("\n\n\s\sNetwork Set Without Ethernet\n")
-    ns = @resourcetype.find_by(@client, @data).first.get_without_ethernet
+    ns = get_single_resource_instance.get_without_ethernet
     puts "\s\sName: #{ns['name']}\n\s\sURI: #{ns['uri']}\n\n"
     true
   end
 
   def set_native_network
-    ns = @resourcetype.find_by(@client, unique_id).first
+    ns = get_single_resource_instance
     set_native_network_helper(ns)
     ns.update
   end
 
   def add_ethernet_network
-    ns = @resourcetype.find_by(@client, unique_id).first
+    ns = get_single_resource_instance
     add_ethernet_network_helper(ns)
     ns.update
   end
 
   def remove_ethernet_network
-    ns = @resourcetype.find_by(@client, unique_id).first
+    ns = get_single_resource_instance
     @ethernet_networks.each do |net|
       ethernet = @ethernet.find_by(@client, name: net).first
       ns.remove_ethernet_network(ethernet)
