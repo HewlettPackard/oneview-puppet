@@ -79,14 +79,12 @@ Puppet::Type.type(:oneview_switch).provide(:oneview_switch) do
   def get_statistics
     port_name = @data.delete('port_name')
     subport_number = @data.delete('subport_number')
-    switch = get_single_resource_instance
-    pretty switch.statistics(port_name, subport_number)
+    pretty get_single_resource_instance.statistics(port_name, subport_number)
     true
   end
 
   def get_environmental_configuration
-    switch = get_single_resource_instance
-    pretty switch.environmental_configuration
+    pretty get_single_resource_instance.environmental_configuration
     true
   end
 end

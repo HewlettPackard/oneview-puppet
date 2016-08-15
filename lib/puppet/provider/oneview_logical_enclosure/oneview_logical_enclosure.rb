@@ -68,9 +68,8 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:oneview_logical_enclosure
   end
 
   def get_script
-    logical_enclosure = get_single_resource_instance
     Puppet.notice "\n\n-- Start of the configuration script :"
-    pretty logical_enclosure.get_script
+    pretty get_single_resource_instance.get_script
     Puppet.notice "\n\n-- End of the configuration script."
     true
   end
