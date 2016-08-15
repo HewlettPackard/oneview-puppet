@@ -23,72 +23,72 @@
 # - Server Hardware Type 'BL660c Gen8 1'
 # - Firmware Driver 'firmware'
 
-# oneview_server_profile_template{'Server Profile Template Create':
-#   ensure => 'present',
-#   data   =>
-#     {
-#       name                  => 'New SPT',
-#       # You can either declare the name or the uri of the following parameters:
-#       enclosureGroupUri     => 'EG',
-#       serverHardwareTypeUri => 'BL460c Gen8 1'
-#     }
-# }
-#
-# oneview_server_profile_template{'Server Profile Template Found':
-#   ensure  => 'found',
-#   require => Oneview_server_profile_template['Server Profile Template Create'],
-#   data    =>
-#     {
-#       name => 'New SPT',
-#     }
-# }
-#
-# oneview_server_profile_template{'Server Profile Template Edit':
-#   ensure  => 'present',
-#   require => Oneview_server_profile_template['Server Profile Template Found'],
-#   data    =>
-#     {
-#       name     => 'New SPT',
-#       new_name => 'Edited SPT'
-#     }
-# }
-#
-# oneview_server_profile_template{'Server Profile Template Create #2':
-#   ensure  => 'present',
-#   require => Oneview_server_profile_template['Server Profile Template Edit'],
-#   data    =>
-#     {
-#       name                  => 'New SPT #2',
-#       # You can either declare the name or the uri of the following parameters:
-#       enclosureGroupUri     => 'EG',
-#       serverHardwareTypeUri => 'BL460c Gen8 1'
-#     }
-# }
-#
-# oneview_server_profile_template{'Server Profile Template Get All':
-#   ensure  => 'found',
-#   require => Oneview_server_profile_template['Server Profile Template Create #2']
-# }
-#
-# oneview_server_profile_template{'Server Profile Template Destroy':
-#   ensure  => 'absent',
-#   require => Oneview_server_profile_template['Server Profile Template Get All'],
-#   data    =>
-#     {
-#       name => 'Edited SPT',
-#     }
-# }
-#
-# oneview_server_profile_template{'Server Profile Create':
-#   ensure  => 'set_new_profile',
-#   require => Oneview_server_profile_template['Server Profile Template Get All'],
-#   data    =>
-#     {
-#       name                  => 'New SPT #2',
-#       # This is optional; a default name will be provided
-#       # serverProfileName     => 'My SP'
-#     }
-# }
+oneview_server_profile_template{'Server Profile Template Create':
+  ensure => 'present',
+  data   =>
+    {
+      name                  => 'New SPT',
+      # You can either declare the name or the uri of the following parameters:
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'BL460c Gen8 1'
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Found':
+  ensure  => 'found',
+  require => Oneview_server_profile_template['Server Profile Template Create'],
+  data    =>
+    {
+      name => 'New SPT',
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Edit':
+  ensure  => 'present',
+  require => Oneview_server_profile_template['Server Profile Template Found'],
+  data    =>
+    {
+      name     => 'New SPT',
+      new_name => 'Edited SPT'
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Create #2':
+  ensure  => 'present',
+  require => Oneview_server_profile_template['Server Profile Template Edit'],
+  data    =>
+    {
+      name                  => 'New SPT #2',
+      # You can either declare the name or the uri of the following parameters:
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'BL460c Gen8 1'
+    }
+}
+
+oneview_server_profile_template{'Server Profile Template Get All':
+  ensure  => 'found',
+  require => Oneview_server_profile_template['Server Profile Template Create #2']
+}
+
+oneview_server_profile_template{'Server Profile Template Destroy':
+  ensure  => 'absent',
+  require => Oneview_server_profile_template['Server Profile Template Get All'],
+  data    =>
+    {
+      name => 'Edited SPT',
+    }
+}
+
+oneview_server_profile_template{'Server Profile Create':
+  ensure  => 'set_new_profile',
+  require => Oneview_server_profile_template['Server Profile Template Get All'],
+  data    =>
+    {
+      name                  => 'New SPT #2',
+      # This is optional; a default name will be provided
+      # serverProfileName     => 'My SP'
+    }
+}
 
 # This task will only work once the Server Profile above is deleted
 # oneview_server_profile_template{'Server Profile Template Destroy #2':
@@ -99,28 +99,28 @@
 #       name => 'New SPT #2',
 #     }
 # }
-
+#
 # The following tasks are not available in the resources currently in use
 # (enclosure groups and server hardware types cannot be changed)
-oneview_server_profile_template{'Server Profile Template Add Connection':
-ensure  => 'present',
-# require => Oneview_server_profile_template['Server Profile Template Destroy'],
-  data  =>
-  {
-    name        => 'New SPT #2',
-    connections =>
-    [
-      {
-        name => 'Ethernet 1',
-        functionType => 'Ethernet'
-        # options =>
-        #   {
-        #     This is optional
-        #   }
-      }
-    ]
-  }
-}
+# oneview_server_profile_template{'Server Profile Template Add Connection':
+# ensure  => 'present',
+# # require => Oneview_server_profile_template['Server Profile Template Destroy'],
+#   data  =>
+#   {
+#     name        => 'New SPT #2',
+#     connections =>
+#     [
+#       {
+#         name => 'Ethernet 1',
+#         functionType => 'Ethernet'
+#         # options =>
+#         #   {
+#         #     This is optional
+#         #   }
+#       }
+#     ]
+#   }
+# }
 #
 # oneview_server_profile_template{'Server Profile Template Remove Connection':
 #   ensure => 'remove_connection',
