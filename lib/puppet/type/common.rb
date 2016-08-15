@@ -51,7 +51,7 @@ end
 def special_resources_check(key)
   special_resources = %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri dependentResourceUri
                          sspUri associatedUplinkSetUri associatedTaskUri parentTaskUri snapshotPoolUri permittedSwitchTypeUri
-                         volumeStoragePoolUri volumeStorageSystemUri)
+                         volumeStoragePoolUri volumeStorageSystemUri permittedInterconnectTypeUri)
   return key unless special_resources.include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
   # to make it compatible with the get_class method which will be called after this
@@ -71,6 +71,7 @@ def special_resources_assign(key)
   when 'associatedUplinkSetUri' then 'UplinkSet'
   when 'parentTaskUri', 'associatedTaskUri' then 'Task'
   when 'permittedSwitchTypeUri' then 'Switch'
+  when 'permittedInterconnectTypeUri' then 'Interconnect'
   end
 end
 

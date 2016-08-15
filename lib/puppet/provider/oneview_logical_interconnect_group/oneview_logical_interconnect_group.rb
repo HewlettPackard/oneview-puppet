@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
+Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_interconnect_group) do
   mk_resource_methods
 
   def initialize(*args)
@@ -30,13 +30,8 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
 
   def exists?
     @data = data_parse
-    lig = if resource['ensure'] == :present
-            resource_update(@data, @resourcetype)
-            @resourcetype.find_by(@client, unique_id)
-          else
-            @resourcetype.find_by(@client, @data)
-          end
-    !lig.empty?
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def found
@@ -44,36 +39,23 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:ruby) do
   end
 
   def create
-    lig = @resourcetype.new(@client, @data)
-    lig.create
+    return true if resource_update(@data, @resourcetype)
+    @resourcetype.new(@client, @data).create
   end
 
   def destroy
-    lig = @resourcetype.find_by(@client, unique_id)
-    lig.first.delete
+    get_single_resource_instance.delete
   end
 
   def get_settings
     Puppet.notice("\n\nLogical Interconnect Group Settings\n")
-    lig = @resourcetype.find_by(@client, unique_id)
-    if lig.first
-      pretty lig.first.get_settings
-      true
-    else
-      Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
-      false
-    end
+    pretty get_single_resource_instance.get_settings
+    true
   end
 
   def get_default_settings
     Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
-    lig = @resourcetype.find_by(@client, unique_id)
-    if lig.first
-      pretty lig.first.get_default_settings
-      true
-    else
-      Puppet.warning('No Logical Interconnect Groups with the given specifications were found.')
-      false
-    end
+    pretty get_single_resource_instance.get_default_settings
+    true
   end
 end
