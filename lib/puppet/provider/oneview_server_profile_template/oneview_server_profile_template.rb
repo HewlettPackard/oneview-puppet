@@ -31,7 +31,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
   def exists?
     @data = data_parse
     empty_data_check
-    variable_assignments
+    connections_parse if @data['connections']
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -48,11 +48,6 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
     find_resources
   end
 
-  def get_available_hardware
-    Puppet.notice("\nServer Profile Template Available Hardware\n")
-    pretty get_single_resource_instance.available_hardware
-  end
-
   # Creates a new server profile based on the current template
   def set_new_profile
     # lets the SDK set a default name in case the user has not declared one
@@ -64,65 +59,16 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
     end
   end
 
-  # Needs the attr connectionName
-  def remove_connection
-    raise('There are no connections settings in the manifest.') unless @data['connections']
-    spt = get_single_resource_instance
-    @data['connections'].each do |con|
-      network = objectfromstring(con['type']).find_by(@client, name: con['name']).first
-      spt.remove_connection(network)
+  def connections_parse
+    @data['connections'].each do |conn|
+      next if conn['uri'].to_s[0..6].include?('/rest/')
+      type = case conn['functionType']
+             when 'Ethernet' then 'EthernetNetwork'
+             when 'FibreChannel' then 'FCNetwork'
+             end
+      net = objectfromstring(type).find_by(@client, name: conn['networkUri'])
+      raise('The network does not exist in the Appliance.') unless net.first
+      conn['networkUri'] = net.first['uri']
     end
-  end
-
-  # Needs the attr network name, type and its options (optional)
-  # def set_connection
-  #   raise('There are no connections settings in the manifest.') unless @connections
-  #   spt = get_single_resource_instance
-  #   @connections.each do |con|
-  #     # options = {}
-  #     # options = con['options'] if con['options']
-  #     # network = objectfromstring(con['type']).find_by(@client, name: con['name']).first
-  #     # puts spt.methods
-  #     # spt.add_connection(network)
-  #     # function_type = con.delete('functionType')
-  #     # name = con.delete('name')
-  #     connectiontype = case con['functionType']
-  #                       when 'Ethernet' then 'EthernetNetwork'
-  #                       when 'FibreChannel' then 'FC'
-  #                      end
-  #     network = objectfromstring(connectiontype).find_by(@client, name: con['name']).first
-  #     spt.add_connection(network, con)
-  #   end
-  # end
-
-  # Needs the firmware driver name and its options
-  def set_firmware_driver
-    raise('There are no firmware driver settings in the manifest.') unless @data['firmwareDriver']
-    firmware = @data['firmwareDriver']
-    options = if firmware['options']
-                firmware['options']
-              else
-                {}
-              end
-    fd = OneviewSDK::FirmwareDriver.find_by(@client, name: firmware['name']).first
-    get_single_resource_instance.set_firmware_driver(fd, options)
-  end
-
-  # Needs the enclosure group name
-  def set_enclosure_group
-    raise('There are no enclosure group settings in the manifest.') unless @data['enclosureGroup']
-    eg = OneviewSDK::EnclosureGroup.find_by(@client, name: @data['enclosureGroup']).first
-    get_single_resource_instance.set_enclosure_group(eg)
-  end
-
-  # Needs the server hardware type name
-  def set_server_hardware_type
-    raise('There are no server hardware type settings in the manifest.') unless @data['serverHardwareType']
-    sht = OneviewSDK::ServerHardwareType.find_by(@client, name: @data['serverHardwareType']).first
-    get_single_resource_instance.set_server_hardware_type(sht)
-  end
-
-  def variable_assignments
-    @connections = @data.delete('connections')
   end
 end
