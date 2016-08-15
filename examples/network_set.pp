@@ -16,15 +16,6 @@
 
 # This example needs two Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
 
-# Optional filters
-oneview_network_set{'Network Set Get All':
-  ensure => 'found'
-  # data   =>
-  # {
-  #   name => 'ns1'
-  # }
-}
-
 oneview_network_set{'Network Set Create':
   ensure => 'present',
   data   =>
@@ -34,13 +25,23 @@ oneview_network_set{'Network Set Create':
   }
 }
 
+# Optional filters
+oneview_network_set{'Network Set Get All':
+  ensure => 'found',
+  require => Oneview_network_set['Network Set Create'],
+  # data   =>
+  # {
+  #   name => 'ns1'
+  # }
+}
+
 oneview_network_set{'Network Set Add Network':
   ensure  => 'add_ethernet_network',
-  require => Oneview_network_set['Network Set Create'],
+  require => Oneview_network_set['Network Set Get All'],
   data    =>
   {
     name             => 'Test Network Set',
-    ethernetNetworks => ['Ethernet 1', 'Ethernet 2']
+    ethernetNetworks => ['Ethernet 1ss', 'Ethernet 2']
   }
 }
 

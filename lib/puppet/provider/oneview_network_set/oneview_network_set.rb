@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_network_set).provide(:ruby) do
+Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
   mk_resource_methods
 
   def initialize(*args)
@@ -46,8 +46,7 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
   end
 
   def destroy
-    ns = @resourcetype.find_by(@client, unique_id)
-    ns.first.delete
+    get_single_resource_instance.delete
   end
 
   def found
@@ -56,28 +55,31 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
 
   def get_without_ethernet
     Puppet.notice("\n\n\s\sNetwork Set Without Ethernet\n")
-    ns = @resourcetype.find_by(@client, @data).first.get_without_ethernet
-    puts "\s\sName: #{ns['name']}\n\s\sURI: #{ns['uri']}\n\n"
+    pretty @resourcetype.get_without_ethernet(@client)
     true
   end
 
   def set_native_network
-    ns = @resourcetype.find_by(@client, unique_id).first
+    raise('You need to specify a network in order to perform this action.') unless @native_network
+    ns = get_single_resource_instance
     set_native_network_helper(ns)
     ns.update
   end
 
   def add_ethernet_network
-    ns = @resourcetype.find_by(@client, unique_id).first
+    raise('You need to specify at least one network in order to perform this action.') unless @ethernet_networks
+    ns = get_single_resource_instance
     add_ethernet_network_helper(ns)
     ns.update
   end
 
   def remove_ethernet_network
-    ns = @resourcetype.find_by(@client, unique_id).first
+    raise('You need to specify at least one network in order to perform this action.') unless @ethernet_networks
+    ns = get_single_resource_instance
     @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net).first
-      ns.remove_ethernet_network(ethernet)
+      ethernet = @ethernet.find_by(@client, name: net)
+      raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
+      ns.remove_ethernet_network(ethernet.first)
     end
     ns.update
   end
@@ -86,14 +88,16 @@ Puppet::Type.type(:oneview_network_set).provide(:ruby) do
 
   def add_ethernet_network_helper(ns)
     @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net).first
-      ns.add_ethernet_network(ethernet)
+      ethernet = @ethernet.find_by(@client, name: net)
+      raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
+      ns.add_ethernet_network(ethernet.first)
     end
   end
 
   def set_native_network_helper(ns)
-    ethernet = @ethernet.find_by(@client, name: @native_network).first
-    ns.set_native_network(ethernet)
+    ethernet = @ethernet.find_by(@client, name: @native_network)
+    raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
+    ns.set_native_network(ethernet.first)
   end
 
   def variable_assignments
