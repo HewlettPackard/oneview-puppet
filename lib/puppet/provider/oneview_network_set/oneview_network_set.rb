@@ -60,22 +60,26 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
   end
 
   def set_native_network
+    raise('You need to specify a network in order to perform this action.') unless @native_network
     ns = get_single_resource_instance
     set_native_network_helper(ns)
     ns.update
   end
 
   def add_ethernet_network
+    raise('You need to specify at least one network in order to perform this action.') unless @ethernet_networks
     ns = get_single_resource_instance
     add_ethernet_network_helper(ns)
     ns.update
   end
 
   def remove_ethernet_network
+    raise('You need to specify at least one network in order to perform this action.') unless @ethernet_networks
     ns = get_single_resource_instance
     @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net).first
-      ns.remove_ethernet_network(ethernet)
+      ethernet = @ethernet.find_by(@client, name: net)
+      raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
+      ns.remove_ethernet_network(ethernet.first)
     end
     ns.update
   end
@@ -84,14 +88,16 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
 
   def add_ethernet_network_helper(ns)
     @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net).first
-      ns.add_ethernet_network(ethernet)
+      ethernet = @ethernet.find_by(@client, name: net)
+      raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
+      ns.add_ethernet_network(ethernet.first)
     end
   end
 
   def set_native_network_helper(ns)
-    ethernet = @ethernet.find_by(@client, name: @native_network).first
-    ns.set_native_network(ethernet)
+    ethernet = @ethernet.find_by(@client, name: @native_network)
+    raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
+    ns.set_native_network(ethernet.first)
   end
 
   def variable_assignments
