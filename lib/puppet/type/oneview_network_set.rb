@@ -54,10 +54,7 @@ Puppet::Type.newtype(:oneview_network_set) do
   newparam(:data) do
     desc 'Network Set attributes'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
-      uri_validation(value)
+      raise('Inserted value for data is not valid') unless value.class == Hash
     end
   end
 end
