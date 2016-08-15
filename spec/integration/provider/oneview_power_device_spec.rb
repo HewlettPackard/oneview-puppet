@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_power_device).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
 
 describe provider_class do
   let(:resource) do
@@ -42,7 +42,7 @@ describe provider_class do
 
   context 'given the minimum parameters before server creation' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
     end
 
     it 'should be able to discover the power devices' do

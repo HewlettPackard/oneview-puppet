@@ -27,8 +27,8 @@ oneview_power_device{'Power Device Add':
     # powerConnections =>
     # [
     #   {
-    #     connectionName => 'Ethernet 1',
-    #     connectionType => 'EthernetNetwork'
+    #     name => 'Ethernet 1',
+    #     type => 'EthernetNetwork'
     #   },
     #   {
     #     connectionUri => '/rest/...'

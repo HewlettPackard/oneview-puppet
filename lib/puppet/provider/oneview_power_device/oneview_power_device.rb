@@ -73,12 +73,13 @@ Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
   end
 
   def get_uid_state
+    Puppet.notice("\n\nPower Device UID State\n")
     pretty get_single_resource_instance.get_uid_state
     true
   end
 
   def get_utilization
-    raise('The query parameters need to be specified in the manifest.') unless @query_parameters
+    Puppet.notice("\n\nPower Device Utilization\n")
     parameters = if @query_parameters
                    @query_parameters
                  else
@@ -101,8 +102,8 @@ Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
     if @data['powerConnections']
       @data['powerConnections'].each do |pc|
         next if pc['connectionUri']
-        type = pc.delete('connectionType')
-        name = pc.delete('connectionName')
+        type = pc.delete('name')
+        name = pc.delete('type')
         uri = objectfromstring(type).find_by(@client, name: name)
         raise('The connection uri could not be found in the Appliance.') unless uri.first
         pc['connectionUri'] = uri.first.data['uri']
