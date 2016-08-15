@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:oneview_logical_interconnect_group)
 
 describe provider_class do
   let(:resource) do
@@ -26,8 +26,8 @@ describe provider_class do
       data:
           {
             'name' => 'Test LIG',
-            'enclosureType'           => 'C7000',
-            'type'                    => 'logical-interconnect-groupV3'
+            'enclosureType' => 'C7000',
+            'type' => 'logical-interconnect-groupV3'
           }
     )
   end
@@ -41,7 +41,8 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group).provider(:ruby)
+    expect(provider)
+      .to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group).provider(:oneview_logical_interconnect_group)
   end
 
   context 'given the minimum parameters' do
