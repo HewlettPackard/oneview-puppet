@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:oneview_firmware_driver)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -37,8 +37,8 @@ describe provider_class, unit: true do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:ruby)
+    it 'should be an instance of the provider oneview_firmware_driver' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:oneview_firmware_driver)
     end
 
     it 'should raise error when Firmware Driver is not found' do
@@ -55,8 +55,8 @@ describe provider_class, unit: true do
         data:
             {
               'customBaselineName' => 'FirmwareDriver1_Example',
-              'baselineUri'        => 'Service Pack for ProLiant',
-              'hotfixUris'         => ['Online ROM Flash Component for Windows x64 - HPE ProLiant XL260a Gen9 Server']
+              'baselineUri'        => '/rest/fake',
+              'hotfixUris'         => ['/rest/fake']
             }
       )
     end
@@ -66,6 +66,7 @@ describe provider_class, unit: true do
         .and_return([test])
       allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
       allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][0]).and_return([test])
+      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']).and_return([])
       allow(OneviewSDK::FirmwareDriver).to receive(:get_all).with(anything).and_return([test])
       provider.exists?
     end
@@ -75,8 +76,8 @@ describe provider_class, unit: true do
     end
 
     it 'should create/add the Firmware Driver' do
-      data = { 'uri' => '/rest/firmware-drivers/fake', 'baselineUri' => nil,
-               'hotfixUris' => [nil], 'customBaselineName' => 'FirmwareDriver1_Example' }
+      data = { 'uri' => '/rest/firmware-drivers/fake', 'baselineUri' => '/rest/fake',
+               'hotfixUris' => ['/rest/fake'], 'customBaselineName' => 'FirmwareDriver1_Example' }
       resource['data']['uri'] = '/rest/firmware-drivers/fake'
       test = OneviewSDK::FirmwareDriver.new(@client, resource['data'])
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(test)

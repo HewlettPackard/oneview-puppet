@@ -22,5 +22,7 @@ Style/AccessorMethodName:
   Enabled: false
 Metrics/CyclomaticComplexity:
   Max: 10
+  Exclude:
+    - 'lib/puppet/type/common.rb'
 Metrics/AbcSize:
   Max: 20
