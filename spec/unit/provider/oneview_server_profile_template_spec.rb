@@ -48,7 +48,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:oneview_server_profile_template)
     end
 
     it 'should run exists? and return the resource does not exist' do
@@ -69,15 +69,16 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(true)
     end
 
-    # it 'runs through the create method' do
-    #   allow(OneviewSDK::ServerProfileTemplate).to receive(:find_by).with(anything, resource['data']).and_return([])
-    #   expect(provider.exists?).to eq(false)
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-    #     .with('/rest/server-profile-templates', { 'body' => resource['data'] }, test.api_version)
-    #     .and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-profile-templates/100')
-    #   expect(provider.create).to eq(true)
-    # end
+    it 'should be able to create the resource' do
+      data = { 'name' => 'SPT', 'enclosureGroupUri' => '/rest/', 'serverHardwareTypeUri' => '/rest/', 'type' => 'ServerProfileTemplateV1' }
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+        .with('/rest/server-profile-templates', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-profile-templates/fake')
+      expect(provider.create).to be
+    end
   end
 
   context 'given the min parameters' do

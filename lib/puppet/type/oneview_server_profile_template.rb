@@ -28,34 +28,9 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
       provider.found
     end
 
-    # GETs
-    newvalue(:get_available_hardware) do
-      provider.get_available_hardware
-    end
-
     # PUTs
     newvalue(:set_new_profile) do
       provider.set_new_profile
-    end
-
-    newvalue(:set_connection) do
-      provider.set_connection
-    end
-
-    newvalue(:remove_connection) do
-      provider.remove_connection
-    end
-
-    newvalue(:set_firmware_driver) do
-      provider.set_firmware_driver
-    end
-
-    newvalue(:set_enclosure_group) do
-      provider.set_enclosure_group
-    end
-
-    newvalue(:set_server_hardware_type) do
-      provider.set_server_hardware_type
     end
   end
 
@@ -66,9 +41,7 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
   newparam(:data) do
     desc 'Server Profile Template data hash containing all specifications for the system'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise('Inserted value for data is not valid') unless value.class == Hash
       uri_validation(value)
     end
   end
