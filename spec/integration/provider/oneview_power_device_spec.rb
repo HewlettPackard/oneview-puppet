@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_power_device).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
 
 describe provider_class do
   let(:resource) do
@@ -42,7 +42,7 @@ describe provider_class do
 
   context 'given the minimum parameters before server creation' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
     end
 
     it 'should be able to discover the power devices' do
@@ -114,33 +114,6 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
-        ensure: 'absent',
-        data:
-            {
-              'name' => '172.18.8.11, PDU 1'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      provider.exists?
-    end
-
-    context 'given the minimum parameters after resource creation' do
-      it 'should be able to destroy the resource' do
-        expect(provider.destroy).to be
-      end
-    end
-  end
-
-  describe provider_class do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
         ensure: 'present',
         data:
             {
@@ -186,6 +159,10 @@ describe provider_class do
     end
 
     context 'given the minimum parameters after resource creation' do
+      it 'should be able to find the power devices' do
+        expect(provider.found).to be
+      end
+
       it 'should be able to destroy the resource' do
         expect(provider.destroy).to be
       end

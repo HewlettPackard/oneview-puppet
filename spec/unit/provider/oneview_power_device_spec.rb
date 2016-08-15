@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_power_device).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
 resourcetype = OneviewSDK::PowerDevice
 
 describe provider_class, unit: true do
@@ -41,34 +41,12 @@ describe provider_class, unit: true do
 
   before(:each) do
     allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
-    expect(provider.exists?).to be
+    provider.exists?
   end
 
   context 'given the minimum parameters before server creation' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:ruby)
-    end
-  end
-
-  context 'given the find parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
-        ensure: 'found',
-        data:
-            {
-              'name' => '172.18.8.11, PDU 1'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
-      expect(provider.exists?).to be
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
     end
 
     it 'should be able to find the resource' do
@@ -120,39 +98,6 @@ describe provider_class, unit: true do
       expect_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_refresh_state).to be
     end
-  end
-
-  context 'given the get_utilization parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
-        ensure: 'get_utilization',
-        data:
-            {
-              'name' => '172.18.8.11, PDU 1',
-              'queryParameters' =>
-              {
-                'fields' => ['AveragePower']
-              }
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect(provider.exists?).to be
-    end
-
-    # TODO: stub a message for GET endpoints
-    # it 'should be able to get the utilization' do
-    #   allow_any_instance_of(resourcetype).to receive(:utilization).with(resource['data']['queryParameters']).and_return('Test')
-    #   expect(provider.get_utilization).to be
-    # end
   end
 
   context 'given the set_power_state parameters' do

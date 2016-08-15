@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_power_device).provide(:ruby) do
+Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
   mk_resource_methods
 
   def initialize(*args)
@@ -59,36 +59,34 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
 
   def set_refresh_state
     raise('The refresh options need to be specified in the manifest.') unless @refresh_options
-    pd = @resourcetype.find_by(@client, unique_id)
-    pd.first.set_refresh_state(@refresh_options)
+    get_single_resource_instance.set_refresh_state(@refresh_options)
   end
 
   def set_power_state
     raise('The power state needs to be specified in the manifest.') unless @power_state
-    pd = @resourcetype.find_by(@client, unique_id)
-    pd.first.set_power_state(@power_state)
+    get_single_resource_instance.set_power_state(@power_state)
   end
 
   def set_uid_state
     raise('The uid state needs to be specified in the manifest.') unless @uid_state
-    pd = @resourcetype.find_by(@client, unique_id)
-    pd.first.set_uid_state(@uid_state)
+    get_single_resource_instance.set_uid_state(@uid_state)
   end
 
   def get_uid_state
-    pd = @resourcetype.find_by(@client, unique_id)
-    pretty pd.first.get_uid_state
+    Puppet.notice("\n\nPower Device UID State\n")
+    pretty get_single_resource_instance.get_uid_state
+    true
   end
 
   def get_utilization
-    raise('The query parameters need to be specified in the manifest.') unless @query_parameters
-    pd = @resourcetype.find_by(@client, unique_id)
+    Puppet.notice("\n\nPower Device Utilization\n")
     parameters = if @query_parameters
                    @query_parameters
                  else
                    {}
                  end
-    pretty pd.first.utilization(parameters)
+    pretty get_single_resource_instance.utilization(parameters)
+    true
   end
 
   # Gets values from @data and deletes them, if they're available
@@ -104,8 +102,8 @@ Puppet::Type.type(:oneview_power_device).provide(:ruby) do
     if @data['powerConnections']
       @data['powerConnections'].each do |pc|
         next if pc['connectionUri']
-        type = pc.delete('connectionType')
-        name = pc.delete('connectionName')
+        type = pc.delete('name')
+        name = pc.delete('type')
         uri = objectfromstring(type).find_by(@client, name: name)
         raise('The connection uri could not be found in the Appliance.') unless uri.first
         pc['connectionUri'] = uri.first.data['uri']
