@@ -47,8 +47,8 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch_group).provider(:ruby)
+    it 'should be an instance of the provider' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch_group).provider(:oneview_logical_switch_group)
     end
 
     it 'return false when the resource does not exists' do
