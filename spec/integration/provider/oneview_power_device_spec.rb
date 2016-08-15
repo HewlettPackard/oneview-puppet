@@ -159,7 +159,6 @@ describe provider_class do
     end
 
     context 'given the minimum parameters after resource creation' do
-
       it 'should be able to find the power devices' do
         expect(provider.found).to be
       end
