@@ -18,16 +18,14 @@ require 'spec_helper'
 
 type_class = Puppet::Type.type(:oneview_server_profile_template)
 
-def spt_config
+def config
   {
-    name: 'Volume Template',
+    name: 'SPT',
     ensure: 'present',
     data:
-        {
-          'name'                  => 'Test_SPT',
-          'enclosureGroupUri'     => '/rest/enclosure-groups/85a4045d-8e5a-4787-894e-a5e404098944',
-          'serverHardwareTypeUri' => '/rest/server-hardware-types/1D614B25-4119-40F6-A71B-EAF01E325A3A'
-        }
+    {
+      'name' => 'SPT'
+    }
   }
 end
 
@@ -40,25 +38,41 @@ describe type_class do
     ]
   end
 
+  let :special_ensurables do
+    [
+      :found,
+      :set_new_profile
+    ]
+  end
+
   it 'should have expected parameters' do
     params.each do |param|
-      expect(type_class.parameters).to be_include(param)
+      expect(type_class.parameters).to include(param)
+    end
+  end
+
+  it 'should accept special ensurables' do
+    special_ensurables.each do |value|
+      expect do
+        described_class.new(name: 'Test',
+                            ensure: value,
+                            data: {})
+      end.to_not raise_error
     end
   end
 
   it 'should require a name' do
     expect do
       type_class.new({})
-    end.to raise_error(Puppet::Error, 'Title or name must be provided')
+    end.to raise_error('Title or name must be provided')
   end
 
   it 'should require a data hash' do
-    modified_config = spt_config
+    modified_config = config
     modified_config[:data] = ''
-    resource_type = type_class.to_s.split('::')
     expect do
       type_class.new(modified_config)
-    end.to raise_error(Puppet::Error, 'Parameter data failed on' \
-    " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
+    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_server_profile_template[SPT]: Validate method '\
+                                              'failed for class data: Inserted value for data is not valid')
   end
 end

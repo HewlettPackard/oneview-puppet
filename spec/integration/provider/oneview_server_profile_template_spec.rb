@@ -42,7 +42,7 @@ describe provider_class do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:oneview_server_profile_template)
     end
 
     it 'exists? should not find the server profile template' do
