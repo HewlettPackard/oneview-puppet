@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
 
 describe provider_class do
 
@@ -36,8 +36,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_enclosure).provider(:ruby)
+  it 'should be an instance of the provider oneview_logical_enclosure' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
   end
 
   context 'given the minimum parameters' do
@@ -56,21 +56,22 @@ describe provider_class do
 
   end
 
-  let(:resource_with_script) {
-    Puppet::Type.type(:oneview_logical_enclosure).new(
-      name: 'Test Logical Enclosure',
-      ensure: 'present',
-      data:
-          {
-              'name'                    => 'Encl1',
-              'script'                  => 'This is a script example',
-          },
-    )
-  }
+
 
   context 'given the script parameter' do
-
+    let(:resource) {
+      Puppet::Type.type(:oneview_logical_enclosure).new(
+        name: 'Test Logical Enclosure',
+        ensure: 'present',
+        data:
+            {
+                'name'                    => 'Encl1',
+                'script'                  => 'This is a script example',
+            },
+      )
+    }
     it 'should be able to set the script on the logical enclosure' do
+      provider.exists?
       expect(provider.set_script).to be
     end
 
@@ -78,29 +79,28 @@ describe provider_class do
 
   # FIXME This for some unknown reason is giving out a runtime error related to
   # the URI 'Must specify a task_uri!', leaving dump test commented till fixed.
-  # let(:resource_with_dump) {
-  #   Puppet::Type.type(:oneview_logical_enclosure).new(
-  #     name: 'Test Logical Enclosure',
-  #     ensure: 'dumped',
-  #     data:
-  #         {
-  #             'name'                    => 'Encl1',
-  #             'dump'                    =>
-  #               {
-  #                 'errorCode' => 'Mydump',
-  #                 'encrypt' => 'false',
-  #                 'excludeApplianceDump' => 'false',
-  #               },
-  #         },
-  #   )
-  # }
-  #
-  # context 'given the dump parameters' do
-  #
-  #   it 'should be able to successfully create a dump' do
-  #     expect(provider.dumped).to be
-  #   end
-  #
-  # end
+  context 'given the dump parameters' do
+  let(:resource) {
+    Puppet::Type.type(:oneview_logical_enclosure).new(
+      name: 'Test Logical Enclosure',
+      ensure: 'dumped',
+      data:
+          {
+              'name'                    => 'Encl1',
+              'dump'                    =>
+                {
+                  'errorCode' => 'Mydump',
+                  'encrypt' => 'false',
+                  'excludeApplianceDump' => 'false',
+                },
+          },
+    )
+  }
+
+    it 'should be able to successfully create a dump' do
+      provider.exists?
+      expect(provider.dumped).to be
+    end
+  end
 
 end

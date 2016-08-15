@@ -14,16 +14,20 @@
 # limitations under the License.
 ################################################################################
 
+require_relative 'common'
+
 Puppet::Type.newtype(:oneview_uplink_set) do
   desc "Oneview's Uplink Set"
 
   ensurable do
     defaultvalues
 
-    # Creating the find operation for the ensure method
+    # :nocov:
+    # Get methods
     newvalue(:found) do
       provider.found
     end
+    # :nocov:
   end
 
   newparam(:name, namevar: true) do
@@ -33,25 +37,8 @@ Puppet::Type.newtype(:oneview_uplink_set) do
   newparam(:data) do
     desc 'Uplink Set data hash containing all specifications for the system'
     validate do |value|
-      unless value.class == Hash
-        fail Puppet::Error, 'Inserted value for data is not valid'
-      end
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
-  end
-
-  newparam(:network) do
-    desc 'Accepts network as a name instead of network URI'
-  end
-
-  newparam(:fc_network) do
-    desc 'Accepts fc_network as a name instead of fc_network URI'
-  end
-
-  newparam(:fcoe_network) do
-    desc 'Accepts fcoe_network as a name instead of fcoe_network URI'
-  end
-
-  newparam(:logical_interconnect) do
-    desc 'Accepts logical_interconnect as a name instead of logical_interconnect URI'
   end
 end

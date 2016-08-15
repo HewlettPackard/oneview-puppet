@@ -14,9 +14,13 @@
 # limitations under the License.
 ################################################################################
 
+# NOTE: The 'portConfigInfos' at the moment do not have the 'list a name instead of uri' available for
+  # the tag. It should be declared with all infos required as per the oneview documentation in case it
+  # is needed.
+
 oneview_uplink_set{'uplink_set_1':
-    ensure               => 'present',
-    data                 => {
+    ensure => 'present',
+    data   => {
       nativeNetworkUri               => 'nil',
       reachability                   => 'Reachable',
       manualLoginRedistributionState => 'NotSupported',
@@ -26,15 +30,17 @@ oneview_uplink_set{'uplink_set_1':
       ethernetNetworkType            => 'Tagged',
       description                    => 'nil',
       name                           => 'Puppet Uplink Set',
+      networkUris                    => [
+        'Puppet Test EthNetwork', 'OneViewSDK_Bulk_Network_28'
+      ],
+      logicalInterconnectUri         => 'Encl1-Test Oneview'
     },
-    network              => 'Puppet Test EthNetwork',
-    logical_interconnect => 'Encl1-Test Oneview'
 }
 
 oneview_uplink_set{'uplink_set_2':
-    ensure               => 'present',
-    require              => Oneview_uplink_set['uplink_set_1'],
-    data                 => {
+    ensure  => 'present',
+    require => Oneview_uplink_set['uplink_set_1'],
+    data    => {
       nativeNetworkUri               => 'nil',
       reachability                   => 'Reachable',
       manualLoginRedistributionState => 'NotSupported',
@@ -44,10 +50,12 @@ oneview_uplink_set{'uplink_set_2':
       ethernetNetworkType            => 'Tagged',
       description                    => 'nil',
       name                           => 'Puppet Uplink Set',
-      new_name                       => 'Puppet Uplink Set Updated'
+      new_name                       => 'Puppet Uplink Set Updated',
+      networkUris                    => [
+        'Puppet Test EthNetwork'
+      ],
+      logicalInterconnectUri         => 'Encl1-Test Oneview'
     },
-    network              => 'Puppet Test EthNetwork',
-    logical_interconnect => 'Encl1-Test Oneview'
 }
 
 oneview_uplink_set{'uplink_set_3':

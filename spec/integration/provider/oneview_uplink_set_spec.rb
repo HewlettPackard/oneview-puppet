@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
 
 describe provider_class do
   let(:resource) do
@@ -39,8 +39,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:ruby)
+    it 'should be an instance of the provider oneview_uplink_set' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
     end
 
     it 'exists? should not find the uplink set' do
@@ -48,7 +48,8 @@ describe provider_class do
     end
 
     it 'should return that the uplink set was not found' do
-      expect(provider.found).not_to be
+      provider.exists?
+      expect { provider.found }.to raise_error(/No UplinkSet with the specified data were found on the Oneview Appliance/)
     end
   end
 
@@ -61,7 +62,7 @@ describe provider_class do
             {
               'nativeNetworkUri' => 'nil',
               'reachability' => 'Reachable',
-              'logicalInterconnectUri' => '/rest/logical-interconnects/e5e7e935-17a4-4ac6-9cd6-45caf410e323',
+              'logicalInterconnectUri' => 'Encl1-Test Oneview',
               'manualLoginRedistributionState' => 'NotSupported',
               'connectionMode' => 'Auto',
               'lacpTimer' => 'Short',

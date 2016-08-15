@@ -21,4 +21,6 @@ MethodLength:
 Style/AccessorMethodName:
   Enabled: false
 Metrics/CyclomaticComplexity:
-  Max: 8
+  Max: 10
+Metrics/AbcSize:
+  Max: 20
