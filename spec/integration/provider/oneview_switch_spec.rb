@@ -68,7 +68,7 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-        ensure: 'get_type',
+        ensure: 'get_type'
       )
     end
 
