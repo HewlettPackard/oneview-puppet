@@ -49,7 +49,7 @@ Puppet::Type.newtype(:oneview_switch) do
     desc 'Switch data hash containing all specifications for the system'
     validate do |value|
       unless value.class == Hash
-        fail Puppet::Error, 'Inserted value for data is not valid'
+        raise Puppet::Error, 'Inserted value for data is not valid'
       end
     end
   end

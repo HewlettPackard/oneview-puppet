@@ -29,12 +29,16 @@ def uri_recursive_hash(data)
     hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri- or -value is nil-
     next if value.to_s[0..6].include?('/rest/') || !((key.to_s.include? 'Uri') || (key.to_s == 'uri')) || value.to_s == 'nil' ||
-            value.nil?
+            value.nil? || exception_to_be_treated_within_provider(key)
     data[key] = get_uri(key)
   end
 end
 
 # Broken-down blocks
+def exception_to_be_treated_within_provider(key)
+  exception_list = %w(networkUris)
+  true if exception_list.include?(key)
+end
 
 # Gets the Uri for the resource
 def get_uri(key)

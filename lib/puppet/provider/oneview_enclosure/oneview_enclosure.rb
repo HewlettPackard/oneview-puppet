@@ -64,9 +64,7 @@ Puppet::Type.type(:oneview_enclosure).provide(:oneview_enclosure) do
   end
 
   def destroy
-    enclosure = get_single_resource_instance
-    Puppet.notice "\n\n Removing enclosure named: #{enclosure['name']}, with uri: #{enclosure['uri']}\n"
-    enclosure.remove
+    get_single_resource_instance.remove
     @property_hash.clear
     true
   end

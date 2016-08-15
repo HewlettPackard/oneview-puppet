@@ -16,11 +16,9 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_switch).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
 
 describe provider_class do
-  # TODO: a future improvement might be to make this test more atomic, by adding the
-  # possibility to call creates to this test dependencies
   let(:resource) do
     Puppet::Type.type(:oneview_switch).new(
       name: 'Switch',
@@ -37,26 +35,24 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:ruby)
+    before(:each) do
+      provider.exists?
+    end
+
+    it 'should be an instance of the provider oneview_switch' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
     end
 
     it 'exists? should find the Switch' do
       expect(provider.exists?).to be
     end
 
-    # TODO: get this to work!
     it 'create should display unavailable method' do
-      expect(provider.exists?).to be
-      expect { provider.create }.to raise_error(OneviewSDK::MethodUnavailable, /The method #create is unavailable for this resource/)
+      expect { provider.create }.to raise_error(/This ensurable is not supported for this resource/)
     end
 
     it 'should return that the Switch was found' do
       expect(provider.found).to be
-    end
-
-    it 'should be able to get types' do
-      expect(provider.get_type).to be
     end
 
     it 'should be able to get the environmental configuration' do
@@ -65,6 +61,20 @@ describe provider_class do
 
     it 'should drop the Switch' do
       expect(provider.destroy).to be
+    end
+  end
+
+  context 'given no parameters for get types' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_switch).new(
+        name: 'Switch',
+        ensure: 'get_type'
+      )
+    end
+
+    it 'should be able to get types' do
+      provider.exists?
+      expect(provider.get_type).to be
     end
   end
 
@@ -84,8 +94,8 @@ describe provider_class do
     end
 
     it 'should fail and return that the Switch was not found' do
-      expect(provider.exists?).not_to be
-      expect { provider.found }.to raise_error(Puppet::Error, /No Switches with the specified data were found on the Oneview Appliance/)
+      provider.exists?
+      expect { provider.found }.to raise_error(/No Switch with the specified data were found on the Oneview Appliance/)
     end
   end
 
@@ -104,10 +114,10 @@ describe provider_class do
       expect(instance).to be
     end
 
-    it 'should be able to get types' do
+    it 'should display that no such type exists' do
       provider.exists?
       expect { provider.get_type }
-        .to raise_error(Puppet::Error, /\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
+        .to raise_error(/No switch types corresponding to the name 172.18.20.1 were found./)
     end
   end
 
@@ -122,7 +132,7 @@ describe provider_class do
             }
       )
     end
-    it 'should be able to get types' do
+    it 'should be able to get a specific type' do
       provider.exists?
       expect(provider.get_type).to be
     end
@@ -141,7 +151,7 @@ describe provider_class do
             }
       )
     end
-    it 'should be able to get types' do
+    it 'should be able to get statistics' do
       provider.exists?
       expect(provider.get_statistics).to be
     end

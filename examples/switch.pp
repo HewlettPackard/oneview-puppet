@@ -32,24 +32,24 @@ oneview_switch{'switch_2':
 }
 
 # Get statistics for a switch, for the specified port or port/subport duo
+  # NOTE: Here a 'port_name' or 'port_name'+'subport_number' can be specified in the data hash for filtering
+  # or left blank
+  # NOTE 2: A unique identifier such as 'name' for the switch which will be queried for statistics is required
 oneview_switch{'switch_3':
     ensure  => 'get_statistics',
     require => Oneview_switch['switch_2'],
-    # Here a 'port_name' or 'port_name'+'subport_number' can be specified in the data hash for filtering
-    # or left blank
     data    => {
-      # name is the name of the switch which will be queried for statistics and is required
       name                      => '172.18.20.1',
       # port_name                => '1.4',
     }
 }
 
 # Get environmental configuration for a switch
+# NOTE 1: A unique identifier such as 'name' for the switch which will be queried for statistics is required
 oneview_switch{'switch_4':
     ensure  => 'get_environmental_configuration',
     require => Oneview_switch['switch_3'],
     data    => {
-      # name is the name of the switch which will be queried for its environmental configuration and is required
       name                      => '172.18.20.1',
     }
 }
