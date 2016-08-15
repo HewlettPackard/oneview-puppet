@@ -72,7 +72,7 @@ describe type_class do
     modified_config[:data] = ''
     expect do
       type_class.new(modified_config)
-    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_server_profile_template[SPT]: '\
-                                              'Inserted value for data is not valid')
+    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_server_profile_template[SPT]: Validate method '\
+                                              'failed for class data: Inserted value for data is not valid')
   end
 end

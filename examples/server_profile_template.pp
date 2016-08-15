@@ -14,21 +14,16 @@
 # limitations under the License.
 ################################################################################
 
-# This resource requires:
+# This example requires:
 # - Enclosure Group 'EG'
 # - Server Hardware Type 'BL460c Gen8 1'
-# For newer SDK features (commented blocks):
-# - Ethernet Network 'NET'
-# - Enclosure Group 'my enclosure'
-# - Server Hardware Type 'BL660c Gen8 1'
-# - Firmware Driver 'firmware'
 
+# You can either declare the name or the uri of the following parameters that require Uri:
 oneview_server_profile_template{'Server Profile Template Create':
   ensure => 'present',
   data   =>
     {
       name                  => 'New SPT',
-      # You can either declare the name or the uri of the following parameters that require Uri:
       enclosureGroupUri     => 'OneViewSDK Test Enclosure_Group',
       serverHardwareTypeUri => 'BL460c Gen8 1',
       # connections =>
@@ -38,6 +33,11 @@ oneview_server_profile_template{'Server Profile Template Create':
       #     functionType => 'Ethernet'
       #   }
       # ]
+      # firmware =>
+      # {
+      #   firmwareBaselineUri => 'FW Baseline Name',
+      #   manageFirmware      => true
+      # }
     }
 }
 
@@ -66,7 +66,6 @@ oneview_server_profile_template{'Server Profile Template Create #2':
   data    =>
     {
       name                  => 'New SPT #2',
-      # You can either declare the name or the uri of the following parameters:
       enclosureGroupUri     => 'EG',
       serverHardwareTypeUri => 'BL460c Gen8 1'
     }
@@ -86,13 +85,13 @@ oneview_server_profile_template{'Server Profile Template Destroy':
     }
 }
 
+# The server profile name is optional; a default name will be provided
 oneview_server_profile_template{'Server Profile Create':
   ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Server Profile Template Get All'],
   data    =>
     {
       name                  => 'New SPT #2',
-      # This is optional; a default name will be provided
       # serverProfileName     => 'My SP'
     }
 }

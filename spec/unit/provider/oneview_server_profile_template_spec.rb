@@ -59,7 +59,7 @@ describe provider_class, unit: true do
     it 'should return the resource has been found' do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
+      provider.exists?
       expect(provider.found).to be
     end
 
@@ -79,50 +79,14 @@ describe provider_class, unit: true do
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-profile-templates/fake')
       expect(provider.create).to be
     end
-  end
 
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_server_profile_template).new(
-        name: 'spt',
-        ensure: 'present',
-        data: 'parameter'
-      )
+    it 'should delete the resource' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      provider.exists?
+      expect(provider.destroy).to be
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    it 'should return a hash error' do
-      expect { provider.found }
-        .to raise_error('Parameter data failed on Oneview_server_profile_template[spt]: Inserted value for data is not valid')
-    end
-  end
-
-  context 'given the creation parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_server_profile_template).new(
-        name: 'spt',
-        ensure: 'absent',
-        data:
-            {
-              'name' => 'SPT'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    # it 'deletes the resource' do
-    #   resource['data']['uri'] = '/rest/fake'
-    #   test = resourcetype.new(@client, resource['data'])
-    #   allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   expect(provider.exists?).to eq(true)
-    #   expect(provider.destroy).to eq(true)
-    # end
   end
 end
