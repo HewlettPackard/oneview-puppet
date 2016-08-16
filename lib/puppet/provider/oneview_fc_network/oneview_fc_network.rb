@@ -58,8 +58,7 @@ Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
   end
 
   def destroy
-    fc_network = get_single_resource_instance
-    fc_network.delete
+    get_single_resource_instance.delete
     @property_hash.clear
     true
   end

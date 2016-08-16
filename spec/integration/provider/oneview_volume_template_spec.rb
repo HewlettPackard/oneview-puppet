@@ -35,6 +35,9 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
+    before(:each) do
+      provider.exists?
+    end
     it 'should be an instance of the provider oneview_volume_template' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
     end
@@ -44,11 +47,13 @@ describe provider_class do
     end
 
     it 'should return that the volume template was not found' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error(/No VolumeTemplate with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should not be able to return the list of connectable volume templates' do
-      expect(provider.get_connectable_volume_templates).not_to be
+      expect { provider.get_connectable_volume_templates }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
   end
 
@@ -66,18 +71,23 @@ describe provider_class do
                 'shareable'      => true,
                 'provisionType'  => 'Thin',
                 'capacity'       => '235834383322',
-                'storagePoolUri' => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+                'storagePoolUri' => 'FST_CPG1'
               }
             }
       )
     end
 
     it 'should create the volume template' do
+      provider.exists?
       expect(provider.create).to be
     end
   end
 
   context 'given the minimum parameters' do
+    before(:each) do
+      provider.exists?
+    end
+
     it 'exists? should find the volume template' do
       expect(provider.exists?).to be
     end
