@@ -61,7 +61,7 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
     end
-    
+
     it 'should return true if resource is found' do
       resource['data']['uri'] = '/rest/fabrics/fake'
       test = resourcetype.new(@client, resource['data'])
