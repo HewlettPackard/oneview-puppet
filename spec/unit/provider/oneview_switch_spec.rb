@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_switch).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -43,8 +43,8 @@ describe provider_class, unit: true do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:ruby)
+    it 'should be an instance of the provider oneview_switch' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
     end
 
     it 'exists? should find the Switch' do
@@ -53,7 +53,7 @@ describe provider_class, unit: true do
 
     it 'create should display unavailable method' do
       expect(provider.exists?).to be
-      expect { provider.create }.to raise_error(OneviewSDK::MethodUnavailable, /The method #create is unavailable for this resource/)
+      expect { provider.create }.to raise_error(/This ensurable is not supported for this resource/)
     end
 
     it 'should return that the Switch was found' do
@@ -113,7 +113,7 @@ describe provider_class, unit: true do
     it 'should fail and return that the Switch was not found' do
       allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
-      expect { provider.found }.to raise_error(Puppet::Error, /No Switches with the specified data were found on the Oneview Appliance/)
+      expect { provider.found }.to raise_error(/No Switch with the specified data were found on the Oneview Appliance/)
     end
   end
 
@@ -140,11 +140,11 @@ describe provider_class, unit: true do
       allow(OneviewSDK::Switch).to receive(:get_type).with(anything, resource['data']['name']).and_return(nil)
       provider.exists?
       expect { provider.get_type }
-        .to raise_error(Puppet::Error, /\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
+        .to raise_error(/\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
     end
   end
 
-  context 'given the create parameters' do
+  context 'given the switch get type parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
@@ -175,10 +175,14 @@ describe provider_class, unit: true do
             }
       )
     end
-    it 'should be able to get types' do
+    it 'should be able to get statistics' do
       resource['data']['uri'] = '/rest/fake'
+      data_for_findby = {
+        'name'                      => '172.18.20.1',
+        'uri'                       => '/rest/fake'
+      }
       test = OneviewSDK::Switch.new(@client, resource['data'])
-      allow(OneviewSDK::Switch).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(OneviewSDK::Switch).to receive(:find_by).with(anything, data_for_findby).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('Fake Get Statistics'))
       provider.exists?
       expect(provider.get_statistics).to be

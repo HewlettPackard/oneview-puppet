@@ -16,29 +16,27 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_storage_pool).new(
       name: 'Storage Pool',
       ensure: 'present',
-        data:
+      data:
           {
-            'poolName'          => "FST_CPG2",
+            'poolName' => 'FST_CPG2'
           }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:ruby)
+    it 'should be an instance of the provider oneview_storage_pool' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
     end
 
     it 'exists? should not find the storage pool' do
@@ -48,27 +46,25 @@ describe provider_class do
     it 'should return that the storage pool was not found' do
       expect(provider.found).not_to be
     end
-
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_storage_pool).new(
         name: 'Storage Pool',
         ensure: 'present',
-          data:
+        data:
             {
-              'poolName'          => "FST_CPG2",
-              'storageSystemUri'  => "/rest/storage-systems/TXQ1000307"
+              'poolName'          => 'FST_CPG2',
+              'storageSystemUri'  => '/rest/storage-systems/TXQ1000307'
             }
       )
-    }
+    end
 
-    # TODO Create block
+    # TODO: Create block
     it 'should create the storage pool' do
       expect(provider.create).to be
     end
-
   end
 
   context 'given the minimum parameters' do
@@ -82,7 +78,5 @@ describe provider_class do
     it 'should drop the storage pool' do
       expect(provider.destroy).to be
     end
-
   end
-
 end

@@ -19,24 +19,22 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_volume).provider(:ruby)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_volume).new(
       name: 'Enclosure',
       ensure: 'present',
-        data:
+      data:
             {
-              'name'                   => 'ONEVIEW_SDK_TEST_VOLUME_1',
-          },
+              'name' => 'ONEVIEW_SDK_TEST_VOLUME_1'
+            }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:ruby)
     end
@@ -56,15 +54,14 @@ describe provider_class do
     it 'should return that the get_extra_managed_volume_paths was not found' do
       expect(provider.get_extra_managed_volume_paths).to be
     end
-
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_volume).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
               {
                 'name'                   => 'ONEVIEW_SDK_TEST_VOLUME_1',
                 'description'            => 'Test volume with common creation: Storage System + Storage Pool',
@@ -72,36 +69,34 @@ describe provider_class do
                   'provisionType'     => 'Full',
                   'shareable'         => true,
                   'requestedCapacity' => 1024 * 1024 * 1024,
-                  'storagePoolUri'    => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D',
+                  'storagePoolUri'    => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
                 },
-                'snapshotPoolUri'   => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
-            },
+                'snapshotPoolUri' => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+              }
       )
-    }
-
+    end
 
     it 'should create the storage system' do
       expect(provider.create).to be
     end
-
   end
 
   context 'given the snapshotParameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_volume).new(
         name: 'Enclosure',
         ensure: 'present',
-              data:
+        data:
               {
-                'name'                   => 'ONEVIEW_SDK_TEST_VOLUME_1',
+                'name' => 'ONEVIEW_SDK_TEST_VOLUME_1',
                 'snapshotParameters' => {
-                  'name'     => 'test_snapshot',
-                  'type'         => 'Snapshot',
-                  'description' => 'New snapshot',
+                  'name' => 'test_snapshot',
+                  'type' => 'Snapshot',
+                  'description' => 'New snapshot'
                 }
-              },
+              }
       )
-    }
+    end
 
     it 'should be able to create a snapshot' do
       expect(provider.create_snapshot).to be
@@ -114,11 +109,9 @@ describe provider_class do
     it 'should be able to delete a snapsho' do
       expect(provider.delete_snapshot).to be
     end
-
   end
 
   context 'given the minimum parameters' do
-
     it 'should exist now that it was created' do
       expect(provider.exists?).to be
     end
@@ -129,7 +122,5 @@ describe provider_class do
     it 'should drop the volume' do
       expect(provider.destroy).to be
     end
-
   end
-
 end

@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_san_manager).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -38,8 +38,8 @@ describe provider_class, unit: true do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before San Manager creation' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:ruby)
+    it 'should be an instance of the provider oneview_san_manager' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
     end
 
     it 'should raise error when San Manager is not found' do

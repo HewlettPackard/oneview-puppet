@@ -26,3 +26,6 @@ Metrics/CyclomaticComplexity:
     - 'lib/puppet/type/common.rb'
 Metrics/AbcSize:
   Max: 20
+Style/GlobalVars:
+  Exclude:
+    - 'spec/shared_context.rb'
