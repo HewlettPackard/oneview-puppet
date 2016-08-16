@@ -79,11 +79,5 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
-
-    it 'should be able to get the logical downlinks w/o ethernet' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      provider.exists?
-      expect(provider.get_without_ethernet).to eq(true)
-    end
   end
 end
