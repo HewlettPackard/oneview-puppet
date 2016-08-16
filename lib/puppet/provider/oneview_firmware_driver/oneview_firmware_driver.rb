@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_firmware_driver).provide(:ruby) do
+Puppet::Type.type(:oneview_firmware_driver).provide(:oneview_firmware_driver) do
   mk_resource_methods
 
   def initialize(*args)
@@ -44,12 +44,10 @@ Puppet::Type.type(:oneview_firmware_driver).provide(:ruby) do
   end
 
   # Provider methods
-
   def exists?
     @data = data_parse
     data_parse_for_general
-    firmware_driver = @resourcetype.find_by(@client, @data)
-    !firmware_driver.empty?
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
@@ -77,7 +75,7 @@ Puppet::Type.type(:oneview_firmware_driver).provide(:ruby) do
       case key
       when 'baselineUri' then
         @attributes['baselineUri'] = @data.delete('baselineUri')
-        parse_uris_for_firmware_driver('baselineUri', @attributes['baselineUri'])
+      #   parse_uris_for_firmware_driver('baselineUri', @attributes['baselineUri'])
       when 'hotfixUris' then
         @attributes['hotfixUris'] = @data.delete('hotfixUris')
         parse_uris_for_firmware_driver('hotfixUris', @attributes['hotfixUris'])

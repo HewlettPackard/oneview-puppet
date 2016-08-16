@@ -16,15 +16,14 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_enclosure).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_enclosure).new(
       name: 'Enclosure',
       ensure: 'present',
-        data:
+      data:
           {
             'name'              => 'Puppet_Test_Enclosure',
             'hostname'          => '172.18.1.13',
@@ -32,33 +31,33 @@ describe provider_class do
             'password'          => 'dcs',
             'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
             'licensingIntent'   => 'OneView'
-          },
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:ruby)
+  it 'should be an instance of the provider oneview_enclosure' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
   end
 
   # Negative testing set_refresh_state
   context 'given the minimum parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
             {
               'name'              => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView',
               'refreshState'      => 'RefreshPending'
-            },
+            }
       )
-    }
+    end
 
     it 'should not be able to set a refresh state on the enclosure' do
       expect(provider.set_refresh_state).not_to be
@@ -67,28 +66,27 @@ describe provider_class do
 
   # Negative testing retrieved_utilization
   context 'given the minimum parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
             {
               'name'                   => 'Puppet_Test_Enclosure',
               'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'        => 'OneView',
               'utilization_parameters' => {
                 'view' => 'day'
-                },
-            },
+              }
+            }
       )
-    }
-      it 'should not be able to retrieve utilization data from the enclosure' do
-        expect(provider.retrieved_utilization).not_to be
-      end
     end
+    it 'should not be able to retrieve utilization data from the enclosure' do
+      expect(provider.retrieved_utilization).not_to be
+    end
+  end
 
   context 'given the minimum parameters' do
-
     it 'exists? should not find the enclosure' do
       expect(provider.exists?).not_to be
     end
@@ -116,23 +114,22 @@ describe provider_class do
     it 'should find that the enclosure exists' do
       expect(provider.exists?).to be
     end
-
   end
 
   context 'given the minimum parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
             {
               'name'              => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView',
               'refreshState'      => 'RefreshPending'
-            },
+            }
       )
-    }
+    end
 
     it 'should be able to set a refresh state on the enclosure' do
       expect(provider.set_refresh_state).to be
@@ -140,39 +137,39 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
             {
               'name'                   => 'Puppet_Test_Enclosure',
               'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'        => 'OneView',
               'utilization_parameters' => {
                 'view' => 'day'
-                },
-            },
+              }
+            }
       )
-    }
-      it 'should be able to retrieve utilization data from the enclosure' do
-        expect(provider.retrieved_utilization).to be
-      end
     end
+    it 'should be able to retrieve utilization data from the enclosure' do
+      expect(provider.retrieved_utilization).to be
+    end
+  end
 
   context 'given the minimum parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
             {
               'name'              => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView'
-            },
+            }
       )
-    }
+    end
     it 'should return that the enclosure was found' do
       expect(provider.found).to be
     end
@@ -180,7 +177,5 @@ describe provider_class do
     it 'should destroy the enclosure' do
       expect(provider.destroy).to be
     end
-
   end
-
 end

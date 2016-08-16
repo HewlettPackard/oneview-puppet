@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
 
 describe provider_class do
   let(:resource) do
@@ -39,8 +39,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:ruby)
+    it 'should be an instance of the provider oneview_firmware_bundle' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
     end
 
     it 'should raise error when firmware bundle is not found' do

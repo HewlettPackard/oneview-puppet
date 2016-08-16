@@ -16,31 +16,29 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_storage_system).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
 
 describe provider_class do
-
-  let(:resource) {
+  let(:resource) do
     Puppet::Type.type(:oneview_storage_system).new(
       name: 'Enclosure',
       ensure: 'present',
-        data:
+      data:
           {
             'credentials'   => {
-              'ip_hostname' => '172.18.11.11',
+              'ip_hostname' => '172.18.11.11'
             }
-          },
+          }
     )
-  }
+  end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:ruby)
+    it 'should be an instance of the provider oneview_storage_system' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
     end
 
     it 'exists? should not find the storage system' do
@@ -62,32 +60,30 @@ describe provider_class do
     it 'should not be able to get the host types from the storage system' do
       expect(provider.get_host_types).not_to be
     end
-
   end
 
   context 'given the create parameters' do
-    let(:resource) {
+    let(:resource) do
       Puppet::Type.type(:oneview_storage_system).new(
         name: 'Enclosure',
         ensure: 'present',
-          data:
+        data:
             {
-              'name'         => 'OneViewSDK Test Storage System',
+              'name' => 'OneViewSDK Test Storage System',
               'managedDomain' => 'TestDomain',
               'credentials'   => {
                 'ip_hostname' => '172.18.11.11',
                 'username'     => 'dcs',
-                'password'     => 'dcs',
+                'password'     => 'dcs'
               }
-            },
+            }
       )
-    }
+    end
 
-    # TODO Create block
+    # TODO: Create block
     it 'should create the storage system' do
       expect(provider.create).to be
     end
-
   end
 
   context 'given the minimum parameters' do
@@ -113,7 +109,5 @@ describe provider_class do
     it 'should drop the storage system' do
       expect(provider.destroy).to be
     end
-
   end
-
 end

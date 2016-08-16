@@ -21,7 +21,6 @@ require 'rspec-puppet'
 require 'pry'
 require 'simplecov'
 
-
 client_files = %w(client.rb rest.rb config_loader.rb ssl_helper.rb)
 resource_path = 'lib/oneview-sdk/resource'
 
@@ -77,7 +76,6 @@ require_relative 'support/fake_response'
 # require_relative 'integration/sequence_and_naming'
 # require_relative 'system/light_profile/resource_names'
 
-
 RSpec.configure do |config|
   # NOTE: Puppet specific declarations
   config.module_path  = File.expand_path(File.join(File.dirname(__FILE__), 'fixtures/modules'))
@@ -95,7 +93,7 @@ RSpec.configure do |config|
   config.before(:each) do
     # TODO: Puppet: Probably reverify this once we have have different test profiles
     if config.filter_manager.inclusions.rules[:unit]
-    # unless config.filter_manager.inclusions.rules[:integration] || config.filter_manager.inclusions.rules[:system]
+      # unless config.filter_manager.inclusions.rules[:integration] || config.filter_manager.inclusions.rules[:system]
       # Mock appliance version and login api requests, as well as loading trusted certs
       allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(200)
       allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_return('secretToken')
@@ -110,5 +108,4 @@ RSpec.configure do |config|
 end
 
 RSpec.configure do |c|
-
 end

@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_managed_san).provide(:ruby) do
+Puppet::Type.type(:oneview_managed_san).provide(:oneview_managed_san) do
   mk_resource_methods
 
   def initialize(*args)
@@ -43,7 +43,6 @@ Puppet::Type.type(:oneview_managed_san).provide(:ruby) do
   end
 
   # Provider methods
-
   def exists?
     @data = data_parse
     resource['ensure'] == :present ? false : true
@@ -68,22 +67,19 @@ Puppet::Type.type(:oneview_managed_san).provide(:ruby) do
   end
 
   def get_zoning_report
-    managed_san = get_single_resource_instance
-    pretty managed_san.get_zoning_report
+    pretty get_single_resource_instance.get_zoning_report
     true
   end
 
   def get_endpoints
-    managed_san = get_single_resource_instance
-    pretty managed_san.get_endpoints
+    pretty get_single_resource_instance.get_endpoints
     true
   end
 
   def set_refresh_state
     raise 'A refreshState is required to be set within data for this operation' unless @data['refreshState']
     refresh_state = @data.delete('refreshState')
-    managed_san = get_single_resource_instance
-    managed_san.set_refresh_state(refresh_state)
+    get_single_resource_instance.set_refresh_state(refresh_state)
     true
   end
 end

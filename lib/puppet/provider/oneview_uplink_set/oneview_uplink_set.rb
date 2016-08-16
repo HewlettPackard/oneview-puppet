@@ -55,7 +55,7 @@ Puppet::Type.type(:oneview_uplink_set).provide(:oneview_uplink_set) do
 
   def create
     uplink_set = @resourcetype.new(@client, @data)
-    uplink_set.add_port_config(@port_config) if @port_config
+    uplink_set.add_port_config(@port_config[0], @port_config[1], @port_config[2]) if @port_config
     uplink_set.create
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data

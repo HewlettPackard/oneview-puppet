@@ -38,7 +38,8 @@ Puppet::Type.newtype(:oneview_firmware_driver) do
   newparam(:data) do
     desc 'Firmware Driver data hash containing all specifications for the system'
     validate do |value|
-      raise Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+      uri_validation(value)
     end
   end
 end

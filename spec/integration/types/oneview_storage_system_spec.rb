@@ -19,30 +19,29 @@ require 'spec_helper'
 type_class = Puppet::Type.type(:oneview_storage_system)
 
 def storage_system_config
-{
-  name: 'Storage System',
-  ensure: 'present',
-  data:
-    {
-      'name'          => 'Puppet_Test_Storage_System',
-      'managedDomain' => 'TestDomain',
-      'credentials'   => {
-        'ip_hostname' => '172.18.11.11',
-        'username'    => 'dcs',
-        'password'    => 'dcs'
+  {
+    name: 'Storage System',
+    ensure: 'present',
+    data:
+      {
+        'name'          => 'Puppet_Test_Storage_System',
+        'managedDomain' => 'TestDomain',
+        'credentials'   => {
+          'ip_hostname' => '172.18.11.11',
+          'username'    => 'dcs',
+          'password'    => 'dcs'
+        }
       }
-    }
-}
+  }
 end
 
 describe type_class do
-
   let :params do
-  [
-    :name,
-    :data,
-    :provider,
-  ]
+    [
+      :name,
+      :data,
+      :provider
+    ]
   end
 
   it 'should have expected parameters' do
@@ -52,19 +51,18 @@ describe type_class do
   end
 
   it 'should require a name' do
-    expect {
+    expect do
       type_class.new({})
-    }.to raise_error(Puppet::Error, 'Title or name must be provided')
+    end.to raise_error(Puppet::Error, 'Title or name must be provided')
   end
 
   it 'should require a data hash' do
     modified_config = storage_system_config
     modified_config[:data] = ''
     resource_type = type_class.to_s.split('::')
-    expect {
-        type_class.new(modified_config)
-    }.to raise_error(Puppet::Error, 'Parameter data failed on' +
+    expect do
+      type_class.new(modified_config)
+    end.to raise_error(Puppet::Error, 'Parameter data failed on' \
     " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
   end
-
 end
