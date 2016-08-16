@@ -25,7 +25,8 @@ oneview_volume_template{'volume_template_1':
         shareable      => true,
         provisionType  => 'Thin',
         capacity       => '235834383322',
-        storagePoolUri => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+        storagePoolUri => 'FST_CPG1'
+        # storagePoolUri => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
                       }
                     }
 }
@@ -41,10 +42,10 @@ oneview_volume_template{'volume_template_2':
                     }
 }
 
+# This resource accepts a data hash to filter out results or no data hash to display all
 oneview_volume_template{'volume_template_3':
     ensure  => 'found',
     require => Oneview_volume_template['volume_template_2'],
-    # This resource accepts a data hash to filter out results or no data hash to display all
     # data   => {
     #   name                   => 'ONEVIEW_PUPPET_TEST VT1',
     # }

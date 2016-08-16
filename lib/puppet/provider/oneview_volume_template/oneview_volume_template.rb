@@ -18,13 +18,13 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
+Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FCNetwork
+    @resourcetype = OneviewSDK::VolumeTemplate
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
     @data = {}
@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
 
   def self.instances
     @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::FCNetwork.find_by(@client, {})
+    matches = OneviewSDK::VolumeTemplate.find_all(@client, {})
     matches.collect do |line|
       name = line['name']
       data = line.inspect
@@ -65,5 +65,11 @@ Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
 
   def found
     find_resources
+  end
+
+  def get_connectable_volume_templates
+    attributes = @data.delete('attributes') || {}
+    pretty get_single_resource_instance.get_connectable_volume_templates(attributes)
+    true
   end
 end
