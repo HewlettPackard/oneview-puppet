@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
+Puppet::Type.type(:oneview_unmanaged_device).provide(:oneview_unmanaged_device) do
   mk_resource_methods
 
   def initialize(*args)
@@ -50,9 +50,8 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:ruby) do
   end
 
   def get_environmental_configuration
-    Puppet.notice("\n\nEnvironmental Configuration\n")
-    resource = get_single_resource_instance
-    pretty resource.environmental_configuration
+    Puppet.notice("\n\nUnmanaged Device Environmental Configuration\n")
+    pretty get_single_resource_instance.environmental_configuration
     true
   end
 end

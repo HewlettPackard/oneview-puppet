@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
 resourcetype = OneviewSDK::UnmanagedDevice
 
 describe provider_class, unit: true do
@@ -42,9 +42,13 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
+
     before(:each) do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
       provider.exists?
+
+    it 'should be an instance of the provider' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
     end
 
     it 'should be able to find the resource' do

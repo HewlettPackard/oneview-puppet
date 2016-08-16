@@ -59,7 +59,7 @@ describe provider_class, unit: true do
     it 'should return the resource has been found' do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
+      provider.exists?
       expect(provider.found).to be
     end
 
@@ -70,7 +70,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      data = {"name"=>"SPT", "enclosureGroupUri"=>"/rest/", "serverHardwareTypeUri"=>"/rest/", "type"=>"ServerProfileTemplateV1"}
+      data = { 'name' => 'SPT', 'enclosureGroupUri' => '/rest/', 'serverHardwareTypeUri' => '/rest/', 'type' => 'ServerProfileTemplateV1' }
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
