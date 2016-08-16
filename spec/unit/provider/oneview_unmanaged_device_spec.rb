@@ -42,11 +42,11 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-
     before(:each) do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
       provider.exists?
-
+    end
+    
     it 'should be an instance of the provider' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
     end
