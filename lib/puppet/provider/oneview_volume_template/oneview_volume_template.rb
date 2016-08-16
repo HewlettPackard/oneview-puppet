@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_volume_template).provide(:ruby) do
+Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
   mk_resource_methods
 
   def initialize(*args)
@@ -34,8 +34,7 @@ Puppet::Type.type(:oneview_volume_template).provide(:ruby) do
       data = line.inspect
       new(name: name,
           ensure: :present,
-          data: data
-         )
+          data: data)
     end
   end
 

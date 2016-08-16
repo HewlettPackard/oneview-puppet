@@ -39,7 +39,7 @@ Puppet::Type.newtype(:oneview_volume_template) do
     desc 'Volume Template data hash containing all specifications for the system'
     validate do |value|
       unless value.class == Hash
-        fail Puppet::Error, 'Inserted value for data is not valid'
+        raise Puppet::Error, 'Inserted value for data is not valid'
       end
     end
   end

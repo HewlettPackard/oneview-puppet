@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_volume_template).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
 
 describe provider_class do
   let(:resource) do
@@ -35,8 +35,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:ruby)
+    it 'should be an instance of the provider oneview_volume_template' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
     end
 
     it 'exists? should not find the volume template' do
