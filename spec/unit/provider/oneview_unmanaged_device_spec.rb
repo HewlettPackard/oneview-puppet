@@ -24,40 +24,6 @@ resourcetype = OneviewSDK::UnmanagedDevice
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  context 'given the find parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_unmanaged_device).new(
-        name: 'Unmanaged Device',
-        ensure: 'found',
-        data:
-            {
-              'name' => 'Unmanaged Device'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    it 'should be an instance of the provider' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
-    end
-
-    it 'should be able to find the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect(provider.found).to be
-    end
-
-    it 'should not be able to find the resource' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(provider.exists?).not_to be
-      expect { provider.found }.to raise_error(/No UnmanagedDevice with the specified data were found on the Oneview Appliance/)
-    end
-  end
-
   context 'given the add parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_unmanaged_device).new(
@@ -79,6 +45,23 @@ describe provider_class, unit: true do
     before(:each) do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
       provider.exists?
+    end
+
+    it 'should be an instance of the provider' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
+    end
+
+    it 'should be able to find the resource' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      expect(provider.found).to be
+    end
+
+    it 'should not be able to find the resource' do
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      expect(provider.exists?).not_to be
+      expect { provider.found }.to raise_error(/No UnmanagedDevice with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should delete/remove the resource' do

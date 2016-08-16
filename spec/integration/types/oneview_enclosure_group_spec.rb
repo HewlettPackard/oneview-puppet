@@ -18,7 +18,7 @@ require 'spec_helper'
 
 type_class = Puppet::Type.type(:oneview_enclosure_group)
 
-def enclosure_group_config
+enclosure_group_config =
   {
     name: 'Enclosure Group',
     ensure: 'present',
@@ -65,7 +65,6 @@ def enclosure_group_config
         ]
       }
   }
-end
 
 describe type_class do
   let :params do

@@ -77,30 +77,11 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.destroy).to be
     end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_network_set).new(
-        name: 'Network Set',
-        ensure: 'get_without_ethernet',
-        data:
-            {
-              'name' => 'Network Set',
-              'nativeNetwork' => 'Ethernet 1',
-              'ethernetNetworks' => ['Ethernet 1']
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should be able to get all the network sets without ethernet' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return('Test')
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(resource['data']).and_return([test])
+      allow(resourcetype).to receive(:get_without_ethernet).and_return([])
       expect(provider.get_without_ethernet).to be
     end
   end

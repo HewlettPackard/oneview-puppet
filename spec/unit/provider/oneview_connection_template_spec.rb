@@ -56,23 +56,6 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(true)
       expect(provider.found).to be
     end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_connection_template).new(
-        name: 'Connection Template',
-        ensure: 'found',
-        data:
-        {
-          'name' => 'new ct'
-        }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should be able to find the connection template' do
       test = resourcetype.new(@client, name: resource['data']['name'])
@@ -80,44 +63,10 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(true)
       expect(provider.found).to be
     end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_connection_template).new(
-        name: 'Connection Template',
-        ensure: 'present',
-        data:
-        {
-          'name' => 'new ct'
-        }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should not be able to create the resource' do
       expect { provider.create }.to raise_error('This resource relies on others to be created.')
     end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_connection_template).new(
-        name: 'Connection Template',
-        ensure: 'absent',
-        data:
-        {
-          'name' => 'CT'
-        }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should not be able to destroy the resource' do
       expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')

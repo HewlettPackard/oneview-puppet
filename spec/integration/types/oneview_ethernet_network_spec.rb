@@ -28,8 +28,7 @@ def resource_config
             smartLink:              'false',
             privateNetwork:         'true',
             connectionTemplateUri:  'nil',
-            type:                   'ethernet-networkV3',
-      },
+            type:                   'ethernet-networkV3' }
   }
 end
 

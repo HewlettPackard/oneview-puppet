@@ -61,23 +61,6 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
     end
-  end
-
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_fabric).new(
-        name: 'DefaultFabric',
-        ensure: 'found',
-        data:
-        {
-          'name' => 'DefaultFabric'
-        }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should return true if resource is found' do
       resource['data']['uri'] = '/rest/fabrics/fake'
