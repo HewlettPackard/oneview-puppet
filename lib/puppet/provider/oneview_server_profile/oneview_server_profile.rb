@@ -31,6 +31,7 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
   def exists?
     @data = data_parse
     empty_data_check([:found, :get_available_targets, :get_available_networks])
+    variable_assignments
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -45,46 +46,76 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
     server_profiles.map(&:delete)
   end
 
+  def found
+    find_resources
+  end
+
+  # Patch operation
+  def update_from_template
+    get_single_resource_instance.update_from_template
+  end
+
+  def get_available_targets
+    Puppet.notice("\n\nServer Profile Available Targets\n")
+    pretty @resourcetype.get_available_targets(@client)['targets']
+    true
+  end
+
   def get_available_networks
     Puppet.notice("\n\nServer Profile Available Networks\n")
-    pretty get_single_resource_instance.get_available_networks
+    if @data['name'] || @data['uri']
+      pretty get_single_resource_instance.get_available_networks
+    else
+      pretty @resourcetype.get_available_networks(@client, @query)
+    end
     true
   end
 
   def get_available_servers
-    Puppet.notice("\n\nServer Profile Template Available Targets\n")
-    pretty @resourcetype.get_available_targets(@client)['targets']
+    Puppet.notice("\n\nServer Profile Available Targets\n")
+    pretty @resourcetype.get_available_servers(@client, @query)
     true
   end
 
   def get_available_storage_systems
-    Puppet.notice("\n\nServer Profile Template Available Targets\n")
-    pretty @resourcetype.get_available_targets(@client)['targets']
-    true
-  end
-
-  def get_available_targets
-    Puppet.notice("\n\nServer Profile Template Available Targets\n")
-    pretty @resourcetype.get_available_targets(@client)['targets']
+    Puppet.notice("\n\nServer Profile Available Storage Systems\n")
+    pretty @resourcetype.get_available_storage_systems(@client, @query)
     true
   end
 
   def get_profile_ports
+    Puppet.notice("\n\nServer Profile Compliance Preview\n")
+    pretty @resourcetype.get_profile_ports(@client, @query)
+    true
   end
 
   def get_compliance_preview
+    Puppet.notice("\n\nServer Profile Compliance Preview\n")
+    pretty get_single_resource_instance.get_compliance_preview
+    true
   end
 
   def get_messages
+    Puppet.notice("\n\nServer Profile Messages\n")
+    pretty get_single_resource_instance.get_messages
+    true
   end
 
   def get_transformation
+    Puppet.notice("\n\nServer Profile Transformation\n")
+    pretty get_single_resource_instance.get_transformation(@query)
+    true
   end
 
   # Helpers
 
-  def getters
-    Puppet.notice("\n\nServer Profile #{notice}\n")
-    get_single_resource_instance
+  def variable_assignments
+    # gets the connections' uris
+    connections_parse if @data['connections']
+    @query = if @data['query']
+               @data.delete('query')
+             else
+               nil
+             end
   end
 end

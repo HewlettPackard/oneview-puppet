@@ -14,18 +14,101 @@
 # limitations under the License.
 ################################################################################
 
+# This example requires:
+# A server hardware '172.18.6.15'
+
 oneview_server_profile{'Server Profile Get Available Targets':
-  ensure => 'get_available_networks'
+  ensure => 'get_available_targets'
 }
 
-# oneview_server_profile{'Server Profile Create':
-#   ensure => 'present',
-#   data   =>
+oneview_server_profile{'Server Profile Create':
+  ensure  => 'present',
+  require => Oneview_server_profile['Server Profile Get Available Targets'],
+  data    =>
+  {
+    name              => 'Test Server Profile',
+    type              => 'ServerProfileV5',
+    serverHardwareUri => '172.18.6.15',
+  }
+}
+
+# Optional filters
+oneview_server_profile{'Server Profile Found':
+  ensure  => 'found',
+  require => Oneview_server_profile['Server Profile Create'],
+  # data    =>
+  # {
+  #   name => 'Test Server Profile'
+  # }
+}
+
+oneview_server_profile{'Server Profile Edit':
+  ensure  => 'present',
+  require => Oneview_server_profile['Server Profile Found'],
+  data    =>
+  {
+    name     => 'Test Server Profile',
+    new_name => 'Edited Server Profile'
+  }
+}
+
+# CAUTION: More than one matching server profile can be deleted at once
+oneview_server_profile{'Server Profile Destroy':
+  ensure  => 'absent',
+  require => Oneview_server_profile['Server Profile Edit'],
+  data    =>
+  {
+    name => 'Edited Server Profile'
+  }
+}
+
+# Some get endpoints accept query parameters. Please check the API reference for more
+# information on which filters can be used
+
+# The server profile must have been created based on a server profile template
+# in order to get the compliance preview
+# oneview_server_profile{'Server Profile Found':
+#   ensure  => 'get_compliance_preview',
+#   # require => Oneview_server_profile['Server Profile Create'],
+#   data =>
 #   {
-#     name => 'Test Server Profile',
-#     type => 'ServerProfileV5',
-#     serverHardwareUri => '/rest/server-hardware/37333036-3831-584D-5131-303030323037',
-#     # serverHardwareTypeUri => '/rest/server-hardware-types/1D614B25-4119-40F6-A71B-EAF01E325A3A',
-#     # enclosureGroupUri => '/rest/enclosure-groups/961975e3-d160-411b-863e-732336850c3c'
+#     name  => 'Server_Profile_created_from_New SPT #2',
+#     # query =>
+#     # {
+#     #   count => 1
+#     # }
 #   }
 # }
+
+# If you need to assign a network set, make sure its functionType is 'Set'
+# oneview_server_profile{'Server Profile Found':
+#   ensure  => 'present',
+#   data =>
+#   {
+#     name  => 'Server_Profile_created_from_New SPT #2',
+#     connections =>
+#     [
+#       {
+#         name => 'My Network Set',
+#         functionType => 'Set',
+#       },
+#       {
+#         name => 'Ethernet Network 1',
+#         functionType => 'Ethernet',
+#       }
+#     ]
+#   }
+# }
+
+# As the patch operation only supports one specific set of values, it has been replaced
+# by 'update_from_template'
+# The server template needs to be associated with a profile in order to perform this action
+# oneview_server_profile{'Server Profile Update From Template':
+#   ensure  => 'update_from_template',
+#   require => Oneview_server_profile['Server Profile Found'],
+#   data    =>
+#   {
+#     name => 'Test Server Profile'
+#   }
+# }
+#
