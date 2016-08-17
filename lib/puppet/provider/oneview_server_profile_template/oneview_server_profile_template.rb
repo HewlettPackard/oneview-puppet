@@ -58,17 +58,4 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
       get_single_resource_instance.new_profile.create
     end
   end
-
-  def connections_parse
-    @data['connections'].each do |conn|
-      next if conn['uri'].to_s[0..6].include?('/rest/')
-      type = case conn['functionType']
-             when 'Ethernet' then 'EthernetNetwork'
-             when 'FibreChannel' then 'FCNetwork'
-             end
-      net = objectfromstring(type).find_by(@client, name: conn['networkUri'])
-      raise('The network does not exist in the Appliance.') unless net.first
-      conn['networkUri'] = net.first['uri']
-    end
-  end
 end
