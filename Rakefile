@@ -22,9 +22,9 @@ task :validate do
   end
 end
 
-namespace :lint do
+#namespace :lint do
   desc "Checking puppet module code style."
-  task :ci do
+  task :lint do
     begin
       require 'puppet-lint'
     rescue LoadError
@@ -57,4 +57,4 @@ namespace :lint do
 
     abort "Checking puppet module code style FAILED" if success.is_a?(FalseClass)
   end
-end
+#end
