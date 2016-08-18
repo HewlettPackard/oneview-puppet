@@ -111,4 +111,3 @@ oneview_server_profile{'Server Profile Destroy':
 #     name => 'Test Server Profile'
 #   }
 # }
-#
