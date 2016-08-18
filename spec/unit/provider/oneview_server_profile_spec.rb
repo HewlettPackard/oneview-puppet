@@ -18,6 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
 resourcetype = OneviewSDK::ServerProfile
+fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -78,37 +79,37 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get available targets' do
-      allow(resourcetype).to receive(:get_available_targets).with(anything, nil).and_return('Test')
+      allow(resourcetype).to receive(:get_available_targets).with(anything, nil).and_return(fake_json_response)
       expect(provider.get_available_targets).to be
     end
 
     it 'should be able to get the compliance preview' do
-      allow_any_instance_of(resourcetype).to receive(:get_compliance_preview).and_return('Test')
+      allow_any_instance_of(resourcetype).to receive(:get_compliance_preview).and_return(fake_json_response)
       expect(provider.get_compliance_preview).to be
     end
 
     it 'should be able to get the available storage systems' do
-      allow(resourcetype).to receive(:get_available_storage_system).with(anything, nil).and_return('Test')
+      allow(resourcetype).to receive(:get_available_storage_system).with(anything, nil).and_return(fake_json_response)
       expect(provider.get_available_storage_system).to be
     end
 
     it 'should be able to get available networks' do
-      allow_any_instance_of(resourcetype).to receive(:get_available_networks).and_return('Test')
+      allow_any_instance_of(resourcetype).to receive(:get_available_networks).and_return(fake_json_response)
       expect(provider.get_available_networks).to be
     end
 
     it 'should be able to get the transformation' do
-      allow_any_instance_of(resourcetype).to receive(:get_transformation).and_return('Test')
+      allow_any_instance_of(resourcetype).to receive(:get_transformation).and_return(fake_json_response)
       expect(provider.get_transformation).to be
     end
 
     it 'should be able to get messages' do
-      allow_any_instance_of(resourcetype).to receive(:get_messages).and_return('Test')
+      allow_any_instance_of(resourcetype).to receive(:get_messages).and_return(fake_json_response)
       expect(provider.get_messages).to be
     end
 
     it 'should be able to get available servers' do
-      allow(resourcetype).to receive(:get_available_servers).and_return('Test')
+      allow(resourcetype).to receive(:get_available_servers).and_return(fake_json_response)
       expect(provider.get_available_servers).to be
     end
 
@@ -116,7 +117,7 @@ describe provider_class, unit: true do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      allow(resourcetype).to receive(:get_profile_ports).and_return('Test')
+      allow(resourcetype).to receive(:get_profile_ports).and_return(fake_json_response)
       expect(provider.get_profile_ports).to be
     end
 

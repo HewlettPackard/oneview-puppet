@@ -1,0 +1,25 @@
+{
+  "type": "AvailableTargetsV2",
+  "targets": [
+    {
+      "enclosureGroupName": null,
+      "enclosureName": null,
+      "enclosureUri": null,
+      "enclosureBay": 0,
+      "serverHardwareName": "172.18.6.15",
+      "serverHardwareUri": "/rest/server-hardware/37333036-3831-584D-5131-303030323037",
+      "serverHardwareTypeName": "DL360p Gen8 1",
+      "serverHardwareTypeUri": "/rest/server-hardware-types/957CE66E-4BB1-4C0B-8739-2C0078DE99B7",
+      "enclosureGroupUri": null,
+      "powerState": "Off",
+      "formFactor": [
+        "1U"
+      ]
+    }
+  ],
+  "created": "2016-08-18T17:43:02.758Z",
+  "eTag": "2016-08-18T17:43:02.758Z",
+  "modified": "2016-08-18T17:43:02.758Z",
+  "category": "available-targets",
+  "uri": "/rest/server-profiles/available-targets"
+}
