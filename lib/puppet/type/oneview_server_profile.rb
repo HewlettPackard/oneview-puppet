@@ -45,6 +45,10 @@ Puppet::Type.newtype(:oneview_server_profile) do
       provider.get_available_storage_systems
     end
 
+    newvalue(:get_available_storage_system) do
+      provider.get_available_storage_system
+    end
+
     newvalue(:get_available_targets) do
       provider.get_available_targets
     end

@@ -17,6 +17,9 @@
 # This example requires:
 # A server hardware '172.18.6.15'
 
+# Some get endpoints accept query parameters. Please check the API reference for more
+# information on which filters can be used
+
 oneview_server_profile{'Server Profile Get Available Targets':
   ensure => 'get_available_targets'
 }
@@ -62,9 +65,6 @@ oneview_server_profile{'Server Profile Destroy':
   }
 }
 
-# Some get endpoints accept query parameters. Please check the API reference for more
-# information on which filters can be used
-
 # The server profile must have been created based on a server profile template
 # in order to get the compliance preview
 # oneview_server_profile{'Server Profile Found':
@@ -72,8 +72,8 @@ oneview_server_profile{'Server Profile Destroy':
 #   # require => Oneview_server_profile['Server Profile Create'],
 #   data =>
 #   {
-#     name  => 'Server_Profile_created_from_New SPT #2',
-#     # query =>
+#     name               => 'Server_Profile_created_from_New SPT #2',
+#     # query_parameters =>
 #     # {
 #     #   count => 1
 #     # }

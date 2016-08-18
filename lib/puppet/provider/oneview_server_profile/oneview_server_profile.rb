@@ -30,7 +30,8 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :get_available_targets, :get_available_networks])
+    empty_data_check([:found, :get_available_targets, :get_available_networks, :get_available_servers,
+                      :get_available_storage_systems, :get_available_storage_system, :get_profile_ports])
     variable_assignments
     !@resourcetype.find_by(@client, @data).empty?
   end
@@ -57,7 +58,7 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
 
   def get_available_targets
     Puppet.notice("\n\nServer Profile Available Targets\n")
-    pretty @resourcetype.get_available_targets(@client)['targets']
+    pretty @resourcetype.get_available_targets(@client, @query)
     true
   end
 
@@ -80,6 +81,12 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
   def get_available_storage_systems
     Puppet.notice("\n\nServer Profile Available Storage Systems\n")
     pretty @resourcetype.get_available_storage_systems(@client, @query)
+    true
+  end
+
+  def get_available_storage_system
+    Puppet.notice("\n\nServer Profile Available Storage System\n")
+    pretty @resourcetype.get_available_storage_system(@client, @query)
     true
   end
 
@@ -112,10 +119,7 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
   def variable_assignments
     # gets the connections' uris
     connections_parse if @data['connections']
-    @query = if @data['query']
-               @data.delete('query')
-             else
-               nil
-             end
+    # gets the hash of filters for queries; in case it does not exist, query will be nil
+    @query = @data.delete('query_parameters')
   end
 end
