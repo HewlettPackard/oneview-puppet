@@ -19,29 +19,28 @@ require 'spec_helper'
 type_class = Puppet::Type.type(:oneview_enclosure)
 
 def enclosure_config
-{
-  name: 'Enclosure',
-  ensure: 'present',
+  {
+    name: 'Enclosure',
+    ensure: 'present',
     data:
-      {
-        'name'              => 'Puppet_Test_Enclosure',
-        'hostname'          => '172.18.1.13',
-        'username'          => 'dcs',
-        'password'          => 'dcs',
-        'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-        'licensingIntent'   => 'OneView'
-      }
-}
+        {
+          'name'              => 'Puppet_Test_Enclosure',
+          'hostname'          => '172.18.1.13',
+          'username'          => 'dcs',
+          'password'          => 'dcs',
+          'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+          'licensingIntent'   => 'OneView'
+        }
+  }
 end
 
 describe type_class do
-
   let :params do
-  [
-    :name,
-    :data,
-    :provider,
-  ]
+    [
+      :name,
+      :data,
+      :provider
+    ]
   end
 
   it 'should have expected parameters' do
@@ -51,19 +50,18 @@ describe type_class do
   end
 
   it 'should require a name' do
-    expect {
+    expect do
       type_class.new({})
-    }.to raise_error(Puppet::Error, 'Title or name must be provided')
+    end.to raise_error(Puppet::Error, 'Title or name must be provided')
   end
 
   it 'should require a data hash' do
     modified_config = enclosure_config
     modified_config[:data] = ''
     resource_type = type_class.to_s.split('::')
-    expect {
-        type_class.new(modified_config)
-    }.to raise_error(Puppet::Error, "Parameter data failed on" +
+    expect do
+      type_class.new(modified_config)
+    end.to raise_error(Puppet::Error, 'Parameter data failed on' \
     " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
   end
-
 end

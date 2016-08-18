@@ -51,7 +51,6 @@ describe provider_class, unit: true do
       expect(provider.exists?).not_to be
     end
 
-
     it 'should create/add the datacenter' do
       test = resourcetype.new(@client, resource['data'])
       expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])

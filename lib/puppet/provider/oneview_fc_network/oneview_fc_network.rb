@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
 
   def self.instances
     @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::FCNetwork.get_all(@client)
+    matches = OneviewSDK::FCNetwork.find_by(@client, {})
     matches.collect do |line|
       name = line['name']
       data = line.inspect
@@ -58,8 +58,7 @@ Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
   end
 
   def destroy
-    fc_network = get_single_resource_instance
-    fc_network.delete
+    get_single_resource_instance.delete
     @property_hash.clear
     true
   end

@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_rack).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
 
 describe provider_class do
   let(:resource) do
@@ -39,8 +39,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_rack).provider(:ruby)
+    it 'should be an instance of the provider oneview_rack' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
     end
 
     it 'should raise error when server is not found' do

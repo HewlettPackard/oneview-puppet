@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_rack).provide(:ruby) do
+Puppet::Type.type(:oneview_rack).provide(:oneview_rack) do
   mk_resource_methods
 
   def initialize(*args)
@@ -44,11 +44,10 @@ Puppet::Type.type(:oneview_rack).provide(:ruby) do
   end
 
   # Provider methods
-
   def exists?
     @data = data_parse
-    rack = @resourcetype.find_by(@client, @data)
-    !rack.empty?
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
@@ -74,8 +73,7 @@ Puppet::Type.type(:oneview_rack).provide(:ruby) do
   end
 
   def get_device_topology
-    rack = get_single_resource_instance
-    pretty rack.get_device_topology
+    pretty get_single_resource_instance.get_device_topology
     true
   end
 

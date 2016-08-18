@@ -18,7 +18,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_server_hardware).provide(:ruby) do
+Puppet::Type.type(:oneview_server_hardware).provide(:oneview_server_hardware) do
   mk_resource_methods
 
   def initialize(*args)
@@ -43,23 +43,12 @@ Puppet::Type.type(:oneview_server_hardware).provide(:ruby) do
     end
   end
 
-  # TODO: eventually implement this prefetch method as it seems useful but requires an investigation into it
-  # def self.prefetch(resources)
-  #   packages = instances
-  #   resources.keys.each do |name|
-  #     if provider = packages.find { |pkg| pkg.name == name }
-  #       resources[name].provider = provider
-  #     end
-  #   end
-  # end
-
   # Provider methods
-
   def exists?
     @data = data_parse
+    empty_data_check
     data_parse_for_general
-    server_hardware = @resourcetype.find_by(@client, @data)
-    !server_hardware.empty?
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
@@ -72,8 +61,7 @@ Puppet::Type.type(:oneview_server_hardware).provide(:ruby) do
   end
 
   def destroy
-    server_hardware = get_single_resource_instance
-    server_hardware.remove
+    get_single_resource_instance.remove
     @property_hash.clear
   end
 
@@ -82,45 +70,38 @@ Puppet::Type.type(:oneview_server_hardware).provide(:ruby) do
   end
 
   def get_bios
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.get_bios
+    pretty get_single_resource_instance.get_bios
     true
   end
 
   def get_ilo_sso_url
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.get_ilo_sso_url
+    pretty get_single_resource_instance.get_ilo_sso_url
     true
   end
 
   def get_java_remote_sso_url
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.get_java_remote_sso_url
+    pretty get_single_resource_instance.get_java_remote_sso_url
     true
   end
 
   def get_remote_console_url
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.get_remote_console_url
+    pretty get_single_resource_instance.get_remote_console_url
     true
   end
 
   def get_environmental_configuration
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.environmental_configuration
+    pretty get_single_resource_instance.environmental_configuration
     true
   end
 
   def get_utilization
     query_parameters = @data.delete('queryParameters') if @data['queryParameters']
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.utilization(query_parameters || {})
+    pretty get_single_resource_instance.utilization(query_parameters || {})
     true
   end
 
   def update_ilo_firmware
-    server_hardware = get_single_resource_instance
-    pretty server_hardware.update_ilo_firmware
+    pretty get_single_resource_instance.update_ilo_firmware
     true
   end
 
@@ -139,8 +120,7 @@ Puppet::Type.type(:oneview_server_hardware).provide(:ruby) do
     raise 'A "state" specified in data is required for this action.' unless @data['state']
     state = @data.delete('state')
     options = @data.delete('options') || {}
-    server_hardware = get_single_resource_instance
-    server_hardware.set_refresh_state(state, options)
+    get_single_resource_instance.set_refresh_state(state, options)
   end
 
   def data_parse_for_general

@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -28,7 +28,7 @@ describe provider_class, unit: true do
       ensure: 'present',
       data:
           {
-            'firmware_bundle_path' => './spec/support/cp022594.exe'
+            'firmware_bundle_path' => './spec/support/test_firmware_bundle.spp'
           }
     )
   end
@@ -43,8 +43,8 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:ruby)
+    it 'should be an instance of the provider oneview_firmware_bundle' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
     end
 
     it 'should raise error when firmware bundle is not found' do

@@ -18,25 +18,24 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_uplink_set).provide(:oneview_uplink_set) do
+Puppet::Type.type(:oneview_managed_san).provide(:oneview_managed_san) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::UplinkSet
+    @resourcetype = OneviewSDK::ManagedSAN
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
     @data = {}
-    @port_config
   end
 
   def self.instances
     @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::UplinkSet.get_all(@client)
+    matches = OneviewSDK::ManagedSAN.get_all(@client)
     matches.collect do |line|
       name = line['name']
-      data = line.inspect
+      data = line.data
       new(name: name,
           ensure: :present,
           data: data)
@@ -46,48 +45,41 @@ Puppet::Type.type(:oneview_uplink_set).provide(:oneview_uplink_set) do
   # Provider methods
   def exists?
     @data = data_parse
-    empty_data_check
-    name_to_uris
-    # Taking out portConfigInfos before the find_by since it is not returned
-    @port_config = @data.delete('portConfigInfos')
-    !@resourcetype.find_by(@client, @data).empty?
+    resource['ensure'] == :present ? false : true
   end
 
   def create
-    uplink_set = @resourcetype.new(@client, @data)
-    uplink_set.add_port_config(@port_config[0], @port_config[1], @port_config[2]) if @port_config
-    uplink_set.create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
+    raise 'A "publicAttributes" or "sanPolicy" attribute is required to be set within data for this operation' unless
+       @data['publicAttributes'] || @data['sanPolicy']
+    public_attributes = @data.delete('publicAttributes')
+    san_policy = @data.delete('sanPolicy')
+    managed_san = get_single_resource_instance
+    managed_san.set_public_attributes(public_attributes) if public_attributes
+    managed_san.set_san_policy(san_policy) if san_policy
   end
 
   def destroy
-    get_single_resource_instance.delete
-    @property_hash.clear
-    true
+    raise 'Absent is not a valid ensurable for this resource'
   end
 
   def found
     find_resources
   end
 
-  # Calls the sdk helper methods in case the user used the resource names to set uris
-  def name_to_uris
-    uri_set('networkUris', OneviewSDK::EthernetNetwork)
-    uri_set('fcNetworkUris', OneviewSDK::FCNetwork)
-    uri_set('fcoeNetworkUris', OneviewSDK::FCoENetwork)
+  def get_zoning_report
+    pretty get_single_resource_instance.get_zoning_report
+    true
   end
 
-  def uri_set(tag, type)
-    network_uris = @data.delete(tag)
-    return unless network_uris
-    network_uris.each_with_index do |network_name, index|
-      next if network_name.to_s[0..6].include?('/rest/')
-      network = type.find_by(@client, name: network_name).first
-      raise "No #{type.to_s.split('::')[1]}s with the name #{network_name} have been found on the appliance" unless network
-      network_uris[index] = network['uri']
-    end
-    @data[tag] = network_uris
+  def get_endpoints
+    pretty get_single_resource_instance.get_endpoints
+    true
+  end
+
+  def set_refresh_state
+    raise 'A refreshState is required to be set within data for this operation' unless @data['refreshState']
+    refresh_state = @data.delete('refreshState')
+    get_single_resource_instance.set_refresh_state(refresh_state)
+    true
   end
 end

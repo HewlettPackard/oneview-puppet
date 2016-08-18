@@ -18,13 +18,13 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_managed_san).provide(:ruby) do
+Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ManagedSAN
+    @resourcetype = OneviewSDK::VolumeTemplate
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
     @data = {}
@@ -32,10 +32,10 @@ Puppet::Type.type(:oneview_managed_san).provide(:ruby) do
 
   def self.instances
     @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::ManagedSAN.get_all(@client)
+    matches = OneviewSDK::VolumeTemplate.find_all(@client, {})
     matches.collect do |line|
       name = line['name']
-      data = line.data
+      data = line.inspect
       new(name: name,
           ensure: :present,
           data: data)
@@ -43,47 +43,33 @@ Puppet::Type.type(:oneview_managed_san).provide(:ruby) do
   end
 
   # Provider methods
-
   def exists?
     @data = data_parse
-    resource['ensure'] == :present ? false : true
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    raise 'A "publicAttributes" or "sanPolicy" attribute is required to be set within data for this operation' unless
-       @data['publicAttributes'] || @data['sanPolicy']
-    public_attributes = @data.delete('publicAttributes')
-    san_policy = @data.delete('sanPolicy')
-    managed_san = get_single_resource_instance
-    managed_san.set_public_attributes(public_attributes) if public_attributes
-    managed_san.set_san_policy(san_policy) if san_policy
+    return true if resource_update(@data, @resourcetype)
+    @resourcetype.new(@client, @data).create
+    @property_hash[:ensure] = :present
+    @property_hash[:data] = @data
+    true
   end
 
   def destroy
-    raise 'Absent is not a valid ensurable for this resource'
+    get_single_resource_instance.delete
+    @property_hash.clear
+    true
   end
 
   def found
     find_resources
   end
 
-  def get_zoning_report
-    managed_san = get_single_resource_instance
-    pretty managed_san.get_zoning_report
-    true
-  end
-
-  def get_endpoints
-    managed_san = get_single_resource_instance
-    pretty managed_san.get_endpoints
-    true
-  end
-
-  def set_refresh_state
-    raise 'A refreshState is required to be set within data for this operation' unless @data['refreshState']
-    refresh_state = @data.delete('refreshState')
-    managed_san = get_single_resource_instance
-    managed_san.set_refresh_state(refresh_state)
+  def get_connectable_volume_templates
+    attributes = @data.delete('attributes') || {}
+    pretty get_single_resource_instance.get_connectable_volume_templates(attributes)
     true
   end
 end

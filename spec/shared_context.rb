@@ -37,8 +37,8 @@ end
 # Context for integration testing:
 # WARNING: Communicates with & modifies a real instance.
 # Must set the following environment variables:
-  ENV['ONEVIEWSDK_INTEGRATION_CONFIG'] = 'spec/integration/one_view_config.json'
-  ENV['ONEVIEWSDK_INTEGRATION_SECRETS'] = 'spec/integration/one_view_secrets.json'
+ENV['ONEVIEWSDK_INTEGRATION_CONFIG'] = 'spec/integration/one_view_config.json'
+ENV['ONEVIEWSDK_INTEGRATION_SECRETS'] = 'spec/integration/one_view_secrets.json'
 # Or use the default paths:
 #   spec/integration/one_view_config.json
 #   spec/integration/one_view_secrets.json
@@ -77,13 +77,12 @@ RSpec.shared_context 'integration context', a: :b do
                else '_____'
                end
       puts "#{action} #{e.metadata[:sequence] || '_'}: #{described_class}: #{e.metadata[:description]}"
-      fail 'Skipped'
+      raise 'Skipped'
     end
   end
 end
 
 RSpec.shared_context 'system context', a: :b do
-
   before(:each) do
     default_config  = 'spec/system/one_view_config.json'
     default_secrets = 'spec/system/one_view_secrets.json'
@@ -109,5 +108,4 @@ RSpec.shared_context 'system context', a: :b do
     allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_call_original
     allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_call_original
   end
-
 end

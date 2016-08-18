@@ -54,7 +54,6 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:oneview_enclosure_group) do
   def set_script
     script = @data.delete('script') if @data['script']
     raise("\nThe 'script' field is required in data hash to run the set_script action.") unless script
-    enclosure = @resourcetype.find_by(@client, unique_id)
     get_single_resource_instance.set_script(script)
     Puppet.notice("Enclosure Group script set to:\n#{script}\n")
   end

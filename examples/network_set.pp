@@ -27,7 +27,7 @@ oneview_network_set{'Network Set Create':
 
 # Optional filters
 oneview_network_set{'Network Set Get All':
-  ensure => 'found',
+  ensure  => 'found',
   require => Oneview_network_set['Network Set Create'],
   # data   =>
   # {

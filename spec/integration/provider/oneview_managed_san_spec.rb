@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_managed_san).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
 
 describe provider_class do
   let(:resource) do
@@ -39,8 +39,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_managed_san).provider(:ruby)
+    it 'should be an instance of the provider oneview_managed_san' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
     end
 
     # NOTE: This depends on the appliance not having any ManagedSAN listed, thus is commented out

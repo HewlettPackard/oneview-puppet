@@ -18,44 +18,49 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_firmware_bundle).provide(:ruby) do
+Puppet::Type.type(:oneview_server_hardware_type).provide(:oneview_server_hardware_type) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FirmwareBundle
+    @resourcetype = OneviewSDK::ServerHardwareType
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
     @data = {}
+    @authentication = {}
   end
 
-  # TODO: eventually implement this prefetch method as it seems useful but requires an investigation into it
-  # def self.prefetch(resources)
-  #   packages = instances
-  #   resources.keys.each do |name|
-  #     if provider = packages.find { |pkg| pkg.name == name }
-  #       resources[name].provider = provider
-  #     end
-  #   end
-  # end
+  def self.instances
+    @client = OneviewSDK::Client.new(login)
+    matches = OneviewSDK::ServerHardwareType.get_all(@client)
+    matches.collect do |line|
+      name = line['name']
+      data = line.inspect
+      new(name: name,
+          ensure: :present,
+          data: data)
+    end
+  end
 
   # Provider methods
-
   def exists?
     @data = data_parse
-    raise 'A "firmware_bundle_path" is required for this operation' unless @data['firmware_bundle_path']
+    empty_data_check
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    @resourcetype.add(@client, @data['firmware_bundle_path'])
+    resource_update(@data, @resourcetype)
+    true
   end
 
   def destroy
-    raise '"Absent" is not a valid ensurable for firmware bundle.'
+    get_single_resource_instance.remove
+    @property_hash.clear
   end
 
   def found
-    raise '"Found" is not a valid ensurable for firmware bundle.'
+    find_resources
   end
 end
