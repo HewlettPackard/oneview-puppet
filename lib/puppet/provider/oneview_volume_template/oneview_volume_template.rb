@@ -68,8 +68,8 @@ Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
   end
 
   def get_connectable_volume_templates
-    attributes = @data.delete('attributes') || {}
-    pretty get_single_resource_instance.get_connectable_volume_templates(attributes)
+    query_parameters = @data.delete('query_parameters') || {}
+    pretty get_single_resource_instance.get_connectable_volume_templates(query_parameters)
     true
   end
 end
