@@ -88,11 +88,6 @@ describe provider_class, unit: true do
       expect(provider.get_compliance_preview).to be
     end
 
-    it 'should be able to get the available storage systems' do
-      allow(resourcetype).to receive(:get_available_storage_system).with(anything, nil).and_return(fake_json_response)
-      expect(provider.get_available_storage_system).to be
-    end
-
     it 'should be able to get available networks' do
       allow_any_instance_of(resourcetype).to receive(:get_available_networks).and_return(fake_json_response)
       expect(provider.get_available_networks).to be

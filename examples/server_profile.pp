@@ -20,6 +20,18 @@
 # Some get endpoints accept query parameters. Please check the API reference for more
 # information on which filters can be used
 
+# As the patch operation only supports one specific set of values, it has been replaced
+# by 'update_from_template'
+# The server template needs to be associated with a profile in order to perform this action
+# oneview_server_profile{'Server Profile Update From Template':
+#   ensure  => 'update_from_template',
+#   require => Oneview_server_profile['Server Profile Found'],
+#   data    =>
+#   {
+#     name => 'Test Server Profile'
+#   }
+# }
+
 oneview_server_profile{'Server Profile Get Available Targets':
   ensure => 'get_available_targets'
 }
@@ -99,16 +111,3 @@ oneview_server_profile{'Server Profile Destroy':
 #     ]
 #   }
 # }
-
-# As the patch operation only supports one specific set of values, it has been replaced
-# by 'update_from_template'
-# The server template needs to be associated with a profile in order to perform this action
-# oneview_server_profile{'Server Profile Update From Template':
-#   ensure  => 'update_from_template',
-#   require => Oneview_server_profile['Server Profile Found'],
-#   data    =>
-#   {
-#     name => 'Test Server Profile'
-#   }
-# }
-#

@@ -30,9 +30,12 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :get_available_targets, :get_available_networks, :get_available_servers,
-                      :get_available_storage_systems, :get_available_storage_system, :get_profile_ports])
-    variable_assignments
+    empty_data_check([:found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
+                      :get_messages, :get_profile_ports, :get_transformation])
+    # gets the connections' uris
+    connections_parse if @data['connections']
+    # gets the hash of filters for queries; in case it does not exist, query will be nil
+    @query = @data.delete('query_parameters')
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -80,12 +83,16 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
 
   def get_available_storage_systems
     Puppet.notice("\n\nServer Profile Available Storage Systems\n")
+    raise('You must specify the following query attributes: enclosureGroupUri and serverHardwareTypeUri.') unless
+      @query_parameters['enclosureGroupUri'] && @query_parameters['serverHardwareTypeUri']
     pretty @resourcetype.get_available_storage_systems(@client, @query)
     true
   end
 
   def get_available_storage_system
     Puppet.notice("\n\nServer Profile Available Storage System\n")
+    raise('You must specify the following query attributes: enclosureGroupUri, serverHardwareTypeUri and storageSystemId.') unless
+      @query_parameters['enclosureGroupUri'] && @query_parameters['storageSystemId'] && @query_parameters['serverHardwareTypeUri']
     pretty @resourcetype.get_available_storage_system(@client, @query)
     true
   end
@@ -112,14 +119,5 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
     Puppet.notice("\n\nServer Profile Transformation\n")
     pretty get_single_resource_instance.get_transformation(@query)
     true
-  end
-
-  # Helpers
-
-  def variable_assignments
-    # gets the connections' uris
-    connections_parse if @data['connections']
-    # gets the hash of filters for queries; in case it does not exist, query will be nil
-    @query = @data.delete('query_parameters')
   end
 end
