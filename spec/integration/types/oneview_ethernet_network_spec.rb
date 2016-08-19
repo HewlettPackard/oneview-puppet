@@ -20,15 +20,17 @@ type_class = Puppet::Type.type(:oneview_ethernet_network)
 
 def resource_config
   {
-    name:                           'test_net',
+    name: 'Test Ethernet Network',
     data:
-      {     name:                   'Puppet Network',
-            vlanId:                 '100',
-            purpose:                'General',
-            smartLink:              'false',
-            privateNetwork:         'true',
-            connectionTemplateUri:  'nil',
-            type:                   'ethernet-networkV3' }
+        {
+          'name' => 'Puppet Network',
+          'vlanId' => '100',
+          'purpose' => 'General',
+          'smartLink' => 'false',
+          'privateNetwork' => 'true',
+          'connectionTemplateUri' => 'nil',
+          'type' => 'ethernet-networkV3'
+        }
   }
 end
 
@@ -43,7 +45,9 @@ describe type_class do
 
   let :special_ensurables do
     [
-      :found
+      :found,
+      :get_associated_profiles,
+      :get_associated_uplink_groups
     ]
   end
 
@@ -74,7 +78,7 @@ describe type_class do
     modified_config[:data] = ''
     expect do
       type_class.new(modified_config)
-    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_ethernet_network[test_net]: '\
+    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_ethernet_network[Test Ethernet Network]: '\
                                               'Validate method failed for class data: Inserted value for data is not valid')
   end
 end
