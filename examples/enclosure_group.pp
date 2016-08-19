@@ -18,6 +18,7 @@ oneview_enclosure_group{'Enclosure Group Get All':
     ensure  => 'found'
 }
 
+# 'interconnectBayMappings' does not need to be specified if the values are nil
 oneview_enclosure_group{'Enclosure Group Create':
     ensure => 'present',
     data   => {
@@ -25,41 +26,17 @@ oneview_enclosure_group{'Enclosure Group Create':
       stackingMode                => 'Enclosure',
       interconnectBayMappingCount => '8',
       type                        => 'EnclosureGroupV200',
-      interconnectBayMappings     =>
-      [
-        {
-          interconnectBay             => '1',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '2',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '3',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '4',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '5',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '6',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '7',
-          logicalInterconnectGroupUri => nil
-        },
-        {
-          interconnectBay             => '8',
-          logicalInterconnectGroupUri => nil
-        }
-      ]
+      # interconnectBayMappings     =>
+      # [
+      #   {
+      #     interconnectBay             => '1',
+      #     logicalInterconnectGroupUri => nil
+      #   },
+      # ... up to 8
+      #     interconnectBay             => '8',
+      #     logicalInterconnectGroupUri => nil
+      #   }
+      # ]
     }
 }
 
