@@ -72,9 +72,9 @@ oneview_rack{'rack_5':
 
 # The absent ensurable accepts general filters when deleting racks and can delete multiple racks at once.
   # Caution is advised if a unique identifier is not used when deleting racks.
-# oneview_rack{'rack_6':
-#     ensure => 'absent',
-#     # data   => {
-#     #       name => 'myrack'
-#     # },
-# }
+oneview_rack{'rack_6':
+    ensure => 'absent',
+    # data   => {
+    #       name => 'myrack'
+    # },
+}
