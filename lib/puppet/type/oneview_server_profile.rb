@@ -23,7 +23,7 @@ Puppet::Type.newtype(:oneview_server_profile) do
   ensurable do
     defaultvalues
 
-    #PUTs
+    # PUTs
     newvalue(:update_from_template) do
       provider.update_from_template
     end
