@@ -74,7 +74,7 @@ oneview_rack{'rack_5':
   # Caution is advised if a unique identifier is not used when deleting racks.
 oneview_rack{'rack_6':
     ensure => 'absent',
-    data   => {
-          name => 'myrack'
-    },
+    # data   => {
+    #       name => 'myrack'
+    # },
 }
