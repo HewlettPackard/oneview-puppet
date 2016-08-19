@@ -18,13 +18,13 @@ require 'spec_helper'
 
 type_class = Puppet::Type.type(:oneview_fcoe_network)
 
-def fcoe_config
+def resource_config
   {
-    name: 'fcoe',
+    name: 'FCoE Network',
     data:
-      {
-        'name' => 'Test FCOE'
-      }
+        {
+          'name' => 'Puppet Network'
+        }
   }
 end
 
@@ -37,24 +37,40 @@ describe type_class do
     ]
   end
 
+  let :special_ensurables do
+    [
+      :found
+    ]
+  end
+
   it 'should have expected parameters' do
     params.each do |param|
-      expect(type_class.parameters).to be_include(param)
+      expect(type_class.parameters).to include(param)
+    end
+  end
+
+  it 'should accept special ensurables' do
+    special_ensurables.each do |value|
+      expect do
+        described_class.new(name: 'Test',
+                            ensure: value,
+                            data: {})
+      end.to_not raise_error
     end
   end
 
   it 'should require a name' do
     expect do
       type_class.new({})
-    end.to raise_error(Puppet::Error, 'Title or name must be provided')
+    end.to raise_error('Title or name must be provided')
   end
 
   it 'should require a data hash' do
-    modified_config = fcoe_config
+    modified_config = resource_config
     modified_config[:data] = ''
     expect do
       type_class.new(modified_config)
-    end.to raise_error('Parameter data failed on Oneview_fcoe_network[fcoe]: Validate method failed for class data: '\
-                       'Inserted value for data is not valid')
+    end.to raise_error(Puppet::ResourceError, 'Parameter data failed on Oneview_fcoe_network[FCoE Network]: Validate method failed '\
+                                              'for class data: Inserted value for data is not valid')
   end
 end
