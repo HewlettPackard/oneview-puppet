@@ -43,17 +43,21 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
-        name: 'DefaultFabric',
+        name: 'Enclosure',
         ensure: 'present',
         data:
             {
-              'name' => 'DefaultFabric',
               'name' => 'Puppet_Test_Enclosure',
               'hostname' => '172.18.1.13',
               'username' => 'dcs',
               'password' => 'dcs',
-              'enclosureGroupUri' => 'Puppet Enc Group Test',
+              'enclosureGroupUri' => '/rest/',
               'licensingIntent' => 'OneView',
+              'refreshState' => 'RefreshPending',
+              'utilization_parameters' =>
+              {
+                'view' => 'day'
+              }
             }
       )
     end
@@ -66,6 +70,65 @@ describe provider_class, unit: true do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
+    end
+
+    it 'should be an instance of the provider Ruby' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
+    end
+
+    it 'should be able to find the resource' do
+      expect(provider.found).to be
+    end
+
+    it 'should be able to get the environmental configuration' do
+      allow_any_instance_of(resourcetype).to receive(:environmental_configuration).and_return('Test')
+      expect(provider.get_environmental_configuration).to be
+    end
+
+    it 'should be able to set the configuration' do
+      allow_any_instance_of(resourcetype).to receive(:configuration).and_return('Test')
+      expect(provider.set_configuration).to be
+    end
+
+    it 'should be able to set the refresh state' do
+      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return('Test')
+      expect(provider.set_refresh_state).to be
+    end
+
+    it 'should be able to set the refresh state' do
+      allow_any_instance_of(resourcetype).to receive(:utilization).with(resource['data']['utilization_parameters']).and_return('Test')
+      expect(provider.get_utilization).to be
+    end
+
+    it 'should be able to set the refresh state' do
+      allow_any_instance_of(resourcetype).to receive(:script).and_return('Test')
+      expect(provider.get_script).to be
+    end
+
+    it 'should be able to set the refresh state' do
+      expect { provider.get_single_sign_on }.to raise_error(RuntimeError)
+    end
+
+    # FIXME: shows the expected data (which is the same as the one below), but does not work
+    # it 'runs through the create method' do
+    #   data = {"name"=>"Puppet_Test_Enclosure", "enclosureGroupUri"=>"/rest/", "licensingIntent"=>"OneView", "type"=>"EnclosureV200"}
+    #   allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+    #   test = resourcetype.new(@client, resource['data'])
+    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+    #     .with('/rest/enclosures', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+    #   allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/enclosures/100')
+    #   provider.exists?
+    #   expect(provider.create).to be
+    # end
+
+    it 'deletes the resource' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      provider.exists?
+      expect(provider.destroy).to be
     end
   end
 end

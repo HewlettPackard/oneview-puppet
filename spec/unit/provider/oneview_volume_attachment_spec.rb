@@ -61,5 +61,7 @@ describe provider_class, unit: true do
     it 'should able to find the resource' do
       expect(provider.found).to be
     end
+
+    # TODO: finish the path getters and setters
   end
 end
