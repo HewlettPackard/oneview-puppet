@@ -26,7 +26,7 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_interconnect).new(
-        name: 'LIG',
+        name: 'LI',
         ensure: 'present',
         data:
             {
@@ -42,7 +42,7 @@ describe provider_class, unit: true do
               },
               'telemetryConfiguration' =>
               {
-                'enableTelemetry' => true,
+                'enableTelemetry' => true
               },
               'qosConfiguration' =>
               {
@@ -66,8 +66,8 @@ describe provider_class, unit: true do
     end
 
     it 'should be an instance of the provider' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect).
-        provider(:oneview_logical_interconnect)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect)
+        .provider(:oneview_logical_interconnect)
     end
 
     it 'return false when the resource does not exists' do
@@ -95,9 +95,9 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get the vlans' do
-      testNet = OneviewSDK::EthernetNetwork.new(@client, name: 'NET')
-      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'NET').and_return([testNet])
-      allow_any_instance_of(resourcetype).to receive(:list_vlan_networks).and_return([testNet])
+      test_network = OneviewSDK::EthernetNetwork.new(@client, name: 'NET')
+      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'NET').and_return([test_network])
+      allow_any_instance_of(resourcetype).to receive(:list_vlan_networks).and_return([test_network])
       expect(provider.get_internal_vlans).to be
     end
 
@@ -107,9 +107,10 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to add an internal network' do
-      testNet = OneviewSDK::EthernetNetwork.new(@client, name: 'NET')
-      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'NET').and_return([testNet])
-      expect_any_instance_of(resourcetype).to receive(:update_internal_networks).with(testNet).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      test_network = OneviewSDK::EthernetNetwork.new(@client, name: 'NET')
+      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'NET').and_return([test_network])
+      expect_any_instance_of(resourcetype).to receive(:update_internal_networks)
+        .with(test_network).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_internal_networks).to be
     end
 

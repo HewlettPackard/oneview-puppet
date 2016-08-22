@@ -30,7 +30,7 @@ describe provider_class, unit: true do
       ensure: 'present',
       data:
           {
-            'name' => 'ONEVIEW_PUPPET_TEST VA1',
+            'name' => 'ONEVIEW_PUPPET_TEST VA1'
           }
     )
   end

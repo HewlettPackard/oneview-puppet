@@ -42,8 +42,8 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group).
-        provider(:oneview_logical_interconnect_group)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group)
+        .provider(:oneview_logical_interconnect_group)
     end
 
     it 'return false when the resource does not exists' do
@@ -56,8 +56,8 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
       test = resourcetype.new(@client, resource['data'])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/logical-interconnect-groups', { 'body' => test.data }, test.api_version).and_return(FakeResponse.
-        new('uri' => '/rest/fake'))
+        .with('/rest/logical-interconnect-groups', { 'body' => test.data }, test.api_version).and_return(FakeResponse
+        .new('uri' => '/rest/fake'))
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-interconnect-groups/100')
       provider.exists?
       expect(provider.create).to be
