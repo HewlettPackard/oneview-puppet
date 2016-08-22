@@ -97,26 +97,29 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should return that the resource exists' do
+    before(:each) do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+    end
+
+    it 'should return that the resource exists' do
       expect(provider.exists?).to eq(true)
     end
 
     it 'should be able to get the visual content' do
       visual_content = 'spec/support/fixtures/unit/provider/datacenter_visual_content.json'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
       allow_any_instance_of(resourcetype).to receive(:get_visual_content).and_return(File.read(visual_content))
       expect(provider.get_visual_content).to eq(true)
     end
 
-    it 'should be able to remove the resource' do
+    it 'deletes the resource' do
+      resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:remove).and_return('Test')
       expect(provider.destroy).to be
     end
   end
