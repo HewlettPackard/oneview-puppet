@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_fabric).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_fabric).provider(:oneview_fabric)
 resourcetype = OneviewSDK::Fabric
 
 describe provider_class, unit: true do
