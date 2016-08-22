@@ -22,31 +22,6 @@ provider_class = Puppet::Type.type(:oneview_fc_network).provider(:oneview_fc_net
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_fc_network).new(
-      name: 'fc',
-      ensure: 'present',
-      data:
-          {
-            'name'                    => 'OneViewSDK Test FC Network',
-            'connectionTemplateUri'   => nil,
-            'autoLoginRedistribution' => true,
-            'fabricType'              => 'FabricAttach',
-            'type' => 'fc-networkV2',
-            'linkStabilityTime' => 30
-          }
-    )
-  end
-
-  # TODO: View the before :each method to reduce code repetition, specially for find_by calls
-  # before(:each) do
-  #   # @item = OneviewSDK::ServerProfileTemplate.new(@client, name: 'server_profile_template')
-  #   test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-  #   puts test
-  #   expect(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, name: resource['data']['name']).and_return(test)
-  # end
-
   context 'given the Creation parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_fc_network).new(
@@ -115,25 +90,6 @@ describe provider_class, unit: true do
       allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect(provider.found).to be
-    end
-  end
-
-  context 'given the minimum parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_fc_network).new(
-        name: 'fc',
-        ensure: 'present',
-        data:
-            {
-              'name'                    => 'OneViewSDK Test FC Network',
-              'new_name'                => 'OneViewSDK Test FC Network',
-              'connectionTemplateUri'   => nil,
-              'autoLoginRedistribution' => true,
-              'fabricType'              => 'FabricAttach',
-              'type' => 'fc-networkV2',
-              'linkStabilityTime' => 30
-            }
-      )
     end
   end
 end
