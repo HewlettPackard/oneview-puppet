@@ -30,7 +30,7 @@ Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
 
   def exists?
     @data = data_parse
-    empty_data_check
+    empty_data_check([:found, :destroy])
     pd_uri_parser
     variable_assignments
     !@resourcetype.find_by(@client, @data).empty?
