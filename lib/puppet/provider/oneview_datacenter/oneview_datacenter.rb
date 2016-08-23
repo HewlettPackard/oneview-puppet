@@ -30,7 +30,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:oneview_datacenter) do
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :destroy])
+    empty_data_check([:found, :absent])
     !@resourcetype.find_by(@client, @data).empty?
   end
 

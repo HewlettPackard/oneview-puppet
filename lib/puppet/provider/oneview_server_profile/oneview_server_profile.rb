@@ -31,7 +31,7 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
   def exists?
     @data = data_parse
     empty_data_check([:found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
-                      :get_messages, :get_profile_ports, :get_transformation, :destroy])
+                      :get_messages, :get_profile_ports, :get_transformation, :absent])
     # gets the connections' uris
     connections_parse if @data['connections']
     # gets the hash of filters for queries; in case it does not exist, query will be nil
