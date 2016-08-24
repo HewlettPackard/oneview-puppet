@@ -51,11 +51,11 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
   end
 
   def create
-    Puppet.notice "Ensure state 'present' is unavailable for this resource"
+    raise "Ensure state 'present' is unavailable for this resource"
   end
 
   def destroy
-    Puppet.notice "Ensure state 'absent' is unavailable for this resource"
+    raise "Ensure state 'absent' is unavailable for this resource"
   end
 
   def found
@@ -73,7 +73,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
   end
 
   def remove_extra_unmanaged_volume
-    server_profile = OneviewSDK::ServerProfile.find_by(@client, name: data['name']).first
+    server_profile = OneviewSDK::ServerProfile.find_by(@client, name: @data['name']).first
     raise "\n\nSpecified Server Profile does not exist.\n" unless server_profile
     @resourcetype.remove_extra_unmanaged_volume(@client, server_profile)
     # @resourcetype.remove_extra_unmanaged_volume(@client, server_profile['uri'])
@@ -102,7 +102,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
   def get_all_paths(storage_volume_attachment)
     volume_paths = storage_volume_attachment.get_paths
     raise "\n\nNo Storage Volume Attachment Paths found with on #{storage_volume_attachment['name']}\n" if volume_paths.empty?
-    Puppet.notice "\n\nPaths from storage attachment #{retrieved_resource['name']}:\n"
+    Puppet.notice "\n\nPaths from storage attachment #{storage_volume_attachment['name']}:\n"
     volume_paths.each do |path|
       Puppet.notice("- #{path['initiatorName']}")
     end
