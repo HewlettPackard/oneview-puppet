@@ -28,7 +28,7 @@ def login
                     environment_credentials
                   # - Placing a JSON file in the directory you are running the manifests from
                   else
-                    JSON.parse(File.read(File.expand_path(Dir.pwd + '/credentials.json', __FILE__)), symbolize_names: true)
+                    JSON.parse(File.read(File.expand_path(Dir.pwd + '/login.json', __FILE__)), symbolize_names: true)
                   end
   rescue
     raise('The Oneview credentials could not be set. Please check the documentation for more information.')
