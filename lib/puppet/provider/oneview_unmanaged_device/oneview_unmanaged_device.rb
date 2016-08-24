@@ -30,7 +30,7 @@ Puppet::Type.type(:oneview_unmanaged_device).provide(:oneview_unmanaged_device) 
 
   def exists?
     @data = data_parse
-    empty_data_check
+    empty_data_check([:found, :absent])
     !@resourcetype.find_by(@client, @data).empty?
   end
 

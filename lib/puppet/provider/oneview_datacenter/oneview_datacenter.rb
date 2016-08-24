@@ -30,7 +30,7 @@ Puppet::Type.type(:oneview_datacenter).provide(:oneview_datacenter) do
 
   def exists?
     @data = data_parse
-    empty_data_check
+    empty_data_check([:found, :absent])
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -40,7 +40,9 @@ Puppet::Type.type(:oneview_datacenter).provide(:oneview_datacenter) do
   end
 
   def destroy
-    @resourcetype.find_by(@client, unique_id).first.remove
+    datacenter = @resourcetype.find_by(@client, @data)
+    raise('There were no matching Datacenters in the Appliance.') if datacenter.empty?
+    datacenter.map(&:remove)
   end
 
   def found
