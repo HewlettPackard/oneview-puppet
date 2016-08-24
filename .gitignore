@@ -16,7 +16,7 @@
 
 Gemfile.lock
 spec/fixtures/
-lib/puppet/provider/login.rb
+examples/login.json
 docker/*.sh
 docker/tests/
 coverage/
