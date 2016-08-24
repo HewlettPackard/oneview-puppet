@@ -61,6 +61,11 @@ describe provider_class, unit: true do
       expect(provider.exists?).not_to be
       expect { provider.found }.to raise_error(/No PowerDevice with the specified data were found on the Oneview Appliance/)
     end
+
+    it 'should be able to discover the power device' do
+      allow(resourcetype).to receive(:discover).with(anything, resource['data']).and_return('Test')
+      expect(provider.discover).to be
+    end
   end
 
   context 'given the set_refresh_state parameters' do
@@ -85,82 +90,12 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    before(:each) do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect(provider.exists?).to be
-    end
-
     it 'should refresh the power device' do
       test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_refresh_state).to be
-    end
-  end
-
-  context 'given the set_power_state parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
-        ensure: 'set_power_state',
-        data:
-            {
-              'name' => '172.18.8.11, PDU 1',
-              'powerState' => 'On'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect(provider.exists?).to be
-    end
-
-    it 'should set the power state' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      expect_any_instance_of(resourcetype).to receive(:set_power_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.set_power_state).to be
-    end
-  end
-
-  context 'given the set_uid_state parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
-        ensure: 'set_uid_state',
-        data:
-            {
-              'name' => '172.18.8.11, PDU 1',
-              'uidState' => 'On'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect(provider.exists?).to be
-    end
-
-    it 'should set the uid state' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      expect_any_instance_of(resourcetype).to receive(:set_uid_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.set_uid_state).to be
     end
   end
 
@@ -171,7 +106,9 @@ describe provider_class, unit: true do
         ensure: 'absent',
         data:
             {
-              'name' => '172.18.8.11, PDU 1'
+              'name' => '172.18.8.11, PDU 1',
+              'uidState' => 'On',
+              'powerState' => 'On'
             }
       )
     end
@@ -199,34 +136,21 @@ describe provider_class, unit: true do
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/power-devices/fake')
       expect(provider.create).to be
     end
-  end
 
-  context 'given the discover parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_power_device).new(
-        name: 'Power Device',
-        ensure: 'discover',
-        data:
-            {
-              'hostname' => '172.18.8.11',
-              'username' => 'dcs',
-              'password' => 'dcs'
-            }
-      )
+    it 'should set the uid state' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_uid_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_uid_state).to be
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(provider.exists?).not_to be
-    end
-
-    it 'should not be able to discover the power device' do
-      allow(resourcetype).to receive(:discover).with(anything, resource['data']).and_return('Test')
-      expect(provider.discover).to be
+    it 'should set the power state' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.exists?).to eq(true)
+      expect_any_instance_of(resourcetype).to receive(:set_power_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_power_state).to be
     end
   end
 end

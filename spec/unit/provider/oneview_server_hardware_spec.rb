@@ -33,11 +33,6 @@ describe provider_class, unit: true do
     )
   end
 
-  # before(:each) do
-  #   allow(OneviewSDK::ServerHardware).to receive(:find_by).with(anything, {}).and_return([])
-  #   provider.exists?
-  # end
-
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }

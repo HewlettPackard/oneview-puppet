@@ -38,6 +38,37 @@ describe type_class do
     ]
   end
 
+  let :special_ensurables do
+    [
+      :found,
+      :get_ethernet_settings,
+      :set_qos_aggregated_configuration,
+      :get_qos_aggregated_configuration,
+      :get_snmp_configuration,
+      :set_snmp_configuration,
+      :set_configuration,
+      :get_port_monitor,
+      :set_port_monitor,
+      :get_telemetry_configuration,
+      :set_telemetry_configuration,
+      :get_firmware,
+      :set_firmware,
+      :set_compliance,
+      :get_internal_vlans,
+      :set_internal_networks
+    ]
+  end
+
+  it 'should accept special ensurables' do
+    special_ensurables.each do |value|
+      expect do
+        described_class.new(name: 'Test',
+                            ensure: value,
+                            data: {})
+      end.to_not raise_error
+    end
+  end
+
   it 'should have expected parameters' do
     params.each do |param|
       expect(type_class.parameters).to be_include(param)

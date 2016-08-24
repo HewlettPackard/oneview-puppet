@@ -25,45 +25,10 @@ describe provider_class do
       ensure: 'present',
       data:
         {
-          'name'                         => 'Enclosure Group',
-          'interconnectBayMappingCount'  => '8',
-          'stackingMode'                 => 'Enclosure',
-          'type'                         => 'EnclosureGroupV200',
-          'interconnectBayMappings'      =>
-          [
-            {
-              'interconnectBay' => '1',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '2',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '3',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '4',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '5',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '6',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '7',
-              'logicalInterconnectGroupUri' => nil
-            },
-            {
-              'interconnectBay' => '8',
-              'logicalInterconnectGroupUri' => nil
-            }
-          ]
+          'name' => 'Enclosure Group',
+          'interconnectBayMappingCount' => 8,
+          'stackingMode' => 'Enclosure',
+          'type' => 'EnclosureGroupV200'
         }
     )
   end
@@ -90,7 +55,7 @@ describe provider_class do
     end
   end
 
-  context 'given the unique id parameters' do
+  context 'given the unique resource id' do
     let(:resource) do
       Puppet::Type.type(:oneview_enclosure_group).new(
         name: 'Enclosure Group',
@@ -102,17 +67,18 @@ describe provider_class do
       )
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    before(:each) do
-      provider.exists?
-    end
-
     it 'exists? should find an enclosure group' do
       expect(provider.exists?).to be
       expect(provider.found).to be
+    end
+
+    it 'should add the script to the enclosure group' do
+      resource['data']['script'] = 'Sample'
+      expect(provider.set_script).to be
+    end
+
+    it 'should display the script of the enclosure group' do
+      expect(provider.get_script).to be
     end
 
     it 'should destroy the enclosure group' do

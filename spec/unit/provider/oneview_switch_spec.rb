@@ -118,17 +118,6 @@ describe provider_class, unit: true do
   end
 
   context 'given the create parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_switch).new(
-        name: 'Switch',
-        ensure: 'present',
-        data:
-            {
-              'name'                      => '172.18.20.1'
-            }
-      )
-    end
-
     it 'should be able to run through self.instances' do
       test = OneviewSDK::Switch.new(@client, resource['data'])
       allow(OneviewSDK::Switch).to receive(:get_all).and_return([test])
@@ -145,16 +134,6 @@ describe provider_class, unit: true do
   end
 
   context 'given the switch get type parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_switch).new(
-        name: 'Switch',
-        ensure: 'get_type',
-        data:
-            {
-              'name'                      => 'Cisco Nexus 50xx'
-            }
-      )
-    end
     it 'should be able to get types' do
       allow(OneviewSDK::Switch).to receive(:get_type).with(anything, resource['data']['name']).and_return(resource['data']['name'])
       provider.exists?
