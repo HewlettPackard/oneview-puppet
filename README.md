@@ -11,8 +11,10 @@
     * [Appliance Authentication](#appliance-authentication)
     * [Types and Providers](#types-and-providers)
 5. [Reference](#reference)
-5. [Limitations](#limitations)
-6. [Development](#development)
+6. [Contributing and feature requests](#contributing-and-feature-requests)
+7. [License](#license)
+8. [Version and changes](#version-and-changes)
+9. [Authors](#authors)
 
 ## Overview
 
@@ -100,6 +102,48 @@ mountUri => 'Puppet Example Enclosure, enclosure',
 instead of
 ``` ruby
 mountUri => '/rest/enclosures/09SGH100X6J1',
+```
+
+A sample snippet of what a manifest might look like:
+
+```puppet
+oneview_ethernet_network{'Ethernet Network Create':
+  ensure => 'present',
+  data   => {
+    name                  => 'Puppet network',
+    vlanId                => '1045',
+    purpose               => 'General',
+    smartLink             => true,
+    privateNetwork        => false,
+    connectionTemplateUri => nil,
+    type                  => 'ethernet-networkV3'
+  }
+}
+
+oneview_fc_network{'fc1':
+    ensure => 'present',
+    data   => {
+      name                    => 'OneViewSDK Test FC Network',
+      connectionTemplateUri   => nil,
+      autoLoginRedistribution => true,
+      fabricType              => 'FabricAttach',
+    }
+}
+
+oneview_volume{'volume_1':
+    ensure => 'present',
+    data   => {
+      name                   => 'Oneview_Puppet_TEST_VOLUME_1',
+      description            => 'Test volume with common creation: Storage System + Storage Pool',
+      provisioningParameters => {
+            provisionType     => 'Full',
+            shareable         => true,
+            requestedCapacity => 1024 * 1024 * 1024,
+            storagePoolUri    => 'FST_CPG1',
+      },
+      snapshotPoolUri        => 'FST_CPG1'
+    }
+}
 ```
 
 General examples of the usage for each resource and ensurable can be found inside the [examples](examples) directory.
