@@ -45,7 +45,7 @@ Puppet::Type.type(:oneview_storage_system).provide(:oneview_storage_system) do
   # Provider methods
   def exists?
     @data = data_parse
-    empty_data_check
+    empty_data_check([:found,:get_host_types])
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -84,8 +84,6 @@ Puppet::Type.type(:oneview_storage_system).provide(:oneview_storage_system) do
   end
 
   def get_host_types
-    storage_system = get_single_resource_instance
-    Puppet.notice "\nRetrieving host types data for storage system '#{storage_system['name']}'...\n"
     pretty OneviewSDK::StorageSystem.get_host_types(@client)
     true
   end

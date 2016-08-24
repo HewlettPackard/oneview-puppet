@@ -80,12 +80,11 @@ oneview_enclosure{'Enclosure set refresh state':
 }
 
 # Leaving this commented since it requires a script to be put inside the enclosure to work
-# oneview_enclosure{'Enclosure retrieve script':
+# oneview_enclosure{'Enclosure get script':
 #     ensure  => 'get_script',
 #     require => Oneview_enclosure['Enclosure set refresh state'],
 #     data    => {
 #         name              => 'Puppet_Test_Enclosure',
-#         refreshState      => 'RefreshPending',
 #     }
 # }
 
