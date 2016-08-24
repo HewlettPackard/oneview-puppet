@@ -1,3 +1,5 @@
+# Resources for the Puppet Module for HPE OneView
+
 1. [Oneview_connection_template](#oneview_connection_template)
 2. [Oneview_datacenter](#oneview_datacenter)
 3. [Oneview_enclosure_group](#oneview_enclosure_group)
