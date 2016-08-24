@@ -1,94 +1,184 @@
-# oneview
+# Puppet Module for HPE OneView
 
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with oneview](#setup)
-    * [What oneview affects](#what-oneview-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with oneview](#beginning-with-oneview)
-4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+2. [Module Description](#module-description)
+3. [Setup](#setup)
+    * [Requirements](#requirements)
+    * [Beginning with the Puppet Module for HPE OneView](#beginning-with-the-puppet-module-for-hpe-oneview)
+4. [Usage](#usage)
+    * [Appliance Authentication](#appliance-authentication)
+    * [Types and Providers](#types-and-providers)
+5. [Reference](#reference)
+6. [Contributing and feature requests](#contributing-and-feature-requests)
+7. [License](#license)
+8. [Version and changes](#version-and-changes)
+9. [Authors](#authors)
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+Puppet module which provides resource style declaration capabilities to Puppet manifests for managing HPE Oneview Appliances.
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
+The Puppet Module for HPE OneView allows for management of HPE Oneview Appliances through the use of puppet manifests and resource declarations, which internally make use of the HPE Oneview Ruby SDK and HPE Oneview API.
 
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+It adds several resource types to puppet, and uses ensurables such as 'present', 'absent' and other custom ensurables to manage the appliance and allow the user to easily create, update, query and destroy resources.
+
+For more information on the resource types this module adds to Puppet, and each type specifics, refer to the 'usage' section and examples within this module.
 
 ## Setup
 
-### What oneview affects
+### Requirements
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
+  - Ruby >= 2.2.3
+  - [oneview-sdk-ruby](https://github.com/HewlettPackard/oneview-sdk-ruby) >= 2.0.0
 
-### Setup Requirements **OPTIONAL**
+### Beginning with the Puppet Module for HPE OneView
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+To install this module from the Puppet Forge, with enough permissions, use the command:
+```
+puppet module install hpe-oneview
+```
 
-### Beginning with oneview
-
-The very basic steps needed for a user to get the module up and running.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+Alternatively, you can clone the source code from https://github.com/HewlettPackard/oneview-puppet into your Puppet module path. Be sure to rename the cloned directory to `oneview` as puppet cannot handle dashes on module names.
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+### Appliance Authentication
+
+The attributes required for authenticating with your HPE Oneview Appliance are:
+
+* `ONEVIEW_URL` - The URL to the HPE Oneview appliance. i.e.'https://oneview.example.com'
+* `ONEVIEW_TOKEN` - Set EITHER this or the ONEVIEW_USER & ONEVIEW_PASSWORD
+* `ONEVIEW_USER` - The HPE Oneview appliance username. This defaults to Administrator
+* `ONEVIEW_PASSWORD` - The HPE Oneview appliance password.
+* `ONEVIEW_API_VERSION` - This defaults to the 200 API version (Minimum supported by oneview-sdk-ruby)
+* `ONEVIEW_LOG_LEVEL` - The log level of the Oneview HPE appliance. This defaults to 'info'
+* `ONEVIEW_SSL_ENABLED` - This is strongly encouraged to be set to 'true'
+
+
+There are three ways to pass in those attributes for the appliance using this module:
+
+- Create a json file named `login.json` on your working directory, and fill it with the authentication information of your appliance
+
+- If it is not desired to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
+
+	* `ONEVIEW_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
+
+- Directly declare the authentication attributes mentioned above as environment variables. The module will automatically use those values.
+
+:exclamation: **NOTE:** It should be noted that all information stored on the login file or json files should be in clear text, so to avoid security issues we strongly recommend verifying the access permissions for those files.
+
+Once the authentication is prepared and the manifests containing the resources are written, you can use ``` puppet apply <manifest>``` to run your manifests and execute the desired changes to the system.
+
+### Types and Providers
+
+#### General -- Most resources of this module accept the following ensurables:
+
+* `present` - Creates/adds/updates resources on which those operations are permitted.
+* `absent` - Deletes/removes resources
+* `found` - Searches for resources of a specific type on the appliance (with or without specific filters) and prints the information to the standard output.
+
+The majority of the ensurables on the resources require a `data` parameter to be informed, containing a hash written in Puppet DSL with all the information required for the operation to be performed.
+
+All `get_` ensurables output the information retrieved to the standard output.
+
+As a way to provide easier deployment and management of infrastructure, all resources tags that either have or require an `Uri` can receive either the 'name' or a 'name, resource type' combination of parameters instead of the uri as the value to the field, unless otherwise specified.
+
+For a uri clearly related to a resource, as in `enclosureUri`, the name can be given instead of the uri, i.e.:
+```ruby
+enclosureUri => 'Puppet Example Enclosure'
+```
+instead of
+``` ruby
+enclosureUri => '/rest/enclosures/09SGH100X6J1'
+```
+and in the case of a general tag which does not specify its resource, such as mountUri, a 'name, resource type ' can be provided, i.e.:
+``` ruby
+mountUri => 'Puppet Example Enclosure, enclosure',
+```
+instead of
+``` ruby
+mountUri => '/rest/enclosures/09SGH100X6J1',
+```
+
+A sample snippet of what a manifest might look like:
+
+```puppet
+oneview_ethernet_network{'Ethernet Network Create':
+  ensure => 'present',
+  data   => {
+    name                  => 'Puppet network',
+    vlanId                => '1045',
+    purpose               => 'General',
+    smartLink             => true,
+    privateNetwork        => false,
+    connectionTemplateUri => nil,
+    type                  => 'ethernet-networkV3'
+  }
+}
+
+oneview_fc_network{'fc1':
+    ensure => 'present',
+    data   => {
+      name                    => 'OneViewSDK Test FC Network',
+      connectionTemplateUri   => nil,
+      autoLoginRedistribution => true,
+      fabricType              => 'FabricAttach',
+    }
+}
+
+oneview_volume{'volume_1':
+    ensure => 'present',
+    data   => {
+      name                   => 'Oneview_Puppet_TEST_VOLUME_1',
+      description            => 'Test volume with common creation: Storage System + Storage Pool',
+      provisioningParameters => {
+            provisionType     => 'Full',
+            shareable         => true,
+            requestedCapacity => 1024 * 1024 * 1024,
+            storagePoolUri    => 'FST_CPG1',
+      },
+      snapshotPoolUri        => 'FST_CPG1'
+    }
+}
+```
+
+General examples of the usage for each resource and ensurable can be found inside the [examples](examples) directory.
+
+A more detailed explanation on each resource type added by this module, and their unique ensurables can be found on [Resources](RESOURCES.md).
 
 ## Reference
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+This module uses the HPE oneview-ruby-sdk to make all API calls and the HPE Oneview API to execute all actions.
 
-## Limitations
+More information on the oneview-ruby-sdk can be found on the official git repository:
+https://github.com/HewlettPackard/oneview-sdk-ruby
 
-This is where you list OS compatibility, version compatibility, etc.
+More information on the HPE Oneview API, and information on attributes and options for the resources managed by it (which are managed by this module through it) can be found on the following link:
+http://h17007.www1.hpe.com/docs/enterprise/servers/oneview2.0/cic-api/en/api-docs/current/index.html
 
-## Development
+## Contributing and feature requests
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+**Contributing:** You know the drill. Fork it, branch it, change it, commit it, and pull-request it. We are passionate about improving this project, and glad to accept help to make it better.
 
-## Release Notes/Contributors/Etc **Optional**
+NOTE: We reserve the right to reject changes that we feel do not fit the scope of this project, so for feature additions, please open an issue to discuss your ideas before doing the work.
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
+**Feature Requests:** If you have a need that is not met by the current implementation, please let us know (via a new issue). This feedback is crucial for us to deliver a useful product. Do not assume we have already thought of everything, because we assure you that is not the case.
 
+## License
 
-(C) Copyright 2016 Hewlett Packard Enterprise Development LP
+This project is licensed under the Apache 2.0 license. Please see [LICENSE](LICENSE) for more info.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-You may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+## Version and changes
 
-http://www.apache.org/licenses/LICENSE-2.0
+Verify the [Changelog](CHANGELOG.md) for the history or notes for this version.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+## Authors
+
+- Ana Campesan - [@anazard](https://github.com/anazard)
+- Chris Hurley - [@chrishpe](https://github.com/chrishpe)
+- Felipe Bulsoni - [@fgbulsoni](https://github.com/fgbulsoni)
+- Ricardo Piantola - [@piantola](https://github.com/piantola)
