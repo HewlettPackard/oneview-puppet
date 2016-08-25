@@ -15,7 +15,6 @@
 ################################################################################
 
 require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
 
 Puppet::Type.newtype(:oneview_san_manager) do
   desc "Oneview's san_manager"

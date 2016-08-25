@@ -14,9 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
-
 Puppet::Type.newtype(:oneview_managed_san) do
   desc "Oneview's managed_san Bundle"
 
