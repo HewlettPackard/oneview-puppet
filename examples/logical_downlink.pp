@@ -52,6 +52,11 @@
 #     }
 # }
 
-oneview_logical_downlink{'Logical Downlink Get All (without ethernet)':
-    ensure => 'get_without_ethernet'
+# Optional filters
+oneview_logical_downlink{'Logical Downlink Get Without Ethernet':
+    ensure => 'get_without_ethernet',
+    # data   =>
+    # {
+    #   name => 'LD4f44701e-e60c-420e-b09e-d620366d0dba (HP VC FlexFabric 10Gb/24-Port Module)'
+    # }
 }
