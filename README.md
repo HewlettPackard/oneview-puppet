@@ -22,7 +22,7 @@ Puppet module which provides resource style declaration capabilities to Puppet m
 
 ## Module Description
 
-The Puppet Module for HPE OneView allows for management of HPE Oneview Appliances through the use of puppet manifests and resource declarations, which internally make use of the HPE Oneview Ruby SDK and HPE Oneview API.
+The Puppet Module for HPE OneView allows for management of HPE Oneview Appliances through the use of puppet manifests and resource style declarations, which internally make use of the HPE Oneview Ruby SDK and HPE Oneview API.
 
 It adds several resource types to puppet, and uses ensurables such as 'present', 'absent' and other custom ensurables to manage the appliance and allow the user to easily create, update, query and destroy resources.
 
@@ -42,7 +42,12 @@ To install this module from the Puppet Forge, with enough permissions, use the c
 puppet module install hpe-oneview
 ```
 
-Alternatively, you can clone the source code from https://github.com/HewlettPackard/oneview-puppet into your Puppet module path. Be sure to rename the cloned directory to `oneview` as puppet cannot handle dashes on module names.
+Alternatively, you can clone the source code from https://github.com/HewlettPackard/oneview-puppet into your Puppet module path using the following command:
+```bash
+git clone https://github.com/HewlettPackard/oneview-puppet <your_module_path>/oneview
+```
+
+:exclamation: It's recommended that the cloned directory be named `oneview`. It should also be noted that if the directory name contains any dashes it will not be found by puppet.
 
 ## Usage
 
@@ -70,6 +75,8 @@ There are three ways to pass in those attributes for the appliance using this mo
 - Directly declare the authentication attributes mentioned above as environment variables. The module will automatically use those values.
 
 :exclamation: **NOTE:** It should be noted that all information stored on the login file or json files should be in clear text, so to avoid security issues we strongly recommend verifying the access permissions for those files.
+
+:lock: Tip: If you have Docker installed you can use the Dockerfile provided to build an image. Example scripts are also provided in the [docker](docker) folder for building and running using environment variables for OneView parameters (and proxies if required).
 
 Once the authentication is prepared and the manifests containing the resources are written, you can use ``` puppet apply <manifest>``` to run your manifests and execute the desired changes to the system.
 
