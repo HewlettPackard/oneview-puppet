@@ -30,8 +30,7 @@ Puppet::Type.type(:oneview_fabric).provide(:oneview_fabric) do
 
   def exists?
     @data = data_parse
-    fabrics = @resourcetype.find_by(@client, @data)
-    !fabrics.empty?
+    !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create

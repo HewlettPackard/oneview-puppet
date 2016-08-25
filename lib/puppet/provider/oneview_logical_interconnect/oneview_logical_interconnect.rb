@@ -80,7 +80,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide(:oneview_logical_interc
   def get_internal_vlans
     Puppet.notice("\n\nVLAN Internal Networks\n")
     vlan_networks = get_single_resource_instance.list_vlan_networks
-    Puppet.warning('There are no VLAN Networks to be displayed.') if vlan_networks.empty?
+    raise('There are no VLAN Networks to be displayed.') if vlan_networks.empty?
     vlan_networks.each { |net| pretty "Name: #{net[:name]}\nURI:  #{net[:uri]}\n\n" }
   end
 

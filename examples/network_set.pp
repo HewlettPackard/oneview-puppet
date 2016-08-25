@@ -16,6 +16,15 @@
 
 # This example needs two Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
 
+# Optional filters for specific network sets
+oneview_network_set{'Network Set Get Without Ethernet':
+  ensure => 'get_without_ethernet',
+  # data   =>
+  # {
+  #   name          => 'ns1'
+  # }
+}
+
 oneview_network_set{'Network Set Create':
   ensure => 'present',
   data   =>

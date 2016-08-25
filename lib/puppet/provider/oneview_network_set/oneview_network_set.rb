@@ -54,8 +54,16 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
   end
 
   def get_without_ethernet
-    Puppet.notice("\n\n\s\sNetwork Set Without Ethernet\n")
-    pretty @resourcetype.get_without_ethernet(@client)
+    Puppet.notice("\n\nNetwork Set Without Ethernet\n")
+    if @data.empty?
+      list = @resourcetype.get_without_ethernet(@client)
+      raise('There is no Network Set without ethernet in the Oneview appliance.') if list.empty?
+      list.each { |item| pretty item }
+    else
+      item = get_single_resource_instance.get_without_ethernet
+      raise('There is no Network Set without ethernet in the Oneview appliance.') unless item
+      pretty item
+    end
     true
   end
 
