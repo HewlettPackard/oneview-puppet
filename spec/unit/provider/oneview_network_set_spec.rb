@@ -81,7 +81,6 @@ describe provider_class, unit: true do
     it 'should be able to get all the network sets without ethernet' do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(resource['data']).and_return([test])
-      allow(resourcetype).to receive(:get_without_ethernet).and_return([])
       expect(provider.get_without_ethernet).to be
     end
   end
