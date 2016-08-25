@@ -51,7 +51,11 @@ Puppet::Type.type(:oneview_interconnect).provide(:oneview_interconnect) do
 
   def get_types
     Puppet.notice("\n\nInterconnect Types\n")
-    pretty @resourcetype.get_type(@client)
+    if @data['name']
+      pretty @resourcetype.get_type(@client, @data['name'])
+    else
+      pretty @resourcetype.get_types(@client)
+    end
   end
 
   # it is possible to query by either portName, subportNumber or nothing (for all)
