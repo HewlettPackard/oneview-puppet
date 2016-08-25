@@ -45,7 +45,7 @@ Puppet::Type.type(:oneview_storage_system).provide(:oneview_storage_system) do
   # Provider methods
   def exists?
     @data = data_parse
-    empty_data_check([:found,:get_host_types])
+    empty_data_check([:found, :get_host_types])
     !@resourcetype.find_by(@client, @data).empty?
   end
 
