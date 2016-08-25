@@ -1,8 +1,8 @@
 {
-  "url": "https://172.16.101.19",
+  "url": "https://oneview.example.com",
   "user": "Administrator",
-  "password": "rainforest",
-  "ssl_enabled": "false",
+  "password": "secret123",
+  "ssl_enabled": "true",
   "api_version": 200,
   "log_level": "info"
 }
