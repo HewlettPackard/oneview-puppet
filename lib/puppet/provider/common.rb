@@ -14,9 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-# ============== Common methods ==============
-
 require 'json'
+require_relative 'uri'
+
+# ============== Common methods ==============
 
 def pretty(arg)
   return puts arg if arg.instance_of?(String)
@@ -32,6 +33,7 @@ def data_parse(data = {})
     data[key] = true if value == 'true'
     data[key] = data[key].to_i if key == 'vlanId'
   end
+  uri(data) unless # LIST OF RESOURCES VALIDATED IN THE PROVIDER.include?
   data
 end
 
