@@ -14,9 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
-
 Puppet::Type.newtype(:oneview_firmware_bundle) do
   desc "Oneview's Firmware Bundle"
 
@@ -38,7 +35,6 @@ Puppet::Type.newtype(:oneview_firmware_bundle) do
     desc 'Firmware Bundle data hash containing the path to the bundle'
     validate do |value|
       raise Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 

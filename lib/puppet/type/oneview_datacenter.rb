@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_datacenter) do
   desc "Oneview's Datacenter"
 
@@ -43,7 +41,6 @@ Puppet::Type.newtype(:oneview_datacenter) do
     desc 'Datacenter attributes'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

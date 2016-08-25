@@ -14,9 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
-
 Puppet::Type.newtype(:oneview_server_profile_template) do
   desc "Oneview's Server Profile Template"
 
@@ -42,7 +39,6 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
     desc 'Server Profile Template data hash containing all specifications for the system'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_ethernet_network) do
   desc "Oneview's Ethernet Network"
 
@@ -45,7 +43,6 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
     desc 'Ethernet Network data hash containing all specifications for the resource'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

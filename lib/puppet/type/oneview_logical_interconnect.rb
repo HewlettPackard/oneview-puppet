@@ -14,9 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
-
 Puppet::Type.newtype(:oneview_logical_interconnect) do
   desc "Oneview's Logical Interconnect"
 
@@ -100,7 +97,6 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
     desc 'Logical Interconnect data hash containing all specifications for the resource'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

@@ -14,9 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
-
 Puppet::Type.newtype(:oneview_logical_switch) do
   desc "Oneview's Logical Switch"
 
@@ -38,12 +35,9 @@ Puppet::Type.newtype(:oneview_logical_switch) do
   end
 
   newparam(:data) do
-    desc 'Logical Switch data hash containing all specifications for the system'
+    desc 'Logical Switch attributes'
     validate do |value|
-      unless value.class == Hash
-        raise Puppet::Error, 'Inserted value for data is not valid'
-      end
-      uri_validation(value)
+      raise('Inserted value for data is not valid') unless value.class == Hash
     end
   end
 end

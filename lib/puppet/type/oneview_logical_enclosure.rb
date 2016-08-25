@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_logical_enclosure) do
   desc "Oneview's Logical Enclosure"
 
@@ -56,7 +54,6 @@ Puppet::Type.newtype(:oneview_logical_enclosure) do
     network"
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

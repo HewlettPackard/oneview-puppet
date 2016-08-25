@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_enclosure_group) do
   desc "Oneview's Enclosure Group"
 
@@ -45,7 +43,6 @@ Puppet::Type.newtype(:oneview_enclosure_group) do
     desc 'Enclosure Group data hash containing all specifications for the resource'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

@@ -15,7 +15,7 @@
 ################################################################################
 
 require 'json'
-require_relative 'uri'
+require_relative 'uri_parsing'
 
 # ============== Common methods ==============
 
@@ -33,7 +33,7 @@ def data_parse(data = {})
     data[key] = true if value == 'true'
     data[key] = data[key].to_i if key == 'vlanId'
   end
-  uri(data) unless # LIST OF RESOURCES VALIDATED IN THE PROVIDER.include?
+  uri_validation(data)
   data
 end
 

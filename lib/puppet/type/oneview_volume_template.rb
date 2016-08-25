@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_volume_template) do
   desc "Oneview's Volume Template"
 
@@ -42,7 +40,6 @@ Puppet::Type.newtype(:oneview_volume_template) do
     desc 'Volume Template data hash containing all specifications for the system'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end
