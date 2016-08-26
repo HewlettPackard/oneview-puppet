@@ -101,13 +101,15 @@ oneview_server_profile{'Server Profile Destroy':
 #     connections =>
 #     [
 #       {
-#         name => 'My Network Set',
+#         name => 'My Connection',
+#         connectionUri => 'My network set'
 #         functionType => 'Set',
 #       },
 #       {
-#         name => 'Ethernet Network 1',
+#         name => 'My Connection 2',
+#         connectionUri => 'My ethernet'
 #         functionType => 'Ethernet',
-#       }
+#       },
 #     ]
 #   }
 # }
