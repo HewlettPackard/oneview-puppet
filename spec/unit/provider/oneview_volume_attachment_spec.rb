@@ -106,7 +106,7 @@ describe provider_class, unit: true do
 
     it 'should be able to get all paths if no id is provided' do
       resource['data'] = { 'name' => 'ONEVIEW_PUPPET_TEST VA1' }
-      resource['data']['uri'] = '/fake/uri'
+      resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(%w(fake_path_1 fake_path_2)))

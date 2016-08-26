@@ -56,7 +56,7 @@ oneview_volume_template{'volume_template_4':
     ensure  => 'get_connectable_volume_templates',
     require => Oneview_volume_template['volume_template_3'],
     data    => {
-      name       => 'ONEVIEW_PUPPET_TEST VT1',
+      name             => 'ONEVIEW_PUPPET_TEST VT1',
       query_parameters => {
         count => '5',
         start => '0'

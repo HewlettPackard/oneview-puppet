@@ -71,8 +71,6 @@ describe provider_class do
     end
   end
 
-  # FIXME: This for some unknown reason is giving out a runtime error related to
-  # the URI 'Must specify a task_uri!', leaving dump test commented till fixed.
   context 'given the dump parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(

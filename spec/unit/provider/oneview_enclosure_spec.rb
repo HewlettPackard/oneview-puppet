@@ -109,18 +109,6 @@ describe provider_class, unit: true do
       expect { provider.get_single_sign_on }.to raise_error(RuntimeError)
     end
 
-    # FIXME: shows the expected data (which is the same as the one below), but does not work
-    # it 'runs through the create method' do
-    #   data = {"name"=>"Puppet_Test_Enclosure", "enclosureGroupUri"=>"/rest/", "licensingIntent"=>"OneView", "type"=>"EnclosureV200"}
-    #   allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-    #   test = resourcetype.new(@client, resource['data'])
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-    #     .with('/rest/enclosures', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/enclosures/100')
-    #   provider.exists?
-    #   expect(provider.create).to be
-    # end
-
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])

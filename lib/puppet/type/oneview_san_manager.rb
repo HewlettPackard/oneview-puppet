@@ -35,19 +35,8 @@ Puppet::Type.newtype(:oneview_san_manager) do
 
   newparam(:data) do
     desc 'san_manager data hash'
-    def parse_san_manager_uris(value)
-      return unless value['ProviderUri']
-      name = mount['ProviderUri']
-      return if uri.to_s[0..6].include?('/rest/')
-      uri = OneviewSDK::SANManager.find_by(@client, name: name).first
-      raise 'The name informed on ProviderUri did not result in a match in the appliance' unless uri
-      value['ProviderUri'] = uri
-    end
-
     validate do |value|
       raise Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
-      @client = OneviewSDK::Client.new(login)
-      parse_san_manager_uris(value)
     end
   end
 end

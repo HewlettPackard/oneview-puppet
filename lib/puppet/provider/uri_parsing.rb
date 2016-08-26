@@ -36,7 +36,7 @@ end
 
 # Broken-down blocks
 def exception_to_be_treated_within_provider(key)
-  exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri)
+  exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri providerUri)
   true if exception_list.include?(key)
 end
 
@@ -55,7 +55,7 @@ end
 def special_resources_check(key)
   special_resources = %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri dependentResourceUri
                          sspUri associatedUplinkSetUri associatedTaskUri parentTaskUri snapshotPoolUri permittedSwitchTypeUri
-                         permittedInterconnectTypeUri volumeStoragePoolUri volumeStorageSystemUri baselineUri)
+                         permittedInterconnectTypeUri volumeStoragePoolUri volumeStorageSystemUri baselineUri mountUri)
   return key unless special_resources.include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
   # to make it compatible with the get_class method which will be called after this
@@ -65,7 +65,7 @@ end
 
 # Helper for special_resource_check to assign the correct values to the special resources
 def special_resources_assign(key)
-  return generic_resource_fixer if %w(resourceUri actualNetworkUri expectedNetworkUri uri).include?(key)
+  return generic_resource_fixer if %w(resourceUri actualNetworkUri expectedNetworkUri uri mountUri).include?(key)
   case key
   when 'firmwareBaselineUri', 'sspUri', 'baselineUri' then 'FirmwareDriver'
   when 'actualNetworkSanUri' then 'ManagedSAN'

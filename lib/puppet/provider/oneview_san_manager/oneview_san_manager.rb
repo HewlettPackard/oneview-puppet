@@ -45,6 +45,8 @@ Puppet::Type.type(:oneview_san_manager).provide(:oneview_san_manager) do
   # Provider methods
   def exists?
     @data = data_parse
+    parse_provider_uri
+    pretty @data
     empty_data_check
     !@resourcetype.find_by(@client, @data).empty?
   end
@@ -66,5 +68,11 @@ Puppet::Type.type(:oneview_san_manager).provide(:oneview_san_manager) do
 
   def found
     find_resources
+  end
+
+  def parse_provider_uri
+    return unless @data['providerUri']
+    return if @data['providerUri'].to_s[0..6].include?('/rest/')
+    @data['providerDisplayName'] = @data.delete('providerUri')
   end
 end
