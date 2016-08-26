@@ -24,6 +24,7 @@ Metrics/CyclomaticComplexity:
   Max: 10
   Exclude:
     - 'lib/puppet/type/common.rb'
+    - 'lib/puppet/provider/uri_parsing.rb'
 Metrics/AbcSize:
   Max: 20
 Style/GlobalVars:

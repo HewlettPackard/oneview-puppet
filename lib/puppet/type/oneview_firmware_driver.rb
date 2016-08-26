@@ -14,9 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require 'oneview-sdk'
-require File.expand_path(File.join(File.dirname(__FILE__), 'common'))
-
 Puppet::Type.newtype(:oneview_firmware_driver) do
   desc "Oneview's Firmware Driver"
 
@@ -39,7 +36,6 @@ Puppet::Type.newtype(:oneview_firmware_driver) do
     desc 'Firmware Driver data hash containing all specifications for the system'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

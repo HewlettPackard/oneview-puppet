@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_interconnect) do
   desc "Oneview's Interconnect"
 
@@ -63,7 +61,6 @@ Puppet::Type.newtype(:oneview_interconnect) do
     desc 'Interconnect data hash containing all specifications for the resource'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

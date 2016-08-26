@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_volume) do
   desc "Oneview's Volume"
 
@@ -63,7 +61,6 @@ Puppet::Type.newtype(:oneview_volume) do
     desc 'Volume data hash containing all specifications for the system'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

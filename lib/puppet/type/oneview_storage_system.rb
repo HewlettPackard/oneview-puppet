@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_storage_system) do
   desc "Oneview's Storage System"
 
@@ -51,7 +49,6 @@ Puppet::Type.newtype(:oneview_storage_system) do
     system"
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

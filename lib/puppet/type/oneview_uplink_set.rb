@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_uplink_set) do
   desc "Oneview's Uplink Set"
 
@@ -38,7 +36,6 @@ Puppet::Type.newtype(:oneview_uplink_set) do
     desc 'Uplink Set data hash containing all specifications for the system'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

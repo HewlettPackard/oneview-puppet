@@ -14,9 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-# ============== Common methods ==============
-
 require 'json'
+require_relative 'uri_parsing'
+
+# ============== Common methods ==============
 
 def pretty(arg)
   return puts arg if arg.instance_of?(String)
@@ -32,18 +33,7 @@ def data_parse(data = {})
     data[key] = true if value == 'true'
     data[key] = data[key].to_i if key == 'vlanId'
   end
-  data
-end
-
-# FIXME: method created because data_parse (above) was returning hashes with booleans as strings
-# to be debugged in the future
-def data_parse_interconnect(data)
-  data.each do |key, value|
-    data[key] = nil if value == 'nil'
-    data[key] = false if value == 'false'
-    data[key] = true if value == 'true'
-    data[key] = data[key].to_i if key == 'vlanId'
-  end
+  uri_validation(data)
   data
 end
 
@@ -98,7 +88,7 @@ end
 # Gets a resource by its unique identifier (generally name or uri)
 def unique_id
   id = {}
-  %w(uri name id providerDisplayName credentials).each { |key| id[key] = @data[key] if @data[key] }
+  %w(uri name id providerDisplayName credentials providerUri).each { |key| id[key] = @data[key] if @data[key] }
   raise 'A unique identifier for the resource must be declared in data for the current operation' if id.empty?
   id
 end

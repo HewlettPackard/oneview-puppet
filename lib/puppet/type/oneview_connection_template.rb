@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_connection_template) do
   desc "Oneview's Connection Template"
 
@@ -43,7 +41,6 @@ Puppet::Type.newtype(:oneview_connection_template) do
     desc 'Connection Template attributes'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

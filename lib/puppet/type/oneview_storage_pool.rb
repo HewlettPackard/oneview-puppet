@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_storage_pool) do
   desc "Oneview's Storage Pool"
 
@@ -38,7 +36,6 @@ Puppet::Type.newtype(:oneview_storage_pool) do
     desc 'Storage pool data hash containing all specifications for the system'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

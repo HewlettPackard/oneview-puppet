@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_unmanaged_device) do
   desc "Oneview's Unmanaged Device"
 
@@ -40,7 +38,6 @@ Puppet::Type.newtype(:oneview_unmanaged_device) do
     desc 'Unmanaged Device attributes'
     validate do |value|
       raise('Inserted value for data is not valid') unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

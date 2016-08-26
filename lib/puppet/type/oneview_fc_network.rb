@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_fc_network) do
   desc "Oneview's FC network"
 
@@ -39,7 +37,6 @@ Puppet::Type.newtype(:oneview_fc_network) do
     network"
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end

@@ -14,8 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'common'
-
 Puppet::Type.newtype(:oneview_fcoe_network) do
   desc "Oneview's FCoE network"
 
@@ -37,7 +35,6 @@ Puppet::Type.newtype(:oneview_fcoe_network) do
     desc 'FCoE network data hash containing all specifications for the network'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
-      uri_validation(value)
     end
   end
 end
