@@ -109,7 +109,7 @@ oneview_server_profile{'Server Profile Destroy':
 #         name => 'My Connection 2',
 #         connectionUri => 'My ethernet'
 #         functionType => 'Ethernet',
-#       },
+#       }
 #     ]
 #   }
 # }
