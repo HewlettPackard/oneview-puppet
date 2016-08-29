@@ -48,14 +48,15 @@ Puppet::Type.type(:oneview_logical_downlink).provide(:oneview_logical_downlink) 
   end
 
   def get_without_ethernet
-    Puppet.notice("\n\nLogical Downlinks Without Ethernet\n")
+    Puppet.notice("\n\nLogical Downlink Without Ethernet\n")
     if @data.empty?
       list = @resourcetype.get_without_ethernet(@client)
-      raise('There are no logical downlinks without ethernet in the Oneview appliance.') if list.empty?
-      list.each { |item| puts "Name: #{item['name']}\nURI: #{item['uri']}\n\n" }
+      raise('There is no Logical Downlink without ethernet in the Oneview appliance.') if list.empty?
+      list.each { |item| pretty item.data }
     else
-      resource = get_single_resource_instance.get_without_ethernet
-      puts "Name: #{resource['name']}\n\nURI: #{resource['uri']}"
+      list = get_single_resource_instance.get_without_ethernet
+      raise('There is no Logical Downlink without ethernet in the Oneview appliance.') unless list
+      pretty list.data
     end
     true
   end

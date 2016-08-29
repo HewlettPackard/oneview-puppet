@@ -72,11 +72,6 @@ oneview_storage_system{'storage_system_5':
 oneview_storage_system{'storage_system_6':
     ensure  => 'get_host_types',
     require => Oneview_storage_system['storage_system_5'],
-    data    => {
-      credentials => {
-        ip_hostname  => '172.18.11.12',
-      }
-    }
 }
 oneview_storage_system{'storage_system_7':
     ensure  => 'absent',

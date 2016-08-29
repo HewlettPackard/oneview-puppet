@@ -72,7 +72,7 @@ Puppet::Type.type(:oneview_uplink_set).provide(:oneview_uplink_set) do
     find_resources
   end
 
-  # Calls the sdk helper methods in case the user used the resource names to set uris
+  # Helper method to transform names into uris
   def name_to_uris
     uri_set('networkUris', OneviewSDK::EthernetNetwork)
     uri_set('fcNetworkUris', OneviewSDK::FCNetwork)
