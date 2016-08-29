@@ -44,8 +44,7 @@ Puppet::Type.type(:oneview_logical_switch).provide(:oneview_logical_switch) do
   end
 
   def destroy
-    ls = @resourcetype.find_by(@client, unique_id)
-    ls.first.delete
+    get_single_resource_instance.delete
   end
 
   def found
@@ -53,15 +52,14 @@ Puppet::Type.type(:oneview_logical_switch).provide(:oneview_logical_switch) do
   end
 
   def refresh
-    ls = @resourcetype.find_by(@client, unique_id)
-    ls.first.refresh
+    get_single_resource_instance.refresh
   end
 
   # Helper Methods to treat switches and set credentials
 
   def set_switches(ls, resource)
     resource.each do |switch|
-      switch['version'] = nil unless switch['version']
+      switch['version'] = switch['version'] || nil
       set_credentials(ls,
                       switch['ip'],
                       new_ssh(switch['ssh_username'], switch['ssh_password']),
