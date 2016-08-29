@@ -54,7 +54,6 @@ describe type_class do
   it 'should require a data hash' do
     modified_config = lsg_config
     modified_config[:data] = ''
-    resource_type = type_class.to_s.split('::')
     expect do
       type_class.new(modified_config)
     end.to raise_error('Parameter data failed on Oneview_logical_switch[Logical Switch]: Validate method failed for class data: Inserted '\
