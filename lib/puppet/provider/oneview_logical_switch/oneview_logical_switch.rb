@@ -18,37 +18,66 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch_group) do
+Puppet::Type.type(:oneview_logical_switch).provide(:oneview_logical_switch) do
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::LogicalSwitchGroup
+    @resourcetype = OneviewSDK::LogicalSwitch
     @data = {}
+    @switches = []
   end
 
   def exists?
     @data = data_parse
+    @switches = @data.delete('switches') if @data['switches']
     empty_data_check
-    @switches = @data.delete('switches')
     !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
-    new_name = @data.delete('new_name')
-    lsg = @resourcetype.new(@client, @data)
-    lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s) if @switches
-    @data['new_name'] = new_name if new_name
     return true if resource_update(@data, @resourcetype)
-    lsg.create
+    ls = @resourcetype.new(@client, @data)
+    set_switches(ls, @switches)
+    ls.create
   end
 
   def destroy
-    get_single_resource_instance.delete
+    ls = @resourcetype.find_by(@client, unique_id)
+    ls.first.delete
   end
 
   def found
     find_resources
+  end
+
+  def refresh
+    ls = @resourcetype.find_by(@client, unique_id)
+    ls.first.refresh
+  end
+
+  # Helper Methods to treat switches and set credentials
+
+  def set_switches(ls, resource)
+    resource.each do |switch|
+      switch['version'] = nil unless switch['version']
+      set_credentials(ls,
+                      switch['ip'],
+                      new_ssh(switch['ssh_username'], switch['ssh_password']),
+                      new_snmp(switch['snmp_port'], switch['community_string'], switch['version']))
+    end
+  end
+
+  def new_ssh(username, password)
+    OneviewSDK::LogicalSwitch::CredentialsSSH.new(username, password)
+  end
+
+  def new_snmp(port, community_string, version = nil)
+    OneviewSDK::LogicalSwitch::CredentialsSNMPV1.new(port, community_string, version)
+  end
+
+  def set_credentials(ls, ip, ssh, snmp)
+    ls.set_switch_credentials(ip, ssh, snmp)
   end
 end
