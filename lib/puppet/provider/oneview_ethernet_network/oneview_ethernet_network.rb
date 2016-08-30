@@ -52,7 +52,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
 
   def get_associated_profiles
     Puppet.notice("\n\nAssociated Profiles\n")
-    list = get_single_resource_instance.get_associated_uplink_groups
+    list = get_single_resource_instance.get_associated_profiles
     if list.eql?('[]')
       Puppet.warning("There are no associated profiles to show.\n")
     else

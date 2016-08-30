@@ -80,15 +80,22 @@ describe provider_class, unit: true do
       expect(provider.destroy).to be
     end
 
-    it 'should be able to get the associated uplink groups and profiles' do
+    it 'should be able to get the associated uplink groups' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       allow_any_instance_of(resourcetype).to receive(:get_associated_uplink_groups).and_return('Test')
       expect(provider.get_associated_uplink_groups).to be
-      allow_any_instance_of(resourcetype).to receive(:get_associated_profiles).and_return('Test')
-      expect(provider.get_associated_profiles).to be
+    end
+
+    it 'should be able to get the associated profiles' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_associated_uplink_groups).and_return('Test')
+      expect(provider.get_associated_uplink_groups).to be
     end
   end
 end
