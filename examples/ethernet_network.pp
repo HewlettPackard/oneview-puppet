@@ -22,7 +22,6 @@ oneview_ethernet_network{'Ethernet Network Create':
     purpose               => 'General',
     smartLink             => true,
     privateNetwork        => false,
-    connectionTemplateUri => nil,
     type                  => 'ethernet-networkV3'
   }
 }
@@ -46,9 +45,14 @@ oneview_ethernet_network{'Ethernet Network Uplink Groups':
 oneview_ethernet_network{'Ethernet Network Update':
   ensure  => 'present',
   require => Oneview_ethernet_network['Ethernet Network Uplink Groups'],
-  data    => {
-    name     => 'Puppet network',
-    new_name => 'Updated'
+  data    =>
+  {
+    name      => 'Puppet network',
+    new_name  => 'Updated',
+    bandwidth =>
+    {
+      maximumBandwidth => 16000
+    }
   }
 }
 
@@ -67,7 +71,6 @@ oneview_ethernet_network{'Ethernet Network Found #2':
     vlanId => '1045',
   }
 }
-
 
 oneview_ethernet_network{'Ethernet Network Delete':
   ensure  => 'absent',
