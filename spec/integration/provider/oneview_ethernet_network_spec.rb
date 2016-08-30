@@ -86,6 +86,15 @@ describe provider_class do
       expect(provider.get_associated_profiles).to be
     end
 
+    it 'should be able to update the connection template' do
+      resource['data']['bandwidth'] = { 'maximumBandwidth' => 10000 }
+      expect(provider.exists?).to be
+    end
+
+    it 'should be able to set to default bandwidth' do
+      expect(provider.reset_default_bandwidth).to be
+    end
+
     it 'exists? should return the found networks' do
       expect(provider.found).to be
     end

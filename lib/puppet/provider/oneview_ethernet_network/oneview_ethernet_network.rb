@@ -100,5 +100,6 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     connection_template_current_bandwidth = connection_template['bandwidth']
     connection_template['bandwidth'] = connection_template['bandwidth'].merge(@bandwidth)
     connection_template.update unless connection_template_current_bandwidth.eql?(connection_template['bandwidth'])
+    true
   end
 end
