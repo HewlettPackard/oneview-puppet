@@ -17,12 +17,12 @@
 oneview_ethernet_network{'Ethernet Network Create':
   ensure => 'present',
   data   => {
-    name                  => 'Puppet network',
-    vlanId                => '1045',
-    purpose               => 'General',
-    smartLink             => true,
-    privateNetwork        => false,
-    type                  => 'ethernet-networkV3'
+    name           => 'Puppet network',
+    vlanId         => '1045',
+    purpose        => 'General',
+    smartLink      => true,
+    privateNetwork => false,
+    type           => 'ethernet-networkV3'
   }
 }
 
