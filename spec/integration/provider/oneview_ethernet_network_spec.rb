@@ -87,7 +87,7 @@ describe provider_class do
     end
 
     it 'should be able to update the connection template' do
-      resource['data']['bandwidth'] = { 'maximumBandwidth' => 10000 }
+      resource['data']['bandwidth'] = { 'maximumBandwidth' => 10_000 }
       expect(provider.exists?).to be
     end
 
