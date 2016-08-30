@@ -56,7 +56,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     if list.eql?('[]')
       Puppet.warning("There are no associated profiles to show.\n")
     else
-      pretty list
+      puts list
     end
     true
   end
@@ -67,9 +67,15 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     if list.eql?('[]')
       Puppet.warning("There are no associated uplink groups to show.\n")
     else
-      pretty list
+      puts list
     end
     true
+  end
+
+  # Retrieves de default connection template bandwidth, compares it to the current network's connection template and updates it if needed
+  def reset_default_bandwidth
+    @bandwidth = OneviewSDK::ConnectionTemplate.get_default(@client)['bandwidth']
+    update_connection_template
   end
 
   # Helpers

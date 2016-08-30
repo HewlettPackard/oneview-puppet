@@ -32,6 +32,10 @@ Puppet::Type.newtype(:oneview_ethernet_network) do
     newvalue(:get_associated_uplink_groups) do
       provider.get_associated_uplink_groups
     end
+
+    newvalue(:reset_default_bandwidth) do
+      provider.reset_default_bandwidth
+    end
   end
   # :nocov:
 

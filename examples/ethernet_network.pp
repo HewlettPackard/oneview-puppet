@@ -42,15 +42,22 @@ oneview_ethernet_network{'Ethernet Network Uplink Groups':
   }
 }
 
+oneview_ethernet_network{'Ethernet Network Default Bandwidth':
+  ensure  => 'reset_default_bandwidth',
+  require => Oneview_ethernet_network['Ethernet Network Uplink Groups'],
+  data    => {
+    name => 'Puppet network'
+  }
+}
+
 oneview_ethernet_network{'Ethernet Network Update':
   ensure  => 'present',
-  require => Oneview_ethernet_network['Ethernet Network Uplink Groups'],
+  require => Oneview_ethernet_network['Ethernet Network Default Bandwidth'],
   data    =>
   {
     name      => 'Puppet network',
     new_name  => 'Updated',
-    bandwidth =>
-    {
+    bandwidth => {
       maximumBandwidth => 16000
     }
   }
