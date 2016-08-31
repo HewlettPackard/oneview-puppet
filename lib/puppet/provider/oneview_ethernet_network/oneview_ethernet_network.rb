@@ -32,11 +32,12 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     @data = data_parse
     empty_data_check
     @bandwidth = @data.delete('bandwidth') unless @data['vlanIdRange']
-    update_connection_template if @bandwidth
     !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
+    # Checks if there is a connection template update
+    update_connection_template if @bandwidth
     # Checks if the operation is an update, bulk create or neither
     return true if bulk_create_check || resource_update(@data, @resourcetype)
     @resourcetype.new(@client, @data).create
