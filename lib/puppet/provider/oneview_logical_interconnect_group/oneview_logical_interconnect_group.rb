@@ -31,7 +31,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
   def exists?
     @data = data_parse
     empty_data_check
-    interconnect_type_uri
+    interconnect_type_uri if @data['interconnectMapTemplate']
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -62,11 +62,10 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
 
   def interconnect_type_uri
     @data['interconnectMapTemplate'].each do |item|
-      if item['permittedInterconnectTypeUri']
-        interconnect_type = OneviewSDK::Interconnect.get_type(@client, item['permittedInterconnectTypeUri'])
-        raise("The interconnect type #{item['permittedInterconnectTypeUri']} does not exist.") unless interconnect_type
-        item['permittedInterconnectTypeUri'] = interconnect_type['uri']
-      end
+      next unless item['permittedInterconnectTypeUri']
+      interconnect_type = OneviewSDK::Interconnect.get_type(@client, item['permittedInterconnectTypeUri'])
+      raise("The interconnect type #{item['permittedInterconnectTypeUri']} does not exist.") unless interconnect_type
+      item['permittedInterconnectTypeUri'] = interconnect_type['uri']
     end
   end
 end
