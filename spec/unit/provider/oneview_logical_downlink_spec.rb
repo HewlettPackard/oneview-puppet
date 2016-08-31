@@ -31,8 +31,7 @@ describe provider_class, unit: true do
         ensure: 'present',
         data:
             {
-              'name' => 'Logical Downlink',
-              'logicalSwitchGroupUri' => '/rest/'
+              'name' => 'Logical Downlink'
             }
       )
     end
@@ -45,39 +44,26 @@ describe provider_class, unit: true do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
     end
 
-    it 'should return that the resource does not exist' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
-    end
-
-    it 'should return that the resource exists' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-    end
-
     it 'should not be able to create/destroy the resource' do
       expect { provider.create }.to raise_error('This resource relies on others to be created.')
       expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
 
-    it 'should be able to get all the matching logical downlinks' do
+    it 'should be able to find the resource' do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect(provider.found).to be
     end
 
-    it 'should be able to get all the logical downlinks with no filters' do
-      test = resourcetype.new(@client, {})
-      allow(resourcetype).to receive(:find_by).and_return([test])
+    it 'should be able to get all the logical downlinks without ethernet' do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      expect(provider.found).to be
-    end
-
-    it 'should not be able to get all the logical downlinks' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
+      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return(test)
+      expect(provider.get_without_ethernet).to be
+      allow(resourcetype).to receive(:get_without_ethernet).with(anything).and_return('')
+      expect(provider.get_without_ethernet).to be
     end
   end
 end

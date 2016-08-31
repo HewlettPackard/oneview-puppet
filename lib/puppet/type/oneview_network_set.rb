@@ -29,19 +29,6 @@ Puppet::Type.newtype(:oneview_network_set) do
     newvalue(:get_without_ethernet) do
       provider.get_without_ethernet
     end
-
-    # PUTs
-    newvalue(:set_native_network) do
-      provider.set_native_network
-    end
-
-    newvalue(:add_ethernet_network) do
-      provider.add_ethernet_network
-    end
-
-    newvalue(:remove_ethernet_network) do
-      provider.remove_ethernet_network
-    end
   end
 
   newparam(:name, namevar: true) do

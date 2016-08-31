@@ -32,17 +32,14 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
   def exists?
     # assignments and deletions from @data
     @data = data_parse
-    variable_assignments
+    network_uris
     empty_data_check([:found, :get_without_ethernet])
     !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
     return true if resource_update(@data, @resourcetype)
-    ns = @resourcetype.new(@client, @data)
-    set_native_network_helper(ns) if @native_network
-    add_ethernet_network_helper(ns) if @ethernet_networks
-    ns.create
+    @resourcetype.new(@client, @data).create
   end
 
   def destroy
@@ -67,49 +64,15 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
     true
   end
 
-  def set_native_network
-    raise('You need to specify a network in order to perform this action.') unless @native_network
-    ns = get_single_resource_instance
-    set_native_network_helper(ns)
-    ns.update
-  end
-
-  def add_ethernet_network
-    raise('You need to specify at least one network in order to perform this action.') unless @ethernet_networks
-    ns = get_single_resource_instance
-    add_ethernet_network_helper(ns)
-    ns.update
-  end
-
-  def remove_ethernet_network
-    raise('You need to specify at least one network in order to perform this action.') unless @ethernet_networks
-    ns = get_single_resource_instance
-    @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net)
-      raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
-      ns.remove_ethernet_network(ethernet.first)
+  def network_uris
+    if @data['networkUris']
+      list = []
+      @data['networkUris'].each do |item|
+        net = OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+        raise('The network #{name} does not exist.') unless net.first
+        list.push(net.first['uri'])
+      end
+      @data['networkUris'] = list
     end
-    ns.update
-  end
-
-  # Helper methods
-
-  def add_ethernet_network_helper(ns)
-    @ethernet_networks.each do |net|
-      ethernet = @ethernet.find_by(@client, name: net)
-      raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
-      ns.add_ethernet_network(ethernet.first)
-    end
-  end
-
-  def set_native_network_helper(ns)
-    ethernet = @ethernet.find_by(@client, name: @native_network)
-    raise('The network declared in the manifest does not exists in the Appliance.') unless ethernet.first
-    ns.set_native_network(ethernet.first)
-  end
-
-  def variable_assignments
-    @ethernet_networks = @data.delete('ethernetNetworks') if @data['ethernetNetworks']
-    @native_network = @data.delete('nativeNetwork') if @data['nativeNetwork']
   end
 end

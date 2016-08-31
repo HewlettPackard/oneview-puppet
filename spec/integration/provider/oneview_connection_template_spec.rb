@@ -27,7 +27,7 @@ describe provider_class do
       ensure: 'present',
       data:
       {
-        'name' => 'name-78545775-1466687357131'
+        'name' => 'defaultConnectionTemplate'
       }
     )
   end
@@ -40,6 +40,10 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  it 'should be able to find connection templates' do
+    expect(provider.found).to be
+  end
+
   it 'should be an instance of the provider Ruby' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
   end
@@ -48,33 +52,11 @@ describe provider_class do
     expect(provider.get_default_connection_template).to be
   end
 
-  it 'should be able to find the connection template when it exists' do
-    expect(provider.exists?).to be
-    expect(provider.found).to be
+  it 'should not be able to create the resource' do
+    expect { provider.create }.to raise_error(RuntimeError, 'This resource relies on others to be created.')
   end
 
-  context 'giving the minumum parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_connection_template).new(
-        name: 'Connection Template',
-        ensure: 'absent',
-        data:
-        {
-          'name' => 'Another CT'
-        }
-      )
-    end
-
-    before(:each) do
-      provider.exists?
-    end
-
-    it 'should not be able to create the resource' do
-      expect { provider.create }.to raise_error(RuntimeError, 'This resource relies on others to be created.')
-    end
-
-    it 'should not be able to destroy the resource' do
-      expect { provider.destroy }.to raise_error(RuntimeError, 'This resource relies on others to be destroyed.')
-    end
+  it 'should not be able to destroy the resource' do
+    expect { provider.destroy }.to raise_error(RuntimeError, 'This resource relies on others to be destroyed.')
   end
 end

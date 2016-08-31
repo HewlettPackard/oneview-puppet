@@ -21,7 +21,7 @@ oneview_network_set{'Network Set Get Without Ethernet':
   ensure => 'get_without_ethernet',
   # data   =>
   # {
-  #   name          => 'ns1'
+  #   name => 'Network Set 1'
   # }
 }
 
@@ -29,8 +29,8 @@ oneview_network_set{'Network Set Create':
   ensure => 'present',
   data   =>
   {
-    name          => 'Test Network Set',
-    nativeNetwork => 'Ethernet 1'
+    name        => 'Test Network Set',
+    networkUris => ['Ethernet 1', 'Ethernet 2']
   }
 }
 
@@ -40,47 +40,18 @@ oneview_network_set{'Network Set Get All':
   require => Oneview_network_set['Network Set Create'],
   # data   =>
   # {
-  #   name => 'ns1'
+  #   name        => 'Test Network Set',
+  #   networkUris => ['BulkEthernetNetwork_1', 'Prod_401']
   # }
-}
-
-oneview_network_set{'Network Set Add Network':
-  ensure  => 'add_ethernet_network',
-  require => Oneview_network_set['Network Set Get All'],
-  data    =>
-  {
-    name             => 'Test Network Set',
-    ethernetNetworks => ['Ethernet 1ss', 'Ethernet 2']
-  }
-}
-
-oneview_network_set{'Network Set Set Native Network':
-  ensure  => 'set_native_network',
-  require => Oneview_network_set['Network Set Add Network'],
-  data    =>
-  {
-    name          => 'Test Network Set',
-    nativeNetwork => 'Ethernet 2'
-  }
-}
-
-oneview_network_set{'Network Set Remove Network':
-  ensure  => 'remove_ethernet_network',
-  require => Oneview_network_set['Network Set Set Native Network'],
-  data    =>
-  {
-    name             => 'Test Network Set',
-    ethernetNetworks => ['Ethernet 1']
-  }
 }
 
 oneview_network_set{'Network Set Edit':
   ensure  => 'present',
-  require => Oneview_network_set['Network Set Remove Network'],
+  require => Oneview_network_set['Network Set Get All'],
   data    =>
   {
-    name     => 'Test Network Set',
-    new_name => 'Edited Name'
+    name             => 'Test Network Set',
+    nativeNetworkUri => 'Ethernet 2'
   }
 }
 
@@ -89,6 +60,6 @@ oneview_network_set{'Network Set Delete':
   require => Oneview_network_set['Network Set Edit'],
   data    =>
   {
-    name => 'Edited Name'
+    name => 'Test Network Set'
   }
 }
