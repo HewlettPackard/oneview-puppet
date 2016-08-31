@@ -31,6 +31,8 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
   def exists?
     @data = data_parse
     empty_data_check
+    @bandwidth = @data.delete('bandwidth') unless @data['vlanIdRange']
+    update_connection_template if @bandwidth
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -50,16 +52,30 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
 
   def get_associated_profiles
     Puppet.notice("\n\nAssociated Profiles\n")
-    list = get_single_resource_instance.get_associated_uplink_groups
-    list == '[]' ? Puppet.warning('There are no associated profiles to show.') : Puppet.notice(list)
+    list = get_single_resource_instance.get_associated_profiles
+    if list.eql?('[]')
+      Puppet.warning("There are no associated profiles to show.\n")
+    else
+      puts list
+    end
     true
   end
 
   def get_associated_uplink_groups
     Puppet.notice("\n\nAssociated Uplink Groups\n")
     list = get_single_resource_instance.get_associated_uplink_groups
-    list == '[]' ? Puppet.warning('There are no associated uplink groups to show.') : Puppet.notice(list)
+    if list.eql?('[]')
+      Puppet.warning("There are no associated uplink groups to show.\n")
+    else
+      puts list
+    end
     true
+  end
+
+  # Retrieves de default connection template bandwidth, compares it to the current network's connection template and updates it if needed
+  def reset_default_bandwidth
+    @bandwidth = OneviewSDK::ConnectionTemplate.get_default(@client)['bandwidth']
+    update_connection_template
   end
 
   # Helpers
@@ -73,5 +89,17 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     data = Hash[data.map { |k, v| [k.to_sym, v] }]
     data[:bandwidth] = Hash[data[:bandwidth].map { |k, v| [k.to_sym, v.to_i] }]
     data
+  end
+
+  # Checks whether the connection template needs to be updated
+  def update_connection_template
+    # Get single resource instance cannot be used because its @data may contain new_name
+    network = @resourcetype.find_by(@client, unique_id).first
+    @bandwidth.each { |key, value| @bandwidth[key] = value.to_i }
+    connection_template = OneviewSDK::ConnectionTemplate.find_by(@client, uri: network['connectionTemplateUri']).first
+    connection_template_current_bandwidth = connection_template['bandwidth']
+    connection_template['bandwidth'] = connection_template['bandwidth'].merge(@bandwidth)
+    connection_template.update unless connection_template_current_bandwidth.eql?(connection_template['bandwidth'])
+    true
   end
 end
