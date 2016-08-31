@@ -15,8 +15,12 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:oneview_server_hardware)
+server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.5'
+server_hardware_username = login[:server_hardware_username] || 'dcs'
+server_hardware_password = login[:server_hardware_password] || 'dcs'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +29,7 @@ describe provider_class do
       ensure: 'found',
       data:
           {
-            'hostname' => '172.18.6.5'
+            'hostname' => server_hardware_hostname
           }
     )
   end
@@ -55,9 +59,9 @@ describe provider_class do
         ensure: 'present',
         data:
             {
-              'hostname'        => '172.18.6.5',
-              'username'        => 'dcs',
-              'password'        => 'dcs',
+              'hostname'        => server_hardware_hostname,
+              'username'        => server_hardware_username,
+              'password'        => server_hardware_password,
               'licensingIntent' => 'OneView'
             }
       )

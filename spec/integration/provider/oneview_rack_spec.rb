@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
+enclosure_name = login[:enclosure_name] || 'Puppet_Test_Enclosure'
 
 describe provider_class do
   let(:resource) do
@@ -69,7 +71,7 @@ describe provider_class do
         {
           'name' => 'myrack',
           'rackMounts' => [
-            { 'mountUri' => '/rest/enclosures/09SGH100X6J1', 'topUSlot' => 20, 'uHeight' => 10 }
+            { 'mountUri' => "#{enclosure_name}, enclosure", 'topUSlot' => 20, 'uHeight' => 10 }
           ]
         }
       )

@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
+firmware_bundle_path = login[:firmware_bundle_path] || './spec/support/cp022594.exe'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +27,7 @@ describe provider_class do
       ensure: 'present',
       data:
           {
-            'firmware_bundle_path' => './spec/support/cp022594.exe'
+            'firmware_bundle_path' => firmware_bundle_path
           }
     )
   end

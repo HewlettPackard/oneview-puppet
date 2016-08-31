@@ -15,8 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
+storage_system_name = login[:storage_system_name] || 'ThreePAR7200-8147'
+storage_system_ip = login[:storage_system_ip] || '172.18.11.12'
+storage_system_username = login[:storage_system_username] || 'dcs'
+storage_system_password = login[:storage_system_password] || 'dcs'
+storage_system_domain = login[:storage_system_domain] || 'TestDomain'
 
 describe provider_class do
   let(:resource) do
@@ -26,7 +32,7 @@ describe provider_class do
       data:
           {
             'credentials'   => {
-              'ip_hostname' => '172.18.11.11'
+              'ip_hostname' => storage_system_ip
             }
           }
     )
@@ -35,6 +41,10 @@ describe provider_class do
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  before(:each) do
+    provider.exists?
+  end
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_storage_system' do
@@ -46,19 +56,19 @@ describe provider_class do
     end
 
     it 'should return that the storage system was not found' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error(/No StorageSystem with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should not be able to get the storage pools from the storage system' do
-      expect(provider.get_storage_pools).not_to be
+      expect { provider.get_storage_pools }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
 
     it 'should not be able to get the managed ports from the storage system' do
-      expect(provider.get_managed_ports).not_to be
-    end
-
-    it 'should not be able to get the host types from the storage system' do
-      expect(provider.get_host_types).not_to be
+      expect { provider.get_managed_ports }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
   end
 
@@ -69,18 +79,17 @@ describe provider_class do
         ensure: 'present',
         data:
             {
-              'name' => 'OneViewSDK Test Storage System',
-              'managedDomain' => 'TestDomain',
+              'name' => storage_system_name,
+              'managedDomain' => storage_system_domain,
               'credentials'   => {
-                'ip_hostname' => '172.18.11.11',
-                'username'     => 'dcs',
-                'password'     => 'dcs'
+                'ip_hostname' => storage_system_ip,
+                'username'     => storage_system_username,
+                'password'     => storage_system_password
               }
             }
       )
     end
 
-    # TODO: Create block
     it 'should create the storage system' do
       expect(provider.create).to be
     end

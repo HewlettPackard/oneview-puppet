@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
+storage_pool_name = login[:storage_pool_name] || '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
 
 describe provider_class do
   let(:resource) do
@@ -71,7 +73,7 @@ describe provider_class do
                 'shareable'      => true,
                 'provisionType'  => 'Thin',
                 'capacity'       => '235834383322',
-                'storagePoolUri' => 'FST_CPG1'
+                'storagePoolUri' => storage_pool_name
               }
             }
       )

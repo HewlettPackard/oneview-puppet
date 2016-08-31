@@ -14,9 +14,15 @@
 # limitations under the License.
 ################################################################################
 
+# NOTE: This resource requires a storage system to be added to the appliance and
+# adds the specified storage pool
+
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
+storage_pool_name = login[:storage_pool_name] || 'FST_CPG2'
+storage_system_name = login[:storage_system_name] || 'ThreePAR7200-8147'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +31,7 @@ describe provider_class do
       ensure: 'present',
       data:
           {
-            'poolName' => 'FST_CPG2'
+            'poolName' => storage_pool_name
           }
     )
   end
@@ -33,6 +39,10 @@ describe provider_class do
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  before(:each) do
+    provider.exists?
+  end
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_storage_pool' do
@@ -44,7 +54,7 @@ describe provider_class do
     end
 
     it 'should return that the storage pool was not found' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error(/No StoragePool with the specified data were found on the Oneview Appliance/)
     end
   end
 
@@ -55,8 +65,8 @@ describe provider_class do
         ensure: 'present',
         data:
             {
-              'poolName'          => 'FST_CPG2',
-              'storageSystemUri'  => '/rest/storage-systems/TXQ1000307'
+              'poolName'          => storage_pool_name,
+              'storageSystemUri'  => storage_system_name
             }
       )
     end

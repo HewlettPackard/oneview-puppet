@@ -83,6 +83,17 @@ RSpec.configure do |config|
   config.manifest_dir = File.expand_path(File.join(File.dirname(__FILE__), 'fixtures/manifests'))
   # End of puppet specific declarations
 
+  # Rspec output Configurations
+  # Use color in STDOUT
+  config.color = true
+
+  # Use color not only in STDOUT but also in pagers and files
+  config.tty = true
+
+  # Use the specified formatter
+  config.formatter = :documentation # :progress, :html, :textmate
+  # End of Rspec output Configurations
+
   # Sort integration and system tests
   if config.filter_manager.inclusions.rules[:integration] || config.filter_manager.inclusions.rules[:system]
     config.register_ordering(:global) do |items|

@@ -15,8 +15,11 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:oneview_firmware_driver)
+firmware_baseline_name = login[:firmware_baseline_name] || 'Service Pack for ProLiant'
+firmware_hotfix_names = login[:firmware_hotfix_names] || ['Online ROM Flash Component for Windows x64 - HPE ProLiant XL260a Gen9 Server']
 
 describe provider_class do
   let(:resource) do
@@ -56,8 +59,8 @@ describe provider_class do
         data:
             {
               'customBaselineName' => 'FirmwareDriver1_Example',
-              'baselineUri'        => 'Service Pack for ProLiant',
-              'hotfixUris'         => ['Online ROM Flash Component for Windows x64 - HPE ProLiant XL260a Gen9 Server']
+              'baselineUri'        => firmware_baseline_name,
+              'hotfixUris'         => firmware_hotfix_names
             }
       )
     end
