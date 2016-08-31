@@ -50,12 +50,14 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
 
   # Creates a new server profile based on the current template
   def set_new_profile
+    server_profile = OneviewSDK::ServerProfile
     # lets the SDK set a default name in case the user has not declared one
     if @data['serverProfileName']
       sp_name = @data.delete('serverProfileName')
-      get_single_resource_instance.new_profile(sp_name).create
+      get_single_resource_instance.new_profile(sp_name).create unless server_profile.find_by(@client, name: sp_name).first
     else
-      get_single_resource_instance.new_profile.create
+      default = 'Server_Profile_created_from_New' + @data['name']
+      get_single_resource_instance.new_profile.create unless server_profile.find_by(@client, name: default).first
     end
   end
 end

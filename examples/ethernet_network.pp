@@ -17,13 +17,12 @@
 oneview_ethernet_network{'Ethernet Network Create':
   ensure => 'present',
   data   => {
-    name                  => 'Puppet network',
-    vlanId                => '1045',
-    purpose               => 'General',
-    smartLink             => true,
-    privateNetwork        => false,
-    connectionTemplateUri => nil,
-    type                  => 'ethernet-networkV3'
+    name           => 'Puppet network',
+    vlanId         => '1045',
+    purpose        => 'General',
+    smartLink      => true,
+    privateNetwork => false,
+    type           => 'ethernet-networkV3'
   }
 }
 
@@ -43,12 +42,24 @@ oneview_ethernet_network{'Ethernet Network Uplink Groups':
   }
 }
 
-oneview_ethernet_network{'Ethernet Network Update':
-  ensure  => 'present',
+oneview_ethernet_network{'Ethernet Network Default Bandwidth':
+  ensure  => 'reset_default_bandwidth',
   require => Oneview_ethernet_network['Ethernet Network Uplink Groups'],
   data    => {
-    name     => 'Puppet network',
-    new_name => 'Updated'
+    name => 'Puppet network'
+  }
+}
+
+oneview_ethernet_network{'Ethernet Network Update':
+  ensure  => 'present',
+  require => Oneview_ethernet_network['Ethernet Network Default Bandwidth'],
+  data    =>
+  {
+    name      => 'Puppet network',
+    new_name  => 'Updated',
+    bandwidth => {
+      maximumBandwidth => 16000
+    }
   }
 }
 
@@ -67,7 +78,6 @@ oneview_ethernet_network{'Ethernet Network Found #2':
     vlanId => '1045',
   }
 }
-
 
 oneview_ethernet_network{'Ethernet Network Delete':
   ensure  => 'absent',
