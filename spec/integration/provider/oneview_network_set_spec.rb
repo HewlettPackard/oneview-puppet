@@ -26,8 +26,7 @@ describe provider_class do
       data:
           {
             'name' => 'Network Set',
-            'nativeNetwork' => 'Ethernet 1',
-            'ethernetNetworks' => ['Ethernet 1', 'Ethernet 2']
+            'networkUris' => %w(Prod_401 BulkEthernetNetwork_1)
           }
     )
   end
@@ -49,25 +48,16 @@ describe provider_class do
       expect(provider.create).to be
     end
 
-    it 'should be able to get the resource without ethernet' do
-      expect(provider.get_without_ethernet).to be
-    end
-
     it 'should be able to find this resource' do
-      expect(provider.exists?).to be
       expect(provider.found).to be
-    end
-
-    it 'should be able to set the native network' do
-      expect(provider.set_native_network).to be
-    end
-
-    it 'should be able to add a network' do
-      expect(provider.add_ethernet_network).to be
     end
 
     it 'should be able to delete the resource' do
       expect(provider.destroy).to be
+    end
+
+    it 'should be able to get the resource without ethernet' do
+      expect(provider.get_without_ethernet).to be
     end
   end
 end

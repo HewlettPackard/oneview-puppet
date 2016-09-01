@@ -24,7 +24,7 @@ def ld_config
     ensure: 'present',
     data:
       {
-        'name' => 'Logical Switch'
+        'name' => 'Logical Downlink'
       }
   }
 end

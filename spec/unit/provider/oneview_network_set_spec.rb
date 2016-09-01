@@ -85,41 +85,5 @@ describe provider_class, unit: true do
       allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return([test])
       expect(provider.get_without_ethernet).to be
     end
-
-    it 'should be able to set the native network' do
-      resource['data']['nativeNetwork'] = 'Ethernet'
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      ethernet = OneviewSDK::EthernetNetwork.new(@client, name: 'Ethernet')
-      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'Ethernet').and_return([ethernet])
-      allow_any_instance_of(resourcetype).to receive(:set_native_network).with(ethernet).and_return('Test')
-      allow_any_instance_of(resourcetype).to receive(:update).and_return('Test')
-      expect(provider.set_native_network).to be
-    end
-
-    it 'should be able to add an ethernet network' do
-      resource['data']['ethernetNetworks'] = ['Ethernet 1']
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      ethernet = OneviewSDK::EthernetNetwork.new(@client, name: 'Ethernet 1')
-      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'Ethernet 1').and_return([ethernet])
-      allow_any_instance_of(resourcetype).to receive(:add_ethernet_network).with(ethernet).and_return('Test')
-      allow_any_instance_of(resourcetype).to receive(:update).and_return('Test')
-      expect(provider.add_ethernet_network).to be
-    end
-
-    it 'should be able to remove an ethernet network' do
-      resource['data']['ethernetNetworks'] = ['Ethernet 1']
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      ethernet = OneviewSDK::EthernetNetwork.new(@client, name: 'Ethernet 1')
-      allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'Ethernet 1').and_return([ethernet])
-      allow_any_instance_of(resourcetype).to receive(:remove_ethernet_network).with(ethernet).and_return('Test')
-      allow_any_instance_of(resourcetype).to receive(:update).and_return('Test')
-      expect(provider.remove_ethernet_network).to be
-    end
   end
 end
