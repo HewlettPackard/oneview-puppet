@@ -15,8 +15,16 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+
+# NOTE: This test REQUIRES an enclosure group to be created and listed either on the enclosure_group
+# var on the json containing the login info, or down bellow directly in the var.
 
 provider_class = Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
+enclosure_ip = login[:enclosure_ip] || '172.18.1.13'
+enclosure_username = login[:enclosure_username] || dcs
+enclosure_password = login[:enclosure_password] || dcs
+enclosure_group = login[:enclosure_group] || 'Puppet Enc Group Test'
 
 describe provider_class do
   let(:resource) do
@@ -26,10 +34,11 @@ describe provider_class do
       data:
           {
             'name'              => 'Puppet_Test_Enclosure',
-            'hostname'          => '172.18.1.13',
-            'username'          => 'dcs',
-            'password'          => 'dcs',
-            'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+            'hostname'          => enclosure_ip,
+            'username'          => enclosure_username,
+            'password'          => enclosure_password,
+            'enclosureGroupUri' => enclosure_group,
+            # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
             'licensingIntent'   => 'OneView'
           }
     )
@@ -52,7 +61,8 @@ describe provider_class do
         data:
             {
               'name'              => 'Puppet_Test_Enclosure',
-              'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+              'enclosureGroupUri' => enclosure_group,
+              # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView',
               'refreshState'      => 'RefreshPending'
             }
@@ -60,7 +70,10 @@ describe provider_class do
     end
 
     it 'should not be able to set a refresh state on the enclosure' do
-      expect(provider.set_refresh_state).not_to be
+      provider.exists?
+      expect { provider.set_refresh_state }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
   end
 
@@ -72,8 +85,9 @@ describe provider_class do
         ensure: 'present',
         data:
             {
-              'name'                   => 'Puppet_Test_Enclosure',
-              'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+              'name' => 'Puppet_Test_Enclosure',
+              'enclosureGroupUri' => enclosure_group,
+              # 'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'        => 'OneView',
               'utilization_parameters' => {
                 'view' => 'day'
@@ -81,38 +95,50 @@ describe provider_class do
             }
       )
     end
-    it 'should not be able to retrieve utilization data from the enclosure' do
-      expect(provider.retrieved_utilization).not_to be
+
+    it 'should not be able to get utilization data from the enclosure' do
+      provider.exists?
+      expect { provider.get_utilization }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
   end
 
   context 'given the minimum parameters' do
+    before(:each) do
+      provider.exists?
+    end
+
     it 'exists? should not find the enclosure' do
       expect(provider.exists?).not_to be
     end
 
     it 'should return that the enclosure was not found' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error(
+        /No Enclosure with the specified data were found on the Oneview Appliance/
+      )
     end
 
     it 'should not be able to get configuration from the enclosure' do
-      expect(provider.configured).not_to be
+      expect { provider.set_configuration }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
 
     it 'should not be able to retrieve environmental configuration from the enclosure' do
-      expect(provider.retrieved_environmental_configuration).not_to be
+      expect { provider.get_environmental_configuration }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
 
     it 'should not be able to retrieve the script from the enclosure' do
-      expect(provider.script_retrieved).not_to be
+      expect { provider.get_script }.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
     end
 
     it 'should create the new enclosure' do
       expect(provider.create).to be
-    end
-
-    it 'should find that the enclosure exists' do
-      expect(provider.exists?).to be
     end
   end
 
@@ -124,7 +150,8 @@ describe provider_class do
         data:
             {
               'name'              => 'Puppet_Test_Enclosure',
-              'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+              'enclosureGroupUri' => enclosure_group,
+              # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView',
               'refreshState'      => 'RefreshPending'
             }
@@ -132,19 +159,21 @@ describe provider_class do
     end
 
     it 'should be able to set a refresh state on the enclosure' do
+      provider.exists?
       expect(provider.set_refresh_state).to be
     end
   end
 
-  context 'given the minimum parameters' do
+  context 'given the utilization parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_enclosure).new(
         name: 'Enclosure',
         ensure: 'present',
         data:
             {
-              'name'                   => 'Puppet_Test_Enclosure',
-              'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+              'name' => 'Puppet_Test_Enclosure',
+              'enclosureGroupUri' => enclosure_group,
+              # 'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'        => 'OneView',
               'utilization_parameters' => {
                 'view' => 'day'
@@ -152,8 +181,9 @@ describe provider_class do
             }
       )
     end
-    it 'should be able to retrieve utilization data from the enclosure' do
-      expect(provider.retrieved_utilization).to be
+    it 'should be able to get utilization data from the enclosure' do
+      provider.exists?
+      expect(provider.get_utilization).to be
     end
   end
 
@@ -165,17 +195,22 @@ describe provider_class do
         data:
             {
               'name'              => 'Puppet_Test_Enclosure',
-              'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
+              'enclosureGroupUri' => enclosure_group,
+              # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView'
             }
       )
     end
+    before(:each) do
+      provider.exists?
+    end
+
     it 'should return that the enclosure was found' do
       expect(provider.found).to be
     end
 
-    it 'should destroy the enclosure' do
-      expect(provider.destroy).to be
-    end
+    # it 'should destroy the enclosure' do
+    #   expect(provider.destroy).to be
+    # end
   end
 end

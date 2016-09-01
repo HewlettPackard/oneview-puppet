@@ -14,9 +14,15 @@
 # limitations under the License.
 ################################################################################
 
+# NOTE: For all tests in this spec to pass, the volume attachment specified must
+# have unmanaged volumes in it.
+
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
+storage_volume_template = login[:storage_volume_template] || 'Test'
+server_profile_name = login[:server_profile_name] || 'OneViewSDK Test ServerProfile'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +31,7 @@ describe provider_class do
       ensure: 'present',
       data:
           {
-            'name' => 'ONEVIEW_PUPPET_TEST'
+            'name' => storage_volume_template
           }
     )
   end
@@ -34,20 +40,24 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  before(:each) do
+    provider.exists?
+  end
+
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_volume_attachment' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
     end
 
-    it 'exists? should find the volume template' do
-      expect(provider.exists?).to be
+    it 'should be able to run through self.instances' do
+      expect(instance).to be
     end
 
-    it 'should do nothing (it is unavailable) and always return true as it is' do
-      expect(provider.create).to be
+    it 'should raise an error when the "present" ensurable is specified' do
+      expect { provider.create }.to raise_error(/Ensure state 'present' is unavailable for this resource/)
     end
     # This requires the VA to be created beforehand
-    # it 'should return that the volume template was found' do
+    # it 'should return that the volume attachment was found' do
     #   expect(provider.found).to be
     # end
 
@@ -56,6 +66,7 @@ describe provider_class do
     end
 
     it 'should be able to remove extra unmanaged volumes' do
+      resource['data']['name'] = server_profile_name
       expect(provider.remove_extra_unmanaged_volume).to be
     end
 
@@ -63,8 +74,8 @@ describe provider_class do
       expect(provider.get_paths).to be
     end
 
-    it 'should do nothing (it is unavailable) and always return true as it is' do
-      expect(provider.destroy).to be
+    it 'should raise an error when the "present" ensurable is specified' do
+      expect { provider.destroy }.to raise_error(/Ensure state 'absent' is unavailable for this resource/)
     end
   end
 end

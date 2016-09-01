@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_server_hardware_type).provider(:oneview_server_hardware_type)
+server_hardware_type = login[:server_hardware_type] || 'BL460c Gen8 1'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +27,7 @@ describe provider_class do
       ensure: 'present',
       data:
           {
-            'name' => 'BL460c Gen8 1'
+            'name' => server_hardware_type
           }
     )
   end

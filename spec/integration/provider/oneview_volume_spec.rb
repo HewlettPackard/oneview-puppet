@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_volume).provider(:ruby)
+storage_pool_name = login[:storage_pool_name] || '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
 
 describe provider_class do
   let(:resource) do
@@ -34,9 +36,13 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  before(:each) do
+    provider.exists?
+  end
+
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:ruby)
+    it 'should be an instance of the provider oneview_volume' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:oneview_volume)
     end
 
     it 'should not exist until it is created' do
@@ -44,7 +50,7 @@ describe provider_class do
     end
 
     it 'should return that the volume was not found' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error(/No Volume with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should return that the get_attachable_volumes was not found' do
@@ -69,9 +75,9 @@ describe provider_class do
                   'provisionType'     => 'Full',
                   'shareable'         => true,
                   'requestedCapacity' => 1024 * 1024 * 1024,
-                  'storagePoolUri'    => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+                  'storagePoolUri'    => storage_pool_name
                 },
-                'snapshotPoolUri' => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+                'snapshotPoolUri' => storage_pool_name
               }
       )
     end

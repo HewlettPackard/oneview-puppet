@@ -15,8 +15,13 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
+san_manager_host = login[:san_manager_host] || '172.18.15.1'
+san_manager_username = login[:san_manager_username] || 'dcs'
+san_manager_password = login[:san_manager_password] || 'dcs'
+san_manager_name = login[:san_manager_name] || 'Brocade Network Advisor'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +30,7 @@ describe provider_class do
       ensure: 'found',
       data:
           {
-            'providerDisplayName' => 'Brocade Network Advisor'
+            'providerDisplayName' => san_manager_name
           }
     )
   end
@@ -44,6 +49,7 @@ describe provider_class do
     end
 
     it 'should raise error when server is not found' do
+      resource['data']['providerDisplayName'] = 'Fail Test'
       expect { provider.found }.to raise_error(/No SANManager with the specified data were found on the Oneview Appliance/)
     end
   end
@@ -55,11 +61,11 @@ describe provider_class do
         ensure: 'present',
         data:
             {
-              'providerDisplayName' => 'Brocade Network Advisor',
+              'providerDisplayName' => san_manager_name,
               'connectionInfo' => [
                 {
                   'name' => 'Host',
-                  'value' => '172.18.15.1'
+                  'value' => san_manager_host
                 },
                 {
                   'name' => 'Port',
@@ -67,11 +73,11 @@ describe provider_class do
                 },
                 {
                   'name' => 'Username',
-                  'value' => 'dcs'
+                  'value' => san_manager_username
                 },
                 {
                   'name' => 'Password',
-                  'value' => 'dcs'
+                  'value' => san_manager_password
                 },
                 {
                   'name' => 'UseSsl',

@@ -21,11 +21,11 @@ provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview
 describe provider_class do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_enclosure).new(
-      name: 'Test Logical Enclosure',
+      name: 'Puppet_Test_Enclosure',
       ensure: 'present',
       data:
           {
-            'name' => 'Encl1',
+            'name' => 'Puppet_Test_Enclosure',
             'type' => 'LogicalEnclosure'
           }
     )
@@ -56,11 +56,11 @@ describe provider_class do
   context 'given the script parameter' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
-        name: 'Test Logical Enclosure',
+        name: 'Puppet_Test_Enclosure',
         ensure: 'present',
         data:
             {
-              'name'                    => 'Encl1',
+              'name'                    => 'Puppet_Test_Enclosure',
               'script'                  => 'This is a script example'
             }
       )
@@ -74,15 +74,15 @@ describe provider_class do
   context 'given the dump parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
-        name: 'Test Logical Enclosure',
+        name: 'Puppet_Test_Enclosure',
         ensure: 'dumped',
         data:
             {
-              'name'                    => 'Encl1',
+              'name'                    => 'Puppet_Test_Enclosure',
               'dump'                    =>
                   {
                     'errorCode' => 'Mydump',
-                    'encrypt' => 'false',
+                    'encrypt' => 'true',
                     'excludeApplianceDump' => 'false'
                   }
             }

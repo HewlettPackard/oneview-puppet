@@ -50,11 +50,7 @@ describe type_class do
     [
       :name,
       :data,
-      :provider,
-      :network,
-      :logical_interconnect,
-      :fcoe_network,
-      :fc_network
+      :provider
     ]
   end
 
@@ -73,10 +69,8 @@ describe type_class do
   it 'should require a data hash' do
     modified_config = uplink_set_config
     modified_config[:data] = ''
-    resource_type = type_class.to_s.split('::')
     expect do
       type_class.new(modified_config)
-    end.to raise_error(Puppet::Error, 'Parameter data failed on' \
-    " #{resource_type[2]}[#{modified_config[:name]}]: Inserted value for data is not valid")
+    end.to raise_error(/Inserted value for data is not valid/)
   end
 end

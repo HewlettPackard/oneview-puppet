@@ -26,29 +26,39 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
+    before(:each) do
+      provider.exists?
+    end
     it 'exists? should return false at first' do
       expect(provider.exists?).not_to be
     end
 
     it 'found should return false at first' do
-      expect(provider.found).not_to be
+      expect { provider.found }.to raise_error(/No FCNetwork with the specified data were found on the Oneview Appliance/)
     end
-
-    # it 'should not have a network to destroy' do
-    #   expect(provider.destroy).not_to be
-    # end
 
     it 'should create a new network' do
       expect(provider.create).to be
     end
+  end
 
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_fc_network).new(
+        name: 'fc',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'OneViewSDK Test FC Network'
+            }
+      )
+    end
+    before(:each) do
+      provider.exists?
+    end
     it 'exists? should find a network' do
       expect(provider.exists?).to be
     end
-
-    # it 'found should return the matching network' do
-    #   expect(provider.found).to be
-    # end
 
     it 'should run destroy' do
       expect(provider.destroy).to be

@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
+managed_san_name = login[:managed_san_name] || 'SAN1_0'
 
 describe provider_class do
   let(:resource) do
@@ -25,7 +27,7 @@ describe provider_class do
       ensure: 'found',
       data:
           {
-            'name' => 'SAN1_0'
+            'name' => managed_san_name
           }
     )
   end
@@ -56,7 +58,7 @@ describe provider_class do
         ensure: 'present',
         data:
             {
-              'name' => 'SAN1_0',
+              'name' => managed_san_name,
               'publicAttributes' => {
                 'name' => 'MetaSan',
                 'value' => 'Neon SAN',
