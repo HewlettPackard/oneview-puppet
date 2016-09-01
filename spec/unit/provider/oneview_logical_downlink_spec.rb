@@ -65,5 +65,16 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:get_without_ethernet).with(anything).and_return('')
       expect(provider.get_without_ethernet).to be
     end
+
+    it 'should be able to get logical downlinks without ethernet' do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return(test)
+      expect(provider.get_without_ethernet).to be
+      resource['data'] = {}
+      allow(resourcetype).to receive(:get_without_ethernet).with(anything).and_return(test)
+      expect(provider.get_without_ethernet).to be
+    end
   end
 end

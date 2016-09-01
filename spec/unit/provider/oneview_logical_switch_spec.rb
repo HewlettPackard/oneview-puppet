@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
 resourcetype = OneviewSDK::LogicalSwitch
 
 describe provider_class, unit: true do
@@ -58,7 +58,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
     end
 
     it 'return false when the resource does not exists' do

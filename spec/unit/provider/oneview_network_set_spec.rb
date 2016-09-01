@@ -68,14 +68,6 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'should be able to get all the network sets without ethernet' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return([test])
-      expect(provider.get_without_ethernet).to be
-    end
-
     it 'should be able to delete the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
@@ -84,6 +76,14 @@ describe provider_class, unit: true do
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
+    end
+
+    it 'should be able to get all the network sets without ethernet' do
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return([test])
+      expect(provider.get_without_ethernet).to be
     end
   end
 end

@@ -47,7 +47,8 @@ describe type_class do
     [
       :found,
       :get_associated_profiles,
-      :get_associated_uplink_groups
+      :get_associated_uplink_groups,
+      :reset_default_bandwidth
     ]
   end
 

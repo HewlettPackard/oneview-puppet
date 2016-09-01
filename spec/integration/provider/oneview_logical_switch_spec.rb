@@ -58,7 +58,7 @@ describe provider_class do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
     end
 
     it 'exists? should not find logical switch' do

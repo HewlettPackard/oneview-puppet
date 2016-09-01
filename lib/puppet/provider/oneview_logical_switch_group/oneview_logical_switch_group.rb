@@ -26,7 +26,6 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch
     @client = OneviewSDK::Client.new(login)
     @resourcetype = OneviewSDK::LogicalSwitchGroup
     @data = {}
-    @switches = {}
   end
 
   def exists?
@@ -38,9 +37,11 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
+    new_name = @data.delete('new_name')
     lsg = @resourcetype.new(@client, @data)
-    lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s)
+    lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s) if @switches
+    @data['new_name'] = new_name if new_name
+    return true if resource_update(@data, @resourcetype)
     lsg.create
   end
 
