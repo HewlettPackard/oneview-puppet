@@ -80,20 +80,19 @@ describe provider_class, unit: true do
       expect(provider.found).to be
     end
 
-    # TODO: find out how to stub response
-    # it 'should be able to create the resource' do
-    #   data = resource['data']
-    #   allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(false)
-    #   allow_any_instance_of(resourcetype).to receive(:exists?).and_return(false)
-    #   expect(provider.exists?).to eq(false)
-    #   allow_any_instance_of(resourcetype).to receive(:set_grouping_parameters)
-    #     .with(switches['groupingParameters'].keys[0].to_i, switches['groupingParameters'].values[0])
-    #     .and_return(true)
-    #   data.delete('switches')
-    #   # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-    #   #   .with('/rest/logical-switch-groups', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   # allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switch-groups/100')
-    #   # expect(provider.create).to eq(true)
-    # end
+    it 'runs through the create method' do
+      data = { 'name' => 'OneViewSDK Test Logical Switch Group', 'category' => 'logical-switch-groups', 'state' => 'Active',
+               'type' => 'logical-switch-group', 'switchMapTemplate' => {} }
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+      test = resourcetype.new(@client, resource['data'])
+      allow_any_instance_of(resourcetype).to receive(:set_grouping_parameters).with(1, 'Cisco Nexus 50xx').and_return(test)
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+        .with('/rest/logical-switch-groups', { 'body' => data }, test.api_version).and_return(FakeResponse
+        .new('uri' => '/rest/fake'))
+      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switch-groups/100')
+      provider.exists?
+      expect(provider.create).to be
+    end
   end
 end
