@@ -32,7 +32,6 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch
     @data = data_parse
     empty_data_check
     switch_type_uri if @data['switchMapTemplate']
-    puts @data
     @switches = @data.delete('switches')
     !@resourcetype.find_by(@client, @data).empty?
   end
@@ -55,13 +54,13 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch
   end
 
   def switch_type_uri
-    @data['switchMapTemplate'].each do |key, value|
+    @data['switchMapTemplate'].each do |key, _|
       @data['switchMapTemplate'][key].each do |item|
-        item.each do |sub_key, sub_value|
-          next unless sub_key.eql?('permittedSwitchTypeUri')
-          switch_type = OneviewSDK::Switch.get_type(@client, sub_value)
+        item.each do |uri_key, name|
+          next unless uri_key.eql?('permittedSwitchTypeUri') || uri_key.nil? || uri_key.to_s[0..6].include?('/rest/')
+          switch_type = OneviewSDK::Switch.get_type(@client, name)
           raise("The switch type #{sub_value} does not exist.") unless switch_type
-          item[sub_key] = switch_type['uri']
+          item[uri_key] = switch_type['uri']
         end
       end
     end
