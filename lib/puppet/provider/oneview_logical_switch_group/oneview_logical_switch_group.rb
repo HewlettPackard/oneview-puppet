@@ -54,11 +54,15 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch
   end
 
   def switch_type_uri
-    @data['switchMapTemplate'].each do |item|
-      next unless item['permittedSwitchTypeUri']
-      switch_type = OneviewSDK::Switch.get_type(@client, item['permittedSwitchTypeUri'])
-      raise("The switch type item['permittedSwitchTypeUri'] does not exist.") unless switch_type
-      item['permittedSwitchTypeUri'] = switch_type['uri']
+    @data['switchMapTemplate'].each do |key, _|
+      @data['switchMapTemplate'][key].each do |item|
+        item.each do |uri_key, name|
+          next unless uri_key.eql?('permittedSwitchTypeUri') || uri_key.nil? || uri_key.to_s[0..6].include?('/rest/')
+          switch_type = OneviewSDK::Switch.get_type(@client, name)
+          raise("The switch type #{sub_value} does not exist.") unless switch_type
+          item[uri_key] = switch_type['uri']
+        end
+      end
     end
   end
 end
