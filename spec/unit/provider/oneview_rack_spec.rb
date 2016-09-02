@@ -108,6 +108,14 @@ describe provider_class, unit: true do
       expect_any_instance_of(OneviewSDK::Rack).to receive(:update).and_return('test')
       expect(provider.remove_rack_resource).to be
     end
+
+    it 'should allow specifying a name instead of an uri' do
+      resource['data']['rackMounts'][0]['mountUri'] = 'Test, enclosure'
+      test = OneviewSDK::Rack.new(@client, resource['data'])
+      allow(OneviewSDK::Enclosure).to receive(:find_by).with(anything, name: 'Test').and_return([test])
+      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to be
+    end
   end
 
   context 'given the minimum parameters' do

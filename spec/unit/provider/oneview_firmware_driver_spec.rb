@@ -93,5 +93,13 @@ describe provider_class, unit: true do
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.destroy).to be
     end
+
+    it 'should be able to work specifying a name instead of an uri' do
+      resource['data']['baselineUri'] = 'Test'
+      test = OneviewSDK::FirmwareDriver.new(@client, resource['data'])
+      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
+      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to be
+    end
   end
 end
