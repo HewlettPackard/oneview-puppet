@@ -41,12 +41,11 @@ describe provider_class, unit: true do
     )
   end
 
-      let(:provider) { resource.provider }
+  let(:provider) { resource.provider }
 
-      let(:instance) { provider.class.instances.first }
+  let(:instance) { provider.class.instances.first }
 
   context 'given the create parameters' do
-
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
     end
@@ -129,13 +128,14 @@ describe provider_class, unit: true do
     it 'should be able to reset default bandwidth' do
       resource['data']['uri'] = '/rest/fake'
       resource['data']['connectionTemplateUri'] = '/rest/fake'
-      resource['data']['bandwidth'] = {'maximumbandwidth' => '1000'}
-      unique_ids = {"uri"=>"/rest/fake", "name"=>"Puppet Network"}
+      resource['data']['bandwidth'] = { 'maximumbandwidth' => '1000' }
+      unique_ids = { 'uri' => '/rest/fake', 'name' => 'Puppet Network' }
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       allow(resourcetype).to receive(:find_by).with(anything, unique_ids).and_return([test])
       allow(OneviewSDK::ConnectionTemplate).to receive(:get_default).with(anything).and_return(test)
-      allow(OneviewSDK::ConnectionTemplate).to receive(:find_by).with(anything, uri: resource['data']['connectionTemplateUri']).and_return([test])
+      allow(OneviewSDK::ConnectionTemplate).to receive(:find_by)
+        .with(anything, uri: resource['data']['connectionTemplateUri']).and_return([test])
       provider.exists?
       expect(provider.reset_default_bandwidth).to be
     end
