@@ -65,21 +65,21 @@ describe provider_class, unit: true do
 
     it 'should be able to get types' do
       path = 'spec/support/fixtures/unit/provider/ethernet_network_members.json'
-      teste = File.read(path)
+      Test = File.read(path)
       resource['data']['name'] = nil
       allow(OneviewSDK::Switch).to receive(:get_type).with(anything).and_return(['test'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(teste))
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(Test))
       provider.exists?
       expect(provider.get_type).to be
     end
 
     it 'should be able to get the environmental configuration' do
       path = 'spec/support/fixtures/unit/provider/ethernet_network_members.json'
-      teste = File.read(path)
+      Test = File.read(path)
       resource['data']['uri'] = '/rest/fake'
       test = OneviewSDK::Switch.new(@client, resource['data'])
       allow(OneviewSDK::Switch).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(teste))
+      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(Test))
       expect(provider.exists?).to eq(true)
       expect(provider.get_environmental_configuration).to be
     end

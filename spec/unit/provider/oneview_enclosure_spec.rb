@@ -109,6 +109,14 @@ describe provider_class, unit: true do
       expect { provider.get_single_sign_on }.to raise_error(RuntimeError)
     end
 
+    it 'should be able to work specifying a name instead of an uri' do
+      resource['data']['enclosureGroupUri'] = 'Test'
+      test = resourcetype.new(@client, resource['data'])
+      allow(OneviewSDK::EnclosureGroup).to receive(:find_by).with(anything, name: resource['data']['enclosureGroupUri']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to be
+    end
+
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])

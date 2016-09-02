@@ -1,13 +1,24 @@
 {
   "name": "hpe-oneview",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Hewlett Packard Enterprise",
-  "summary": "Puppet integration with HPE OneView",
+  "summary": "HPE Puppet providers and types for management of HPE OneView Appliances",
   "license": "Apache 2.0",
-  "source": "",
-  "project_page": null,
-  "issues_url": null,
-  "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  "source": "https://github.com/HewlettPackard/oneview-puppet",
+  "project_page": "https://github.com/HewlettPackard/oneview-puppet",
+  "issues_url": "https://github.com/HewlettPackard/oneview-puppet/issues",
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=4.1"
+    },
+    {
+      "name": "oneview-sdk",
+      "version_requirement": ">=2.0.0"
+    },
+    {
+      "name": "ruby",
+      "version_requirement": ">=2.2.3"
+    }
   ]
 }
