@@ -31,8 +31,10 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
   def exists?
     @data = data_parse
     empty_data_check
+    # Assignments and helpers
     @interconnects = @data.delete('interconnects')
     interconnect_type_uri if @data['interconnectMapTemplate']
+    uplink_sets_uri if @data['uplinkSets']
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -69,6 +71,18 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     @interconnects.each do |item|
       lig.add_interconnect(item['bay'].to_i, item['type'])
     end
+  end
+
+  # Grabs the
+  def uplink_sets_uri
+    list = []
+    @data['uplinkSets'].each do |item|
+      next if item.to_s[0..6].include?('/rest/')
+      set = OneviewSDK::UplinkSet.find_by(@client, name: item)
+      raise('The uplink set #{item} does not exist.') unless set.first
+      list.push(set.first['uri'])
+    end
+    @data['uplinkSets'] = list
   end
 
   def interconnect_type_uri

@@ -14,13 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-# The Interconnects can also be declared as follows:
+# The Interconnects and Uplink Sets can also be declared as follows:
 oneview_logical_interconnect_group{'Logical Interconnect Group Create':
   ensure => 'present',
   data   => {
     name          => 'My LIG',
     enclosureType => 'C7000',
     type          => 'logical-interconnect-groupV3',
+    # uplinkSets => ['Puppet Uplink Set'],
     interconnects =>
     [
       {
@@ -35,43 +36,43 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Create':
   }
 }
 
-# oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
-#   ensure  => 'present',
-#   require => Oneview_logical_interconnect_group['Logical Interconnect Group Create'],
-#   data    => {
-#     name     => 'My LIG',
-#     new_name => 'Edited LIG'
-#   }
-# }
-#
-# oneview_logical_interconnect_group{'Logical Interconnect Group Found':
-#   ensure  => 'found',
-#   require => Oneview_logical_interconnect_group['Logical Interconnect Group Edit'],
-#   # data   => {
-#   #   name => 'Edited LIG'
-#   # }
-# }
-#
-# oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Settings':
-#   ensure  => 'get_default_settings',
-#   require => Oneview_logical_interconnect_group['Logical Interconnect Group Found'],
-#   data    => {
-#     name => 'Edited LIG'
-#   }
-# }
-#
-# oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
-#   ensure  => 'get_settings',
-#   require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Default Settings'],
-#   data    => {
-#     name => 'Edited LIG'
-#   }
-# }
-#
-# oneview_logical_interconnect_group{'Logical Interconnect Group Destroy':
-#   ensure  => 'absent',
-#   require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Settings'],
-#   data    => {
-#     name => 'Edited LIG'
-#   }
-# }
+oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
+  ensure  => 'present',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Create'],
+  data    => {
+    name     => 'My LIG',
+    new_name => 'Edited LIG'
+  }
+}
+
+oneview_logical_interconnect_group{'Logical Interconnect Group Found':
+  ensure  => 'found',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Edit'],
+  # data   => {
+  #   name => 'Edited LIG'
+  # }
+}
+
+oneview_logical_interconnect_group{'Logical Interconnect Group Get Default Settings':
+  ensure  => 'get_default_settings',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Found'],
+  data    => {
+    name => 'Edited LIG'
+  }
+}
+
+oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
+  ensure  => 'get_settings',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Default Settings'],
+  data    => {
+    name => 'Edited LIG'
+  }
+}
+
+oneview_logical_interconnect_group{'Logical Interconnect Group Destroy':
+  ensure  => 'absent',
+  require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Settings'],
+  data    => {
+    name => 'Edited LIG'
+  }
+}
