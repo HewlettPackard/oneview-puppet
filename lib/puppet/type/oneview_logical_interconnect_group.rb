@@ -40,7 +40,7 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
     end
   end
   #:nocov:
-  
+
   newparam(:name, namevar: true) do
     desc 'Logical Interconnect Group process name'
   end
