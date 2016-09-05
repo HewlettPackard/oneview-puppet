@@ -48,7 +48,6 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     lig = @resourcetype.new(@client, @data)
     add_interconnects(lig) if @interconnects
     @data['new_name'] = new_name if new_name
-    pretty @data
     return true if resource_update(@data, @resourcetype)
     lig.create
   end
