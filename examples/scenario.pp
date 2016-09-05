@@ -77,77 +77,77 @@ oneview_server_profile{'Server Profile':
     name => 'Puppet Server Profile'
   }
 }
-
-oneview_enclosure{'Enclosure':
-  ensure  => 'present',
-  require => Oneview_enclosure_group['Enclosure Group'],
-  data    =>
-  {
-    name              => 'Puppet_Enclosure',
-    hostname          => '172.18.1.13',
-    username          => 'dcs',
-    password          => 'dcs',
-    enclosureGroupUri => 'Puppet Enclosure Group',
-    licensingIntent   => 'OneView'
-  }
-}
-
-oneview_rack{'Rack':
-  ensure  => 'present',
-  require => Oneview_enclosure['Enclosure'],
-  data    =>
-  {
-    name       => 'myrack',
-    rackMounts =>
-    [
-      {
-        mountUri => 'Puppet_Enclosure, enclosure',
-        topUSlot => 20,
-        uHeight  => 10
-      }
-    ]
-  }
-}
-
-oneview_storage_system{'Storage System':
-  ensure  => 'present',
-  require => Oneview_rack['Rack'],
-  data    =>
-  {
-    managedDomain => 'TestDomain',
-    credentials   =>
-    {
-      ip_hostname => '172.18.11.12',
-      username    => 'dcs',
-      password    => 'dcs',
-    }
-  }
-}
-
-oneview_storage_pool{'Storage Pool':
-  ensure  => 'present',
-  require => Oneview_storage_system['Storage System'],
-  data    =>
-  {
-    poolName         => 'CPG-SSD-AO',
-    storageSystemUri => 'ThreePAR7200-8392'
-  }
-}
-
-oneview_volume{'Volume':
-  ensure  => 'present',
-  require => Oneview_storage_pool['Storage Pool'],
-  data    =>
-  {
-    name                   => 'Puppet Volume',
-    description            => 'Test volume with common creation: Storage System + Storage Pool',
-    snapshotPoolUri        => 'CPG-SSD-AO',
-    provisioningParameters =>
-    {
-      provisionType     => 'Full',
-      shareable         => true,
-      requestedCapacity => 1024 * 1024 * 1024,
-      storagePoolUri    => 'CPG-SSD-AO',
-    }
-  }
-}
+#
+# oneview_enclosure{'Enclosure':
+#   ensure  => 'present',
+#   require => Oneview_enclosure_group['Enclosure Group'],
+#   data    =>
+#   {
+#     name              => 'Puppet_Enclosure',
+#     hostname          => '172.18.1.13',
+#     username          => 'dcs',
+#     password          => 'dcs',
+#     enclosureGroupUri => 'Puppet Enclosure Group',
+#     licensingIntent   => 'OneView'
+#   }
+# }
+#
+# oneview_rack{'Rack':
+#   ensure  => 'present',
+#   require => Oneview_enclosure['Enclosure'],
+#   data    =>
+#   {
+#     name       => 'myrack',
+#     rackMounts =>
+#     [
+#       {
+#         mountUri => 'Puppet_Enclosure, enclosure',
+#         topUSlot => 20,
+#         uHeight  => 10
+#       }
+#     ]
+#   }
+# }
+#
+# oneview_storage_system{'Storage System':
+#   ensure  => 'present',
+#   require => Oneview_rack['Rack'],
+#   data    =>
+#   {
+#     managedDomain => 'TestDomain',
+#     credentials   =>
+#     {
+#       ip_hostname => '172.18.11.12',
+#       username    => 'dcs',
+#       password    => 'dcs',
+#     }
+#   }
+# }
+#
+# oneview_storage_pool{'Storage Pool':
+#   ensure  => 'present',
+#   require => Oneview_storage_system['Storage System'],
+#   data    =>
+#   {
+#     poolName         => 'CPG-SSD-AO',
+#     storageSystemUri => 'ThreePAR7200-8392'
+#   }
+# }
+#
+# oneview_volume{'Volume':
+#   ensure  => 'present',
+#   require => Oneview_storage_pool['Storage Pool'],
+#   data    =>
+#   {
+#     name                   => 'Puppet Volume',
+#     description            => 'Test volume with common creation: Storage System + Storage Pool',
+#     snapshotPoolUri        => 'CPG-SSD-AO',
+#     provisioningParameters =>
+#     {
+#       provisionType     => 'Full',
+#       shareable         => true,
+#       requestedCapacity => 1024 * 1024 * 1024,
+#       storagePoolUri    => 'CPG-SSD-AO',
+#     }
+#   }
+# }

@@ -31,6 +31,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
   def exists?
     @data = data_parse
     empty_data_check
+    @interconnects = @data.delete('interconnects')
     interconnect_type_uri if @data['interconnectMapTemplate']
     !@resourcetype.find_by(@client, @data).empty?
   end
@@ -40,8 +41,12 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
   end
 
   def create
+    new_name = @data.delete('new_name')
+    lig = @resourcetype.new(@client, @data)
+    add_interconnects(lig) if @interconnects
+    @data['new_name'] = new_name if new_name
     return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
+    lig.create
   end
 
   def destroy
@@ -58,6 +63,12 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
     pretty get_single_resource_instance.get_default_settings
     true
+  end
+
+  def add_interconnects(lig)
+    @interconnects.each do |item|
+      lig.add_interconnect(item['bay'].to_i, item['type'])
+    end
   end
 
   def interconnect_type_uri
