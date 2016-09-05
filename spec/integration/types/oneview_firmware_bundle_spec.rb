@@ -53,7 +53,7 @@ describe type_class do
   it 'should accept special ensurables' do
     special_ensurables.each do |value|
       expect do
-        described_class.new(name: 'Teste',
+        described_class.new(name: 'Test',
                             ensure: value,
                             data: {})
       end.to_not raise_error

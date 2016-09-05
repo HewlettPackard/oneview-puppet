@@ -24,28 +24,28 @@ resourcetype = OneviewSDK::EthernetNetwork
 describe provider_class, unit: true do
   include_context 'shared context'
 
+  let(:resource) do
+    Puppet::Type.type(:oneview_ethernet_network).new(
+      name: 'Ethernet Network',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Puppet Network',
+            'vlanId' => 100,
+            'purpose' => 'General',
+            'smartLink' => 'false',
+            'privateNetwork' => 'true',
+            'connectionTemplateUri' => nil,
+            'type' => 'ethernet-networkV3'
+          }
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
   context 'given the create parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_ethernet_network).new(
-        name: 'Ethernet Network',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'Puppet Network',
-              'vlanId' => 100,
-              'purpose' => 'General',
-              'smartLink' => 'false',
-              'privateNetwork' => 'true',
-              'connectionTemplateUri' => nil,
-              'type' => 'ethernet-networkV3'
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
     end
@@ -89,6 +89,15 @@ describe provider_class, unit: true do
       expect(provider.get_associated_uplink_groups).to be
     end
 
+    it 'should raise a warning when there are no associated uplink groups to show' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_associated_uplink_groups).and_return('[]')
+      expect(provider.get_associated_uplink_groups).to be
+    end
+
     it 'should be able to get the associated profiles' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
@@ -96,6 +105,39 @@ describe provider_class, unit: true do
       provider.exists?
       allow_any_instance_of(resourcetype).to receive(:get_associated_uplink_groups).and_return('Test')
       expect(provider.get_associated_uplink_groups).to be
+    end
+
+    it 'should be able to get the associated profiles' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_associated_profiles).and_return('Test')
+      expect(provider.get_associated_profiles).to be
+    end
+
+    it 'should raise a warning when its not able to get the associated profiles' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_associated_profiles).and_return('[]')
+      expect(provider.get_associated_profiles).to be
+    end
+
+    it 'should be able to reset default bandwidth' do
+      resource['data']['uri'] = '/rest/fake'
+      resource['data']['connectionTemplateUri'] = '/rest/fake'
+      resource['data']['bandwidth'] = { 'maximumbandwidth' => '1000' }
+      unique_ids = { 'uri' => '/rest/fake', 'name' => 'Puppet Network' }
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, unique_ids).and_return([test])
+      allow(OneviewSDK::ConnectionTemplate).to receive(:get_default).with(anything).and_return(test)
+      allow(OneviewSDK::ConnectionTemplate).to receive(:find_by)
+        .with(anything, uri: resource['data']['connectionTemplateUri']).and_return([test])
+      provider.exists?
+      expect(provider.reset_default_bandwidth).to be
     end
   end
 end

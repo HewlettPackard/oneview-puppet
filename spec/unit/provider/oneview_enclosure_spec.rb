@@ -1,22 +1,6 @@
 ################################################################################
 # (C) Copyright 2016 Hewlett Packard Enterprise Development LP
 #
-# Licensed under the Apache License, Version 2.0 (the 'License');
-# You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an 'AS IS' BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-################################################################################
-
-################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -40,32 +24,32 @@ resourcetype = OneviewSDK::Enclosure
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_enclosure).new(
-        name: 'Enclosure',
-        ensure: 'present',
-        data:
+  let(:resource) do
+    Puppet::Type.type(:oneview_enclosure).new(
+      name: 'Enclosure',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Puppet_Test_Enclosure',
+            'hostname' => '172.18.1.13',
+            'username' => 'dcs',
+            'password' => 'dcs',
+            'enclosureGroupUri' => '/rest/',
+            'licensingIntent' => 'OneView',
+            'refreshState' => 'RefreshPending',
+            'utilization_parameters' =>
             {
-              'name' => 'Puppet_Test_Enclosure',
-              'hostname' => '172.18.1.13',
-              'username' => 'dcs',
-              'password' => 'dcs',
-              'enclosureGroupUri' => '/rest/',
-              'licensingIntent' => 'OneView',
-              'refreshState' => 'RefreshPending',
-              'utilization_parameters' =>
-              {
-                'view' => 'day'
-              }
+              'view' => 'day'
             }
-      )
-    end
+          }
+    )
+  end
 
-    let(:provider) { resource.provider }
+  let(:provider) { resource.provider }
 
-    let(:instance) { provider.class.instances.first }
+  let(:instance) { provider.class.instances.first }
 
+  context 'given the min parameters' do
     before(:each) do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
@@ -74,6 +58,11 @@ describe provider_class, unit: true do
 
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
+    end
+
+    it 'should be able to run through self.instances' do
+      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return(%w(test1 test2 test3))
+      expect(instance).to be
     end
 
     it 'should be able to find the resource' do
@@ -109,6 +98,14 @@ describe provider_class, unit: true do
       expect { provider.get_single_sign_on }.to raise_error(RuntimeError)
     end
 
+    it 'should be able to work specifying a name instead of an uri' do
+      resource['data']['enclosureGroupUri'] = 'Test'
+      test = resourcetype.new(@client, resource['data'])
+      allow(OneviewSDK::EnclosureGroup).to receive(:find_by).with(anything, name: resource['data']['enclosureGroupUri']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to be
+    end
+
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
@@ -117,6 +114,53 @@ describe provider_class, unit: true do
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
+    end
+
+    context 'given the creation parameters' do
+      let(:resource) do
+        Puppet::Type.type(:oneview_enclosure).new(
+          name: 'Enclosure',
+          ensure: 'present',
+          data:
+              {
+                'name' => 'Puppet_Test_Enclosure',
+                'hostname' => '172.18.1.13',
+                'username' => 'dcs',
+                'password' => 'dcs',
+                'enclosureGroupUri' => '/rest/',
+                'licensingIntent' => 'OneView'
+              }
+        )
+      end
+
+      it 'creates the resource' do
+        body = { 'enclosureGroupUri' => '/rest/', 'licensingIntent' => 'OneView',
+                 'hostname' => '172.18.1.13', 'username' => 'dcs', 'password' => 'dcs' }
+        test = resourcetype.new(@client, resource['data'])
+        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+        allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+        allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
+        expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
+          .with('/rest/enclosures', { 'body' => body }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+        provider.exists?
+        expect(provider.create).to be
+      end
+
+      it 'patches the resource' do
+        unique_id = { 'uri' => '/rest/fake', 'name' => 'Puppet_Test_Enclosure' }
+        resource['data']['uri'] = '/rest/fake'
+        resource['data']['op'] = 'fake_op'
+        resource['data']['path'] = 'fake_path'
+        resource['data']['value'] = 'fake_value'
+        patch_data = { op: 'fake_op', path: 'fake_path', value: 'fake_value' }
+        test = resourcetype.new(@client, resource['data'])
+        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+        allow(resourcetype).to receive(:find_by).with(anything, unique_id).and_return([test])
+        expect_any_instance_of(OneviewSDK::Client).to receive(:rest_patch)
+          .with(resource['data']['uri'], { 'body' => [patch_data] }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+        provider.exists?
+        expect(provider.create).to be
+      end
     end
   end
 end

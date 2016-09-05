@@ -17,6 +17,7 @@
 Puppet::Type.newtype(:oneview_server_profile_template) do
   desc "Oneview's Server Profile Template"
 
+  # :nocov:
   ensurable do
     defaultvalues
 
@@ -30,6 +31,7 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
       provider.set_new_profile
     end
   end
+  # :nocov:
 
   newparam(:name, namevar: true) do
     desc 'Server Profile Template name'
