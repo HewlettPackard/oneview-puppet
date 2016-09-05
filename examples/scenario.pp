@@ -60,9 +60,9 @@ oneview_server_profile_template{'Server Profile Template':
 }
 
 oneview_server_profile_template{'New Server Profile':
-  ensure => 'set_new_profile',
+  ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Server Profile Template'],
-  data =>
+  data    =>
   {
     name              => 'Puppet Server Profile Template',
     serverProfileName => 'Puppet Server Profile'
@@ -72,7 +72,7 @@ oneview_server_profile_template{'New Server Profile':
 oneview_server_profile{'Server Profile':
   ensure  => 'present',
   require => Oneview_server_profile_template['New Server Profile'],
-  data =>
+  data    =>
   {
     name => 'Puppet Server Profile'
   }
@@ -135,9 +135,9 @@ oneview_storage_pool{'Storage Pool':
 }
 
 oneview_volume{'Volume':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_storage_pool['Storage Pool'],
-  data   =>
+  data    =>
   {
     name                   => 'Puppet Volume',
     description            => 'Test volume with common creation: Storage System + Storage Pool',
