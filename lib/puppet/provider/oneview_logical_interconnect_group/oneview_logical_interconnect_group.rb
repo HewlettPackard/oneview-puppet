@@ -34,7 +34,8 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     # Assignments and helpers
     @interconnects = @data.delete('interconnects')
     interconnect_type_uri if @data['interconnectMapTemplate']
-    uplink_sets_uri if @data['uplinkSets']
+    uri_getters('internalNetworkUris')
+    uri_getters('uplinkSets')
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -47,6 +48,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     lig = @resourcetype.new(@client, @data)
     add_interconnects(lig) if @interconnects
     @data['new_name'] = new_name if new_name
+    pretty @data
     return true if resource_update(@data, @resourcetype)
     lig.create
   end
@@ -73,16 +75,22 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     end
   end
 
-  # Grabs the
-  def uplink_sets_uri
-    list = []
-    @data['uplinkSets'].each do |item|
-      next if item.to_s[0..6].include?('/rest/')
-      set = OneviewSDK::UplinkSet.find_by(@client, name: item)
-      raise('The uplink set #{item} does not exist.') unless set.first
-      list.push(set.first['uri'])
+  # Grabs the uplink sets uris
+  def uri_getters(field)
+    if @data[field]
+      list = []
+      @data[field].each do |item|
+        next if item.to_s[0..6].include?('/rest/')
+        set = if field.eql?('uplinkSets')
+                OneviewSDK::UplinkSet.find_by(@client, name: item)
+              else
+                OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+              end
+        raise("The resource #{item} does not exist.") unless set.first
+        list.push(set.first['uri'])
+      end
+      @data[field] = list
     end
-    @data['uplinkSets'] = list
   end
 
   def interconnect_type_uri

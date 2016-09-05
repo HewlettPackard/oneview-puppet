@@ -54,75 +54,75 @@
 #   }
 # }
 
-oneview_enclosure_group{'Enclosure Group':
-  ensure => 'present',
-  # require => Oneview_logical_interconnect_group['Logical Interconnect Group'],
-  data   => {
-    name                        => 'Enclosure Group',
-    stackingMode                => 'Enclosure',
-    interconnectBayMappingCount => 1,
-    type                        => 'EnclosureGroupV200',
-    interconnectBayMappings     =>
-    [
-      {
-        interconnectBay             => 1,
-        logicalInterconnectGroupUri => 'Puppet LIG'
-      },
-      {
-        interconnectBay             => 2,
-        logicalInterconnectGroupUri => nil
-      },
-      {
-        interconnectBay             => 3,
-        logicalInterconnectGroupUri => nil
-      },
-      {
-        interconnectBay             => 4,
-        logicalInterconnectGroupUri => nil
-      },
-      {
-        interconnectBay             => 5,
-        logicalInterconnectGroupUri => nil
-      },
-      {
-        interconnectBay             => 6,
-        logicalInterconnectGroupUri => nil
-      },
-      {
-        interconnectBay             => 7,
-        logicalInterconnectGroupUri => nil
-      },
-      {
-        interconnectBay             => 8,
-        logicalInterconnectGroupUri => nil
-      },
-    ]
-  }
-}
+# oneview_enclosure_group{'Enclosure Group':
+#   ensure => 'present',
+#   # require => Oneview_logical_interconnect_group['Logical Interconnect Group'],
+#   data   => {
+#     name                        => 'Puppet Enclosure Group',
+#     stackingMode                => 'Enclosure',
+#     interconnectBayMappingCount => 1,
+#     type                        => 'EnclosureGroupV200',
+#     interconnectBayMappings     =>
+#     [
+#       {
+#         interconnectBay             => 1,
+#         logicalInterconnectGroupUri => 'Puppet LIG'
+#       },
+#       {
+#         interconnectBay             => 2,
+#         logicalInterconnectGroupUri => nil
+#       },
+#       {
+#         interconnectBay             => 3,
+#         logicalInterconnectGroupUri => nil
+#       },
+#       {
+#         interconnectBay             => 4,
+#         logicalInterconnectGroupUri => nil
+#       },
+#       {
+#         interconnectBay             => 5,
+#         logicalInterconnectGroupUri => nil
+#       },
+#       {
+#         interconnectBay             => 6,
+#         logicalInterconnectGroupUri => nil
+#       },
+#       {
+#         interconnectBay             => 7,
+#         logicalInterconnectGroupUri => nil
+#       },
+#       {
+#         interconnectBay             => 8,
+#         logicalInterconnectGroupUri => nil
+#       },
+#     ]
+#   }
+# }
 
-oneview_ethernet_network{'Ethernet Network':
-  ensure  => 'present',
-  require => Oneview_enclosure_group['Enclosure Group'],
-  data    =>
-  {
-    name           => 'Puppet Ethernet Network',
-    vlanId         => '1045',
-    purpose        => 'General',
-    smartLink      => true,
-    privateNetwork => false,
-    type           => 'ethernet-networkV3'
-  }
-}
-
-oneview_network_set{'Network Set':
-  ensure  => 'present',
-  require => Oneview_ethernet_network['Ethernet Network'],
-  data    =>
-  {
-    name        => 'Test Network Set',
-    networkUris => ['Puppet Ethernet Network']
-  }
-}
+# oneview_ethernet_network{'Ethernet Network':
+#   ensure  => 'present',
+#   require => Oneview_enclosure_group['Enclosure Group'],
+#   data    =>
+#   {
+#     name           => 'Puppet Ethernet Network',
+#     vlanId         => '1045',
+#     purpose        => 'General',
+#     smartLink      => true,
+#     privateNetwork => false,
+#     type           => 'ethernet-networkV3'
+#   }
+# }
+#
+# oneview_network_set{'Network Set':
+#   ensure  => 'present',
+#   require => Oneview_ethernet_network['Ethernet Network'],
+#   data    =>
+#   {
+#     name        => 'Test Network Set',
+#     networkUris => ['Puppet Ethernet Network']
+#   }
+# }
 
 # oneview_server_profile_template{'Server Profile Template':
 #   ensure  => 'present',
@@ -145,14 +145,22 @@ oneview_network_set{'Network Set':
 #   }
 # }
 #
-# oneview_server_profile{'Server Profile':
-#   ensure  => 'present',
-#   require => Oneview_server_profile_template['New Server Profile'],
-#   data    =>
-#   {
-#     name => 'Puppet Server Profile'
-#   }
-# }
+oneview_server_profile{'Server Profile':
+  ensure  => 'present',
+  # require => Oneview_server_profile_template['New Server Profile'],
+  data    =>
+  {
+    name => 'Puppet Server Profile',
+    connections =>
+    [
+      {
+        name         => 'My Connection',
+        networkUri   => 'Test Network Set',
+        functionType => 'Set',
+      }
+    ]
+  }
+}
 #
 # oneview_enclosure{'Enclosure':
 #   ensure  => 'present',
