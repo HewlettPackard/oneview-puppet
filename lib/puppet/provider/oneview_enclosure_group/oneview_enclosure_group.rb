@@ -68,4 +68,17 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:oneview_enclosure_group) do
     end
     data
   end
+
+  def resource_update(data, resourcetype)
+    current_resource = resourcetype.find_by(@client, unique_id).first
+    return false unless current_resource
+    current_attributes = current_resource.data
+    new_name_validation(data, resourcetype)
+    raw_merged_data = current_attributes.merge(data)
+    updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
+    pretty updated_data
+    current_resource.update(enclosure_group_parse(updated_data)) unless updated_data.empty?
+    @property_hash[:data] = current_resource.data
+    true
+  end
 end

@@ -18,65 +18,141 @@
 # - Server Hardware
 # - Server Hardware Type
 
-oneview_server_hardware{'Server Hardware':
-  ensure => 'present',
-  data   => {
-    hostname        => '172.18.6.5',
-    username        => 'dcs',
-    password        => 'dcs',
-    licensingIntent => 'OneView'
-  },
-}
-
-oneview_server_hardware_type{'Server Hardware Type':
-    ensure  => 'present',
-    require => Oneview_server_hardware['Server Hardware'],
-    data    =>
-    {
-      name => 'BL460c Gen8 1'
-    }
-}
+# oneview_server_hardware{'Server Hardware':
+#   ensure => 'present',
+#   data   => {
+#     hostname        => '172.18.6.5',
+#     username        => 'dcs',
+#     password        => 'dcs',
+#     licensingIntent => 'OneView'
+#   },
+# }
+#
+# oneview_server_hardware_type{'Server Hardware Type':
+#     ensure  => 'present',
+#     require => Oneview_server_hardware['Server Hardware'],
+#     data    =>
+#     {
+#       name => 'BL460c Gen8 1'
+#     }
+# }
+#
+# oneview_logical_interconnect_group{'Logical Interconnect Group':
+#   ensure  => 'present',
+#   require => Oneview_server_hardware_type['Server Hardware Type'],
+#   data    => {
+#     name          => 'Puppet LIG',
+#     enclosureType => 'C7000',
+#     type          => 'logical-interconnect-groupV3',
+#     interconnects =>
+#     [
+#       {
+#         bay  => 1,
+#         type => 'HP VC FlexFabric 10Gb/24-Port Module'
+#       }
+#     ]
+#   }
+# }
 
 oneview_enclosure_group{'Enclosure Group':
-  ensure  => 'present',
-  require => Oneview_server_hardware_type['Server Hardware Type'],
-  data    => {
-    name                        => 'Puppet Enclosure Group',
+  ensure => 'present',
+  # require => Oneview_logical_interconnect_group['Logical Interconnect Group'],
+  data   => {
+    name                        => 'Enclosure Group',
     stackingMode                => 'Enclosure',
-    interconnectBayMappingCount => '8',
-    type                        => 'EnclosureGroupV200'
+    interconnectBayMappingCount => 1,
+    type                        => 'EnclosureGroupV200',
+    interconnectBayMappings     =>
+    [
+      {
+        interconnectBay             => 1,
+        logicalInterconnectGroupUri => 'Puppet LIG'
+      },
+      {
+        interconnectBay             => 2,
+        logicalInterconnectGroupUri => nil
+      },
+      {
+        interconnectBay             => 3,
+        logicalInterconnectGroupUri => nil
+      },
+      {
+        interconnectBay             => 4,
+        logicalInterconnectGroupUri => nil
+      },
+      {
+        interconnectBay             => 5,
+        logicalInterconnectGroupUri => nil
+      },
+      {
+        interconnectBay             => 6,
+        logicalInterconnectGroupUri => nil
+      },
+      {
+        interconnectBay             => 7,
+        logicalInterconnectGroupUri => nil
+      },
+      {
+        interconnectBay             => 8,
+        logicalInterconnectGroupUri => nil
+      },
+    ]
   }
 }
 
-oneview_server_profile_template{'Server Profile Template':
+oneview_ethernet_network{'Ethernet Network':
   ensure  => 'present',
   require => Oneview_enclosure_group['Enclosure Group'],
   data    =>
-    {
-      name                  => 'Puppet Server Profile Template',
-      enclosureGroupUri     => 'Puppet Enclosure Group',
-      serverHardwareTypeUri => 'BL460c Gen8 1'
-    }
-}
-
-oneview_server_profile_template{'New Server Profile':
-  ensure  => 'set_new_profile',
-  require => Oneview_server_profile_template['Server Profile Template'],
-  data    =>
   {
-    name              => 'Puppet Server Profile Template',
-    serverProfileName => 'Puppet Server Profile'
+    name           => 'Puppet Ethernet Network',
+    vlanId         => '1045',
+    purpose        => 'General',
+    smartLink      => true,
+    privateNetwork => false,
+    type           => 'ethernet-networkV3'
   }
 }
 
-oneview_server_profile{'Server Profile':
+oneview_network_set{'Network Set':
   ensure  => 'present',
-  require => Oneview_server_profile_template['New Server Profile'],
+  require => Oneview_ethernet_network['Ethernet Network'],
   data    =>
   {
-    name => 'Puppet Server Profile'
+    name        => 'Test Network Set',
+    networkUris => ['Puppet Ethernet Network']
   }
 }
+
+# oneview_server_profile_template{'Server Profile Template':
+#   ensure  => 'present',
+#   require => Oneview_network_set['Network Set'],
+#   data    =>
+#     {
+#       name                  => 'Puppet Server Profile Template',
+#       enclosureGroupUri     => 'Puppet Enclosure Group',
+#       serverHardwareTypeUri => 'BL460c Gen8 1'
+#     }
+# }
+#
+# oneview_server_profile_template{'New Server Profile':
+#   ensure  => 'set_new_profile',
+#   require => Oneview_server_profile_template['Server Profile Template'],
+#   data    =>
+#   {
+#     name              => 'Puppet Server Profile Template',
+#     serverProfileName => 'Puppet Server Profile'
+#   }
+# }
+#
+# oneview_server_profile{'Server Profile':
+#   ensure  => 'present',
+#   require => Oneview_server_profile_template['New Server Profile'],
+#   data    =>
+#   {
+#     name => 'Puppet Server Profile'
+#   }
+# }
 #
 # oneview_enclosure{'Enclosure':
 #   ensure  => 'present',
