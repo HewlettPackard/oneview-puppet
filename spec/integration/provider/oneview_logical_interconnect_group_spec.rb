@@ -27,7 +27,14 @@ describe provider_class do
           {
             'name' => 'Test LIG',
             'enclosureType' => 'C7000',
-            'type' => 'logical-interconnect-groupV3'
+            'type' => 'logical-interconnect-groupV3',
+            'interconnects' =>
+            [
+              {
+                'bay' => 1,
+                'type' => 'HP VC FlexFabric 10Gb/24-Port Module'
+              }
+            ]
           }
     )
   end
