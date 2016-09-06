@@ -127,13 +127,5 @@ describe provider_class, unit: true do
       allow_any_instance_of(resourcetype).to receive(:set_script).with('Sample').and_return('Sample')
       expect(provider.set_script).to be
     end
-
-    it 'should be able to update the resource' do
-      test = resourcetype.new(@client, resource['data'])
-      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
-      provider.exists?
-      expect(provider.create).to be
-    end
   end
 end
