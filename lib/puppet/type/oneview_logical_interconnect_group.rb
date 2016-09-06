@@ -17,7 +17,7 @@
 Puppet::Type.newtype(:oneview_logical_interconnect_group) do
   desc "Oneview's Logical Interconnect Group"
 
-  # :nocov:
+  #:nocov:
   ensurable do
     defaultvalues
 
@@ -39,7 +39,7 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
       provider.get_settings
     end
   end
-  # :nocov:
+  #:nocov:
 
   newparam(:name, namevar: true) do
     desc 'Logical Interconnect Group process name'

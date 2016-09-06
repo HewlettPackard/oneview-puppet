@@ -14,12 +14,25 @@
 # limitations under the License.
 ################################################################################
 
+# The Interconnects and Uplink Sets can also be declared as follows:
 oneview_logical_interconnect_group{'Logical Interconnect Group Create':
   ensure => 'present',
   data   => {
     name          => 'My LIG',
     enclosureType => 'C7000',
-    type          => 'logical-interconnect-groupV3'
+    type          => 'logical-interconnect-groupV3',
+    # uplinkSets => ['Puppet Uplink Set'],
+    interconnects =>
+    [
+      {
+        bay  => 1,
+        type => 'HP VC FlexFabric 10Gb/24-Port Module'
+      },
+      # {
+      #   bay  => 2,
+      #   type => 'HP VC FlexFabric 10Gb/24-Port Module'
+      # },
+    ]
   }
 }
 

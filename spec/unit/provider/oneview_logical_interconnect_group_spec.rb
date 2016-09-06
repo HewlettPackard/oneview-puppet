@@ -55,6 +55,9 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
       test = resourcetype.new(@client, resource['data'])
+      resource['data']['interconnects'] = [{ 'bay' => 1, 'type' => 'HP VC FlexFabric 10Gb/24-Port Module' }]
+      resource['data']['uplinkSets'] = ['/rest/']
+      allow_any_instance_of(resourcetype).to receive(:add_interconnect).with(1, 'HP VC FlexFabric 10Gb/24-Port Module').and_return('')
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
         .with('/rest/logical-interconnect-groups', { 'body' => test.data }, test.api_version).and_return(FakeResponse
         .new('uri' => '/rest/fake'))

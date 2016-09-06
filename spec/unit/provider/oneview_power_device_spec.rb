@@ -66,6 +66,22 @@ describe provider_class, unit: true do
       allow(resourcetype).to receive(:discover).with(anything, resource['data']).and_return('Test')
       expect(provider.discover).to be
     end
+
+    it 'should get the UID state' do
+      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:get_uid_state).and_return('Test')
+      expect(provider.get_uid_state).to be
+    end
+
+    it 'should get the utilization without parameters' do
+      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:utilization).with({}).and_return('Test')
+      expect(provider.get_utilization).to be
+    end
   end
 
   context 'given the set_refresh_state parameters' do

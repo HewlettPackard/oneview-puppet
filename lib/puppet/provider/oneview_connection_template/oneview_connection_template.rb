@@ -58,7 +58,7 @@ Puppet::Type.type(:oneview_connection_template).provide(:oneview_connection_temp
       puts "\nName: '#{default['name']}'"
       puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"
       puts "(- typicalBandwidth: #{default['bandwidth']['typicalBandwidth']})\n\n"
-      true
     end
+    true
   end
 end

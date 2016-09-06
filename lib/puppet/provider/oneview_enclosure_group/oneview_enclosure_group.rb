@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_enclosure_group).provide(:oneview_enclosure_group) do
   end
 
   def exists?
-    @data = data_parse
+    @data = enclosure_group_parse(data_parse)
     empty_data_check
     !@resourcetype.find_by(@client, @data).empty?
   end

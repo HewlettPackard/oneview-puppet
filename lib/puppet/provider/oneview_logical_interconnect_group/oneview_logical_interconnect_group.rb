@@ -31,7 +31,11 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
   def exists?
     @data = data_parse
     empty_data_check
+    # Assignments and helpers
+    @interconnects = @data.delete('interconnects')
     interconnect_type_uri if @data['interconnectMapTemplate']
+    uri_getters('internalNetworkUris')
+    uri_getters('uplinkSets')
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -40,8 +44,12 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
   end
 
   def create
+    new_name = @data.delete('new_name')
+    lig = @resourcetype.new(@client, @data)
+    add_interconnects(lig) if @interconnects
+    @data['new_name'] = new_name if new_name
     return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
+    lig.create
   end
 
   def destroy
@@ -60,16 +68,27 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     true
   end
 
-  def interconnect_type_uri
-    @data['interconnectMapTemplate'].each do |key, _|
-      @data['interconnectMapTemplate'][key].each do |item|
-        item.each do |uri_key, name|
-          next unless uri_key.eql?('permittedInterconnectTypeUri') || uri_key.nil? || uri_key.to_s[0..6].include?('/rest/')
-          interconnect_type = OneviewSDK::Interconnect.get_type(@client, name)
-          raise("The interconnect type #{sub_value} does not exist.") unless interconnect_type
-          item[uri_key] = interconnect_type['uri']
-        end
+  def add_interconnects(lig)
+    @interconnects.each do |item|
+      lig.add_interconnect(item['bay'].to_i, item['type'])
+    end
+  end
+
+  # Grabs the uplink sets uris
+  def uri_getters(field)
+    if @data[field]
+      list = []
+      @data[field].each do |item|
+        next if item.to_s[0..6].include?('/rest/')
+        set = if field.eql?('uplinkSets')
+                OneviewSDK::UplinkSet.find_by(@client, name: item)
+              else
+                OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+              end
+        raise("The resource #{item} does not exist.") unless set.first
+        list.push(set.first['uri'])
       end
+      @data[field] = list
     end
   end
 end

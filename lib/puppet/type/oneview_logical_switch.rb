@@ -17,7 +17,7 @@
 Puppet::Type.newtype(:oneview_logical_switch) do
   desc "Oneview's Logical Switch"
 
-  # :nocov:
+  #:nocov:
   ensurable do
     defaultvalues
 
@@ -30,7 +30,7 @@ Puppet::Type.newtype(:oneview_logical_switch) do
       provider.refresh
     end
   end
-  # :nocov:
+  #:nocov:
 
   newparam(:name, namevar: true) do
     desc 'Logical Switch name'
