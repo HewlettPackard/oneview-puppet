@@ -59,9 +59,11 @@ describe provider_class, unit: true do
 
     it 'should be able to find the connection template' do
       test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      expect(provider.found).to be
+      test['uri'] = '/rest/'
+      allow(resourcetype).to receive(:find_by).and_return([])
+      provider.exists?
+      allow(resourcetype).to receive(:get_default).with(anything).and_return(test)
+      expect(provider.get_default_connection_template).to be
     end
 
     it 'should not be able to create the resource' do

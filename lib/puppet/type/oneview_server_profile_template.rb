@@ -17,7 +17,7 @@
 Puppet::Type.newtype(:oneview_server_profile_template) do
   desc "Oneview's Server Profile Template"
 
-  # :nocov:
+  #:nocov:
   ensurable do
     defaultvalues
 

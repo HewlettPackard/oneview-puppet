@@ -17,7 +17,7 @@
 Puppet::Type.newtype(:oneview_server_profile) do
   desc "Oneview's Server Profile"
 
-  # :nocov:
+  #:nocov:
   ensurable do
     defaultvalues
 
@@ -67,7 +67,7 @@ Puppet::Type.newtype(:oneview_server_profile) do
       provider.get_transformation
     end
   end
-  # :nocov:
+  #:nocov:
 
   newparam(:name, namevar: true) do
     desc 'Server Profile name'

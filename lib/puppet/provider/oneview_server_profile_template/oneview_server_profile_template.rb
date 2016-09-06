@@ -56,7 +56,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
       sp_name = @data.delete('serverProfileName')
       get_single_resource_instance.new_profile(sp_name).create unless server_profile.find_by(@client, name: sp_name).first
     else
-      default = 'Server_Profile_created_from_New' + @data['name']
+      default = 'Server_Profile_created_from_' + @data['name']
       get_single_resource_instance.new_profile.create unless server_profile.find_by(@client, name: default).first
     end
   end
