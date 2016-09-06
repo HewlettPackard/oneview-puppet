@@ -33,7 +33,6 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     empty_data_check
     # Assignments and helpers
     @interconnects = @data.delete('interconnects')
-    interconnect_type_uri if @data['interconnectMapTemplate']
     uri_getters('internalNetworkUris')
     uri_getters('uplinkSets')
     !@resourcetype.find_by(@client, @data).empty?
