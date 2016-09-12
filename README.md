@@ -26,7 +26,7 @@ The Puppet Module for HPE OneView allows for management of HPE OneView Appliance
 
 It adds several resource types to puppet, and uses ensurable methods such as `present`, `absent` and other custom ensurable methods to manage the appliance to allow the user to easily create, update, query and delete resources.
 
-For more information on this Puppet module resource types and their specifications, see the [Usage](#usage) and examples in this module.
+For more information on the Puppet module for HPE OneView resource types and their specifications, see the [Usage](#usage) and [examples](examples).
 
 ## Setup
 
@@ -84,7 +84,7 @@ Once the authentication is prepared and the manifests containing the resources a
 
 #### General
 
-Most resources of this module accept the following ensurable methods:
+Most resources of the Puppet module for HPE OneView accept the following ensurable methods:
 * `present` - Creates/adds/updates resources on which those operations are permitted.
 * `absent` - Deletes/removes resources.
 * `found` - Searches for resources of a specific type on the appliance (with or without specific filters), and prints the information to the standard output.
@@ -157,7 +157,7 @@ oneview_volume{'volume_1':
 
 General examples of the usage for each resource and ensurable can be found in the [examples](examples) directory.
 
-For more details for each resource type that this module adds and their unique ensurable methods, refer to [Resources](RESOURCES.md).
+For more details for each resource type that the Puppet module for HPE OneView adds and their unique ensurable methods, refer to [Resources](RESOURCES.md).
 
 ## Reference
 
