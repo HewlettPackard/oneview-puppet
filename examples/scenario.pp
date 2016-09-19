@@ -70,9 +70,9 @@ oneview_logical_interconnect_group{'Logical Interconnect Group':
 }
 
 oneview_enclosure_group{'Enclosure Group':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_logical_interconnect_group['Logical Interconnect Group'],
-  data   => {
+  data    => {
     name                        => 'Puppet Enclosure Group',
     stackingMode                => 'Enclosure',
     interconnectBayMappingCount => 1,
@@ -151,7 +151,7 @@ oneview_server_profile{'Server Profile':
   require => Oneview_server_profile_template['New Server Profile'],
   data    =>
   {
-    name => 'Puppet Server Profile',
+    name        => 'Puppet Server Profile',
     connections =>
     [
       {
