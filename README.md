@@ -37,7 +37,7 @@ For more information on the Puppet module for HPE OneView resource types and the
 
 ### Beginning with the Puppet Module for HPE OneView
 
-To install this module from the Puppet Forge, with enough permissions, use the command:
+To install this module from the Puppet Forge, with enough permissions to install puppet modules, use the command:
 ```
 puppet module install hpe-oneview
 ```
@@ -47,7 +47,7 @@ Alternatively, you can clone the source code from https://github.com/HewlettPack
 git clone https://github.com/HewlettPackard/oneview-puppet <your_module_path>/oneview
 ```
 
-:exclamation: It's recommended that the cloned directory be named `oneview`. It should also be noted that if the directory name contains any dashes it will not be found by puppet.
+:exclamation: HPE recommends that the cloned directory be named `oneview`. It should also be noted that if the directory name contains any dashes it will not be found by puppet.
 
 ## Usage
 
@@ -61,7 +61,7 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 * `ONEVIEW_PASSWORD` - The HPE OneView appliance password.
 * `ONEVIEW_API_VERSION` - This defaults to the 200 API version (Minimum supported by oneview-sdk-ruby).
 * `ONEVIEW_LOG_LEVEL` - The log level of the HPE OneView appliance. This defaults to **info**
-* `ONEVIEW_SSL_ENABLED` - HPE Recommends setting this value to **true**
+* `ONEVIEW_SSL_ENABLED` - HPE recommends setting this value to **true**
 
 
 You can assign attributes for your appliances using three methods:

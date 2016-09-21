@@ -28,6 +28,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
     @data = {}
+    @vas = []
   end
 
   def self.instances
@@ -59,7 +60,8 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
   end
 
   def found
-    find_resources
+    @data.empty? ? find_for_empty : find_for_server_profile
+    true
   end
 
   def get_extra_unmanaged_volumes
@@ -96,7 +98,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
     volume_path = storage_volume_attachment.get_path(id)
     raise "No Storage Volume Attachment Paths found with id #{id} on #{storage_volume_attachment['name']}" unless volume_path
     Puppet.notice "\n\nPath from attachment with id #{id}: \n"
-    pretty volume_path
+    Puppet.notice JSON.pretty_generate(volume_path).to_s
   end
 
   def get_all_paths(storage_volume_attachment)
@@ -106,5 +108,40 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
     volume_paths.each do |path|
       Puppet.notice("- #{path['initiatorName']}")
     end
+  end
+
+  def find_for_empty
+    resource_name = @resourcetype.to_s.split('::')
+    vas = @resourcetype.find_by(@client, {})
+    raise "No #{resource_name[1]}s found on the appliance" if vas.empty?
+    vas.each do |va|
+      Puppet.notice "\n\n Found matching #{resource_name[1]} with the following info: \n"
+      Puppet.notice JSON.pretty_generate(va.data).to_s
+    end
+  end
+
+  def find_for_server_profile
+    raise "A 'name' tag must be specified within data, containing the server profile name and/or server profile name/volume name"\
+      'to find a specific storage volume attachment' unless @data['name']
+    vas, volume = helper_retrieve_vas
+    vas.each do |va|
+      @vas.push(va) if va['volumeUri'] == volume.first['uri']
+    end
+    raise 'No Volume Attachments matching the specified Server Profile name and Volume name were found.' if @vas.empty?
+    Puppet.notice "The following Volume Attachment resources match the Server Profile name and Volume name informed: \n"
+    Puppet.notice JSON.pretty_generate(@vas).to_s
+  end
+
+  def helper_retrieve_vas
+    server_name, volume_name = @data['name'].split(',').map(&:strip)
+    raise 'A server profile name has not been provided' unless server_name
+    raise 'A volume name has not been provided' unless volume_name
+    server_profile = OneviewSDK::ServerProfile.find_by(@client, name: server_name)
+    raise "A server profile with the name #{server_name} could not be found on the appliance" if server_profile.empty?
+    vas = server_profile.first.data['sanStorage']['volumeAttachments']
+    raise 'No Volume Attachments found on the specified Server Profile' if vas.empty?
+    volume = OneviewSDK::Volume.find_by(@client, name: volume_name)
+    raise "A volume with the name #{volume_name} could not be found on the appliance" if volume.empty?
+    [vas, volume]
   end
 end

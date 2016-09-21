@@ -23,15 +23,16 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
 storage_volume_template = login[:storage_volume_template] || 'Test'
 server_profile_name = login[:server_profile_name] || 'OneViewSDK Test ServerProfile'
+volume_name = login[:volume_name] || 'Volume Test'
 
 describe provider_class do
   let(:resource) do
     Puppet::Type.type(:oneview_volume_attachment).new(
-      name: 'Volume Template',
+      name: 'Volume Attachment',
       ensure: 'present',
       data:
           {
-            'name' => storage_volume_template
+            'name' => "#{storage_volume_template}, #{volume_name}"
           }
     )
   end

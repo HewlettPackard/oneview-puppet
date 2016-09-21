@@ -16,13 +16,15 @@
 
 # NOTE: The 'present' and 'absent' ensurables are disabled for this resource
   # as it is created/updated/deleted through other resources/dependencies.
+# NOTE2: The 'found' ensurable for this resource accepts either no data declared to find all
+  # volume attachments, or a 'Server Profile name, Volume name' combination to get information on the specified
+  # storage volume attachment. This second method is the recommended way to find out the 'id' for a storage attachment
 
 oneview_volume_attachment{'volume_attachment_3':
-    ensure  => 'found',
-    require => Oneview_volume_attachment['volume_attachment_2'],
-    # data   => {
-    #   name                   => 'ONEVIEW_PUPPET_TEST VA1',
-    # }
+    ensure => 'found',
+    data   => {
+      name                   => 'Server Profile Attachment Demo, volume-attachment-demo',
+    }
 }
 
 # This resource does not require a data hash as it will return all extra unmanaged volumes.
