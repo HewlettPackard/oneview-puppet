@@ -61,6 +61,35 @@ oneview_logical_switch{'Logical Switch Destroy':
   }
 }
 
+# Name and Credentials are the only Logical Switch parameters that can be updated
+# To update its name, just do it normally as a ´´present´´ ensurable
+# To update the credentials, declare the parameters as follows:
+# oneview_logical_switch{'Logical Switch Create':
+#   ensure => 'update_credentials',
+#   # SSH and SNMP credentials information per switch
+#   data   =>
+#   {
+#     name                  => 'Test Logical Switch',
+#     switches              =>
+#     [
+#       {
+#         ip               => '172.18.20.1',
+#         ssh_username     => 'dcs',
+#         ssh_password     => 'dcs',
+#         snmp_port        => '161',
+#         community_string => 'public'
+#       },
+#       # {
+#       #   ip               => '172.18.20.2',
+#       #   ssh_username     => 'dcs',
+#       #   ssh_password     => 'dcs',
+#       #   snmp_port        => '161',
+#       #   community_string => 'public'
+#       # }
+#     ]
+#   }
+# }
+
 # This operation is not supported by all switch types
 # oneview_logical_switch{'Logical Switch Refresh':
 #   ensure           => 'refresh',

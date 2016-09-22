@@ -95,4 +95,44 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
   end
+
+  context 'given the credentials' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_switch).new(
+        name: 'LS',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'LS',
+              'switches' =>
+              [
+                {
+                  'ip' => '172.18.20.1',
+                  'ssh_username' => 'dcs',
+                  'ssh_password' => 'dcs',
+                  'snmp_port' => '161',
+                  'community_string' => 'public',
+                  'switchUri' => '/rest/'
+                }
+              ]
+            }
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should update the logical switch credentials' do
+      request_body = File.read('spec/support/fixtures/unit/provider/logical_switch_update.json')
+      resource['data']['uri'] = '/rest/'
+      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+      allow_any_instance_of(OneviewSDK::Client).to receive(:rest_put).with(nil, { 'body' => JSON.parse(request_body) }, 200)
+        .and_return(uri: '/rest/logical-switches/fake')
+      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return('Credentials update')
+      expect(provider.update_credentials).to be
+    end
+  end
 end

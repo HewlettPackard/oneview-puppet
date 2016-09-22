@@ -29,6 +29,10 @@ Puppet::Type.newtype(:oneview_logical_switch) do
     newvalue(:refresh) do
       provider.refresh
     end
+
+    newvalue(:update_credentials) do
+      provider.update_credentials
+    end
   end
   #:nocov:
 

@@ -55,6 +55,35 @@ Puppet::Type.type(:oneview_logical_switch).provide(:oneview_logical_switch) do
     get_single_resource_instance.refresh
   end
 
+  def update_credentials
+    ls = get_single_resource_instance
+    @switches.each do |switch|
+      update_hash = {}
+      update_hash['logicalSwitchCredentials'] =
+        [{ 'connectionProperties' =>
+          [
+            { 'valueFormat' => 'Unknown', 'propertyName' => 'SshBasicAuthCredentialUser', 'valueType' => 'String',
+              'value' => switch['ssh_username'] },
+            { 'valueFormat' => 'SecuritySensitive', 'propertyName' => 'SshBasicAuthCredentialPassword',
+              'valueType' => 'String', 'value' => switch['ssh_password'] }
+          ] }]
+      update_hash['logicalSwitch'] = { 'switchCredentialConfiguration' => [{ 'sshUsername' => switch['ssh_username'],
+                                                                             'snmpPort' => switch['snmp_port'],
+                                                                             'snmpV1Configuration' =>
+                                                                               { 'communityString' => switch['community_string'] },
+                                                                             'snmpVersion' => switch['version'],
+                                                                             'snmpV3Configuration' => nil,
+                                                                             'switchUri' => switch['switchUri'],
+                                                                             'logicalSwitchManagementHost' => switch['ip'] }],
+                                       'type' => 'logical-switch',
+                                       'uri' => ls['uri'],
+                                       'name' => ls['name'],
+                                       'description' => ls['description'] }
+      put_request = @client.rest_put(ls['uri'], { 'body' => update_hash }, 200)
+      @client.response_handler(put_request)
+    end
+  end
+
   # Helper Methods to treat switches and set credentials
 
   def set_switches(ls, resource)
