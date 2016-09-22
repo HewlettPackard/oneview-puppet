@@ -234,7 +234,7 @@ This resource provides the following ensurable methods for managing logical swit
 * `refresh` - Reclaims the top-of-rack switches in a logical switch.
 * `update_credentials` - Updates the credentials of a logical switch.
 
-:exclamation: **NOTE:** The switches and their credentials must follow the declaration seen in the example file. The update via `present` ensurable is only valid for the Logical Switch name. To update its credentials, the `update_credentials` must be used.
+:exclamation: **NOTE:** The switches and their credentials must follow the declaration seen in the example file. The update via `present` ensurable is only valid for the Logical Switch name. To update its credentials, the `update_credentials` ensurable must be used.
 
 Example file: [logical_switch.pp](examples/logical_switch.pp)
 
