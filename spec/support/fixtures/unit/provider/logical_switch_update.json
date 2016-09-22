@@ -1,0 +1,39 @@
+{
+  "logicalSwitchCredentials": [
+    {
+      "connectionProperties": [
+        {
+          "valueFormat": "Unknown",
+          "propertyName": "SshBasicAuthCredentialUser",
+          "valueType": "String",
+          "value": "dcs"
+        },
+        {
+          "valueFormat": "SecuritySensitive",
+          "propertyName": "SshBasicAuthCredentialPassword",
+          "valueType": "String",
+          "value": "dcs"
+        }
+      ]
+    }
+  ],
+  "logicalSwitch": {
+    "switchCredentialConfiguration": [
+      {
+        "sshUsername": "dcs",
+        "snmpPort": "161",
+        "snmpV1Configuration": {
+          "communityString": "public"
+        },
+        "snmpVersion": null,
+        "snmpV3Configuration": null,
+        "switchUri": "/rest/",
+        "logicalSwitchManagementHost": "172.18.20.1"
+      }
+    ],
+    "type": "logical-switch",
+    "uri": null,
+    "name": "LS",
+    "description": null
+  }
+}
