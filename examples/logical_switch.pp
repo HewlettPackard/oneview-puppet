@@ -69,8 +69,8 @@ oneview_logical_switch{'Logical Switch Destroy':
 #   # SSH and SNMP credentials information per switch
 #   data   =>
 #   {
-#     name                  => 'Test Logical Switch',
-#     switches              =>
+#     name     => 'Test Logical Switch',
+#     switches =>
 #     [
 #       {
 #         ip               => '172.18.20.1',
