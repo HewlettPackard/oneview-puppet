@@ -30,7 +30,7 @@ describe provider_class, unit: true do
       ensure: 'present',
       data:
           {
-            'name' => 'ONEVIEW_PUPPET_TEST VA1'
+            'name' => 'Server Profile Attachment Demo, volume-attachment-demo'
           }
     )
   end
@@ -58,7 +58,15 @@ describe provider_class, unit: true do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
     end
 
-    it 'should able to find the resource' do
+    it 'should able to find the specific VA' do
+      resource['data']['sanStorage'] = { 'volumeAttachments' => [{ 'volumeUri' => 'fake uri' }] }
+      resource['data']['uri'] = 'fake uri'
+      test = resourcetype.new(@client, resource['data'])
+      resource['data'].delete('sanStorage')
+      resource['data'].delete('uri')
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(OneviewSDK::ServerProfile).to receive(:find_by).with(anything, name: 'Server Profile Attachment Demo').and_return([test])
+      allow(OneviewSDK::Volume).to receive(:find_by).with(anything, name: 'volume-attachment-demo').and_return([test])
       expect(provider.found).to be
     end
 
@@ -88,6 +96,20 @@ describe provider_class, unit: true do
         .and_return(FakeResponse.new('uri' => '/rest/fake'))
       # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new({'members' => ['first','second']}))
       expect(provider.remove_extra_unmanaged_volume).to be
+    end
+  end
+
+  context 'given no data' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_volume_attachment).new(
+        name: 'VA',
+        ensure: 'found'
+      )
+    end
+    it 'should able to find all VAs' do
+      test = resourcetype.new(@client, {})
+      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
+      expect(provider.found).to be
     end
   end
 

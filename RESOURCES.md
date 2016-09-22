@@ -472,7 +472,7 @@ Example file: [volume.pp](examples/volume.pp)
 
 This resource provides the following ensurable methods for managing storage volume attachments on the HPE OneView appliance:
 
-* `found` - Searches for `oneview_volume_attachment` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `found` - Searches for `oneview_volume_attachment` resources on the appliance. This `found` accepts either no `data` to return all volume attachments, or a `data` containing the `name` key with a "Server Profile Name, Volume Name" combination to find a specific volume attachment.
 * `get_extra_unmanaged_volumes` - Gets the list of extra unmanaged storage volumes.
 * `remove_extra_unmanaged_volume` - Removes extra presentations from a specified server profile.
 * `get_paths` - Either gets all volume attachment paths, or if an `id` is specified, gets the specific volume attachment path.
