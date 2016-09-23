@@ -77,4 +77,11 @@ describe provider_class do
       expect(provider.destroy).to be
     end
   end
+
+  context 'given the credentials' do
+    it 'should be able to update the logical switch credentials' do
+      resource['data'].delete('logicalSwitchGroupUri')
+      expect(provider.update_credentials).to be
+    end
+  end
 end
