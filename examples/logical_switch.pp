@@ -62,7 +62,7 @@ oneview_logical_switch{'Logical Switch Destroy':
 }
 
 # Name and Credentials are the only Logical Switch parameters that can be updated
-# To update its name, just do it normally as a ´´present´´ ensurable
+# To update its name, just do it normally as a 'present' ensurable
 # To update the credentials, declare the parameters as follows:
 # oneview_logical_switch{'Logical Switch Create':
 #   ensure => 'update_credentials',
