@@ -1,5 +1,5 @@
 {
-  "name": "hpe-oneview",
+  "name": "hewlettpackard-oneview",
   "version": "1.0.0",
   "author": "Hewlett Packard Enterprise",
   "summary": "HPE Puppet providers and types for management of HPE OneView Appliances",

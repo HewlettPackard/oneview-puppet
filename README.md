@@ -39,7 +39,7 @@ For more information on the Puppet module for HPE OneView resource types and the
 
 To install this module from the Puppet Forge, with enough permissions to install puppet modules, use the command:
 ```
-puppet module install hpe-oneview
+puppet module install hewlettpackard-oneview
 ```
 
 Alternatively, you can clone the source code from https://github.com/HewlettPackard/oneview-puppet into your Puppet module path using the following command:
