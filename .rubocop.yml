@@ -18,6 +18,8 @@ LineLength:
   Max: 140
 MethodLength:
   Max: 40
+Metrics/BlockLength:
+  Enabled: false
 Style/AccessorMethodName:
   Enabled: false
 Metrics/CyclomaticComplexity:

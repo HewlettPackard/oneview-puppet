@@ -1,3 +1,6 @@
+[![Puppet Forge](https://img.shields.io/puppetforge/v/hewlettpackard/oneview.svg)](https://forge.puppet.com/hewlettpackard/oneview)
+[![Travis](https://img.shields.io/travis/HewlettPackard/oneview-puppet/master.svg)](https://github.com/HewlettPackard/oneview-puppet)
+
 # Puppet Module for HPE OneView
 
 #### Table of Contents
@@ -32,8 +35,9 @@ For more information on the Puppet module for HPE OneView resource types and the
 
 ### Requirements
 
-  - Ruby >= V2.2.3
-  - [oneview-sdk-ruby](https://github.com/HewlettPackard/oneview-sdk-ruby) >= V2.0.0
+  - Puppet V4.1 or greater
+  - Ruby V2.2.3 or greater
+  - [oneview-sdk-ruby](https://github.com/HewlettPackard/oneview-sdk-ruby) V2.0.0 or greater (available as a gem)
 
 ### Beginning with the Puppet Module for HPE OneView
 

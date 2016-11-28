@@ -7,6 +7,7 @@
   "source": "https://github.com/HewlettPackard/oneview-puppet",
   "project_page": "https://github.com/HewlettPackard/oneview-puppet",
   "issues_url": "https://github.com/HewlettPackard/oneview-puppet/issues",
+  "operatingsystem_support": ["windows", "ubuntu", "suse", "redhat", "mac_os_x", "debian", "centos"],
   "dependencies": [],
   "requirements": [
     {"name":"puppet","version_requirement":">= 4.1.0"},
