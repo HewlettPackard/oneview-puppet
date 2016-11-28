@@ -1,5 +1,5 @@
 [![Puppet Forge](https://img.shields.io/puppetforge/v/hewlettpackard/oneview.svg)](https://forge.puppet.com/hewlettpackard/oneview)
-[![Travis](https://img.shields.io/travis/HewlettPackard/oneview-puppet/master.svg)](https://github.com/HewlettPackard/oneview-puppet)
+[![Build Status](https://travis-ci.org/HewlettPackard/oneview-puppet.svg?branch=master)](https://travis-ci.org/HewlettPackard/oneview-puppet)
 
 # Puppet Module for HPE OneView
 
