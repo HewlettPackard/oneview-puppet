@@ -6,4 +6,4 @@ rvm:
 before_install: gem update bundler
 
 script:
-- rake test
+- rspec spec/unit/ --tag unit
