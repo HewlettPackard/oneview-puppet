@@ -3,6 +3,7 @@
  * Added the .travis.yml file to the root of the project
  * Configured continuous integration with Travis CI for the repository
  * Disabled BlockLength for rubocop
+ * Added OS Support to metadata file
  * Added shields to the README.md file
 
 ### 1.0.0 (2016-10-06)
