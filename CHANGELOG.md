@@ -5,6 +5,7 @@
  * Disabled BlockLength for rubocop
  * Added OS Support to metadata file
  * Added shields to the README.md file
+ * Fixed issue on one of the firmware bundle unit tests
 
 ### 1.0.0 (2016-10-06)
 
