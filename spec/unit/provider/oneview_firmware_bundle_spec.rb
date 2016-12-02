@@ -56,7 +56,7 @@ describe provider_class, unit: true do
     end
 
     it 'should create/add the firmware bundle' do
-      allow(OneviewSDK::FirmwareBundle).to receive(:add).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow(OneviewSDK::FirmwareBundle).to receive(:add).and_return(resource)
       expect(provider.create).to be
     end
   end
