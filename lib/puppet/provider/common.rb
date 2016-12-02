@@ -77,7 +77,7 @@ def find_resources
   retrieved_resources = @resourcetype.find_by(@client, @data)
   resource_name = @resourcetype.to_s.split('::')
   # If resources are found, iterate through them and notify. Else just notify.
-  raise "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
+  raise "\n\nNo #{resource_name[2]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
   retrieved_resources.each do |retrieved_resource|
     Puppet.notice "\n\n Found matching #{resource_name[1]} #{retrieved_resource['name']} "\
     "(URI: #{retrieved_resource['uri']}) on Oneview Appliance\n"

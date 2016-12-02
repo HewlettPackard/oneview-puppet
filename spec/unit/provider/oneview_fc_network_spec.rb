@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_fc_network).provider(:oneview_fc_network)
+provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -44,7 +44,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider oneview_fc_network' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:oneview_fc_network)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:c7000)
     end
 
     it 'if nothing is found should return false' do

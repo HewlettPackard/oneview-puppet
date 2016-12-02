@@ -14,20 +14,24 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_fc_network).provide(:oneview_fc_network) do
+Puppet::Type::Oneview_fc_network.provide :c7000 do
+  desc 'Provider for OneView FC Networks'
+
+  confine true: login[:enclosure_variant] == 'C7000'
+
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FCNetwork
+    @resourcetype ||= OneviewSDK::API300::C7000::FCNetwork
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
+    @data ||= {}
   end
 
   def self.instances
