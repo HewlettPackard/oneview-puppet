@@ -46,7 +46,7 @@ def environment_credentials
     token:                   ENV['ONEVIEW_TOKEN'] || nil,
     user:                    ENV['ONEVIEW_USER'] || nil,
     password:                ENV['ONEVIEW_PASSWORD'] || nil,
-    enclosure_variant:       ENV['ONEVIEW_ENCLOSURE_VARIANT'] || 'C7000'
+    hardware_variant:       ENV['ONEVIEW_HARDWARE_VARIANT'] || 'C7000'
   }
 end
 
@@ -56,6 +56,6 @@ def credentials_parse(credentials)
     credentials[key] = false if value == 'false'
     credentials[key] = true if value == 'true'
   end
-  credentials[:enclosure_variant] ||= 'C7000'
+  credentials[:hardware_variant] ||= 'C7000'
   credentials
 end

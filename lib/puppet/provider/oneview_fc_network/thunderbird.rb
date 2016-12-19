@@ -15,10 +15,12 @@
 ################################################################################
 
 Puppet::Type.type(:oneview_fc_network).provide :thunderbird, parent: :c7000 do
-  confine true: login[:enclosure_variant] == 'Thunderbird'
+  desc 'Provider for OneView Fiber Channel Networks using the Thunderbird variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'Thunderbird'
 
   def initialize(*args)
-    @resourcetype ||= OneviewSDK::API300::Thunderbird::FCNetwork
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::FCNetwork")
     super(*args)
   end
 end

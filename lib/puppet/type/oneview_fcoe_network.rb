@@ -31,7 +31,7 @@ Puppet::Type.newtype(:oneview_fcoe_network) do
     desc 'FCoE network name'
   end
 
-  newparam(:data) do
+  newproperty(:data) do
     desc 'FCoE network data hash containing all specifications for the network'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash

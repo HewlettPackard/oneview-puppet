@@ -14,19 +14,29 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
+Puppet::Type::Oneview_network_set.provide :c7000 do
+  desc 'Provider for OneView Network Sets using the C7000 variant of the OneView API'
+
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::NetworkSet
-    @ethernet = OneviewSDK::EthernetNetwork
-    @data = {}
+    @resourcetype ||= if api_version == '200'
+                        OneviewSDK::API200::NetworkSet
+                      else
+                        Object.const_get("OneviewSDK::API#{api_version}::C7000::NetworkSet")
+                      end
+    @ethernet ||= if api_version == '200'
+                    OneviewSDK::API200::EthernetNetwork
+                  else
+                    Object.const_get("OneviewSDK::API#{api_version}::C7000::EthernetNetwork")
+                  end
+    @data ||= {}
   end
 
   def exists?
@@ -65,14 +75,13 @@ Puppet::Type.type(:oneview_network_set).provide(:oneview_network_set) do
   end
 
   def network_uris
-    if @data['networkUris']
-      list = []
-      @data['networkUris'].each do |item|
-        net = OneviewSDK::EthernetNetwork.find_by(@client, name: item)
-        raise('The network #{name} does not exist.') unless net.first
-        list.push(net.first['uri'])
-      end
-      @data['networkUris'] = list
+    return unless @data['networkUris']
+    list = []
+    @data['networkUris'].each do |item|
+      net = OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+      raise('The network #{name} does not exist.') unless net.first
+      list.push(net.first['uri'])
     end
+    @data['networkUris'] = list
   end
 end

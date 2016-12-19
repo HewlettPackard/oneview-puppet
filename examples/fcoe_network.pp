@@ -18,9 +18,8 @@ oneview_fcoe_network{'FCoE Create':
   ensure => 'present',
   data   => {
     name                  => 'FCoE Network',
-    vlanId                => '100',
+    vlanId                => '1000',
     connectionTemplateUri => nil,
-    type                  => 'fcoe-network'
   }
 }
 
@@ -37,7 +36,7 @@ oneview_fcoe_network{'FCoE Found':
   ensure  => 'found',
   require => Oneview_fcoe_network['FCoE Update'],
   data    => {
-    vlanId => '100'
+    vlanId => '1000'
   }
 }
 

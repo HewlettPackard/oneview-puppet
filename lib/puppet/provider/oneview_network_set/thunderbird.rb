@@ -14,28 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.newtype(:oneview_fc_network) do
-  desc "Oneview's FC network"
+Puppet::Type.type(:oneview_fc_network).provide :thunderbird, parent: :c7000 do
+  desc 'Provider for OneView Network Sets using the Thunderbird variant of the OneView API'
 
-  # :nocov:
-  # Get methods
-  ensurable do
-    defaultvalues
+  confine true: login[:hardware_variant] == 'Thunderbird'
 
-    newvalue(:found) do
-      provider.found
-    end
-    # :nocov:
-  end
-
-  newparam(:name, namevar: true) do
-    desc 'FC network name'
-  end
-
-  newproperty(:data) do
-    desc 'FC network data hash containing all specifications for the network'
-    validate do |value|
-      raise 'Inserted value for data is not valid' unless value.class == Hash
-    end
+  def initialize(*args)
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::FCNetwork")
+    @ethernet ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::EthernetNetwork")
+    super(*args)
   end
 end

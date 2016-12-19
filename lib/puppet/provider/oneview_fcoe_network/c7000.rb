@@ -14,18 +14,27 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_fcoe_network).provide(:oneview_fcoe_network) do
+Puppet::Type::Oneview_fcoe_network.provide :c7000 do
+  desc 'Provider for OneView Fiber Channel over Ethernet Networks using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FCoENetwork
-    @data = {}
+    api_version = login[:api_version] || '200'
+    @resourcetype ||= if api_version == '200'
+                        OneviewSDK::API200::FCoENetwork
+                      else
+                        Object.const_get("OneviewSDK::API#{api_version}::C7000::FCoENetwork")
+                      end
+    @data ||= {}
   end
 
   def exists?
