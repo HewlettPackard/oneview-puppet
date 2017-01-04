@@ -46,7 +46,7 @@ def environment_credentials
     token:                   ENV['ONEVIEW_TOKEN'] || nil,
     user:                    ENV['ONEVIEW_USER'] || nil,
     password:                ENV['ONEVIEW_PASSWORD'] || nil,
-    hardware_variant:       ENV['ONEVIEW_HARDWARE_VARIANT'] || 'C7000'
+    hardware_variant:        ENV['ONEVIEW_HARDWARE_VARIANT'] || 'C7000'
   }
 end
 

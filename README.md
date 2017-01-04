@@ -67,6 +67,7 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 * `ONEVIEW_API_VERSION` - This defaults to the 200 API version (Minimum supported by oneview-sdk-ruby).
 * `ONEVIEW_LOG_LEVEL` - The log level of the HPE OneView appliance. This defaults to **info**
 * `ONEVIEW_SSL_ENABLED` - HPE recommends setting this value to **true**
+* `ONEVIEW_HARDWARE_VARIANT` - Set this to C7000 or Synergy, according to the appliance's enclosure's model. This defaults to **C7000**
 
 
 You can assign attributes for your appliances using three methods:
