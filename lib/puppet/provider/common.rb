@@ -51,10 +51,9 @@ end
 
 def new_name_validation(data, resourcetype)
   # Validation for name change on resource through flag 'new_name'
-  if data['new_name']
-    new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
-    data['name'] = data.delete('new_name') unless new_resource_name_used
-  end
+  return unless data['new_name']
+  new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
+  data['name'] = data.delete('new_name') unless new_resource_name_used
 end
 
 def get_single_resource_instance

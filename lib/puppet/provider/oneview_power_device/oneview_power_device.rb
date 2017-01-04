@@ -99,15 +99,14 @@ Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
 
   # Retrieves the connection uri in case it has not been specified
   def pd_uri_parser
-    if @data['powerConnections']
-      @data['powerConnections'].each do |pc|
-        next if pc['connectionUri']
-        type = pc.delete('name')
-        name = pc.delete('type')
-        uri = objectfromstring(type).find_by(@client, name: name)
-        raise('The connection uri could not be found in the Appliance.') unless uri.first
-        pc['connectionUri'] = uri.first.data['uri']
-      end
+    return unless @data['powerConnections']
+    @data['powerConnections'].each do |pc|
+      next if pc['connectionUri']
+      type = pc.delete('name')
+      name = pc.delete('type')
+      uri = objectfromstring(type).find_by(@client, name: name)
+      raise('The connection uri could not be found in the Appliance.') unless uri.first
+      pc['connectionUri'] = uri.first.data['uri']
     end
   end
 end
