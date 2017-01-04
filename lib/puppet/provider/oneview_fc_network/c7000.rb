@@ -28,8 +28,8 @@ Puppet::Type::Oneview_fc_network.provide :c7000 do
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    api_version = login[:api_version] || '200'
-    @resourcetype ||= if api_version == '200'
+    api_version = login[:api_version] || 200
+    @resourcetype ||= if api_version == 200
                         OneviewSDK::API200::FCNetwork
                       else
                         Object.const_get("OneviewSDK::API#{api_version}::C7000::FCNetwork")
