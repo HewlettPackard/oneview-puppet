@@ -46,7 +46,7 @@ describe provider_class, unit: true do
   let(:instance) { provider.class.instances.first }
 
   context 'given the create parameters' do
-    it 'should be an instance of the provider Ruby' do
+    it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
     end
 
