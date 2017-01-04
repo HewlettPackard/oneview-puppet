@@ -47,7 +47,7 @@ describe provider_class, unit: true do
 
   context 'given the create parameters' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
     end
 
     it 'should be able to find the resource' do
@@ -58,14 +58,8 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      data = { 'name' => 'Puppet Network', 'vlanId' => 100, 'purpose' => 'General', 'smartLink' => false, 'privateNetwork' => true,
-               'connectionTemplateUri' => nil, 'type' => 'ethernet-networkV3', 'ethernetNetworkType' => 'Tagged' }
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-      test = resourcetype.new(@client, resource['data'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/ethernet-networks', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/ethernet-networks/100')
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to be
     end

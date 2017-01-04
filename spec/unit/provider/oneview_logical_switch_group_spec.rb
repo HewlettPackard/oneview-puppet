@@ -81,16 +81,10 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      data = { 'name' => 'OneViewSDK Test Logical Switch Group', 'category' => 'logical-switch-groups', 'state' => 'Active',
-               'type' => 'logical-switch-group', 'switchMapTemplate' => {} }
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       test = resourcetype.new(@client, resource['data'])
       allow_any_instance_of(resourcetype).to receive(:set_grouping_parameters).with(1, 'Cisco Nexus 50xx').and_return(test)
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/logical-switch-groups', { 'body' => data }, test.api_version).and_return(FakeResponse
-        .new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/logical-switch-groups/100')
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end

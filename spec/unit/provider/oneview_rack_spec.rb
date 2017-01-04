@@ -17,6 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
+resourcetype = OneviewSDK::Rack
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -53,11 +54,10 @@ describe provider_class, unit: true do
       expect { provider.found }.to raise_error(/No Rack with the specified data were found on the Oneview Appliance/)
     end
 
-    it 'should create/add the rack' do
-      test = OneviewSDK::Rack.new(@client, resource['data'])
-      expect(OneviewSDK::Rack).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/racks', anything, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+    it 'should be able to add the resource' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(resourcetype.new(@client, resource['data']))
+      expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
 

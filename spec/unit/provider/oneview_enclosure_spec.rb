@@ -134,14 +134,11 @@ describe provider_class, unit: true do
       end
 
       it 'creates the resource' do
-        body = { 'enclosureGroupUri' => '/rest/', 'licensingIntent' => 'OneView',
-                 'hostname' => '172.18.1.13', 'username' => 'dcs', 'password' => 'dcs' }
         test = resourcetype.new(@client, resource['data'])
         allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
-        expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-          .with('/rest/enclosures', { 'body' => body }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+        allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
       end

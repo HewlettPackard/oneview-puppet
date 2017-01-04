@@ -14,8 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do

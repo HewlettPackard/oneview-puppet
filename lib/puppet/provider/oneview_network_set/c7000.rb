@@ -26,6 +26,7 @@ Puppet::Type::Oneview_network_set.provide :c7000 do
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
+    api_version = login[:api_version] || '200'
     @resourcetype ||= if api_version == '200'
                         OneviewSDK::API200::NetworkSet
                       else

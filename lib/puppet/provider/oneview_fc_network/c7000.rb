@@ -40,7 +40,15 @@ Puppet::Type::Oneview_fc_network.provide :c7000 do
   end
 
   def self.instances
-    []
+    @client = OneviewSDK::Client.new(login)
+    matches = OneviewSDK::FCNetwork.find_by(@client, {})
+    matches.collect do |line|
+      name = line['name']
+      data = line.inspect
+      new(name: name,
+          ensure: :present,
+          data: data)
+    end
   end
 
   # Provider methods

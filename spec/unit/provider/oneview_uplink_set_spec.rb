@@ -19,6 +19,7 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
+resourcetype = OneviewSDK::UplinkSet
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -125,28 +126,12 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, resource['data']).and_return([])
-      data = { 'nativeNetworkUri' => nil, 'reachability' => 'Reachable', 'manualLoginRedistributionState' => 'NotSupported',
-               'connectionMode' => 'Auto', 'lacpTimer' => 'Short', 'networkType' => 'Ethernet', 'ethernetNetworkType' => 'Tagged',
-               'description' => nil, 'name' => 'Puppet Uplink Set', 'logicalInterconnectUri' => '/rest/fake/3',
-               'fcoeNetworkUris' => [], 'fcNetworkUris' => ['/rest/fake/1', '/rest/fake/2'], 'networkUris' => [],
-               'portConfigInfos' => [
-                 { 'portUri' => '/rest/interconnects/8e48bbd0-b651-46e1-afdf-334332a3a233',
-                   'desiredSpeed' => 'Auto', 'location' => {
-                     'locationEntries' => [
-                       { value: 1, type: 'Bay' }, { value: '/rest/enclosures/09SGH100X6J1',
-                                                    type: 'Enclosure' }, { value: 'X1', type: 'Port' }
-                     ]
-                   } }
-               ], 'primaryPortLocation' => nil, 'type' => 'uplink-setV3' }
-      test = OneviewSDK::UplinkSet.new(@client, resource['data'])
+      allow(OneviewSDK::UplinkSet).to receive(:find_by).and_return([])
       fc_network = OneviewSDK::FCNetwork.new(@client, name: 'Puppet Test FCNetwork', uri: '/rest/fc-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
       allow(OneviewSDK::FCNetwork).to receive(:find_by).and_return([fc_network])
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([logint])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/uplink-sets', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/uplink-sets/fake')
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to eq(true)
     end
@@ -183,28 +168,12 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, resource['data']).and_return([])
-      data = { 'nativeNetworkUri' => nil, 'reachability' => 'Reachable', 'manualLoginRedistributionState' => 'NotSupported',
-               'connectionMode' => 'Auto', 'lacpTimer' => 'Short', 'networkType' => 'Ethernet', 'ethernetNetworkType' => 'Tagged',
-               'description' => nil, 'name' => 'Puppet Uplink Set', 'logicalInterconnectUri' => '/rest/fake/3',
-               'fcoeNetworkUris' => ['/rest/fake/1', '/rest/fake/2'], 'fcNetworkUris' => [], 'networkUris' => [],
-               'portConfigInfos' => [
-                 { 'portUri' => '/rest/interconnects/8e48bbd0-b651-46e1-afdf-334332a3a233',
-                   'desiredSpeed' => 'Auto', 'location' => {
-                     'locationEntries' => [
-                       { value: 1, type: 'Bay' }, { value: '/rest/enclosures/09SGH100X6J1',
-                                                    type: 'Enclosure' }, { value: 'X1', type: 'Port' }
-                     ]
-                   } }
-               ], 'primaryPortLocation' => nil, 'type' => 'uplink-setV3' }
-      test = OneviewSDK::UplinkSet.new(@client, resource['data'])
+      allow(OneviewSDK::UplinkSet).to receive(:find_by).and_return([])
       fcoe_network = OneviewSDK::FCoENetwork.new(@client, name: 'Puppet Test FCoENetwork', uri: '/rest/fcoe-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
       allow(OneviewSDK::FCoENetwork).to receive(:find_by).and_return([fcoe_network])
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([logint])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/uplink-sets', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/uplink-sets/fake')
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to eq(true)
     end
