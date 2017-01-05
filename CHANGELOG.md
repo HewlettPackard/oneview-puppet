@@ -1,8 +1,8 @@
-# 2.0.0 (2017-01-04)
+# 2.0.0 (2017-01-05)
 
 ### Notes
  This is the Second major version of the Puppet module for the HPE OneView. It extends the support for the OneView API version 300, and
- adds support for Synergy hardware.  
+ adds support for Synergy hardware.
 
 ### Major changes
  1. Added full support to OneView Rest API version 300 for the hardware variants C7000 and Synergy to the already existing features:
@@ -10,8 +10,7 @@
  - FC network
  - FCOE network
  - Network set
- 2. Support to Synergy hardware has been added. The 'hardware_variant' option is specified in the client and the providers in this module
- handle the correct execution.
+ 2. Support to Synergy hardware has been added. The 'hardware_variant' option is specified in the client and the providers in this module handle the correct execution.
  3. Updated the requirements for the module for using the oneview-sdk gem with versions greated than 3.0.0.
 
 ### 1.0.1 (2016-11-28)
@@ -23,10 +22,8 @@
  * Fixed issue on one of the firmware bundle unit tests
 
 # 1.0.0 (2016-10-06)
-### NOTES
-  This is the official release of the Puppet module for the HPE OneView. It features the creation of providers and types needed for managing
-  OneView resources, example files for each type created, as well as a full set of unit and integration tests for each type and provider,
-  with total code coverage averaging over 90%. For now it only supports C7000 enclosure types.
+### Notes
+  This is the official release of the Puppet module for the HPE OneView. It features the creation of providers and types needed for managing OneView resources, example files for each type created, as well as a full set of unit and integration tests for each type and provider, with total code coverage averaging over 90%. For now it only supports C7000 enclosure types.
 
 ### Summary
 
