@@ -14,34 +14,13 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+Puppet::Type.type(:oneview_fc_network).provide :thunderbird, parent: :c7000 do
+  desc 'Provider for OneView Ethernet Networks using the Thunderbird variant of the OneView API'
 
-Puppet::Type.type(:oneview_fabric).provide(:oneview_fabric) do
-  mk_resource_methods
+  confine true: login[:hardware_variant] == 'Thunderbird'
 
   def initialize(*args)
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::EthernetNetwork")
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Fabric
-    @data = {}
-  end
-
-  def exists?
-    @data = data_parse
-    !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    raise('This resource relies on others to be created.')
-  end
-
-  def destroy
-    raise('This resource relies on others to be destroyed.')
-  end
-
-  def found
-    find_resources
   end
 end

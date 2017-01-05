@@ -51,10 +51,9 @@ end
 
 def new_name_validation(data, resourcetype)
   # Validation for name change on resource through flag 'new_name'
-  if data['new_name']
-    new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
-    data['name'] = data.delete('new_name') unless new_resource_name_used
-  end
+  return unless data['new_name']
+  new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
+  data['name'] = data.delete('new_name') unless new_resource_name_used
 end
 
 def get_single_resource_instance
@@ -77,7 +76,7 @@ def find_resources
   retrieved_resources = @resourcetype.find_by(@client, @data)
   resource_name = @resourcetype.to_s.split('::')
   # If resources are found, iterate through them and notify. Else just notify.
-  raise "\n\nNo #{resource_name[1]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
+  raise "\n\nNo #{resource_name[2]} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
   retrieved_resources.each do |retrieved_resource|
     Puppet.notice "\n\n Found matching #{resource_name[1]} #{retrieved_resource['name']} "\
     "(URI: #{retrieved_resource['uri']}) on Oneview Appliance\n"

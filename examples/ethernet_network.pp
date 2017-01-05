@@ -22,7 +22,6 @@ oneview_ethernet_network{'Ethernet Network Create':
     purpose        => 'General',
     smartLink      => true,
     privateNetwork => false,
-    type           => 'ethernet-networkV3'
   }
 }
 

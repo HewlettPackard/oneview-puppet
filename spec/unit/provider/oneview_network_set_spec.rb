@@ -41,7 +41,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:c7000)
     end
 
     it 'should return that the resource does not exists' do
@@ -57,14 +57,9 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      data = { 'name' => 'Network Set', 'connectionTemplateUri' => nil, 'nativeNetworkUri' => nil, 'networkUris' => [],
-               'type' => 'network-set' }
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, name: resource['data']))
       expect(provider.exists?).to eq(false)
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/network-sets', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/network-sets/fake')
       expect(provider.create).to be
     end
 

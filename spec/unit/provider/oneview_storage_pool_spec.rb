@@ -65,13 +65,9 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      data = { 'storageSystemUri' => '/rest/', 'poolName' => 'CPG-SSD-AO', 'type' => 'StoragePoolV2' }
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(resourcetype.new(@client, resource['data']))
       expect(provider.exists?).to eq(false)
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/storage-pools', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/storage-pools/fake')
       expect(provider.create).to be
     end
 

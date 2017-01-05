@@ -143,13 +143,9 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      body = { 'name' => '172.18.8.11, PDU 1', 'deviceType' => 'BranchCircuit', 'phaseType' => 'Unknown', 'powerConnections' => [] }
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-      provider.exists?
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/power-devices', { 'body' => body }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/power-devices/fake')
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(resourcetype.new(@client, name: resource['data']['name']))
+      expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
 

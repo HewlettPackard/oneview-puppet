@@ -17,6 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:oneview_firmware_driver)
+resourcetype = OneviewSDK::FirmwareDriver
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -75,14 +76,10 @@ describe provider_class, unit: true do
       expect(instance).to be
     end
 
-    it 'should create/add the Firmware Driver' do
-      data = { 'uri' => '/rest/firmware-drivers/fake', 'baselineUri' => '/rest/fake',
-               'hotfixUris' => ['/rest/fake'], 'customBaselineName' => 'FirmwareDriver1_Example' }
-      resource['data']['uri'] = '/rest/firmware-drivers/fake'
-      test = OneviewSDK::FirmwareDriver.new(@client, resource['data'])
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(test)
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/firmware-drivers', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+    it 'runs through the create method' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      provider.exists?
       expect(provider.create).to be
     end
 

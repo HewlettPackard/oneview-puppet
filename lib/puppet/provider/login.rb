@@ -39,13 +39,14 @@ end
 # Returns the credentials set by environment variables
 def environment_credentials
   {
-    url:         ENV['ONEVIEW_URL'],
-    ssl_enabled: ENV['ONEVIEW_SSL_ENABLED'],
-    log_level:   ENV['ONEVIEW_LOG_LEVEL'] || 'info',
-    api_version: ENV['ONEVIEW_API_VERSION'] || 200,
-    token:       ENV['ONEVIEW_TOKEN'] || nil,
-    user:        ENV['ONEVIEW_USER'] || nil,
-    password:    ENV['ONEVIEW_PASSWORD'] || nil
+    url:                     ENV['ONEVIEW_URL'],
+    ssl_enabled:             ENV['ONEVIEW_SSL_ENABLED'],
+    log_level:               ENV['ONEVIEW_LOG_LEVEL'] || 'info',
+    api_version:             ENV['ONEVIEW_API_VERSION'] || 200,
+    token:                   ENV['ONEVIEW_TOKEN'] || nil,
+    user:                    ENV['ONEVIEW_USER'] || nil,
+    password:                ENV['ONEVIEW_PASSWORD'] || nil,
+    hardware_variant:        ENV['ONEVIEW_HARDWARE_VARIANT'] || 'C7000'
   }
 end
 
@@ -55,5 +56,6 @@ def credentials_parse(credentials)
     credentials[key] = false if value == 'false'
     credentials[key] = true if value == 'true'
   end
+  credentials[:hardware_variant] ||= 'C7000'
   credentials
 end

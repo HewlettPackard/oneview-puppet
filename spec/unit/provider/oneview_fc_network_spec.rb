@@ -18,7 +18,8 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_fc_network).provider(:oneview_fc_network)
+provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
+resourcetype = OneviewSDK::FCNetwork
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -44,7 +45,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider oneview_fc_network' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:oneview_fc_network)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:c7000)
     end
 
     it 'if nothing is found should return false' do
@@ -59,12 +60,8 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, resource['data']).and_return([])
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-      test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/fc-networks', { 'body' => resource['data'] }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/fc-networks/100')
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to be
     end
@@ -80,8 +77,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to run through self.instances' do
-      test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, {}).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([OneviewSDK::FCNetwork.new(@client, resource['data'])])
       expect(instance).to be
     end
 

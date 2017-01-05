@@ -17,11 +17,11 @@
 Puppet::Type.newtype(:oneview_fc_network) do
   desc "Oneview's FC network"
 
+  # :nocov:
+  # Get methods
   ensurable do
     defaultvalues
 
-    # :nocov:
-    # Get methods
     newvalue(:found) do
       provider.found
     end
@@ -32,9 +32,8 @@ Puppet::Type.newtype(:oneview_fc_network) do
     desc 'FC network name'
   end
 
-  newparam(:data) do
-    desc "FC network data hash containing all specifications for the
-    network"
+  newproperty(:data) do
+    desc 'FC network data hash containing all specifications for the network'
     validate do |value|
       raise 'Inserted value for data is not valid' unless value.class == Hash
     end

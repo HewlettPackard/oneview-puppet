@@ -71,12 +71,8 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-      test = resourcetype.new(@client, resource['data'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/storage-volumes', { 'body' => test.data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/storage-volumes/100')
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to be
     end

@@ -14,8 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_interconnect_group) do
@@ -75,19 +75,18 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
 
   # Grabs the uplink sets uris
   def uri_getters(field)
-    if @data[field]
-      list = []
-      @data[field].each do |item|
-        next if item.to_s[0..6].include?('/rest/')
-        set = if field.eql?('uplinkSets')
-                OneviewSDK::UplinkSet.find_by(@client, name: item)
-              else
-                OneviewSDK::EthernetNetwork.find_by(@client, name: item)
-              end
-        raise("The resource #{item} does not exist.") unless set.first
-        list.push(set.first['uri'])
-      end
-      @data[field] = list
+    return unless @data[field]
+    list = []
+    @data[field].each do |item|
+      next if item.to_s[0..6].include?('/rest/')
+      set = if field.eql?('uplinkSets')
+              OneviewSDK::UplinkSet.find_by(@client, name: item)
+            else
+              OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+            end
+      raise("The resource #{item} does not exist.") unless set.first
+      list.push(set.first['uri'])
     end
+    @data[field] = list
   end
 end

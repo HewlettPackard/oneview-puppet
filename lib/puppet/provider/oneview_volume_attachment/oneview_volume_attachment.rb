@@ -14,8 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
 Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment) do
@@ -121,8 +121,10 @@ Puppet::Type.type(:oneview_volume_attachment).provide(:oneview_volume_attachment
   end
 
   def find_for_server_profile
-    raise "A 'name' tag must be specified within data, containing the server profile name and/or server profile name/volume name"\
-      'to find a specific storage volume attachment' unless @data['name']
+    unless @data['name']
+      raise "A 'name' tag must be specified within data, containing the server profile name and/or server profile name/volume name"\
+        'to find a specific storage volume attachment'
+    end
     vas, volume = helper_retrieve_vas
     vas.each do |va|
       @vas.push(va) if va['volumeUri'] == volume.first['uri']

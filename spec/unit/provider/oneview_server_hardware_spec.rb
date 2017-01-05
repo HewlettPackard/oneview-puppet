@@ -17,6 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:oneview_server_hardware)
+resourcetype = OneviewSDK::ServerHardware
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -67,14 +68,10 @@ describe provider_class, unit: true do
       expect(instance).to be
     end
 
-    it 'should create/add the server hardware' do
-      data = { 'hostname' => '172.18.6.5', 'username' => 'dcs', 'password' => 'dcs', 'licensingIntent' => 'OneView' }
-      allow(OneviewSDK::ServerHardware).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
-      provider.exists?
-      test = OneviewSDK::ServerHardware.new(@client, resource['data'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/server-hardware', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-hardware/fake')
+    it 'should be able to create the resource' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(resourcetype.new(@client, resource['data']))
+      expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
   end

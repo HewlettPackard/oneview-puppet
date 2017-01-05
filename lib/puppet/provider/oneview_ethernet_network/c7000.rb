@@ -14,18 +14,29 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
+require_relative '../login'
+require_relative '../common'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) do
+Puppet::Type::Oneview_ethernet_network.provide :c7000 do
+  desc 'Provider for OneView Ethernet Networks using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::EthernetNetwork
-    @data = {}
+    api_version = login[:api_version] || 200
+    @resourcetype ||= if api_version == 200
+                        OneviewSDK::API200::EthernetNetwork
+                      else
+                        Object.const_get("OneviewSDK::API#{api_version}::C7000::EthernetNetwork")
+                      end
+    # Initializes the data so it is parsed only on exists and accessible throughout the methods
+    # This is not set here due to the 'resources' variable not being accessible in initialize
+    @data ||= {}
   end
 
   def exists?
@@ -79,11 +90,17 @@ Puppet::Type.type(:oneview_ethernet_network).provide(:oneview_ethernet_network) 
     update_connection_template
   end
 
-  # Helpers
+  # Helpersmiss
 
   # Creates bulk networks if there is @data['vlanIdRange']
   def bulk_create_check
-    @data['vlanIdRange'] ? @resourcetype.bulk_create(@client, bulk_parse(@data)) : false
+    if @data['vlanIdRange']
+      Puppet.warning 'Deprecation warning! Bulk creation cannot be correctly maintained with idempotency,
+       so it will be discontinued in future releases. Adopt the single resource style creation in the future.'
+      @resourcetype.bulk_create(@client, bulk_parse(@data))
+    else
+      false
+    end
   end
 
   def bulk_parse(data)

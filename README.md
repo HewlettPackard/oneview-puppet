@@ -1,4 +1,6 @@
 [![Puppet Forge](https://img.shields.io/puppetforge/v/hewlettpackard/oneview.svg)](https://forge.puppet.com/hewlettpackard/oneview)
+[![Travis](https://img.shields.io/travis/HewlettPackard/oneview-puppet/master.svg)](https://github.com/HewlettPackard/oneview-puppet)
+[![Inline docs](http://inch-ci.org/github/HewlettPackard/oneview-puppet.svg?branch=master)](http://inch-ci.org/github/HewlettPackard/oneview-puppet)
 [![Build Status](https://travis-ci.org/HewlettPackard/oneview-puppet.svg?branch=master)](https://travis-ci.org/HewlettPackard/oneview-puppet)
 
 # Puppet Module for HPE OneView
@@ -66,6 +68,7 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 * `ONEVIEW_API_VERSION` - This defaults to the 200 API version (Minimum supported by oneview-sdk-ruby).
 * `ONEVIEW_LOG_LEVEL` - The log level of the HPE OneView appliance. This defaults to **info**
 * `ONEVIEW_SSL_ENABLED` - HPE recommends setting this value to **true**
+* `ONEVIEW_HARDWARE_VARIANT` - Set this to C7000 or Synergy, according to the appliance's enclosure's model. This defaults to **C7000**
 
 
 You can assign attributes for your appliances using three methods:

@@ -14,36 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'login'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'common'))
-require 'oneview-sdk'
+Puppet::Type.type(:oneview_fc_network).provide :thunderbird, parent: :c7000 do
+  desc 'Provider for OneView Network Sets using the Thunderbird variant of the OneView API'
 
-Puppet::Type.type(:oneview_fcoe_network).provide(:oneview_fcoe_network) do
-  mk_resource_methods
+  confine true: login[:hardware_variant] == 'Thunderbird'
 
   def initialize(*args)
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::FCNetwork")
+    @ethernet ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::EthernetNetwork")
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FCoENetwork
-    @data = {}
-  end
-
-  def exists?
-    @data = data_parse
-    empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-  end
-
-  def found
-    find_resources
   end
 end
