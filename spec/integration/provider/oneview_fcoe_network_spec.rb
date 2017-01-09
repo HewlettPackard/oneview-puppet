@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:oneview_fcoe_network)
+provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -42,7 +42,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:oneview_fcoe_network)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:c7000)
   end
 
   context 'given the min parameters' do

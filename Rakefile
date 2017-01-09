@@ -1,10 +1,11 @@
 LINT_IGNORES = [].freeze
 
+require 'rubygems'
+require 'puppetlabs_spec_helper/rake_tasks'
+# require 'puppet-lint/tasks/puppet-lint'
+
 desc 'Validate manifests, templates, and ruby files'
 task :validate do
-  require 'rubygems'
-  require 'puppetlabs_spec_helper/rake_tasks'
-  require 'puppet-lint/tasks/puppet-lint'
   PuppetLint.configuration.send('disable_80chars')
   PuppetLint.configuration.ignore_paths = ['spec/**/*.pp', 'pkg/**/*.pp']
 
@@ -22,7 +23,6 @@ task :validate do
   end
 end
 
-# namespace :lint do
 desc 'Checking puppet module code style.'
 task :lint do
   begin
@@ -57,4 +57,18 @@ task :lint do
 
   abort 'Checking puppet module code style FAILED' if success.is_a?(FalseClass)
 end
-# end
+
+task default: :spec
+spec_pattern = 'spec/**/*_spec.rb'
+def_spec_options = '-f d --color'
+
+namespace :spec do
+  desc 'Run unit tests only'
+  RSpec::Core::RakeTask.new(:spec) do |spec|
+    spec.pattern = spec_pattern
+    spec.rspec_opts = def_spec_options
+    spec.rspec_opts << ' --tag unit'
+  end
+end
+
+task(:spec).clear.enhance(['spec:spec'])
