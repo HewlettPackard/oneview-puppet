@@ -1,3 +1,17 @@
+# 2.1.0 (2017-01-XX)
+
+### Notes
+This release extends the full support for the Synergy and C7000 APIs to all the resources previously supported in version 1.0.0, and a few new resources specific to API300.
+
+### Features supported
+- Ethernet network
+- FC network
+- FCOE network
+- Network set
+- Fabric
+- Connection template
+
+
 # 2.0.0 (2017-01-05)
 
 ### Notes
