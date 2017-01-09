@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_fabric).provider(:oneview_fabric)
+provider_class = Puppet::Type.type(:oneview_fabric).provider(:c7000)
 resourcetype = OneviewSDK::Fabric
 
 describe provider_class, unit: true do
@@ -41,7 +41,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:oneview_fabric)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:c7000)
     end
 
     it 'should not be able to create a new fabric' do

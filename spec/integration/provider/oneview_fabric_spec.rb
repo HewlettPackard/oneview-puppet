@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_fabric).provider(:oneview_fabric)
+provider_class = Puppet::Type.type(:oneview_fabric).provider(:c7000)
 
 # you must have the DefaultFabric in the Appliance
 
@@ -40,8 +40,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:oneview_fabric)
+  it 'should be an instance of the provider C7000' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:c7000)
   end
 
   it 'should be able to find the fabric' do

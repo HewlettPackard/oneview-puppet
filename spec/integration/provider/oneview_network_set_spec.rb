@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
+provider_class = Puppet::Type.type(:oneview_network_set).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -41,7 +41,7 @@ describe provider_class do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:c7000)
     end
 
     it 'should be able to create the resource' do

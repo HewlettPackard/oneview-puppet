@@ -14,14 +14,21 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.type(:oneview_fc_network).provide :thunderbird, parent: :c7000 do
-  desc 'Provider for OneView Network Sets using the Thunderbird variant of the OneView API'
+Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
+  desc 'Provider for OneView Fabrics using the Synergy variant of the OneView API'
 
-  confine true: login[:hardware_variant] == 'Thunderbird'
+  confine true: login[:hardware_variant] == 'Synergy'
 
   def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::FCNetwork")
-    @ethernet ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::EthernetNetwork")
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Fabric")
     super(*args)
+  end
+
+  def get_reserved_vlan_range
+    puts get_single_resource_instance.get_reserved_vlan_range
+  end
+
+  def set_reserved_vlan_range
+    @resourcetype.find_by(@client, unique_id).set_reserved_vlan_range(@data['fabric_options'])
   end
 end

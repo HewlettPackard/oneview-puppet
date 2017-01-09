@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'facter', '>= 1.7.0'
+gem 'metadata-json-lint'
 gem 'oneview-sdk', '>= 3.0.0'
 gem 'pry'
 gem 'puppet', '>= 4.1'
