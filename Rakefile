@@ -64,11 +64,21 @@ def_spec_options = '-f d --color'
 
 namespace :spec do
   desc 'Run unit tests only'
-  RSpec::Core::RakeTask.new(:spec) do |spec|
+  RSpec::Core::RakeTask.new(:unit) do |spec|
     spec.pattern = spec_pattern
     spec.rspec_opts = def_spec_options
     spec.rspec_opts << ' --tag unit'
   end
 end
 
-task(:spec).clear.enhance(['spec:spec'])
+task(:spec).clear.enhance(['rubocop', 'spec:unit'])
+
+desc 'Runs unit tests and linters for manifests, libraries and metadata'
+task :test do
+  Rake::Task[:rubocop].invoke
+  Rake::Task[:lint].invoke
+  Rake::Task[:metadata_lint].invoke
+  Rake::Task[:build].invoke
+  Rake::Task[:clean].invoke
+  Rake::Task[:spec].invoke
+end
