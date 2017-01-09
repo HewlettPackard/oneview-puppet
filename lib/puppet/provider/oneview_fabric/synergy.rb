@@ -23,4 +23,12 @@ Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
     @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Fabric")
     super(*args)
   end
+
+  def get_reserved_vlan_range
+    puts get_single_resource_instance.get_reserved_vlan_range
+  end
+
+  def set_reserved_vlan_range
+    @resourcetype.find_by(@client, unique_id).set_reserved_vlan_range(@data['fabric_options'])
+  end
 end

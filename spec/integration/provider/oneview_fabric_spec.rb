@@ -40,7 +40,7 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
+  it 'should be an instance of the provider C7000' do
     expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:c7000)
   end
 

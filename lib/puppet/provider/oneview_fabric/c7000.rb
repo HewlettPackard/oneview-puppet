@@ -55,4 +55,12 @@ Puppet::Type::Oneview_fabric.provide :c7000 do
   def found
     find_resources
   end
+
+  def get_reserved_vlan_range
+    raise('This method is unavailable for the C7000 API')
+  end
+
+  def set_reserved_vlan_range
+    raise('This method is unavailable for the C7000 API')
+  end
 end
