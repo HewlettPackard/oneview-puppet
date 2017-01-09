@@ -14,13 +14,13 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.type(:oneview_fc_network).provide :thunderbird, parent: :c7000 do
-  desc 'Provider for OneView Ethernet Networks using the Thunderbird variant of the OneView API'
+Puppet::Type.type(:oneview_fcoe_network).provide :synergy, parent: :c7000 do
+  desc 'Provider for OneView Fiber Channel over Ethernet Networks using the Synergy variant of the OneView API'
 
-  confine true: login[:hardware_variant] == 'Thunderbird'
+  confine true: login[:hardware_variant] == 'Synergy'
 
   def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Thunderbird::EthernetNetwork")
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::FCoENetwork")
     super(*args)
   end
 end
