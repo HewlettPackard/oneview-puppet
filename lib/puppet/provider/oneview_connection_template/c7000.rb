@@ -18,7 +18,7 @@ require_relative '../login'
 require_relative '../common'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_connection_template).provide(:oneview_connection_template) do
+Puppet::Type.type(:oneview_connection_template).provide(:c7000) do
   mk_resource_methods
 
   def initialize(*args)

@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
+provider_class = Puppet::Type.type(:oneview_connection_template).provider(:c7000)
 
 # you must have this connection template in your appliance
 
@@ -45,7 +45,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:oneview_connection_template)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:c7000)
   end
 
   it 'should be able to get the default connection template' do
