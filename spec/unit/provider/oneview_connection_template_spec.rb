@@ -19,7 +19,12 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_connection_template).provider(:c7000)
-resourcetype = OneviewSDK::ConnectionTemplate
+api_version = login[:api_version] || 200
+resourcetype ||= if api_version == 200
+                   OneviewSDK::API200::ConnectionTemplate
+                 else
+                   Object.const_get("OneviewSDK::API#{api_version}::C7000::ConnectionTemplate")
+                 end
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -40,7 +45,7 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider Ruby' do
+    it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:c7000)
     end
 
