@@ -10,6 +10,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Network set
 - Fabric
 - Connection template
+- Datacenter
 
 
 # 2.0.0 (2017-01-05)
