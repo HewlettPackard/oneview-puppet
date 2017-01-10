@@ -14,22 +14,13 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
-  desc 'Provider for OneView Fabrics using the Synergy variant of the OneView API'
+Puppet::Type.type(:oneview_datacenter).provide :synergy, parent: :c7000 do
+  desc 'Provider for OneView Datacenters using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
 
   def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Fabric")
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Datacenter")
     super(*args)
-  end
-
-  # TODO: Incorporate this into 'present' ensure method.
-  def get_reserved_vlan_range
-    pretty get_single_resource_instance.get_reserved_vlan_range
-  end
-
-  def set_reserved_vlan_range
-    @resourcetype.find_by(@client, unique_id).first.set_reserved_vlan_range(@data['fabric_options'])
   end
 end

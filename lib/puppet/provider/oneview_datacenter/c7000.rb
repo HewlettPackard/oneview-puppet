@@ -18,14 +18,25 @@ require_relative '../login'
 require_relative '../common'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_datacenter).provide(:oneview_datacenter) do
+Puppet::Type::Oneview_datacenter.provide :c7000 do
+  desc 'Provider for OneView Datacenters using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Datacenter
-    @data = {}
+    api_version = login[:api_version] || 200
+    @resourcetype ||= if api_version == 200
+                        OneviewSDK::API200::Datacenter
+                      else
+                        Object.const_get("OneviewSDK::API#{api_version}::C7000::Datacenter")
+                      end
+    # Initializes the data so it is parsed only on exists and accessible throughout the methods
+    # This is not set here due to the 'resources' variable not being accessible in initialize
+    @data ||= {}
   end
 
   def exists?

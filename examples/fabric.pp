@@ -22,3 +22,26 @@ oneview_fabric{'Fabric Found':
     #     name => 'DefaultFabric'
     # }
 }
+
+# This is specific to Synergy, will fail for C7000
+oneview_fabric{'Fabric Reserved Vlan Range':
+    ensure => 'get_reserved_vlan_range',
+    data   =>
+    {
+        name => 'DefaultFabric'
+    }
+}
+
+# This is specific to Synergy, will fail for C7000
+oneview_fabric{'Fabric Set Reserved Vlan Range':
+    ensure => 'set_reserved_vlan_range',
+    data   =>
+    {
+        name           => 'DefaultFabric',
+        fabric_options => {
+          start  => 100,
+          length => 100,
+          type   => 'vlan-pool'
+        }
+    }
+}

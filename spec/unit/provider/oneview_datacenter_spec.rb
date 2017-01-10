@@ -18,8 +18,13 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_datacenter).provider(:oneview_datacenter)
-resourcetype = OneviewSDK::Datacenter
+provider_class = Puppet::Type.type(:oneview_datacenter).provider(:c7000)
+api_version = login[:api_version] || 200
+resourcetype ||= if api_version == 200
+                   OneviewSDK::API200::Datacenter
+                 else
+                   Object.const_get("OneviewSDK::API#{api_version}::C7000::Datacenter")
+                 end
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -43,7 +48,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:oneview_datacenter)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:c7000)
     end
 
     it 'should return that the resource does not exists' do
@@ -75,7 +80,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should not return any datacenters' do
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
       expect { provider.found }.to raise_error(/No Datacenter with the specified data were found on the Oneview Appliance/)
     end

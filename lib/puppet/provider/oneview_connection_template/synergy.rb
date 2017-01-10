@@ -15,7 +15,7 @@
 ################################################################################
 
 Puppet::Type.type(:oneview_connection_template).provide :synergy, parent: :c7000 do
-  desc 'Provider for OneView Fiber Channel Networks using the Synergy variant of the OneView API'
+  desc 'Provider for OneView Connection Templates using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
 
