@@ -49,19 +49,20 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the min parameters' do
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:c7000)
     end
 
     it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return(%w(test1 test2 test3))
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 

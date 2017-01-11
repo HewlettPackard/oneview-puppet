@@ -14,41 +14,20 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_fc_network.provide :c7000 do
+Puppet::Type::Oneview_fc_network.provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Fiber Channel Networks using the C7000 variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    api_version = login[:api_version] || 200
-    @resourcetype ||= if api_version == 200
-                        OneviewSDK::API200::FCNetwork
-                      else
-                        Object.const_get("OneviewSDK::API#{api_version}::C7000::FCNetwork")
-                      end
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data ||= {}
-  end
+  @resourcetype ||= OneviewSDK::FCNetwork
 
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::FCNetwork.find_by(@client, {})
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
+  def initialize(*args)
+    @resource_name = 'FCNetwork'
+    super(*args)
   end
 
   # Provider methods
