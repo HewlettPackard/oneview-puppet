@@ -20,7 +20,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 # NOTE: This test REQUIRES an enclosure group to be created and listed either on the enclosure_group
 # var on the json containing the login info, or down bellow directly in the var.
 
-provider_class = Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
+provider_class = Puppet::Type.type(:oneview_enclosure).provider(:c7000)
 enclosure_ip = login[:enclosure_ip] || '172.18.1.13'
 enclosure_username = login[:enclosure_username] || dcs
 enclosure_password = login[:enclosure_password] || dcs
@@ -38,7 +38,6 @@ describe provider_class do
             'username'          => enclosure_username,
             'password'          => enclosure_password,
             'enclosureGroupUri' => enclosure_group,
-            # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
             'licensingIntent'   => 'OneView'
           }
     )
@@ -49,7 +48,7 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   it 'should be an instance of the provider oneview_enclosure' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:c7000)
   end
 
   # Negative testing set_refresh_state
@@ -62,7 +61,6 @@ describe provider_class do
             {
               'name'              => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => enclosure_group,
-              # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView',
               'refreshState'      => 'RefreshPending'
             }
@@ -87,7 +85,6 @@ describe provider_class do
             {
               'name' => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => enclosure_group,
-              # 'enclosureGroupUri'      => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'        => 'OneView',
               'utilization_parameters' => {
                 'view' => 'day'
@@ -151,7 +148,6 @@ describe provider_class do
             {
               'name'              => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => enclosure_group,
-              # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView',
               'refreshState'      => 'RefreshPending'
             }
@@ -196,7 +192,6 @@ describe provider_class do
             {
               'name'              => 'Puppet_Test_Enclosure',
               'enclosureGroupUri' => enclosure_group,
-              # 'enclosureGroupUri' => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
               'licensingIntent'   => 'OneView'
             }
       )
