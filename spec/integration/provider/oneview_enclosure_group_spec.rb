@@ -27,8 +27,7 @@ describe provider_class do
         {
           'name' => 'Enclosure Group',
           'interconnectBayMappingCount' => 8,
-          'stackingMode' => 'Enclosure',
-          'type' => 'EnclosureGroupV200'
+          'stackingMode' => 'Enclosure'
         }
     )
   end
@@ -42,7 +41,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure_group).provider(:oneview_enclosure_group)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure_group).provider(:c7000)
   end
 
   context 'given the minimum parameters' do
