@@ -21,39 +21,45 @@ resourcetype = OneviewSDK::FCNetwork
 
 describe provider_class, unit: true do
   include_context 'shared context'
+
+  let(:resource) do
+    Puppet::Type.type(:oneview_fc_network).new(
+      name: 'fc',
+      ensure: 'present',
+      data:
+          {
+            'name'                    => 'OneViewSDK Test FC Network',
+            'connectionTemplateUri'   => nil,
+            'autoLoginRedistribution' => true,
+            'fabricType'              => 'FabricAttach',
+            'linkStabilityTime' => 30
+          }
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the Creation parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_fc_network).new(
-        name: 'fc',
-        ensure: 'present',
-        data:
-            {
-              'name'                    => 'OneViewSDK Test FC Network',
-              'connectionTemplateUri'   => nil,
-              'autoLoginRedistribution' => true,
-              'fabricType'              => 'FabricAttach',
-              'type' => 'fc-networkV2',
-              'linkStabilityTime' => 30
-            }
-      )
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider oneview_fc_network' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:c7000)
     end
 
     it 'if nothing is found should return false' do
-      expect(OneviewSDK::FCNetwork).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
 
     it 'should return true when resource exists' do
-      test = [OneviewSDK::FCNetwork.new(@client, resource['data'])]
-      expect(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, resource['data']).and_return(test)
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to eq(true)
     end
 
@@ -66,22 +72,19 @@ describe provider_class, unit: true do
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
-      test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([OneviewSDK::FCNetwork.new(@client, resource['data'])])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
     it 'finds the resource' do
-      test = OneviewSDK::FCNetwork.new(@client, resource['data'])
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect(provider.found).to be
     end
