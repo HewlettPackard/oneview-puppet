@@ -46,7 +46,6 @@ Puppet::Type.type(:oneview_rack).provide(:oneview_rack) do
   # Provider methods
   def exists?
     @data = data_parse
-    pretty @data
     empty_data_check([:found, :absent])
     !@resourcetype.find_by(@client, @data).empty?
   end

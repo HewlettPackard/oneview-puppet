@@ -17,11 +17,11 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
+resourcetype = OneviewSDK::ManagedSAN
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::ManagedSAN
   let(:resource) do
     Puppet::Type.type(:oneview_managed_san).new(
       name: 'managed_san',
@@ -43,7 +43,7 @@ describe provider_class, unit: true do
     end
 
     it 'should raise error when server is not found' do
-      allow(OneviewSDK::ManagedSAN).to receive(:find_by).with(anything, resource['data']).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       provider.exists?
       expect { provider.found }.to raise_error(/No ManagedSAN with the specified data were found on the Oneview Appliance/)
     end
@@ -76,9 +76,9 @@ describe provider_class, unit: true do
     end
     before(:each) do
       resource['data']['uri'] = '/rest/san-managers/fake'
-      test = OneviewSDK::ManagedSAN.new(@client, resource['data'])
-      allow(OneviewSDK::ManagedSAN).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(OneviewSDK::ManagedSAN).to receive(:get_all).with(anything).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
       provider.exists?
     end
 
@@ -117,8 +117,8 @@ describe provider_class, unit: true do
   context 'given the minimum parameters after server creation' do
     before(:each) do
       resource['data']['uri'] = '/rest/san-managers/fake'
-      test = OneviewSDK::ManagedSAN.new(@client, resource['data'])
-      allow(OneviewSDK::ManagedSAN).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
     it 'should be able to run through found' do
@@ -126,7 +126,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to run through get_endpoints' do
-      allow_any_instance_of(OneviewSDK::ManagedSAN).to receive(:get_endpoints).and_return(['Get Endpoints Json'])
+      allow_any_instance_of(resourcetype).to receive(:get_endpoints).and_return(['Get Endpoints Json'])
       expect(provider.get_endpoints).to be
     end
 

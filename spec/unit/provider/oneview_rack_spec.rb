@@ -22,7 +22,7 @@ resourcetype = OneviewSDK::Rack
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::Rack
+  @resourcetype = resourcetype
   let(:resource) do
     Puppet::Type.type(:oneview_rack).new(
       name: 'rack',
@@ -38,10 +38,11 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the minimum parameters' do
     before(:each) do
-      test = OneviewSDK::Rack.new(@client, resource['data'])
-      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
@@ -50,7 +51,7 @@ describe provider_class, unit: true do
     end
 
     it 'should raise error when server is not found' do
-      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, resource['data']).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect { provider.found }.to raise_error(/No Rack with the specified data were found on the Oneview Appliance/)
     end
 
@@ -62,13 +63,12 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to run through self.instances' do
-      test = OneviewSDK::Rack.new(@client, resource['data'])
-      allow(OneviewSDK::Rack).to receive(:get_all).with(anything).and_return([test])
+      allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
       expect(instance).to be
     end
 
     it 'should be able to run get_device_topology' do
-      expect_any_instance_of(OneviewSDK::Rack).to receive(:get_device_topology).and_return(['Fake Json'])
+      expect_any_instance_of(resourcetype).to receive(:get_device_topology).and_return(['Fake Json'])
       expect(provider.get_device_topology).to be
     end
   end
@@ -89,31 +89,29 @@ describe provider_class, unit: true do
     end
     before(:each) do
       resource['data']['uri'] = '/rest/fake'
-      test = OneviewSDK::Rack.new(@client, resource['data'])
-      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
     it 'should be able to add a rack resource' do
       uri = { 'uri' => resource['data']['rackMounts'][0]['mountUri'] }
       new_res = Hash[resource['data']['rackMounts'][0].to_a]
       new_res.delete('mountUri')
-      expect_any_instance_of(OneviewSDK::Rack).to receive(:add_rack_resource).with(uri, new_res).and_return('test')
-      expect_any_instance_of(OneviewSDK::Rack).to receive(:update).and_return('test')
+      expect_any_instance_of(resourcetype).to receive(:add_rack_resource).with(uri, new_res).and_return('test')
+      expect_any_instance_of(resourcetype).to receive(:update).and_return('test')
       expect(provider.add_rack_resource).to be
     end
 
     it 'should be able to remove a rack resource' do
       uri = { 'uri' => resource['data']['rackMounts'][0]['mountUri'] }
-      expect_any_instance_of(OneviewSDK::Rack).to receive(:remove_rack_resource).with(uri).and_return('test')
-      expect_any_instance_of(OneviewSDK::Rack).to receive(:update).and_return('test')
+      expect_any_instance_of(resourcetype).to receive(:remove_rack_resource).with(uri).and_return('test')
+      expect_any_instance_of(resourcetype).to receive(:update).and_return('test')
       expect(provider.remove_rack_resource).to be
     end
 
     it 'should allow specifying a name instead of an uri' do
       resource['data']['rackMounts'][0]['mountUri'] = 'Test, enclosure'
-      test = OneviewSDK::Rack.new(@client, resource['data'])
       allow(OneviewSDK::Enclosure).to receive(:find_by).with(anything, name: 'Test').and_return([test])
-      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
     end
   end
@@ -121,8 +119,7 @@ describe provider_class, unit: true do
   context 'given the minimum parameters' do
     it 'should delete the rack' do
       resource['data']['uri'] = '/rest/fake/'
-      test = OneviewSDK::Rack.new(@client, resource['data'])
-      allow(OneviewSDK::Rack).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.destroy).to be

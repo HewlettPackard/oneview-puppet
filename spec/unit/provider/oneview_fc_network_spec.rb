@@ -15,8 +15,6 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
 resourcetype = OneviewSDK::FCNetwork

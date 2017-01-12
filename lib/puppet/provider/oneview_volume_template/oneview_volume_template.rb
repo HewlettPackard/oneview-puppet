@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
 
   def self.instances
     @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::VolumeTemplate.find_all(@client, {})
+    matches = OneviewSDK::VolumeTemplate.find_by(@client, {})
     matches.collect do |line|
       name = line['name']
       data = line.inspect

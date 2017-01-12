@@ -21,50 +21,26 @@ require 'rspec-puppet'
 require 'pry'
 require 'simplecov'
 
-client_files = %w(client.rb rest.rb config_loader.rb ssl_helper.rb)
-resource_path = 'lib/oneview-sdk/resource'
+provider_path = 'lib/puppet/provider'
+type_path = 'lib/puppet/type'
 
 SimpleCov.profiles.define 'unit' do
   add_filter 'spec/'
-  add_group 'Client', client_files
-  add_group 'Resources', resource_path
-  add_group 'CLI', 'cli.rb'
-  minimum_coverage 90 # TODO: bump up as we increase coverage. Goal: 95%
+  add_group 'Providers', provider_path
+  add_group 'Types', type_path
+  minimum_coverage 80 # TODO: bump up as we increase coverage. Goal: 95%
   minimum_coverage_by_file 50 # TODO: bump up as we increase coverage. Goal: 70%
-end
-
-SimpleCov.profiles.define 'integration' do
-  add_filter 'spec/'
-  add_filter 'cli.rb'
-  add_group 'Client', client_files
-  add_group 'Resources', resource_path
-  minimum_coverage 50 # TODO: bump up as we increase coverage. Goal: 85%
-  minimum_coverage_by_file 30 # TODO: bump up as we increase coverage. Goal: 70%
-end
-
-SimpleCov.profiles.define 'system' do
-  add_filter 'spec/'
-  add_filter 'cli.rb'
-  add_group 'Client', client_files
-  add_group 'Resources', resource_path
-  minimum_coverage 50 # TODO: bump up as we increase coverage. Goal: 85%
-  minimum_coverage_by_file 30 # TODO: bump up as we increase coverage. Goal: 70%
 end
 
 SimpleCov.profiles.define 'all' do
   add_filter 'spec/'
-  add_group 'Client', client_files
-  add_group 'Resources', resource_path
-  add_group 'CLI', 'cli.rb'
-  minimum_coverage 10 # TODO: bump up as we increase coverage. Goal: 95%
-  minimum_coverage_by_file 10 # TODO: bump up as we increase coverage. Goal: 90%
+  add_group 'Providers', provider_path
+  add_group 'Types', type_path
+  minimum_coverage 50 # TODO: bump up as we increase coverage. Goal: 85%
+  minimum_coverage_by_file 30 # TODO: bump up as we increase coverage. Goal: 70%
 end
 
-if RSpec.configuration.filter_manager.inclusions.rules[:integration] # Run Integration only
-  SimpleCov.start 'integration'
-elsif RSpec.configuration.filter_manager.inclusions.rules[:system] # Run System only
-  SimpleCov.start 'system'
-elsif RSpec.configuration.filter_manager.exclusions.rules[:integration] && RSpec.configuration.filter_manager.exclusions.rules[:system]
+if RSpec.configuration.filter_manager.inclusions.rules[:unit]
   SimpleCov.start 'unit'
 else # Run both
   SimpleCov.start 'all'
@@ -116,7 +92,4 @@ RSpec.configure do |config|
       ENV[name] = nil
     end
   end
-end
-
-RSpec.configure do |c|
 end
