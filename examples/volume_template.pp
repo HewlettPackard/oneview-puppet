@@ -17,18 +17,17 @@
 oneview_volume_template{'volume_template_1':
     ensure => 'present',
     data   => {
-      name         => 'ONEVIEW_PUPPET_TEST',
-      description  => 'Volume Template',
-      type         => 'StorageVolumeTemplateV3',
-      stateReason  => 'None',
-      provisioning => {
-        shareable      => true,
-        provisionType  => 'Thin',
-        capacity       => '235834383322',
-        storagePoolUri => 'FST_CPG1'
-        # storagePoolUri => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
-                      }
-                    }
+                'name'         => 'ONEVIEW_PUPPET_TEST',
+                'description'  => 'Volume Template',
+                'type'         => 'StorageVolumeTemplateV3',
+                'stateReason'  => 'None',
+                'provisioning' => {
+                  'shareable'      => true,
+                  'provisionType'  => 'Thin',
+                  'capacity'       => '235834383322',
+                  'storagePoolUri' => 'FST_CPG1'
+                }
+              }
 }
 
 oneview_volume_template{'volume_template_2':

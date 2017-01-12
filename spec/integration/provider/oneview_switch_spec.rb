@@ -116,8 +116,7 @@ describe provider_class do
 
     it 'should display that no such type exists' do
       provider.exists?
-      expect { provider.get_type }
-        .to raise_error(/No switch types corresponding to the name 172.18.20.1 were found./)
+      expect { provider.get_type }.to raise_error(/No switch types corresponding to the name 172.18.20.1 were found./)
     end
   end
 

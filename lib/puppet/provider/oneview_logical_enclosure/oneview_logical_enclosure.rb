@@ -58,7 +58,7 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:oneview_logical_enclosure
   end
 
   def destroy
-    get_single_resource_instance.remove
+    get_single_resource_instance.delete
     @property_hash.clear
     true
   end

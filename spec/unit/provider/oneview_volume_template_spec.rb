@@ -16,23 +16,28 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
-resourcetype = OneviewSDK::FCNetwork
+provider_class = Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
+resourcetype = OneviewSDK::VolumeTemplate
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do
-    Puppet::Type.type(:oneview_fc_network).new(
-      name: 'fc',
+    Puppet::Type.type(:oneview_volume_template).new(
+      name: 'vt',
       ensure: 'present',
       data:
           {
-            'name'                    => 'OneViewSDK Test FC Network',
-            'connectionTemplateUri'   => nil,
-            'autoLoginRedistribution' => true,
-            'fabricType'              => 'FabricAttach',
-            'linkStabilityTime' => 30
+            'name'         => 'ONEVIEW_PUPPET_TEST',
+            'description'  => 'Volume Template',
+            'type'         => 'StorageVolumeTemplateV3',
+            'stateReason'  => 'None',
+            'provisioning' => {
+              'shareable'      => true,
+              'provisionType'  => 'Thin',
+              'capacity'       => '235834383322',
+              'storagePoolUri' => '/rest/fake'
+            }
           }
     )
   end
@@ -49,8 +54,8 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_fc_network' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:c7000)
+    it 'should be an instance of the provider oneview_volume_template' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
     end
 
     it 'if nothing is found should return false' do
@@ -59,21 +64,20 @@ describe provider_class, unit: true do
     end
 
     it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
     end
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
       allow(resourcetype).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
@@ -84,7 +88,7 @@ describe provider_class, unit: true do
     end
 
     it 'finds the resource' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
       expect(provider.found).to be
     end
