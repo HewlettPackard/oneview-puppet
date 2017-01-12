@@ -14,20 +14,24 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_firmware_bundle).provide(:oneview_firmware_bundle) do
+Puppet::Type::Oneview_firmware_bundle.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Firmware Bundles using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
+  @resourcetype ||= OneviewSDK::FirmwareBundle
+
   def initialize(*args)
+    @resource_name = 'FirmwareBundle'
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FirmwareBundle
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
+  end
+
+  def self.instances
+    raise Puppet::Error, 'This resource cannot be queried. Please use the Oneview_firmware_driver provider instead'
   end
 
   # Provider methods
@@ -37,7 +41,7 @@ Puppet::Type.type(:oneview_firmware_bundle).provide(:oneview_firmware_bundle) do
   end
 
   def create
-    @resourcetype.add(@client, @data['firmware_bundle_path'])
+    @resourcetype.add(@client, @data['firmware_bundle_path'], @data['timeout'])
   end
 
   def destroy

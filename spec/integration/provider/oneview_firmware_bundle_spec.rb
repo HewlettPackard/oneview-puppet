@@ -15,9 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
+provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
 firmware_bundle_path = login[:firmware_bundle_path] || './spec/support/cp022594.exe'
 
 describe provider_class do
@@ -41,8 +41,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider oneview_firmware_bundle' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
     end
 
     it 'should raise error when firmware bundle is not found' do

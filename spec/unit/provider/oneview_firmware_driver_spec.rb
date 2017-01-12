@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:oneview_firmware_driver)
+provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
 resourcetype = OneviewSDK::FirmwareDriver
 
 describe provider_class, unit: true do
@@ -39,7 +39,7 @@ describe provider_class, unit: true do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_firmware_driver' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:oneview_firmware_driver)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
     end
 
     it 'should raise error when Firmware Driver is not found' do

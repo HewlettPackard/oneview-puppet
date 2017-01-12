@@ -14,33 +14,21 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_firmware_driver).provide(:oneview_firmware_driver) do
+Puppet::Type::Oneview_firmware_driver.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Firmware Drivers using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::FirmwareDriver
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-    @attributes = {}
-  end
+  @resourcetype ||= OneviewSDK::FirmwareDriver
 
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::FirmwareDriver.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
+  def initialize(*args)
+    @resource_name = 'FirmwareDriver'
+    super(*args)
+    @attributes = {}
   end
 
   # Provider methods
