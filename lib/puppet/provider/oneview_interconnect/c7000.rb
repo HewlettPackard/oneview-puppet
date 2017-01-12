@@ -14,23 +14,25 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_interconnect).provide(:oneview_interconnect) do
+Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Interconnects using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
+  @resourcetype ||= OneviewSDK::Interconnect
+
   def initialize(*args)
+    @resource_name = 'Interconnect'
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Interconnect
-    @data = {}
   end
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :get_types])
+    empty_data_check([nil, :found, :get_types])
     variable_assignments
     # Checks if there is a patch update to be performed
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch

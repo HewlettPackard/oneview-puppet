@@ -23,7 +23,7 @@ begin
   JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_INTEGRATION_CONFIG'])), symbolize_names: true)
   JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_INTEGRATION_SECRETS'])), symbolize_names: true)
 rescue Errno::ENOENT
-  puts 'bla'
+  puts 'No Integration Config and/or Secrets files have been found. Intergration tests will not be able to run.'
 end
 
 # General context for unit testing:

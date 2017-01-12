@@ -18,43 +18,44 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
+provider_class = Puppet::Type.type(:oneview_interconnect).provider(:c7000)
 resourcetype = OneviewSDK::Interconnect
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
+  let(:resource) do
+    Puppet::Type.type(:oneview_interconnect).new(
+      name: 'Interconnect',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Encl2, interconnect 1',
+            'ports' =>
+            [
+              {
+                'portName' => 'x1',
+                'enabled' => true
+              }
+            ]
+          }
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_interconnect).new(
-        name: 'Interconnect',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'Encl2, interconnect 1',
-              'ports' =>
-              [
-                {
-                  'portName' => 'x1',
-                  'enabled' => true
-                }
-              ]
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:c7000)
     end
 
     it 'should be able to get the name servers' do
