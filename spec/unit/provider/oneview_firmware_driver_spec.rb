@@ -43,7 +43,7 @@ describe provider_class, unit: true do
     end
 
     it 'should raise error when Firmware Driver is not found' do
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, {}).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect { provider.found }.to raise_error(/No FirmwareDriver with the specified data were found on the Oneview Appliance/)
     end
   end
@@ -62,13 +62,13 @@ describe provider_class, unit: true do
       )
     end
     before(:each) do
-      test = OneviewSDK::FirmwareDriver.new(@client, resource['data'])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
         .and_return([test])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][0]).and_return([test])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']).and_return([])
-      allow(OneviewSDK::FirmwareDriver).to receive(:get_all).with(anything).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][0]).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']).and_return([])
+      allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
       provider.exists?
     end
 
@@ -85,17 +85,17 @@ describe provider_class, unit: true do
 
     it 'should delete the Firmware Driver' do
       resource['data']['uri'] = '/rest/firmware-drivers/fake'
-      test = OneviewSDK::FirmwareDriver.new(@client, resource['data'])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.destroy).to be
     end
 
     it 'should be able to work specifying a name instead of an uri' do
       resource['data']['baselineUri'] = 'Test'
-      test = OneviewSDK::FirmwareDriver.new(@client, resource['data'])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
-      allow(OneviewSDK::FirmwareDriver).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
     end
   end

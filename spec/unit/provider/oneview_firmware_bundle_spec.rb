@@ -17,11 +17,11 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
+resourcetype = OneviewSDK::FirmwareBundle
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::FirmwareBundle
   let(:resource) do
     Puppet::Type.type(:oneview_firmware_bundle).new(
       name: 'firmware_bundle',
@@ -56,7 +56,7 @@ describe provider_class, unit: true do
     end
 
     it 'should create/add the firmware bundle' do
-      allow(OneviewSDK::FirmwareBundle).to receive(:add).and_return(resource)
+      allow(resourcetype).to receive(:add).and_return(resource)
       expect(provider.create).to be
     end
   end
