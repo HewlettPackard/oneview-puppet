@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
+provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -44,7 +44,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be an instance of the provider oneview_firmware_bundle' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:oneview_firmware_bundle)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
     end
 
     it 'should raise error when firmware bundle is not found' do
