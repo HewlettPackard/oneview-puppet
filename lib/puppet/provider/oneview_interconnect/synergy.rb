@@ -23,4 +23,13 @@ Puppet::Type.type(:oneview_interconnect).provide :synergy, parent: :c7000 do
     @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Interconnect")
     super(*args)
   end
+
+  def get_link_topologies
+    Puppet.notice("\n\nInterconnect link topologies:\n")
+    if @data['name']
+      pretty @resourcetype.get_link_topology(@client, @data['name'])
+    else
+      pretty @resourcetype.get_link_topologies(@client)
+    end
+  end
 end

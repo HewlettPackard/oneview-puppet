@@ -32,7 +32,7 @@ Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResour
 
   def exists?
     @data = data_parse
-    empty_data_check([nil, :found, :get_types])
+    empty_data_check([nil, :found, :get_types, :get_link_topologies])
     variable_assignments
     # Checks if there is a patch update to be performed
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
@@ -92,6 +92,10 @@ Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResour
   def reset_port_protection
     Puppet.notice("\n\nResetting Port Protection...\n")
     get_single_resource_instance.reset_port_protection
+  end
+
+  def get_link_topologies
+    raise 'This ensure method is only supported by the Synergy resource variant'
   end
 
   # Helpers

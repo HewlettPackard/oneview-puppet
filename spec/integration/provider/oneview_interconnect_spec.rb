@@ -75,5 +75,9 @@ describe provider_class do
     it 'should update the interconnect port x1' do
       expect(provider.update_ports).to be
     end
+
+    it 'should run get link topologies and display an error' do
+      expect(provider.get_link_topologies).to raise_error('This ensure method is only supported by the Synergy resource variant.')
+    end
   end
 end
