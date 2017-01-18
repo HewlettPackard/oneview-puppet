@@ -18,6 +18,7 @@ Puppet::Type.type(:oneview_interconnect).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Interconnects using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
+  defaultfor oneview_synergy_variant: 'Synergy'
 
   def initialize(*args)
     @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Interconnect")
@@ -31,5 +32,6 @@ Puppet::Type.type(:oneview_interconnect).provide :synergy, parent: :c7000 do
     else
       pretty @resourcetype.get_link_topologies(@client)
     end
+    true
   end
 end

@@ -32,10 +32,12 @@ Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResour
 
   def exists?
     @data = data_parse
+    puts resource['ensure']
     empty_data_check([nil, :found, :get_types, :get_link_topologies])
     variable_assignments
     # Checks if there is a patch update to be performed
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
+    puts @resourcetype
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -58,6 +60,7 @@ Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResour
     else
       pretty @resourcetype.get_types(@client)
     end
+    true
   end
 
   # it is possible to query by either portName, subportNumber or nothing (for all)
