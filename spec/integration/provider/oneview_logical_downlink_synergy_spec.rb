@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
+provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
 
 # you must have this logical downlink in your appliance
 name = 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
@@ -29,7 +29,8 @@ describe provider_class do
       data:
       {
         name: name
-      }
+      },
+      provider: 'synergy'
     )
   end
 
@@ -37,8 +38,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
+  it 'should be an instance of the provider synergy' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
   end
 
   context 'given the min parameters' do
