@@ -14,23 +14,25 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_unmanaged_device).provide(:oneview_unmanaged_device) do
+Puppet::Type::Oneview_unmanaged_device.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Unmanaged Devices using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
+  @resourcetype ||= OneviewSDK::UnmanagedDevice
+
   def initialize(*args)
+    @resource_name = 'UnmanagedDevice'
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::UnmanagedDevice
-    @data = {}
   end
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :absent])
+    empty_data_check([:nil, :found, :absent])
     !@resourcetype.find_by(@client, @data).empty?
   end
 

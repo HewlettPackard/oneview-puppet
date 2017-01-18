@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
+provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:c7000)
 resourcetype = OneviewSDK::UnmanagedDevice
 
 describe provider_class, unit: true do
@@ -33,8 +33,10 @@ describe provider_class, unit: true do
             {
               'name' => 'Unmanaged Device',
               'model' => 'Procurve 4200VL',
-              'deviceType' => 'Server'
-            }
+              'deviceType' => 'Server',
+              'uri' => '/rest/fake'
+            },
+        provider: 'c7000'
       )
     end
 
@@ -42,52 +44,53 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
+    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+
     before(:each) do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resourcetype).to receive(:update).and_return([test])
       provider.exists?
     end
 
     it 'should be an instance of the provider' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:c7000)
     end
 
     it 'should be able to find the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect(provider.found).to be
     end
 
     it 'should not be able to find the resource' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(provider.exists?).not_to be
+      allow(resourcetype).to receive(:find_by).and_return([])
+      provider.exists?
       expect { provider.found }.to raise_error(/No UnmanagedDevice with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should delete/remove the resource' do
-      resource['data']['uri'] = '/rest/fake/'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resourcetype).to receive(:remove).and_return(true)
       expect(provider.destroy).to be
     end
 
     it 'should create/add the resource' do
-      test = resourcetype.new(@client, resource['data'])
-      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-      provider.exists?
+      allow(resourcetype).to receive(:find_by).and_return([])
       allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      provider.exists?
       expect(provider.create).to be
     end
 
     it 'should update the resource' do
-      test = resourcetype.new(@client, resource['data'])
+      unique_ids = { 'name' => resource['data']['name'], 'uri' => resource['data']['uri'] }
       expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      expect(resourcetype).to receive(:find_by).with(anything, unique_ids).and_return([test])
       provider.exists?
       expect(provider.create).to be
+    end
+
+    it 'should be able to get the environmental configuration' do
+      allow_any_instance_of(resourcetype).to receive(:environmental_configuration).and_return(['test'])
+      provider.exists?
+      expect(provider.get_environmental_configuration).to be
     end
   end
 end
