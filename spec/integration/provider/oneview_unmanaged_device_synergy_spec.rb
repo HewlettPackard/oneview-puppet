@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
+provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:synergy)
 
 describe provider_class do
   let(:resource) do
@@ -28,7 +28,8 @@ describe provider_class do
             'name' => 'Test Datacenter',
             'model' => 'Procurve 4200VL',
             'deviceType' => 'Server'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -40,8 +41,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:oneview_unmanaged_device)
+  it 'should be an instance of the provider synergy' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:synergy)
   end
 
   it 'should be able to add the unmanaged device' do
