@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,33 +14,21 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_server_hardware_type).provide(:oneview_server_hardware_type) do
+Puppet::Type::Oneview_server_hardware_type.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Fiber Channel Networks using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ServerHardwareType
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-    @authentication = {}
-  end
+  @resourcetype ||= OneviewSDK::ServerHardwareType
 
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::ServerHardwareType.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
+  def initialize(*args)
+    @resource_name = 'ServerHardwareType'
+    super(*args)
+    @authentication = {}
   end
 
   # Provider methods
