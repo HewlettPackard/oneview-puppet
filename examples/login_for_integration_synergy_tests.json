@@ -5,7 +5,7 @@
   "ssl_enabled": "true",
   "api_version": 300,
   "log_level": "info",
-  "hardware_variant": "C7000",
+  "hardware_variant": "Synergy",
   "enclosure_ip": "172.18.1.13",
   "enclosure_username": "dcs",
   "enclosure_password": "dcs",

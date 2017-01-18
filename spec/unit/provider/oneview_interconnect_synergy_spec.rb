@@ -18,8 +18,6 @@ require 'spec_helper'
 require_relative '../../shared_context'
 require_relative '../../support/fake_response'
 
-ENV['ONEVIEW_AUTH_FILE'] = 'C:/Users/garciabf/puppet/my_oneview_300_synergy_login.json'
-
 provider_class = Puppet::Type.type(:oneview_interconnect).provider(:synergy)
 resourcetype = OneviewSDK::API300::Synergy::Interconnect
 describe provider_class, unit: true do
