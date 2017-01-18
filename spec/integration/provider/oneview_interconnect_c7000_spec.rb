@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ describe provider_class do
       provider.exists?
     end
 
-    it 'should be an instance of the provider Ruby' do
+    it 'should be an instance of the provider C7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:c7000)
     end
 
