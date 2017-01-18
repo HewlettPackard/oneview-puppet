@@ -14,18 +14,20 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
+Puppet::Type::Oneview_power_device.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Power Devices using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
+  @resourcetype ||= OneviewSDK::PowerDevice
+
   def initialize(*args)
+    @resource_name = 'PowerDevice'
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::PowerDevice
-    @data = {}
   end
 
   def exists?
@@ -80,12 +82,8 @@ Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
 
   def get_utilization
     Puppet.notice("\n\nPower Device Utilization\n")
-    parameters = if @query_parameters
-                   @query_parameters
-                 else
-                   {}
-                 end
-    pretty get_single_resource_instance.utilization(parameters)
+    @query_parameters ||= {}
+    pretty get_single_resource_instance.utilization(@query_parameters)
     true
   end
 
@@ -102,8 +100,8 @@ Puppet::Type.type(:oneview_power_device).provide(:oneview_power_device) do
     return unless @data['powerConnections']
     @data['powerConnections'].each do |pc|
       next if pc['connectionUri']
-      type = pc.delete('name')
-      name = pc.delete('type')
+      type = pc.delete('type')
+      name = pc.delete('name')
       uri = objectfromstring(type).find_by(@client, name: name)
       raise('The connection uri could not be found in the Appliance.') unless uri.first
       pc['connectionUri'] = uri.first.data['uri']
