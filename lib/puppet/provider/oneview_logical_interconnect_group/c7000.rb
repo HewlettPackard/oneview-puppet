@@ -14,32 +14,22 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_interconnect_group) do
+Puppet::Type::Oneview_logical_interconnect_group.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Logical Enclosures using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::LogicalInterconnectGroup
-    @data = {}
-  end
-
   def exists?
-    @data = data_parse
-    empty_data_check
+    super
     # Assignments and helpers
     @interconnects = @data.delete('interconnects')
     uri_getters('internalNetworkUris')
     uri_getters('uplinkSets')
     !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def found
-    find_resources
   end
 
   def create
@@ -49,10 +39,8 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide(:oneview_logical_
     @data['new_name'] = new_name if new_name
     return true if resource_update(@data, @resourcetype)
     lig.create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
+    @property_hash[:data] = lig.data
+    @property_hash[:ensure] = :present
   end
 
   def get_settings

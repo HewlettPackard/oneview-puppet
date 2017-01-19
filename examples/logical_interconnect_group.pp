@@ -20,7 +20,6 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Create':
   data   => {
     name          => 'My LIG',
     enclosureType => 'C7000',
-    type          => 'logical-interconnect-groupV3',
     # uplinkSets => ['Puppet Uplink Set'],
     interconnects =>
     [
