@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -23,6 +23,10 @@ Puppet::Type.newtype(:oneview_interconnect) do
 
     newvalue(:found) do
       provider.found
+    end
+
+    newvalue(:get_link_topologies) do
+      provider.get_link_topologies
     end
 
     # GETs
