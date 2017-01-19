@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -53,5 +53,13 @@ Puppet::Type::Oneview_fc_network.provide :c7000, parent: Puppet::OneviewResource
 
   def found
     find_resources
+  end
+
+  def resource_name
+    'FCNetwork'
+  end
+
+  def self.resource_name
+    'FCNetwork'
   end
 end

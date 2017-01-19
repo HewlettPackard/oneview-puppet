@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -80,7 +80,6 @@ RSpec.configure do |config|
   config.before(:each) do
     # TODO: Puppet: Probably reverify this once we have have different test profiles
     if config.filter_manager.inclusions.rules[:unit]
-      # unless config.filter_manager.inclusions.rules[:integration] || config.filter_manager.inclusions.rules[:system]
       # Mock appliance version and login api requests, as well as loading trusted certs
       allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(300)
       allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_return('secretToken')

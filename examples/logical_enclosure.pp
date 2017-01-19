@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@
 oneview_logical_enclosure{'logical_enc1':
     ensure => 'get_script',
     data   => {
-      name                      =>  'Encl1',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
 oneview_logical_enclosure{'logical_enc2':
     ensure => 'set_script',
     data   => {
-      name   =>  'Encl1',
+      name   =>  'Puppet_Test_Enclosure',
       script =>  'This is a script example',
     }
 }
@@ -42,25 +42,24 @@ oneview_logical_enclosure{'logical_enc2':
 oneview_logical_enclosure{'logical_enc3':
     ensure => 'get_script',
     data   => {
-      name                      =>  'Encl1',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
 oneview_logical_enclosure{'logical_enc4':
     ensure => 'updated_from_group',
     data   => {
-      name                      =>  'Encl1',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
 oneview_logical_enclosure{'logical_enc5':
-    ensure => 'dumped',
+    ensure => 'generate_support_dump',
     data   => {
-      name =>  'Encl1',
+      name =>  'Puppet_Test_Enclosure',
       dump =>
         {
           errorCode            => 'Mydump',
-          encrypt              => false,
           excludeApplianceDump => false
         }
     }
