@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,23 +14,25 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_interconnect).provide(:oneview_interconnect) do
+Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Interconnects using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
+  @resourcetype ||= OneviewSDK::Interconnect
+
   def initialize(*args)
+    @resource_name = 'Interconnect'
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Interconnect
-    @data = {}
   end
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :get_types])
+    empty_data_check([nil, :found, :get_types, :get_link_topologies])
     variable_assignments
     # Checks if there is a patch update to be performed
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
@@ -56,6 +58,7 @@ Puppet::Type.type(:oneview_interconnect).provide(:oneview_interconnect) do
     else
       pretty @resourcetype.get_types(@client)
     end
+    true
   end
 
   # it is possible to query by either portName, subportNumber or nothing (for all)
@@ -90,6 +93,10 @@ Puppet::Type.type(:oneview_interconnect).provide(:oneview_interconnect) do
   def reset_port_protection
     Puppet.notice("\n\nResetting Port Protection...\n")
     get_single_resource_instance.reset_port_protection
+  end
+
+  def get_link_topologies
+    raise 'This ensure method is only supported by the Synergy resource variant'
   end
 
   # Helpers

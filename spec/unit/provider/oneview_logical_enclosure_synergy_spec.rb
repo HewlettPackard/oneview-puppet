@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
+provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:synergy)
 resourcetype = OneviewSDK::LogicalEnclosure
 
 describe provider_class, unit: true do
@@ -33,7 +33,8 @@ describe provider_class, unit: true do
             'enclosureGroupUri'         =>  '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
             'firmwareBaselineUri'       =>  'null',
             'forceInstallFirmware'      =>  'false'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -49,8 +50,8 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_logical_enclosure' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_enclosure).provider(:synergy)
     end
 
     it 'if nothing is found should return false' do
@@ -59,7 +60,6 @@ describe provider_class, unit: true do
     end
 
     it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
     end
 
@@ -71,21 +71,37 @@ describe provider_class, unit: true do
     end
 
     it 'deletes the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
     it 'finds the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
       expect(provider.found).to be
+    end
+
+    it '#gets the script' do
+      allow_any_instance_of(resourcetype).to receive(:get_script).and_return('')
+      expect(provider.get_script).to be
+    end
+
+    it '#set_script raises an error on synergy' do
+      expect { provider.set_script }.to raise_error(/This ensure method is not available for Synergy/)
+    end
+
+    it '#updates the logical enclosure from group -- ~refreshes it' do
+      allow_any_instance_of(resourcetype).to receive(:update_from_group).and_return(true)
+      expect(provider.updated_from_group).to be
+    end
+
+    it '#generates a support dump for the logical enclosure' do
+      resource['data']['dump'] = 'Random text for dump'
+      allow_any_instance_of(resourcetype).to receive(:support_dump).and_return(true)
+      expect(provider.generate_support_dump).to be
     end
   end
 end

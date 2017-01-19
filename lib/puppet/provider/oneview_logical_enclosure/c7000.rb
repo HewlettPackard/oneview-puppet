@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,57 +14,21 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_logical_enclosure).provide(:oneview_logical_enclosure) do
+Puppet::Type::Oneview_logical_enclosure.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Logical Enclosures using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::LogicalEnclosure
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::LogicalEnclosure.find_by(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
-
-  # Provider methods
+  # @resourcetype ||= OneviewSDK::LogicalEnclosure
   def exists?
-    @data = data_parse
-    empty_data_check
+    super
+    @patch = @data.delete('patch')
+    get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
     !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
   end
 
   def get_script
@@ -85,7 +49,7 @@ Puppet::Type.type(:oneview_logical_enclosure).provide(:oneview_logical_enclosure
     get_single_resource_instance.update_from_group
   end
 
-  def dumped
+  def generate_support_dump
     dump = @data.delete('dump')
     raise 'The "dump" field is required inside data in order to use this ensurable' unless dump
     get_single_resource_instance.support_dump(dump)
