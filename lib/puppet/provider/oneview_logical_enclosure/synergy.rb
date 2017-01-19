@@ -19,10 +19,6 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :synergy, parent: :c7000 d
 
   confine true: login[:hardware_variant] == 'Synergy'
 
-  def initialize(*args)
-    super(*args)
-  end
-
   def set_script
     raise Puppet::Error, 'This ensure method is not available for Synergy'
   end

@@ -24,6 +24,12 @@ Puppet::Type::Oneview_logical_enclosure.provide :c7000, parent: Puppet::OneviewR
   mk_resource_methods
 
   # @resourcetype ||= OneviewSDK::LogicalEnclosure
+  def exists?
+    super
+    @patch = @data.delete('patch')
+    get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
+    !@resourcetype.find_by(@client, @data).empty?
+  end
 
   def get_script
     Puppet.notice "\n\n-- Start of the configuration script :"

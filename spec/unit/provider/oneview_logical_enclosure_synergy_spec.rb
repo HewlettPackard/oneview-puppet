@@ -60,7 +60,6 @@ describe provider_class, unit: true do
     end
 
     it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
     end
 
@@ -72,21 +71,37 @@ describe provider_class, unit: true do
     end
 
     it 'deletes the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
     it 'finds the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
       expect(provider.found).to be
+    end
+
+    it '#gets the script' do
+      allow_any_instance_of(resourcetype).to receive(:get_script).and_return('')
+      expect(provider.get_script).to be
+    end
+
+    it '#set_script raises an error on synergy' do
+      expect { provider.set_script }.to raise_error(/This ensure method is not available for Synergy/)
+    end
+
+    it '#updates the logical enclosure from group -- ~refreshes it' do
+      allow_any_instance_of(resourcetype).to receive(:update_from_group).and_return(true)
+      expect(provider.updated_from_group).to be
+    end
+
+    it '#generates a support dump for the logical enclosure' do
+      resource['data']['dump'] = 'Random text for dump'
+      allow_any_instance_of(resourcetype).to receive(:support_dump).and_return(true)
+      expect(provider.generate_support_dump).to be
     end
   end
 end
