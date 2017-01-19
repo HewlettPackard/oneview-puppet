@@ -184,7 +184,7 @@ This resource provides the following ensurable methods for managing one or more 
 * `get_script` - Gets the configuration script of the specified logical enclosure.
 * `set_script` - Updates the configuration script of the specified logical enclosure and on all enclosures in the specified logical enclosure.
 * `updated_from_group` - Makes a logical enclosure consistent with the enclosure group when the logical enclosure is in the Inconsistent state.
-* `dumped` - Generates a support dump for the specified logical enclosure. A logical enclosure support dump includes content for logical interconnects associated with that logical enclosure. By default, it also contains appliance support dump content.
+* `generate_support_dump` - Generates a support dump for the specified logical enclosure. A logical enclosure support dump includes content for logical interconnects associated with that logical enclosure. By default, it also contains appliance support dump content.
 
 Example file: [logical_enclosure.pp](examples/logical_enclosure.pp)
 

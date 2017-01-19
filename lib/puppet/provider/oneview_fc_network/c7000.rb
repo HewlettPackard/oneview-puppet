@@ -54,4 +54,12 @@ Puppet::Type::Oneview_fc_network.provide :c7000, parent: Puppet::OneviewResource
   def found
     find_resources
   end
+
+  def resource_name
+    'FCNetwork'
+  end
+
+  def self.resource_name
+    'FCNetwork'
+  end
 end

@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ describe provider_class do
           {
             'name' => 'Puppet_Test_Enclosure',
             'type' => 'LogicalEnclosure'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -62,7 +63,8 @@ describe provider_class do
             {
               'name'                    => 'Puppet_Test_Enclosure',
               'script'                  => 'This is a script example'
-            }
+            },
+        provider: 'synergy'
       )
     end
     it 'should be able to set the script on the logical enclosure' do
@@ -75,7 +77,7 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
         name: 'Puppet_Test_Enclosure',
-        ensure: 'dumped',
+        ensure: 'generate_support_dump',
         data:
             {
               'name'                    => 'Puppet_Test_Enclosure',
@@ -85,13 +87,14 @@ describe provider_class do
                     'encrypt' => 'true',
                     'excludeApplianceDump' => 'false'
                   }
-            }
+            },
+        provider: 'synergy'
       )
     end
 
     it 'should be able to successfully create a dump' do
       provider.exists?
-      expect(provider.dumped).to be
+      expect(provider.generate_support_dump).to be
     end
   end
 end
