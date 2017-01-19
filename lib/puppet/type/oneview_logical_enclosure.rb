@@ -39,8 +39,8 @@ Puppet::Type.newtype(:oneview_logical_enclosure) do
       provider.updated_from_group
     end
 
-    newvalue(:dumped) do
-      provider.dumped
+    newvalue(:generate_support_dump) do
+      provider.generate_support_dump
     end
     # :nocov:
   end
