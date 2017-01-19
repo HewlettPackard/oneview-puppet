@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
+provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:synergy)
 resourcetype = OneviewSDK::LogicalEnclosure
 
 describe provider_class, unit: true do
@@ -33,7 +33,8 @@ describe provider_class, unit: true do
             'enclosureGroupUri'         =>  '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
             'firmwareBaselineUri'       =>  'null',
             'forceInstallFirmware'      =>  'false'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -49,8 +50,8 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_logical_enclosure' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_enclosure).provider(:synergy)
     end
 
     it 'if nothing is found should return false' do

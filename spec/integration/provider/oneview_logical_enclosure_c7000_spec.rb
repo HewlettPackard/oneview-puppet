@@ -27,7 +27,8 @@ describe provider_class do
           {
             'name' => 'Puppet_Test_Enclosure',
             'type' => 'LogicalEnclosure'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -62,7 +63,8 @@ describe provider_class do
             {
               'name'                    => 'Puppet_Test_Enclosure',
               'script'                  => 'This is a script example'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should be able to set the script on the logical enclosure' do
@@ -75,7 +77,7 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
         name: 'Puppet_Test_Enclosure',
-        ensure: 'dumped',
+        ensure: 'generate_support_dump',
         data:
             {
               'name'                    => 'Puppet_Test_Enclosure',
@@ -85,13 +87,14 @@ describe provider_class do
                     'encrypt' => 'true',
                     'excludeApplianceDump' => 'false'
                   }
-            }
+            },
+        provider: 'c7000'
       )
     end
 
     it 'should be able to successfully create a dump' do
       provider.exists?
-      expect(provider.dumped).to be
+      expect(provider.generate_support_dump).to be
     end
   end
 end
