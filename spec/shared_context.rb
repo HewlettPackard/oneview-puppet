@@ -14,18 +14,6 @@
 # limitations under the License.
 ################################################################################
 
-# Context for integration testing:
-# WARNING: Communicates with & modifies a real instance.
-# Must set the following environment variables:
-ENV['ONEVIEW_INTEGRATION_CONFIG'] ||= 'spec/integration/oneview_config.json'
-ENV['ONEVIEW_INTEGRATION_SECRETS'] ||= 'spec/integration/oneview_secrets.json'
-begin
-  JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_INTEGRATION_CONFIG'])), symbolize_names: true)
-  JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_INTEGRATION_SECRETS'])), symbolize_names: true)
-rescue Errno::ENOENT
-  puts 'bla'
-end
-
 # General context for unit testing:
 RSpec.shared_context 'shared context', a: :b do
   before :each do
@@ -36,6 +24,17 @@ RSpec.shared_context 'shared context', a: :b do
 end
 
 RSpec.shared_context 'integration context', a: :b do
+  # Context for integration testing:
+  # WARNING: Communicates with & modifies a real instance.
+  # Must set the following environment variables:
+  ENV['ONEVIEW_INTEGRATION_CONFIG'] ||= 'spec/integration/oneview_config.json'
+  ENV['ONEVIEW_INTEGRATION_SECRETS'] ||= 'spec/integration/oneview_secrets.json'
+  begin
+    JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_INTEGRATION_CONFIG'])), symbolize_names: true)
+    JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_INTEGRATION_SECRETS'])), symbolize_names: true)
+  rescue Errno::ENOENT
+    raise 'No Integration Config and/or Secrets files have been found. Integration tests will not be able to run.'
+  end
   # Ensure config & secrets files exist
   before :all do
     default_config  = 'spec/integration/oneview_config.json'

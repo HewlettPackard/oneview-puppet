@@ -18,48 +18,60 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
+provider_class = Puppet::Type.type(:oneview_interconnect).provider(:c7000)
 resourcetype = OneviewSDK::Interconnect
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
+  let(:resource) do
+    Puppet::Type.type(:oneview_interconnect).new(
+      name: 'Interconnect',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Encl2, interconnect 1',
+            'ports' =>
+            [
+              {
+                'portName' => 'x1',
+                'enabled' => true
+              }
+            ]
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_interconnect).new(
-        name: 'Interconnect',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'Encl2, interconnect 1',
-              'ports' =>
-              [
-                {
-                  'portName' => 'x1',
-                  'enabled' => true
-                }
-              ]
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:c7000)
+    end
+
+    it 'should be able to find the interconnects' do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(provider.found).to be
     end
 
     it 'should be able to get the name servers' do
       allow_any_instance_of(resourcetype).to receive(:name_servers).and_return('Test')
       expect(provider.get_name_servers).to be
+    end
+
+    it 'should be able to get the types filtered by a name' do
+      allow(resourcetype).to receive(:get_type).and_return('Test')
+      expect(provider.get_types).to be
     end
 
     it 'should be able to get the statistics' do
@@ -75,6 +87,14 @@ describe provider_class, unit: true do
     it 'should be able to update the ports' do
       allow_any_instance_of(resourcetype).to receive(:update_port).and_return('Test')
       expect(provider.update_ports).to be
+    end
+
+    it 'should raise an error when trying to destroy a resource' do
+      expect { provider.destroy }.to raise_error(/This resource relies on others to be destroyed/)
+    end
+
+    it 'should raise an error when trying to run get_link_topologies' do
+      expect { provider.get_link_topologies }.to raise_error(/This ensure method is only supported by the Synergy resource variant/)
     end
   end
 end

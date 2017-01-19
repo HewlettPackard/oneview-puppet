@@ -21,7 +21,7 @@ oneview_interconnect{'Interconnect Get Types':
 oneview_interconnect{'Interconnect Found':
   ensure => 'found',
   data   => {
-    name => 'Encl2, interconnect 1'
+    name => 'Encl1, interconnect 2'
   }
 }
 
@@ -33,7 +33,7 @@ oneview_interconnect{'Interconnect Found All':
 oneview_interconnect{'Interconnect Get Specific Statistics':
   ensure => 'get_statistics',
   data   => {
-    name       => 'Encl2, interconnect 2',
+    name       => 'Encl1, interconnect 2',
     statistics =>
     {
       portName => 'X1'
@@ -45,14 +45,14 @@ oneview_interconnect{'Interconnect Get Specific Statistics':
 oneview_interconnect{'Interconnect Get Name Servers':
   ensure => 'get_name_servers',
   data   => {
-    name => 'Encl2, interconnect 1'
+    name => 'Encl1, interconnect 2'
   }
 }
 
 oneview_interconnect{'Interconnect Patch Interconnect':
   ensure => 'present',
   data   => {
-    name  => 'Encl2, interconnect 1',
+    name  => 'Encl1, interconnect 2',
     patch =>
     {
       op    => 'replace',
@@ -65,7 +65,7 @@ oneview_interconnect{'Interconnect Patch Interconnect':
 oneview_interconnect{'Interconnect Reset Port Protection':
   ensure => 'reset_port_protection',
   data   => {
-    name => 'Encl2, interconnect 1',
+    name => 'Encl1, interconnect 2',
   }
 }
 
@@ -75,7 +75,7 @@ oneview_interconnect{'Interconnect Update Ports':
   ensure => 'update_ports',
   data   =>
   {
-    name  => 'Encl2, interconnect 1',
+    name  => 'Encl1, interconnect 2',
     ports =>
       [
         {
@@ -87,5 +87,13 @@ oneview_interconnect{'Interconnect Update Ports':
           enabled  => false
         }
       ]
+  }
+}
+
+# The data and name filters are optional
+oneview_interconnect{'Interconnect Get Link Topologies':
+  ensure => 'get_link_topologies',
+  data   => {
+    name => 'name-1138866186-1483549608039',
   }
 }

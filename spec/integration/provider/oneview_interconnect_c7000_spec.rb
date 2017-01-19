@@ -18,7 +18,7 @@ require 'spec_helper'
 
 # you must have the interconnect in your appliance
 
-provider_class = Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
+provider_class = Puppet::Type.type(:oneview_interconnect).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -43,15 +43,15 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  before(:each) do
-    provider.exists?
-  end
-
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:oneview_interconnect)
-  end
-
   context 'given the min parameters' do
+    before(:each) do
+      provider.exists?
+    end
+
+    it 'should be an instance of the provider C7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_interconnect).provider(:c7000)
+    end
+
     it 'exists? should return true' do
       expect(provider.exists?).to be
     end
@@ -74,6 +74,10 @@ describe provider_class do
 
     it 'should update the interconnect port x1' do
       expect(provider.update_ports).to be
+    end
+
+    it 'should run get link topologies and display an error' do
+      expect(provider.get_link_topologies).to raise_error('This ensure method is only supported by the Synergy resource variant.')
     end
   end
 end
