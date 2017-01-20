@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -22,11 +22,6 @@ Puppet::Type::Oneview_rack.provide :c7000, parent: Puppet::OneviewResource do
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
-
-  def initialize(*args)
-    @resource_name = 'Rack'
-    super(*args)
-  end
 
   # Provider methods
   def exists?
