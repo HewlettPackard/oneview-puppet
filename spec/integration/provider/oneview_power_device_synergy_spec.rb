@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
+provider_class = Puppet::Type.type(:oneview_power_device).provider(:synergy)
 
 describe provider_class do
   let(:resource) do
@@ -28,7 +28,9 @@ describe provider_class do
             'hostname' => '172.18.8.11',
             'username' => 'dcs',
             'password' => 'dcs'
-          }
+          },
+      provider: 'synergy'
+
     )
   end
 
@@ -42,7 +44,7 @@ describe provider_class do
 
   context 'given the minimum parameters before server creation' do
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:synergy)
     end
 
     it 'should be able to discover the power devices' do

@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
+provider_class = Puppet::Type.type(:oneview_power_device).provider(:c7000)
 resourcetype = OneviewSDK::PowerDevice
 
 describe provider_class, unit: true do
@@ -31,7 +31,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => '172.18.8.11, PDU 1'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -39,18 +40,19 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   before(:each) do
-    allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return(resource['data'])
+    allow(resourcetype).to receive(:find_by).and_return([test])
     provider.exists?
   end
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:oneview_power_device)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_power_device).provider(:c7000)
     end
 
     it 'should be able to find the resource' do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
       expect(provider.found).to be
@@ -68,7 +70,6 @@ describe provider_class, unit: true do
     end
 
     it 'should get the UID state' do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       allow_any_instance_of(resourcetype).to receive(:get_uid_state).and_return('Test')
@@ -76,7 +77,6 @@ describe provider_class, unit: true do
     end
 
     it 'should get the utilization without parameters' do
-      test = resourcetype.new(@client, name: '172.18.8.11, PDU 1')
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       allow_any_instance_of(resourcetype).to receive(:utilization).with({}).and_return('Test')
@@ -107,7 +107,6 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should refresh the power device' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
@@ -134,11 +133,8 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should delete the resource' do
-      resource['data']['uri'] = '/rest/fake/'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resourcetype).to receive(:remove).and_return(true)
       expect(provider.destroy).to be
     end
 
@@ -150,19 +146,24 @@ describe provider_class, unit: true do
     end
 
     it 'should set the uid state' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:set_uid_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_uid_state).to be
     end
 
     it 'should set the power state' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:set_power_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_power_state).to be
+    end
+
+    it 'should be able to retrieve the power connections by name instead of uri' do
+      allow(OneviewSDK::FCNetwork).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      allow_any_instance_of(resourcetype).to receive(:update).and_return(test)
+      resource['data']['powerConnections'] = [{ 'name' => 'test', 'type' => 'FCNetwork' }]
+      provider.exists?
+      expect(provider.create).to be
     end
   end
 end
