@@ -92,11 +92,11 @@ describe provider_class, unit: true do
       expect { provider.get_without_ethernet }.to raise_error(/The method #get_without_ethernet is unavailable for this resource/)
     end
 
-    it 'should raise error when running get without ethernet - Test disabled due to bug on oneview-sdk'
-    # resource['data'] = {}
-    # provider.exists?
-    # expect { provider.get_without_ethernet }.to raise_error(/The method #self.get_without_ethernet is unavailable for this resource/)
-    # end
+    xit 'should raise error when running get without ethernet - Test disabled due to bug on oneview-sdk' do
+      resource['data'] = {}
+      provider.exists?
+      expect { provider.get_without_ethernet }.to raise_error(/The method #self.get_without_ethernet is unavailable for this resource/)
+    end
   end
 
   context 'api 200', if: login[:api_version] == 200 do
