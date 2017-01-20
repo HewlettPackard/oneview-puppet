@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -19,4 +19,9 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :synergy, parent:
 
   confine true: login[:hardware_variant] == 'Synergy'
 
+  def get_default_settings
+    Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
+    pretty @resourcetype.get_default_settings
+    true
+  end
 end
