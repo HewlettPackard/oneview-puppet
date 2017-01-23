@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -18,18 +18,17 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
+provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:synergy)
 resourcetype = OneviewSDK::UplinkSet
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::UplinkSet
-
   let(:resource) do
     Puppet::Type.type(:oneview_uplink_set).new(
       name: 'uplink_set_1',
-      ensure: 'found'
+      ensure: 'found',
+      provider: 'synergy'
     )
   end
 
@@ -63,23 +62,24 @@ describe provider_class, unit: true do
                 '/rest/fake/1', '/rest/fake/2'
               ],
               'logicalInterconnectUri' => '/rest/fake/3'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
-    it 'should be an instance of the provider oneview_uplink_set' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
+    it 'should be an instance of the provider synergy of oneview_uplink_set' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:synergy)
     end
 
     it 'should return false if resource does not exist' do
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect { provider.found }.to raise_error(/No UplinkSet with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should return true if resource exists / is found' do
       test = OneviewSDK::UplinkSet.new(@client, resource['data'])
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)
     end
@@ -87,8 +87,8 @@ describe provider_class, unit: true do
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = OneviewSDK::UplinkSet.new(@client, resource['data'])
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
@@ -121,12 +121,13 @@ describe provider_class, unit: true do
                 '/rest/fake/1', '/rest/fake/2'
               ],
               'logicalInterconnectUri' => '/rest/fake/3'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
     it 'runs through the create method' do
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       fc_network = OneviewSDK::FCNetwork.new(@client, name: 'Puppet Test FCNetwork', uri: '/rest/fc-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
       allow(OneviewSDK::FCNetwork).to receive(:find_by).and_return([fc_network])
@@ -163,12 +164,13 @@ describe provider_class, unit: true do
                 '/rest/fake/1', '/rest/fake/2'
               ],
               'logicalInterconnectUri' => '/rest/fake/3'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
     it 'runs through the create method' do
-      allow(OneviewSDK::UplinkSet).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       fcoe_network = OneviewSDK::FCoENetwork.new(@client, name: 'Puppet Test FCoENetwork', uri: '/rest/fcoe-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
       allow(OneviewSDK::FCoENetwork).to receive(:find_by).and_return([fcoe_network])

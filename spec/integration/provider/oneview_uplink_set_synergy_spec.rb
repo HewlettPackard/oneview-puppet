@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 require 'spec_helper'
 require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
-provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
+provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:synergy)
 logical_interconnect_name = login[:logical_interconnect_name] || 'Encl1-Test Oneview'
 
 describe provider_class do
@@ -28,7 +28,8 @@ describe provider_class do
       data:
           {
             'name' => 'Puppet Uplink Set'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -41,8 +42,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider oneview_uplink_set' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:oneview_uplink_set)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:synergy)
     end
 
     it 'exists? should not find the uplink set' do
@@ -72,7 +73,8 @@ describe provider_class do
               'ethernetNetworkType' => 'Tagged',
               'description' => 'nil',
               'name' => 'Puppet Uplink Set'
-            }
+            },
+        provider: 'synergy'
       )
     end
     it 'should create the uplink set' do
@@ -80,7 +82,7 @@ describe provider_class do
     end
   end
 
-  context 'given the minimum parameters' do
+  context 'given the uplink set was created' do
     it 'exists? should find the uplink set' do
       expect(provider.exists?).to be
     end
