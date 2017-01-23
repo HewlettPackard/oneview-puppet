@@ -19,9 +19,11 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
-resourcetype = OneviewSDK::StorageSystem
+api_version = login[:api_version] || 200
+resource_name = 'StorageSystem'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version == 200
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -37,7 +39,8 @@ describe provider_class, unit: true do
               'username' => 'dcs',
               'password' => 'dcs'
             }
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -45,23 +48,20 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:instance) { provider.class.instances.first }
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be able to run through self.instances' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
       expect(instance).to be
     end
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:synergy)
     end
 
     it 'should able to find the resource' do
@@ -69,11 +69,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to delete the resource' do
-      resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resourcetype).to receive(:remove).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
@@ -93,16 +89,11 @@ describe provider_class, unit: true do
       expect(provider.get_host_types).to be
     end
 
-    # TODO: ArgumentError: Must specify a task_uri!
-    # it 'should be able to create the resource' do
-    #   data = { 'ip_hostname' => '172.18.11.12', 'username' => 'dcs', 'password' => 'dcs' }
-    #   test = resourcetype.new(@client, resource['data'])
-    #   allow(resourcetype).to receive(:find_by).and_return([])
-    #   expect(provider.exists?).to eq(false)
-    #   expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-    #     .with('/rest/storage-systems', { 'body' => data }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
-    #   allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/storage-systems/fake')
-    #   expect(provider.create).to be
-    # end
+    it 'should be able to create the resource' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
+    end
   end
 end

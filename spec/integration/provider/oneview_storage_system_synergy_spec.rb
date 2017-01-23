@@ -15,9 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
+provider_class = Puppet::Type.type(:oneview_storage_system).provider(:synergy)
 storage_system_name = login[:storage_system_name] || 'ThreePAR7200-8147'
 storage_system_ip = login[:storage_system_ip] || '172.18.11.12'
 storage_system_username = login[:storage_system_username] || 'dcs'
@@ -34,7 +34,8 @@ describe provider_class do
             'credentials'   => {
               'ip_hostname' => storage_system_ip
             }
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -47,8 +48,8 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider oneview_storage_system' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:synergy)
     end
 
     it 'exists? should not find the storage system' do
@@ -86,7 +87,8 @@ describe provider_class do
                 'username'     => storage_system_username,
                 'password'     => storage_system_password
               }
-            }
+            },
+        provider: 'synergy'
       )
     end
 

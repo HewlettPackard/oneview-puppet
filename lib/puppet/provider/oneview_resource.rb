@@ -73,17 +73,23 @@ module Puppet
       @property_hash[:data]
     end
 
-    def exists?
+    def exists?(states = [nil, :found])
       @data = data_parse
-      empty_data_check
+      empty_data_check(states)
       !@resourcetype.find_by(@client, @data).empty?
       # @property_hash[:ensure] == :present # TODO: Future Improvement: Look into using property_hash for verifying existance globally
     end
 
     # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
-    def create
+    def create(action = :create)
       return true if resource_update(@data, @resourcetype)
-      ov_resource = @resourcetype.new(@client, @data).create
+      ov_resource = if action == :create
+                      @resourcetype.new(@client, @data).create
+                    elsif action == :add
+                      @resourcetype.new(@client, @data).add
+                    else
+                      raise 'Invalid action for create'
+                    end
       @property_hash[:data] = ov_resource.data
       @property_hash[:ensure] = :present
     end

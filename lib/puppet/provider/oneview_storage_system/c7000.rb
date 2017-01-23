@@ -14,47 +14,21 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_storage_system).provide(:oneview_storage_system) do
+Puppet::Type::Oneview_storage_system.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Storage Systems using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::StorageSystem
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::StorageSystem.find_by(@client, {})
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
-
-  # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_host_types])
-    !@resourcetype.find_by(@client, @data).empty?
+    super([nil, :found, :get_host_types])
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).add
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
+    super(:add)
   end
 
   def destroy
@@ -84,7 +58,7 @@ Puppet::Type.type(:oneview_storage_system).provide(:oneview_storage_system) do
   end
 
   def get_host_types
-    pretty OneviewSDK::StorageSystem.get_host_types(@client)
+    pretty @resourcetype.get_host_types(@client)
     true
   end
 end
