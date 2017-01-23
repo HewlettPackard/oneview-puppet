@@ -96,8 +96,13 @@ module Puppet
 
     # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
     def destroy(action = :delete)
-      get_single_resource_instance.delete if action == :delete
-      get_single_resource_instance.remove if action == :remove
+      if action == :delete
+        get_single_resource_instance.delete
+      elsif action == :remove
+        get_single_resource_instance.remove
+      else
+        raise 'Invalid action specified for destroy'
+      end
       @property_hash[:ensure] = :absent
     end
 
