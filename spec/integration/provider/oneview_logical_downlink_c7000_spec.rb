@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
+provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
 
 # you must have this logical downlink in your appliance
 name = 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
@@ -29,7 +29,8 @@ describe provider_class do
       data:
       {
         name: name
-      }
+      },
+      provider: 'c7000'
     )
   end
 
@@ -37,8 +38,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:oneview_logical_downlink)
+  it 'should be an instance of the provider c7000' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_downlink).provider(:c7000)
   end
 
   context 'given the min parameters' do

@@ -14,23 +14,25 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_logical_downlink).provide(:oneview_logical_downlink) do
+Puppet::Type::Oneview_logical_downlink.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Logical Downlinks using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
+  # @resourcetype ||= OneviewSDK::LogicalDownlink
+
   def initialize(*args)
+    @resource_name = 'LogicalDownlink'
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::LogicalDownlink
-    @data = {}
   end
 
   def exists?
     @data = data_parse
-    empty_data_check([:found, :get_without_ethernet])
+    empty_data_check([nil, :found, :get_without_ethernet])
     !@resourcetype.find_by(@client, @data).empty?
   end
 
