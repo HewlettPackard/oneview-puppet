@@ -15,9 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
+provider_class = Puppet::Type.type(:oneview_managed_san).provider(:synergy)
 managed_san_name = login[:managed_san_name] || 'SAN1_0'
 
 describe provider_class do
@@ -28,7 +28,8 @@ describe provider_class do
       data:
           {
             'name' => managed_san_name
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -41,14 +42,9 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider oneview_managed_san' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_managed_san).provider(:synergy)
     end
-
-    # NOTE: This depends on the appliance not having any ManagedSAN listed, thus is commented out
-    # it 'should raise error when server is not found' do
-    #   expect { provider.found }.to raise_error(/No ManagedSAN with the specified data were found on the Oneview Appliance/)
-    # end
   end
 
   context 'given the create parameters' do
@@ -73,7 +69,8 @@ describe provider_class do
                 'targetNameFormat' => '{storageSystemName}_{targetName}',
                 'targetGroupNameFormat' => '{storageSystemName}_{targetGroupName}'
               }
-            }
+            },
+        provider: 'synergy'
       )
     end
     it 'should create/add the managed san' do
