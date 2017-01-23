@@ -17,7 +17,7 @@
 require 'spec_helper'
 require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
-provider_class = Puppet::Type.type(:oneview_server_hardware_type).provider(:oneview_server_hardware_type)
+provider_class = Puppet::Type.type(:oneview_server_hardware_type).provider(:c7000)
 server_hardware_type = login[:server_hardware_type] || 'BL460c Gen8 1'
 
 describe provider_class do
@@ -28,7 +28,8 @@ describe provider_class do
       data:
           {
             'name' => server_hardware_type
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -41,8 +42,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider oneview_server_hardware_type' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware_type).provider(:oneview_server_hardware_type)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware_type).provider(:c7000)
     end
 
     it 'should raise error when server is not found' do

@@ -16,12 +16,12 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_server_hardware_type).provider(:oneview_server_hardware_type)
+provider_class = Puppet::Type.type(:oneview_server_hardware_type).provider(:c7000)
+resourcetype = OneviewSDK::ServerHardwareType
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::ServerHardwareType
   let(:resource) do
     Puppet::Type.type(:oneview_server_hardware_type).new(
       name: 'server_hardware_type',
@@ -29,7 +29,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'BL460c Gen8 1'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -37,37 +38,38 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the minimum parameters before server creation' do
     before(:each) do
-      test = OneviewSDK::ServerHardwareType.new(@client, resource['data'])
-      allow(OneviewSDK::ServerHardwareType).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(OneviewSDK::ServerHardwareType).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      allow(OneviewSDK::ServerHardwareType).to receive(:get_all).with(anything).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resourcetype).to receive(:get_all).and_return([test])
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_server_hardware_type' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware_type).provider(:oneview_server_hardware_type)
-    end
-
-    it 'should raise error when server is not found' do
-      allow(OneviewSDK::ServerHardwareType).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect { provider.found }.to raise_error(/No ServerHardwareType with the specified data were found on the Oneview Appliance/)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware_type).provider(:c7000)
     end
 
     it 'should be able to run through self.instances' do
       expect(instance).to be
     end
 
+    it 'should raise error when server is not found' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      provider.exists?
+      expect { provider.found }.to raise_error(/No ServerHardwareType with the specified data were found on the Oneview Appliance/)
+    end
+
     it 'should be able to update the resource name, and change it back' do
+      allow_any_instance_of(resourcetype).to receive(:update).and_return(test)
+      provider.exists?
       expect(provider.create).to be
     end
 
     it 'should delete the server hardware' do
-      resource['data']['uri'] = '/rest/server-hardware/fake'
-      test = OneviewSDK::ServerHardwareType.new(@client, resource['data'])
-      allow(OneviewSDK::ServerHardwareType).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resourcetype).to receive(:remove).and_return(true)
+      provider.exists?
       expect(provider.destroy).to be
     end
   end
