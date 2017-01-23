@@ -18,9 +18,9 @@
 # adds the specified storage pool
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
+provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:synergy)
 storage_pool_name = login[:storage_pool_name] || 'FST_CPG2'
 storage_system_name = login[:storage_system_name] || 'ThreePAR7200-8147'
 
@@ -32,7 +32,8 @@ describe provider_class do
       data:
           {
             'poolName' => storage_pool_name
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -45,8 +46,8 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider oneview_storage_pool' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:synergy)
     end
 
     it 'exists? should not find the storage pool' do
@@ -67,11 +68,11 @@ describe provider_class do
             {
               'poolName'          => storage_pool_name,
               'storageSystemUri'  => storage_system_name
-            }
+            },
+        provider: 'synergy'
       )
     end
 
-    # TODO: Create block
     it 'should create the storage pool' do
       expect(provider.create).to be
     end

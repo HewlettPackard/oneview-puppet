@@ -18,8 +18,14 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
-resourcetype = OneviewSDK::StoragePool
+provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
+api_version = login[:api_version] || 200
+resource_name = 'StoragePool'
+resourcetype = if api_version == 200
+                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
+               else
+                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
+               end
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -33,7 +39,8 @@ describe provider_class, unit: true do
             'name' => '172.18.8.11, PDU 1',
             'poolName' => 'CPG-SSD-AO',
             'storageSystemUri' => '/rest/'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -41,23 +48,20 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:instance) { provider.class.instances.first }
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be able to run through self.instances' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
       expect(instance).to be
     end
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:oneview_storage_pool)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
     end
 
     it 'should able to find the resource' do
@@ -66,17 +70,22 @@ describe provider_class, unit: true do
 
     it 'should be able to create the resource' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(resourcetype.new(@client, resource['data']))
-      expect(provider.exists?).to eq(false)
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
+    end
+
+    it 'should be able to destroy and recreate the resource to update its atributes' do
+      expect(resourcetype).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).with(anything, name: resource['name']).and_return(test)
+      allow_any_instance_of(resourcetype).to receive(:remove).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      provider.exists?
       expect(provider.create).to be
     end
 
     it 'should delete the resource' do
-      resource['data']['uri'] = '/rest/fake/'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resourcetype).to receive(:remove).and_return([])
       expect(provider.destroy).to be
     end
   end

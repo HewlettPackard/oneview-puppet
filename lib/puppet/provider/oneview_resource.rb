@@ -95,8 +95,9 @@ module Puppet
     end
 
     # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
-    def destroy
-      get_single_resource_instance.delete
+    def destroy(action = :delete)
+      get_single_resource_instance.delete if action == :delete
+      get_single_resource_instance.remove if action == :remove
       @property_hash[:ensure] = :absent
     end
 
