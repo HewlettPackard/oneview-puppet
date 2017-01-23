@@ -14,38 +14,18 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_storage_pool).provide(:oneview_storage_pool) do
+Puppet::Type::Oneview_storage_pool.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Storage Pools using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
-
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::StoragePool
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::StoragePool.find_by(@client, {})
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
 
   # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check
+    super
     # Allows find_by to work in case poolName is declared, since find_by returns it as 'name'
     @data['name'] = @data.delete('poolName') if @data['poolName']
     !@resourcetype.find_by(@client, @data).empty?
@@ -56,20 +36,11 @@ Puppet::Type.type(:oneview_storage_pool).provide(:oneview_storage_pool) do
     return unless setup_for_recreation
     # Changes name into poolName which is required only for creation
     @data['poolName'] = @data.delete('name') if @data['name']
-    @resourcetype.new(@client, @data).add
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
+    super(:add)
   end
 
   def destroy
-    get_single_resource_instance.remove
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def setup_for_recreation
