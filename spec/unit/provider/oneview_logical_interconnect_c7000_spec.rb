@@ -18,56 +18,58 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:oneview_logical_interconnect)
+provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
 resourcetype = OneviewSDK::LogicalInterconnect
 
 describe provider_class, unit: true do
   include_context 'shared context'
-  context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_interconnect).new(
-        name: 'LI',
-        ensure: 'present',
-        data:
+
+  let(:resource) do
+    Puppet::Type.type(:oneview_logical_interconnect).new(
+      name: 'LI',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Encl2-my enclosure logical interconnect group',
+            'internalNetworks' => ['NET'],
+            'snmpConfiguration' =>
             {
-              'name' => 'Encl2-my enclosure logical interconnect group',
-              'internalNetworks' => ['NET'],
-              'snmpConfiguration' =>
+              'enabled' => true
+            },
+            'portMonitor' =>
+            {
+              'enablePortMonitor' => false
+            },
+            'telemetryConfiguration' =>
+            {
+              'enableTelemetry' => true
+            },
+            'qosConfiguration' =>
+            {
+              'activeQosConfig' =>
               {
-                'enabled' => true
-              },
-              'portMonitor' =>
-              {
-                'enablePortMonitor' => false
-              },
-              'telemetryConfiguration' =>
-              {
-                'enableTelemetry' => true
-              },
-              'qosConfiguration' =>
-              {
-                'activeQosConfig' =>
-                {
-                  'configType' => 'Passthrough'
-                }
+                'configType' => 'Passthrough'
               }
             }
-      )
-    end
+          },
+      provider: 'c7000'
+    )
+  end
 
-    let(:provider) { resource.provider }
+  let(:provider) { resource.provider }
 
-    let(:instance) { provider.class.instances.first }
+  let(:instance) { provider.class.instances.first }
 
+  context 'given the min parameters' do
     before(:each) do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
-    it 'should be an instance of the provider' do
+    it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect)
-        .provider(:oneview_logical_interconnect)
+        .provider(:c7000)
     end
 
     it 'return false when the resource does not exists' do
@@ -142,6 +144,30 @@ describe provider_class, unit: true do
     it 'should be able to set the qos configuration' do
       expect_any_instance_of(resourcetype).to receive(:update_qos_configuration).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_qos_aggregated_configuration).to be
+    end
+  end
+
+  context 'given the min parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_interconnect).new(
+        name: 'LI',
+        ensure: 'get_telemetry_configuration',
+        data:
+            {
+              'name' => 'Encl2-my enclosure logical interconnect group'
+            },
+        provider: 'c7000'
+      )
+    end
+
+    before(:each) do
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+    end
+
+    it 'should be able to get the telemetry configuration' do
+      expect(provider.get_telemetry_configuration).to be
     end
   end
 end

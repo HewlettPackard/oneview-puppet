@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:oneview_logical_interconnect)
+provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -37,7 +37,8 @@ describe provider_class do
                 'isoFileName' => 'fake_firmware.iso',
                 'force' => false
               }
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -49,8 +50,8 @@ describe provider_class do
     provider.exists?
   end
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect).provider(:oneview_logical_interconnect)
+  it 'should be an instance of the provider c7000' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
   end
 
   it 'should find the interconnect' do
