@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -15,8 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
+require_relative '../../support/fake_response'
+require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
+provider_class = Puppet::Type.type(:oneview_rack).provider(:c7000)
 resourcetype = OneviewSDK::Rack
 
 describe provider_class, unit: true do
@@ -30,7 +32,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'myrack'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -46,8 +49,13 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_rack' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
+    it 'should be an instance of the provider' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_rack).provider(:c7000)
+    end
+
+    it 'should be able to find the resource' do
+      provider.exists?
+      expect(provider.found).to be
     end
 
     it 'should raise error when server is not found' do
