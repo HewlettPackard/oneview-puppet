@@ -15,7 +15,7 @@
 ################################################################################
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_switch_group).provider(:oneview_logical_switch_group)
+provider_class = Puppet::Type.type(:oneview_logical_switch_group).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -33,7 +33,8 @@ describe provider_class do
               'number_of_switches' => '1',
               'type' => 'Cisco Nexus 50xx'
             }
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -45,8 +46,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider Ruby' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch_group).provider(:oneview_logical_switch_group)
+  it 'should be an instance of the provider c7000' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch_group).provider(:c7000)
   end
 
   it 'should return the LSG does not exist' do

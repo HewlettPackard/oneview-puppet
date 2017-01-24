@@ -14,19 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch_group) do
+Puppet::Type::Oneview_logical_switch_group.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Fiber Channel Networks using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
-
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::LogicalSwitchGroup
-    @data = {}
-  end
 
   def exists?
     @data = data_parse
@@ -43,13 +38,5 @@ Puppet::Type.type(:oneview_logical_switch_group).provide(:oneview_logical_switch
     @data['new_name'] = new_name if new_name
     return true if resource_update(@data, @resourcetype)
     lsg.create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-  end
-
-  def found
-    find_resources
   end
 end
