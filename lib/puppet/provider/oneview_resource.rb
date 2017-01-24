@@ -23,12 +23,8 @@ module Puppet
   class OneviewResource < Puppet::Provider
     desc 'Base provider for OneView resources'
 
-    # @resource_name = self.class.to_s.split('::')[2].split('_').drop(1).collect(&:capitalize).join
-    # @resourcetype ||= Object.const_get('OneviewSDK::@resource_name')
-
     def initialize(value = {})
       super(value)
-      # @resouce_name splits the provider class to get the name of the resource in snake_case and convert it to CamelCase
       @property_flush ||= {}
       @data ||= {}
       @client ||= OneviewSDK::Client.new(login)

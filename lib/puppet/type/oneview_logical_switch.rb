@@ -33,6 +33,10 @@ Puppet::Type.newtype(:oneview_logical_switch) do
     newvalue(:update_credentials) do
       provider.update_credentials
     end
+
+    newvalue(:get_internal_link_sets) do
+      provider.get_internal_link_sets
+    end
   end
   #:nocov:
 
