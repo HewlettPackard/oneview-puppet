@@ -90,37 +90,9 @@ describe provider_class, unit: true do
       allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
       expect(provider.create).to be
     end
-  end
 
-  context 'given the credentials' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_switch).new(
-        name: 'LS',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'LS',
-              'switches' =>
-              [
-                {
-                  'ip' => '172.18.20.1',
-                  'ssh_username' => 'dcs',
-                  'ssh_password' => 'dcs',
-                  'snmp_port' => '161',
-                  'community_string' => 'public',
-                  'switchUri' => '/rest/'
-                }
-              ]
-            }
-      )
-    end
-
-    it 'should update the logical switch credentials' do
-      request_body = File.read('spec/support/fixtures/unit/provider/logical_switch_update.json')
-      resource['data']['uri'] = '/rest/'
-      provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
-      expect(provider.update_credentials).to be
+    it 'should show method as deprecated' do
+      expect { provider.update_credentials }.to raise_error(/This method was deprecated./)
     end
   end
 end

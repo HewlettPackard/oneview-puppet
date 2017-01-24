@@ -56,38 +56,8 @@ Puppet::Type::Oneview_logical_switch.provide :c7000, parent: Puppet::OneviewReso
     true
   end
 
-  # TODO: Remove these specific calls and substitute for methods that handle these
   def update_credentials
-    ls = get_single_resource_instance
-    set_switches(ls, @switches)
-    pretty ls.data
-    ls.update
-    pretty ls.data
-    # @switches.each do |switch|
-      # update_hash = {}
-      # update_hash['logicalSwitchCredentials'] =
-      #   [{ 'connectionProperties' =>
-      #     [
-      #       { 'valueFormat' => 'Unknown', 'propertyName' => 'SshBasicAuthCredentialUser', 'valueType' => 'String',
-      #         'value' => switch['ssh_username'] },
-      #       { 'valueFormat' => 'SecuritySensitive', 'propertyName' => 'SshBasicAuthCredentialPassword',
-      #         'valueType' => 'String', 'value' => switch['ssh_password'] }
-      #     ] }]
-      # update_hash['logicalSwitch'] = { 'switchCredentialConfiguration' => [{ 'sshUsername' => switch['ssh_username'],
-      #                                                                        'snmpPort' => switch['snmp_port'],
-      #                                                                        'snmpV1Configuration' =>
-      #                                                                          { 'communityString' => switch['community_string'] },
-      #                                                                        'snmpVersion' => switch['version'],
-      #                                                                        'snmpV3Configuration' => nil,
-      #                                                                        'switchUri' => switch['switchUri'],
-      #                                                                        'logicalSwitchManagementHost' => switch['ip'] }],
-      #                                  'type' => 'logical-switch',
-      #                                  'uri' => ls['uri'],
-      #                                  'name' => ls['name'],
-      #                                  'description' => ls['description'] }
-      # put_request = @client.rest_put(ls['uri'], { 'body' => update_hash }, 200)
-      # @client.response_handler(put_request)
-    # end
+    raise 'This method was deprecated. If support for this feature is added on the SDK in the future, it will be reimplemented.'
   end
 
   # Helper Methods to treat switches and set credentials
@@ -100,6 +70,7 @@ Puppet::Type::Oneview_logical_switch.provide :c7000, parent: Puppet::OneviewReso
                       new_ssh(switch['ssh_username'], switch['ssh_password']),
                       new_snmp(switch['snmp_port'], switch['community_string'], switch['version']))
     end
+    switches
   end
 
   def new_ssh(username, password)
