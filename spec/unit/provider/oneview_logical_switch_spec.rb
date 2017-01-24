@@ -19,115 +19,80 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
-resourcetype = OneviewSDK::LogicalSwitch
+api_version = login[:api_version] || 200
+@resource_name = 'LogicalSwitch'
+resourcetype ||= if api_version == 200
+                   Object.const_get("OneviewSDK::API#{api_version}::#{@resource_name}")
+                 else
+                   Object.const_get("OneviewSDK::API#{api_version}::C7000::#{@resource_name}")
+                 end
 
 describe provider_class, unit: true do
   include_context 'shared context'
+
+  let(:resource) do
+    Puppet::Type.type(:oneview_logical_switch).new(
+      name: 'LS',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'LS',
+            'logicalSwitchGroupUri' => '/rest/',
+            'switches' =>
+            [
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              },
+              {
+                'ip' => '172.18.20.1',
+                'ssh_username' => 'dcs',
+                'ssh_password' => 'dcs',
+                'snmp_port' => '161',
+                'community_string' => 'public'
+              }
+            ]
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+
   context 'given the min parameters' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_switch).new(
-        name: 'LS',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'LS',
-              'logicalSwitchGroupUri' => '/rest/',
-              'switches' =>
-              [
-                {
-                  'ip' => '172.18.20.1',
-                  'ssh_username' => 'dcs',
-                  'ssh_password' => 'dcs',
-                  'snmp_port' => '161',
-                  'community_string' => 'public'
-                },
-                {
-                  'ip' => '172.18.20.1',
-                  'ssh_username' => 'dcs',
-                  'ssh_password' => 'dcs',
-                  'snmp_port' => '161',
-                  'community_string' => 'public'
-                }
-              ]
-            }
-      )
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
-    end
-
-    it 'return false when the resource does not exists' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:c7000)
     end
 
     it 'should be able to find the resource' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
       expect(provider.found).to be
     end
 
     it 'should refresh the logical switch' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      expect_any_instance_of(resourcetype).to receive(:refresh).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.exists?).to eq(true)
+      allow_any_instance_of(resourcetype).to receive(:refresh).and_return(true)
       expect(provider.refresh).to be
     end
 
     it 'should be able to create the resource' do
-      resource['data'].delete('switches')
       allow(resourcetype).to receive(:find_by).and_return([])
       allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
-      expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
-  end
 
-  context 'given the credentials' do
-    let(:resource) do
-      Puppet::Type.type(:oneview_logical_switch).new(
-        name: 'LS',
-        ensure: 'present',
-        data:
-            {
-              'name' => 'LS',
-              'switches' =>
-              [
-                {
-                  'ip' => '172.18.20.1',
-                  'ssh_username' => 'dcs',
-                  'ssh_password' => 'dcs',
-                  'snmp_port' => '161',
-                  'community_string' => 'public',
-                  'switchUri' => '/rest/'
-                }
-              ]
-            }
-      )
-    end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
-    it 'should update the logical switch credentials' do
-      request_body = File.read('spec/support/fixtures/unit/provider/logical_switch_update.json')
-      resource['data']['uri'] = '/rest/'
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      allow_any_instance_of(OneviewSDK::Client).to receive(:rest_put).with(nil, { 'body' => JSON.parse(request_body) }, 200)
-        .and_return(uri: '/rest/logical-switches/fake')
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return('Credentials update')
-      expect(provider.update_credentials).to be
+    it 'should show method as deprecated' do
+      expect { provider.update_credentials }.to raise_error(/This method was deprecated./)
     end
   end
 end

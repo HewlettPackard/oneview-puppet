@@ -14,81 +14,59 @@
 # limitations under the License.
 ################################################################################
 
+# This resource is NOT supported if using the Synergy Hardware Variant
+
 oneview_logical_switch{'Logical Switch Create':
   ensure => 'present',
   # SSH and SNMP credentials information per switch
   data   =>
   {
     name                  => 'Test Logical Switch',
-    logicalSwitchGroupUri => 'LSG 1',
+    logicalSwitchGroupUri => 'OneViewSDK Logical Switch Group',
     switches              =>
     [
       {
-        ip               => '172.18.20.1',
+        ip               => '172.18.16.91',
         ssh_username     => 'dcs',
         ssh_password     => 'dcs',
         snmp_port        => '161',
-        community_string => 'public'
+        community_string => 'admin'
       },
       {
-        ip               => '172.18.20.2',
+        ip               => '172.18.16.92',
         ssh_username     => 'dcs',
         ssh_password     => 'dcs',
         snmp_port        => '161',
-        community_string => 'public'
+        community_string => 'admin'
       }
     ]
   }
 }
 
 oneview_logical_switch{'Logical Switch Found':
-  ensure  => 'found',
-  require => Oneview_logical_switch['Logical Switch Create']
-  # data    =>
-  # {
-  #   name                  => 'Test Logical Switch',
-  #   logicalSwitchGroupUri => 'LSG 1'
-  # }
+  ensure  => 'found'
+}
+
+oneview_logical_switch{'Logical Switch internal link set for specific logical switch':
+  ensure => 'get_internal_link_sets',
+  data   => {
+    name => 'Test Logical Switch'
+  }
+}
+
+oneview_logical_switch{'Logical Switch all internal link sets':
+  ensure => 'get_internal_link_sets',
 }
 
 oneview_logical_switch{'Logical Switch Destroy':
   ensure  => 'absent',
-  require => Oneview_logical_switch['Logical Switch Found'],
+  require => Oneview_logical_switch['Logical Switch Create'],
   data    =>
   {
     name                  => 'Test Logical Switch',
-    logicalSwitchGroupUri => 'LSG 1'
+    logicalSwitchGroupUri => 'OneViewSDK Logical Switch Group'
   }
 }
-
-# Name and Credentials are the only Logical Switch parameters that can be updated
-# To update its name, just do it normally as a 'present' ensurable
-# To update the credentials, declare the parameters as follows:
-# oneview_logical_switch{'Logical Switch Create':
-#   ensure => 'update_credentials',
-#   # SSH and SNMP credentials information per switch
-#   data   =>
-#   {
-#     name     => 'Test Logical Switch',
-#     switches =>
-#     [
-#       {
-#         ip               => '172.18.20.1',
-#         ssh_username     => 'dcs',
-#         ssh_password     => 'dcs',
-#         snmp_port        => '161',
-#         community_string => 'public'
-#       },
-#       # {
-#       #   ip               => '172.18.20.2',
-#       #   ssh_username     => 'dcs',
-#       #   ssh_password     => 'dcs',
-#       #   snmp_port        => '161',
-#       #   community_string => 'public'
-#       # }
-#     ]
-#   }
-# }
 
 # This operation is not supported by all switch types
 # oneview_logical_switch{'Logical Switch Refresh':

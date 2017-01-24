@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:ruby)
+provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -44,7 +44,8 @@ describe provider_class do
                 'community_string' => 'public'
               }
             ]
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -57,8 +58,8 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_switch).provider(:c7000)
     end
 
     it 'exists? should not find logical switch' do
@@ -73,15 +74,30 @@ describe provider_class do
       expect(provider.found).to be
     end
 
+    it 'should be able to retrieve the internal link sets for the logical switch' do
+      expect(provider.get_internal_link_sets).to be
+    end
+
     it 'should be able to destroy the logical switch' do
       expect(provider.destroy).to be
+    end
+
+    it 'should be able to update the logical switch credentials' do
+      resource['data'].delete('logicalSwitchGroupUri')
+      expect(provider.update_credentials).to be
     end
   end
 
   context 'given the credentials' do
-    it 'should be able to update the logical switch credentials' do
-      resource['data'].delete('logicalSwitchGroupUri')
-      expect(provider.update_credentials).to be
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_switch).new(
+        name: 'LS',
+        ensure: 'get_internal_link_sets',
+        provider: 'c7000'
+      )
+    end
+    it 'should be able to retrieve the internal link sets for all logical switches' do
+      expect(provider.get_internal_link_sets).to be
     end
   end
 end
