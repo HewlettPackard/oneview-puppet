@@ -232,7 +232,7 @@ This resource provides the following ensurable methods for managing logical swit
 * `absent` - Deletes a logical switch.
 * `found` - Searches for `oneview_logical_switch` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `refresh` - Reclaims the top-of-rack switches in a logical switch.
-* `update_credentials` - Updates the credentials of a logical switch.
+* `update_credentials` - **DEPRECATED** This method will be removed on upcoming releases.
 
 :exclamation: **NOTE:** The switches and their credentials must follow the declaration seen in the example file. The update via `present` ensurable is only valid for the Logical Switch name. To update its credentials, the `update_credentials` ensurable must be used.
 
