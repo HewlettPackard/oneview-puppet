@@ -15,31 +15,31 @@
 ################################################################################
 
 # The Interconnects and Uplink Sets can also be declared as follows:
-oneview_logical_interconnect_group{'Puppet LIG C7000':
+oneview_logical_interconnect_group{'Puppet LIG Synergy':
   ensure => 'present',
   data   => {
-    name          => 'Puppet LIG C7000',
-    enclosureType => 'C7000',
-    # uplinkSets => ['Puppet Uplink Set'],
-    interconnects =>
+    name               => 'Puppet LIG Synergy',
+    redundancyType     => 'Redundant',
+    interconnectBaySet => 3,
+    interconnects      =>
     [
       {
-        bay  => 1,
-        type => 'HP VC FlexFabric 10Gb/24-Port Module'
+        bay  => 3,
+        type => 'Virtual Connect SE 40Gb F8 Module for Synergy'
       },
-      # {
-      #   bay  => 2,
-      #   type => 'HP VC FlexFabric 10Gb/24-Port Module'
-      # },
+      {
+        bay  => 6,
+        type => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+      },
     ]
   }
 }
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
   ensure  => 'present',
-  require => Oneview_logical_interconnect_group['Puppet LIG C7000'],
+  require => Oneview_logical_interconnect_group['Puppet LIG Synergy'],
   data    => {
-    name     => 'Puppet LIG C7000',
+    name     => 'Puppet LIG Synergy',
     new_name => 'Edited LIG'
   }
 }

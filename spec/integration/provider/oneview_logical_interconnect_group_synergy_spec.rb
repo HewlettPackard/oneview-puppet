@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:oneview_logical_interconnect_group)
+provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:synergy)
 
 describe provider_class do
   let(:resource) do
@@ -24,18 +24,23 @@ describe provider_class do
       name: 'Test LIG',
       ensure: 'present',
       data:
-          {
-            'name' => 'Test LIG',
-            'enclosureType' => 'C7000',
-            'type' => 'logical-interconnect-groupV3',
-            'interconnects' =>
-            [
-              {
-                'bay' => 1,
-                'type' => 'HP VC FlexFabric 10Gb/24-Port Module'
-              }
-            ]
-          }
+        {
+          'name'               => 'Puppet LIG Synergy',
+          'redundancyType'     => 'Redundant',
+          'interconnectBaySet' => 3,
+          'interconnects'      =>
+          [
+            {
+              'bay'  => 3,
+              'type' => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+            },
+            {
+              'bay'  => 6,
+              'type' => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+            }
+          ]
+        },
+      provider: 'synergy'
     )
   end
 
@@ -47,9 +52,9 @@ describe provider_class do
     provider.exists?
   end
 
-  it 'should be an instance of the provider Ruby' do
+  it 'should be an instance of the provider synergy' do
     expect(provider)
-      .to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group).provider(:oneview_logical_interconnect_group)
+      .to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect_group).provider(:synergy)
   end
 
   context 'given the minimum parameters' do

@@ -23,7 +23,6 @@ Puppet::Type::Oneview_logical_enclosure.provide :c7000, parent: Puppet::OneviewR
 
   mk_resource_methods
 
-  # @resourcetype ||= OneviewSDK::LogicalEnclosure
   def exists?
     super
     @patch = @data.delete('patch')
