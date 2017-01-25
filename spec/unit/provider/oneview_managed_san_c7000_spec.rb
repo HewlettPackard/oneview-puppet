@@ -89,7 +89,6 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
