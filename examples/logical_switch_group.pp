@@ -14,6 +14,8 @@
 # limitations under the License.
 ################################################################################
 
+# This resource is NOT supported if using the Synergy Hardware Variant
+
 oneview_logical_switch_group{'Logical Switch Group Create':
   ensure => 'present',
   data   =>
@@ -21,7 +23,6 @@ oneview_logical_switch_group{'Logical Switch Group Create':
       name     => 'OneViewSDK Test Logical Switch Group',
       category => 'logical-switch-groups',
       state    => 'Active',
-      type     => 'logical-switch-group',
       switches =>
       {
         number_of_switches => '2',
