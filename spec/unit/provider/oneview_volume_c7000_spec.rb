@@ -78,8 +78,14 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'should be able to get the snapshot' do
+    it 'should be able to get the snapshots' do
       allow_any_instance_of(resourcetype).to receive(:get_snapshots).and_return('Test')
+      expect(provider.get_snapshot).to be
+    end
+
+    it 'should be able to get a snapshot by name' do
+      resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
+      allow_any_instance_of(resourcetype).to receive(:get_snapshot).and_return('Test')
       expect(provider.get_snapshot).to be
     end
 

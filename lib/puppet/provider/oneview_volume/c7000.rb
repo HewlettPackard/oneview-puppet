@@ -26,9 +26,7 @@ Puppet::Type::Oneview_volume.provide :c7000, parent: Puppet::OneviewResource do
 
   # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_attachable_volumes, :get_extra_managed_volume_paths])
-    !@resourcetype.find_by(@client, @data).empty?
+    super([:found, :get_attachable_volumes, :get_extra_managed_volume_paths])
   end
 
   def create
