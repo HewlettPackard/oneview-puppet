@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_volume).provider(:oneview_volume)
+provider_class = Puppet::Type.type(:oneview_volume).provider(:c7000)
 resourcetype = OneviewSDK::Volume
 
 describe provider_class, unit: true do
@@ -39,7 +39,8 @@ describe provider_class, unit: true do
               'storagePoolUri' => '/rest/'
             },
             'snapshotPoolUri' => '/rest/'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -62,8 +63,8 @@ describe provider_class, unit: true do
       expect(instance).to be
     end
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:oneview_volume)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:c7000)
     end
 
     it 'should able to find the resource' do

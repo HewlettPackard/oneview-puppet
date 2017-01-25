@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 require 'spec_helper'
 require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
-provider_class = Puppet::Type.type(:oneview_volume).provider(:ruby)
-storage_pool_name = login[:storage_pool_name] || '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+provider_class = Puppet::Type.type(:oneview_volume).provider(:synergy)
+storage_pool_name = login[:storage_pool_name] || 'FST_CPG1'
 
 describe provider_class do
   let(:resource) do
@@ -28,7 +28,8 @@ describe provider_class do
       data:
             {
               'name' => 'ONEVIEW_SDK_TEST_VOLUME_1'
-            }
+            },
+      provider: 'synergy'
     )
   end
 
@@ -41,8 +42,8 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider oneview_volume' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:oneview_volume)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:synergy)
     end
 
     it 'should not exist until it is created' do
@@ -78,7 +79,8 @@ describe provider_class do
                   'storagePoolUri'    => storage_pool_name
                 },
                 'snapshotPoolUri' => storage_pool_name
-              }
+              },
+        provider: 'synergy'
       )
     end
 
@@ -100,7 +102,8 @@ describe provider_class do
                   'type' => 'Snapshot',
                   'description' => 'New snapshot'
                 }
-              }
+              },
+        provider: 'synergy'
       )
     end
 
