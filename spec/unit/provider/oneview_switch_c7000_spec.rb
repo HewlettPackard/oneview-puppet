@@ -64,11 +64,8 @@ describe provider_class, unit: true do
       expect(provider.found).to be
     end
 
-    it 'should be able to get types' do
-      path = 'spec/support/fixtures/unit/provider/ethernet_network_members.json'
-      Test = File.read(path)
-      resource['data']['name'] = nil
-      allow(resourcetype).to receive(:get_type).and_return(['test'])
+    it 'should be able to get type for a specific switch' do
+      allow(resourcetype).to receive(:get_type).and_return(test)
       provider.exists?
       expect(provider.get_type).to be
     end
@@ -135,10 +132,39 @@ describe provider_class, unit: true do
   end
 
   context 'given the switch get type parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_switch).new(
+        name: 'Switch',
+        ensure: 'get_type',
+        data: {},
+        provider: 'c7000'
+      )
+    end
     it 'should be able to get types' do
-      allow(resourcetype).to receive(:get_type).and_return(test)
+      allow(resourcetype).to receive(:get_types).and_return(test)
       provider.exists?
       expect(provider.get_type).to be
+    end
+  end
+
+  context 'given the set_scope_uris ensure' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_switch).new(
+        name: 'Switch',
+        ensure: 'set_scope_uris',
+        data:
+            {
+              'name'                      => '172.18.20.1',
+              'scope_uris'                => ['/rest/fakescope', '/rest/fakescope2']
+            },
+        provider: 'c7000'
+      )
+    end
+
+    it 'should be able to get types' do
+      allow_any_instance_of(resourcetype).to receive(:set_scope_uris).and_return(test)
+      provider.exists?
+      expect(provider.set_scope_uris).to be
     end
   end
 

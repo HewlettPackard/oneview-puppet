@@ -24,7 +24,7 @@ Puppet::Type::Oneview_switch.provide :synergy, parent: Puppet::OneviewResource d
   mk_resource_methods
 
   def exists?
-    super(nil, :found, :get_type)
+    @data = data_parse
     true
   end
 
