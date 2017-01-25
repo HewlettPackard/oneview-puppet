@@ -17,16 +17,17 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
+api_version = login[:api_version] || 200
+resource_name = 'Switch'
+resourcetype = if api_version == 200
+                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
+               else
+                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
+               end
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::Switch
-
-  # TODO: #1 - a future improvement might be to make this test more atomic, by adding the
-  # possibility to call creates to this test dependencies
-  # TODO: #2 - This example is still using the ethernet_network_members.json file to generate
-  # its json outputs. Ideally a switch specific json file should be used for cohesion.
   let(:resource) do
     Puppet::Type.type(:oneview_switch).new(
       name: 'Switch',
@@ -34,7 +35,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => '172.18.20.1'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -42,24 +44,23 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  context 'given the minimum parameters' do
-    it 'should be an instance of the provider oneview_switch' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
-    end
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
-    it 'exists? should find the Switch' do
-      expect(provider.exists?).to be
+  before(:each) do
+    allow(resourcetype).to receive(:find_by).and_return([test])
+    provider.exists?
+  end
+
+  context 'given the minimum parameters' do
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:c7000)
     end
 
     it 'create should display unavailable method' do
-      expect(provider.exists?).to be
       expect { provider.create }.to raise_error(/This ensurable is not supported for this resource/)
     end
 
     it 'should return that the Switch was found' do
-      test = OneviewSDK::Switch.new(@client, resource['data'])
-      allow(OneviewSDK::Switch).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to eq(true)
       expect(provider.found).to be
     end
 
@@ -67,8 +68,7 @@ describe provider_class, unit: true do
       path = 'spec/support/fixtures/unit/provider/ethernet_network_members.json'
       Test = File.read(path)
       resource['data']['name'] = nil
-      allow(OneviewSDK::Switch).to receive(:get_type).with(anything).and_return(['test'])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(Test))
+      allow(resourcetype).to receive(:get_type).and_return(['test'])
       provider.exists?
       expect(provider.get_type).to be
     end
@@ -77,8 +77,8 @@ describe provider_class, unit: true do
       path = 'spec/support/fixtures/unit/provider/ethernet_network_members.json'
       Test = File.read(path)
       resource['data']['uri'] = '/rest/fake'
-      test = OneviewSDK::Switch.new(@client, resource['data'])
-      allow(OneviewSDK::Switch).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(Test))
       expect(provider.exists?).to eq(true)
       expect(provider.get_environmental_configuration).to be
@@ -86,8 +86,8 @@ describe provider_class, unit: true do
 
     it 'should drop the Switch' do
       resource['data']['uri'] = '/rest/fake'
-      test = OneviewSDK::Switch.new(@client, resource['data'])
-      allow(OneviewSDK::Switch).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.exists?).to eq(true)
       expect(provider.destroy).to be
@@ -102,16 +102,17 @@ describe provider_class, unit: true do
         data:
             {
               'name'                      => '172.18.200.1'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'exists? should not find the Switch' do
-      allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
     end
 
     it 'should fail and return that the Switch was not found' do
-      allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
       expect { provider.found }.to raise_error(/No Switch with the specified data were found on the Oneview Appliance/)
     end
@@ -119,14 +120,14 @@ describe provider_class, unit: true do
 
   context 'given the create parameters' do
     it 'should be able to run through self.instances' do
-      test = OneviewSDK::Switch.new(@client, resource['data'])
-      allow(OneviewSDK::Switch).to receive(:get_all).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:get_all).and_return([test])
       expect(instance).to be
     end
 
     it 'should return an error stating that no types match the name given' do
-      allow(OneviewSDK::Switch).to receive(:find_by).and_return([])
-      allow(OneviewSDK::Switch).to receive(:get_type).with(anything, resource['data']['name']).and_return(nil)
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resourcetype).to receive(:get_type).with(anything, resource['data']['name']).and_return(nil)
       provider.exists?
       expect { provider.get_type }
         .to raise_error(/\n\n No switch types corresponding to the name #{resource['data']['name']} were found.\n/)
@@ -135,7 +136,7 @@ describe provider_class, unit: true do
 
   context 'given the switch get type parameters' do
     it 'should be able to get types' do
-      allow(OneviewSDK::Switch).to receive(:get_type).with(anything, resource['data']['name']).and_return(resource['data']['name'])
+      allow(resourcetype).to receive(:get_type).and_return(test)
       provider.exists?
       expect(provider.get_type).to be
     end
@@ -151,7 +152,8 @@ describe provider_class, unit: true do
               'name'                      => '172.18.20.1',
               'port_name'                 => '1.4',
               # 'subport_number'            => 'test'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should be able to get statistics' do
@@ -160,8 +162,8 @@ describe provider_class, unit: true do
         'name'                      => '172.18.20.1',
         'uri'                       => '/rest/fake'
       }
-      test = OneviewSDK::Switch.new(@client, resource['data'])
-      allow(OneviewSDK::Switch).to receive(:find_by).with(anything, data_for_findby).and_return([test])
+      test = resourcetype.new(@client, resource['data'])
+      allow(resourcetype).to receive(:find_by).with(anything, data_for_findby).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('Fake Get Statistics'))
       provider.exists?
       expect(provider.get_statistics).to be

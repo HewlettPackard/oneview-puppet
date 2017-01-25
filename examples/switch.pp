@@ -23,10 +23,9 @@ oneview_switch{'switch_1':
 }
 
 oneview_switch{'switch_2':
-    ensure  => 'get_type',
-    require => Oneview_switch['switch_1'],
+    ensure => 'get_type',
     # A data hash is optional for the get_type ensurable, and serves as a filter for the types
-    data    => {
+    data   => {
       name                => 'Cisco Nexus 50xx',
     }
 }
@@ -39,7 +38,7 @@ oneview_switch{'switch_3':
     ensure  => 'get_statistics',
     require => Oneview_switch['switch_2'],
     data    => {
-      name                      => '172.18.20.1',
+      name                      => '172.18.16.92',
       # port_name                => '1.4',
     }
 }
@@ -50,14 +49,24 @@ oneview_switch{'switch_4':
     ensure  => 'get_environmental_configuration',
     require => Oneview_switch['switch_3'],
     data    => {
-      name                      => '172.18.20.1',
+      name                      => '172.18.16.92',
     }
 }
 
+# This ensure method requires a unique identifier for the switch and the 'scope_uris' field, containing an array of the scope uris
 oneview_switch{'switch_5':
+    ensure  => 'set_scope_uris',
+    require => Oneview_switch['switch_3'],
+    data    => {
+      name       => '172.18.16.92',
+      scope_uris => ['/rest/scopes/fee00629-9931-426d-8771-a597917eb9d2','/rest/scopes/4cd2c577-6a6c-4bbc-a3fc-5e4ab3326e21']
+    }
+}
+
+oneview_switch{'switch_6':
     ensure  => 'absent',
     require => Oneview_switch['switch_4'],
     data    => {
-      name => '172.18.20.1'
+      name => '172.18.16.92'
     }
 }

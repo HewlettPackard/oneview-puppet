@@ -14,52 +14,26 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_switch).provide(:oneview_switch) do
+Puppet::Type::Oneview_switch.provide :synergy, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Switch resources using the Synergy variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'Synergy'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Switch
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::Switch.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
-
-  # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_type])
-    return true if %w(found get_type).include?(resource['ensure'].to_s)
-    !@resourcetype.find_by(@client, unique_id).empty?
+    super(nil, :found, :get_type)
+    true
   end
 
   def create
-    raise 'This ensurable is not supported for this resource'
+    raise 'Method unavailable for Synergy'
   end
 
   def destroy
-    @resourcetype.find_by(@client, unique_id).first.remove
-  end
-
-  def found
-    find_resources
+    raise 'Method unavailable for Synergy'
   end
 
   def get_type
@@ -77,14 +51,14 @@ Puppet::Type.type(:oneview_switch).provide(:oneview_switch) do
 
   # Remove port_name and subport_number from data hash for comparisons and usage
   def get_statistics
-    port_name = @data.delete('port_name')
-    subport_number = @data.delete('subport_number')
-    pretty get_single_resource_instance.statistics(port_name, subport_number)
-    true
+    raise 'Method unavailable for Synergy'
   end
 
   def get_environmental_configuration
-    pretty get_single_resource_instance.environmental_configuration
-    true
+    raise 'Method unavailable for Synergy'
+  end
+
+  def set_scope_uris
+    raise 'Method unavailable for Synergy'
   end
 end
