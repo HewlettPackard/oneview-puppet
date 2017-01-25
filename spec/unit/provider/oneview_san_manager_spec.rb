@@ -15,108 +15,116 @@
 ################################################################################
 
 require 'spec_helper'
+require_relative '../../support/fake_response'
+require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
+provider_class = Puppet::Type.type(:oneview_san_manager).provider(:c7000)
+api_version = login[:api_version] || 200
+resourcetype ||= if api_version == 200
+                   OneviewSDK::API200::SANManager
+                 else
+                   Object.const_get("OneviewSDK::API#{api_version}::C7000::SANManager")
+                 end
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resourcetype = OneviewSDK::SANManager
-  let(:resource) do
-    Puppet::Type.type(:oneview_san_manager).new(
-      name: 'san_manager',
-      ensure: 'found',
-      data:
-          {
-            'providerDisplayName' => 'Brocade Network Advisor'
-          }
-    )
-  end
-
-  let(:provider) { resource.provider }
-
-  let(:instance) { provider.class.instances.first }
-
-  context 'given the minimum parameters before San Manager creation' do
-    it 'should be an instance of the provider oneview_san_manager' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
-    end
-
-    it 'should raise error when San Manager is not found' do
-      allow(OneviewSDK::SANManager).to receive(:find_by).with(anything, resource['data']).and_return([])
-      provider.exists?
-      expect { provider.found }.to raise_error(/No SANManager with the specified data were found on the Oneview Appliance/)
-    end
-  end
-
-  context 'given the create parameters' do
+  context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_san_manager).new(
         name: 'san_manager',
-        ensure: 'present',
+        ensure: 'found',
         data:
             {
-              'providerDisplayName' => 'Brocade Network Advisor',
-              'connectionInfo' => [
-                {
-                  'name' => 'Host',
-                  'value' => '172.18.15.1'
-                },
-                {
-                  'name' => 'Port',
-                  'value' => 5989
-                },
-                {
-                  'name' => 'Username',
-                  'value' => 'dcs'
-                },
-                {
-                  'name' => 'Password',
-                  'value' => 'dcs'
-                },
-                {
-                  'name' => 'UseSsl',
-                  'value' => true
-                }
-              ]
+              'providerDisplayName' => 'Brocade Network Advisor'
             }
       )
     end
 
-    it 'should create/add the san manager' do
-      test = OneviewSDK::SANManager.new(@client, resource['data'])
-      expect(OneviewSDK::SANManager).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(OneviewSDK::SANManager).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
-        .and_return([])
-      provider.exists?
-      allow_any_instance_of(OneviewSDK::SANManager).to receive(:add).and_return(test)
-      expect(provider.create).to be
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    # context 'given the minimum parameters before San Manager creation' do
+    it 'should be an instance of the provider C7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:c7000)
     end
 
-    it 'should update the san manager' do
-      test = OneviewSDK::SANManager.new(@client, resource['data'])
-      expect(OneviewSDK::SANManager).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(OneviewSDK::SANManager).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
-        .and_return([test])
+    it 'should raise error when San Manager is not found' do
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       provider.exists?
-      expect(provider.create).to be
+      expect { provider.found }.to raise_error(/No SANManager with the specified data were found on the Oneview Appliance/)
     end
-  end
 
-  context 'given the minimum parameters after San Manager creation' do
-    before(:each) do
-      resource['data']['uri'] = '/rest/san-managers/fake'
-      test = OneviewSDK::SANManager.new(@client, resource['data'])
-      allow(OneviewSDK::SANManager).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(OneviewSDK::SANManager).to receive(:get_all).with(anything).and_return([test])
-      provider.exists?
+    context 'given the create parameters' do
+      let(:resource) do
+        Puppet::Type.type(:oneview_san_manager).new(
+          name: 'san_manager',
+          ensure: 'present',
+          data:
+              {
+                'providerDisplayName' => 'Brocade Network Advisor',
+                'connectionInfo' => [
+                  {
+                    'name' => 'Host',
+                    'value' => '172.18.15.1'
+                  },
+                  {
+                    'name' => 'Port',
+                    'value' => 5989
+                  },
+                  {
+                    'name' => 'Username',
+                    'value' => 'dcs'
+                  },
+                  {
+                    'name' => 'Password',
+                    'value' => 'dcs'
+                  },
+                  {
+                    'name' => 'UseSsl',
+                    'value' => true
+                  }
+                ]
+              }
+        )
+      end
+
+      it 'should create/add the san manager' do
+        test = resourcetype.new(@client, resource['data'])
+        expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+        expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
+          .and_return([])
+        provider.exists?
+        allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+        expect(provider.create).to be
+      end
+
+      it 'should update the san manager' do
+        test = resourcetype.new(@client, resource['data'])
+        expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+        expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
+          .and_return([test])
+        provider.exists?
+        expect(provider.create).to be
+      end
     end
-    it 'should be able to run through self.instances' do
-      expect(instance).to be
-    end
-    it 'should delete the san manager' do
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      expect(provider.destroy).to be
+
+    context 'given the minimum parameters after San Manager creation' do
+      before(:each) do
+        resource['data']['uri'] = '/rest/san-managers/fake'
+        test = resourcetype.new(@client, resource['data'])
+        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+        allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
+        provider.exists?
+      end
+      it 'should be able to run through self.instances' do
+        expect(provider).to be
+      end
+      it 'should delete the san manager' do
+        expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+        expect(provider.destroy).to be
+      end
     end
   end
 end

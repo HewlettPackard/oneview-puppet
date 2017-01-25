@@ -14,27 +14,13 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.newtype(:oneview_san_manager) do
-  desc "Oneview's SAN Manager"
+Puppet::Type.type(:oneview_san_manager).provide :synergy, parent: :c7000 do
+  desc 'Provider for OneView SAN Manager using the Synergy variant of the OneView API'
 
-  ensurable do
-    defaultvalues
-    # :nocov:
-    # Get Methods
-    newvalue(:found) do
-      provider.found
-    end
-    # :nocov:
-  end
+  confine true: login[:hardware_variant] == 'Synergy'
 
-  newparam(:name, namevar: true) do
-    desc 'SAN Manager name'
-  end
-
-  newparam(:data) do
-    desc 'SAN Manager data hash'
-    validate do |value|
-      raise Puppet::Error, 'Inserted value for data is not valid' unless value.class == Hash
-    end
+  def initialize(*args)
+    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::SANManager")
+    super(*args)
   end
 end

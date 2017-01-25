@@ -14,32 +14,27 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_san_manager).provide(:oneview_san_manager) do
+Puppet::Type::Oneview_san_manager.provide :c7000 do
+  desc 'Provider for OneView SAN Manager using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
     @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::SANManager
+    api_version = login[:api_version] || 200
+    @resourcetype ||= if api_version == 200
+                        OneviewSDK::API200::SANManager
+                      else
+                        Object.const_get("OneviewSDK::API#{api_version}::C7000::SANManager")
+                      end
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::SANManager.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.data
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
+    @data ||= {}
   end
 
   # Provider methods
