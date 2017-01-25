@@ -19,13 +19,9 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_name = 'ServerHardware'
-resourcetype = if api_version == 200
-                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-               else
-                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-               end
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   @resourcetype = resourcetype
