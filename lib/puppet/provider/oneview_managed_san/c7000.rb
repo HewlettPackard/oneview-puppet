@@ -14,35 +14,25 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_managed_san).provide(:oneview_managed_san) do
+Puppet::Type::Oneview_managed_san.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Managed SANs using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ManagedSAN
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
+  def resource_name
+    'ManagedSAN'
   end
 
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::ManagedSAN.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.data
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
+  def self.resource_name
+    'ManagedSAN'
   end
 
-  # Provider methods
+  # TODO: This is currently an implementation that does not work with 'puppet resource (...)' command. Revising it in the future would be
+  # an improvement.
   def exists?
     @data = data_parse
     resource['ensure'] == :present ? false : true
@@ -60,10 +50,6 @@ Puppet::Type.type(:oneview_managed_san).provide(:oneview_managed_san) do
 
   def destroy
     raise 'Absent is not a valid ensurable for this resource'
-  end
-
-  def found
-    find_resources
   end
 
   def get_zoning_report

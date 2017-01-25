@@ -16,10 +16,12 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
-resourcetype = OneviewSDK::ManagedSAN
+provider_class = Puppet::Type.type(:oneview_managed_san).provider(:synergy)
+api_version = login[:api_version] || 200
+resource_name = 'ManagedSAN'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -29,7 +31,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'SAN1_0'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -37,16 +40,16 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider oneview_managed_san' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_managed_san).provider(:oneview_managed_san)
-    end
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
-    it 'should raise error when server is not found' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      provider.exists?
-      expect { provider.found }.to raise_error(/No ManagedSAN with the specified data were found on the Oneview Appliance/)
-    end
+  before(:each) do
+    allow(resourcetype).to receive(:find_by).and_return([test])
+    allow(resourcetype).to receive(:get_all).and_return([test])
+    provider.exists?
+  end
+
+  it 'should be an instance of the provider synergy' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_managed_san).provider(:synergy)
   end
 
   context 'given the create parameters' do
@@ -71,25 +74,13 @@ describe provider_class, unit: true do
                 'targetNameFormat' => '{storageSystemName}_{targetName}',
                 'targetGroupNameFormat' => '{storageSystemName}_{targetGroupName}'
               }
-            }
+            },
+        provider: 'synergy'
       )
     end
-    before(:each) do
-      resource['data']['uri'] = '/rest/san-managers/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
-      provider.exists?
-    end
-
     it 'should create/add the managed san' do
-      allow_any_instance_of(OneviewSDK::Client).to receive(:rest_put)
-        .with(resource['data']['uri'], 'body' => { publicAttributes: resource['data']['publicAttributes'] })
-        .and_return(uri: '/rest/server-hardware/fake')
-      allow_any_instance_of(OneviewSDK::Client).to receive(:rest_put)
-        .with(resource['data']['uri'], 'body' => { sanPolicy: resource['data']['sanPolicy'] })
-        .and_return(uri: '/rest/server-hardware/fake')
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(uri: '/rest/server-hardware/fake')
+      allow_any_instance_of(resourcetype).to receive(:set_public_attributes).and_return(test)
+      allow_any_instance_of(resourcetype).to receive(:set_san_policy).and_return(test)
       expect(provider.create).to be
     end
 
@@ -98,35 +89,24 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to run through get_zoning_report' do
-      allow_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with(resource['data']['uri'] + '/issues', 'body' => {}).and_return(uri: '/rest/san-managers/fake')
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return('Get zoning report Json')
+      allow_any_instance_of(resourcetype).to receive(:get_zoning_report).and_return(true)
       expect(provider.get_zoning_report).to be
     end
 
     it 'should be able to run through set_refresh_state' do
       resource['data']['refreshState'] = 'RefreshPending'
-      allow_any_instance_of(OneviewSDK::Client).to receive(:rest_put)
-        .with(resource['data']['uri'], 'body' => { refreshState: resource['data']['refreshState'] })
-        .and_return(uri: '/rest/san-managers/fake')
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return('Refresh state set')
+      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(true)
       expect(provider.set_refresh_state).to be
     end
   end
 
   context 'given the minimum parameters after server creation' do
-    before(:each) do
-      resource['data']['uri'] = '/rest/san-managers/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-    end
     it 'should be able to run through found' do
       expect(provider.found).to be
     end
 
     it 'should be able to run through get_endpoints' do
-      allow_any_instance_of(resourcetype).to receive(:get_endpoints).and_return(['Get Endpoints Json'])
+      allow_any_instance_of(resourcetype).to receive(:get_endpoints).and_return(true)
       expect(provider.get_endpoints).to be
     end
 
