@@ -14,33 +14,19 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_server_hardware).provide(:oneview_server_hardware) do
+Puppet::Type::Oneview_server_hardware.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Server Hardwares using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
   def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ServerHardware
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
+    super
     @authentication = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::ServerHardware.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
+    @patch_tags = {}
   end
 
   # Provider methods
@@ -48,25 +34,23 @@ Puppet::Type.type(:oneview_server_hardware).provide(:oneview_server_hardware) do
     @data = data_parse
     empty_data_check
     data_parse_for_general
+    %w(from op path value).each { |key| @patch_tags[key] = @data.delete(key) if @data[key] }
+    return false unless @patch_tags.empty?
     !@resourcetype.find_by(@client, @data).empty?
   end
 
   def create
+    return patch unless @patch_tags.empty?
+    return true if resource_update(@data, @resourcetype)
     @data = @data.merge(@authentication)
     @data['hostname'] = @data.delete('name') if @data['name']
-    @resourcetype.new(@client, @data).add
+    ov_resource = @resourcetype.new(@client, @data).add
+    @property_hash[:data] = ov_resource.data
     @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
   end
 
   def destroy
-    get_single_resource_instance.remove
-    @property_hash.clear
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def get_bios
@@ -141,5 +125,14 @@ Puppet::Type.type(:oneview_server_hardware).provide(:oneview_server_hardware) do
     raise 'Invalid power_state specified in data. Valid values are "On" or "Off"' unless
       power_state.casecmp('off').zero? || power_state.casecmp('on').zero?
     power_state
+  end
+
+  def patch
+    raise 'The "from" tag is not supported by the current version of the ruby sdk' if @patch_tags['from']
+    raise 'The "op", "path" and "value" tags are required together when used for this operation.' unless
+      @patch_tags['op'] && @patch_tags['path'] && @patch_tags['value']
+    server_hardware = get_single_resource_instance
+    pretty server_hardware.patch(@patch_tags['op'], @patch_tags['path'], @patch_tags['value'])
+    true
   end
 end

@@ -15,9 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:oneview_server_hardware)
+provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:c7000)
 server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.5'
 server_hardware_username = login[:server_hardware_username] || 'dcs'
 server_hardware_password = login[:server_hardware_password] || 'dcs'
@@ -30,7 +30,8 @@ describe provider_class do
       data:
           {
             'hostname' => server_hardware_hostname
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -43,8 +44,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider oneview_server_hardware' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware).provider(:oneview_server_hardware)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware).provider(:c7000)
     end
 
     it 'should raise error when server is not found' do
@@ -63,7 +64,8 @@ describe provider_class do
               'username'        => server_hardware_username,
               'password'        => server_hardware_password,
               'licensingIntent' => 'OneView'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should be able to run through self.instances' do
