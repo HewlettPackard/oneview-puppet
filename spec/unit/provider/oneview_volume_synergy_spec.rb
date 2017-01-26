@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_volume).provider(:oneview_volume)
-resourcetype = OneviewSDK::Volume
+provider_class = Puppet::Type.type(:oneview_volume).provider(:synergy)
+api_version = login[:api_version] || 200
+resource_name = 'Volume'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -39,7 +41,8 @@ describe provider_class, unit: true do
               'storagePoolUri' => '/rest/'
             },
             'snapshotPoolUri' => '/rest/'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -62,8 +65,8 @@ describe provider_class, unit: true do
       expect(instance).to be
     end
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:oneview_volume)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume).provider(:synergy)
     end
 
     it 'should able to find the resource' do
@@ -77,8 +80,14 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'should be able to get the snapshot' do
+    it 'should be able to get the snapshots' do
       allow_any_instance_of(resourcetype).to receive(:get_snapshots).and_return('Test')
+      expect(provider.get_snapshot).to be
+    end
+
+    it 'should be able to get a snapshot by name' do
+      resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
+      allow_any_instance_of(resourcetype).to receive(:get_snapshot).and_return('Test')
       expect(provider.get_snapshot).to be
     end
 

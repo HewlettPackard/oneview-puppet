@@ -14,39 +14,19 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
+require_relative '../oneview_resource'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_volume).provide(:oneview_volume) do
+Puppet::Type::Oneview_volume.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Storage Volumes using the C7000 variant of the OneView API'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Volume
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::Volume.find_by(@client, {})
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
+  confine true: login[:hardware_variant] == 'C7000'
 
   # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_attachable_volumes, :get_extra_managed_volume_paths])
-    !@resourcetype.find_by(@client, @data).empty?
+    super([:found, :get_attachable_volumes, :get_extra_managed_volume_paths])
   end
 
   def create
@@ -55,16 +35,6 @@ Puppet::Type.type(:oneview_volume).provide(:oneview_volume) do
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data
     true
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
   end
 
   def get_attachable_volumes
