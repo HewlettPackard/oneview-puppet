@@ -18,9 +18,10 @@ require 'spec_helper'
 require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:synergy)
+api_version = login[:api_version] || 200
 logical_interconnect_name = login[:logical_interconnect_name] || 'Encl1-Test Oneview'
 
-describe provider_class do
+describe provider_class, if: api_version >= 300 do
   let(:resource) do
     Puppet::Type.type(:oneview_uplink_set).new(
       name: 'Enclosure',

@@ -19,7 +19,13 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:c7000)
-resourcetype = OneviewSDK::UplinkSet
+api_version = login[:api_version] || 200
+resource_name = 'UplinkSet'
+resourcetype = if api_version == 200
+                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
+               else
+                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
+               end
 
 describe provider_class, unit: true do
   include_context 'shared context'
