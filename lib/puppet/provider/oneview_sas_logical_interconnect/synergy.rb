@@ -35,14 +35,7 @@ Puppet::Type::Oneview_sas_logical_interconnect.provide :synergy, parent: Puppet:
     @data = data_parse
     empty_data_check
     variable_assignments
-    # puts "\n\n exists: #{@resourcetype.new(@client, @data).exists?}"
-    # li = if resource['ensure'] == :present
-    #        resource_update(@data, @resourcetype)
-    #        @resourcetype.find_by(@client, unique_id)
-    #      else
-    #        @resourcetype.find_by(@client, @data)
-    #      end
-    # !li.empty?
+    return !@resourcetype.find_by(@client, @data).empty? unless @data
     @resourcetype.new(@client, @data).exists?
   end
 
