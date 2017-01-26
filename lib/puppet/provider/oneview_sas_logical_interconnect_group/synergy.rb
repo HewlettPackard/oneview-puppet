@@ -17,7 +17,7 @@
 require_relative '../oneview_resource'
 
 Puppet::Type::Oneview_sas_logical_interconnect_group.provide :synergy, parent: Puppet::OneviewResource do
-  desc 'Provider for OneView SAS Logical Enclosures using the Synergy variant of the OneView API'
+  desc 'Provider for OneView SAS Logical Interconnect Groups using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
 
