@@ -14,34 +14,15 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
+require_relative '../oneview_resource'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_uplink_set).provide(:oneview_uplink_set) do
+Puppet::Type::Oneview_uplink_set.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Uplink Sets using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
-
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::UplinkSet
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-    @port_config
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::UplinkSet.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
 
   # Provider methods
   def exists?
@@ -58,18 +39,8 @@ Puppet::Type.type(:oneview_uplink_set).provide(:oneview_uplink_set) do
     uplink_set.add_port_config(@port_config[0], @port_config[1], @port_config[2]) if @port_config
     uplink_set.create
     @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
+    @property_hash[:data] = uplink_set.data
     true
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
   end
 
   # Helper method to transform names into uris
