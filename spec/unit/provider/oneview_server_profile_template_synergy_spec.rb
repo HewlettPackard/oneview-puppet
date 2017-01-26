@@ -14,20 +14,19 @@
 # limitations under the License.
 ################################################################################
 
+# TODO: review and complete with remaining methods for code coverage 80%+
+# (additional SPT methods)
+
 require 'spec_helper'
 require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:c7000)
+provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_name = 'ServerProfileTemplate'
-resourcetype = if api_version == 200
-                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-               else
-                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-               end
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   context 'given the creation parameters' do
@@ -42,7 +41,7 @@ describe provider_class, unit: true do
               'serverHardwareTypeUri' => '/rest/',
               'type'                  => 'ServerProfileTemplateV1'
             },
-        provider: 'c7000'
+        provider: 'synergy'
       )
     end
 
@@ -50,8 +49,8 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:c7000)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:synergy)
     end
 
     it 'should run exists? and return the resource does not exist' do

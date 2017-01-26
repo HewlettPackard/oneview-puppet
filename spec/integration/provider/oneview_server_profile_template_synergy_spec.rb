@@ -15,10 +15,12 @@
 ################################################################################
 
 require 'spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
-provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:ruby)
+api_version = login[:api_version] || 200
+provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:synergy)
 
-describe provider_class do
+describe provider_class, if: api_version >= 300 do
   let(:resource) do
     Puppet::Type.type(:oneview_server_profile_template).new(
       name: 'Test_SPT',
@@ -28,7 +30,8 @@ describe provider_class do
             'name'                  => 'Test_SPT',
             'enclosureGroupUri'     => 'EG',
             'serverHardwareTypeUri' => 'BL460c Gen8 1'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -41,8 +44,8 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:oneview_server_profile_template)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile_template).provider(:synergy)
     end
 
     it 'exists? should not find the server profile template' do
@@ -55,6 +58,15 @@ describe provider_class do
 
     it 'should be able to find the server profile template' do
       expect(provider.found).to be
+    end
+
+    it 'should be able to get a server profile template with a new configuration', if: api_version >= 300 do
+      resource['data']['queryParameters'] = {
+        'enclosureGroupUri'     => 'EG2',
+        'serverHardwareTypeUri' => 'BL460c Gen8 1'
+      }
+      provider.exists?
+      expect(provider.get_transformation).to be
     end
 
     it 'should be able to destroy the server profile template' do

@@ -15,7 +15,7 @@
 ################################################################################
 
 # This example requires:
-# - Enclosure Group 'EG'
+# - Enclosure Groups 'EG' and 'EG2'
 # - Server Hardware Type 'BL460c Gen8 1'
 
 # You can either declare the name or the uri of the following parameters that require Uri:
@@ -24,7 +24,7 @@ oneview_server_profile_template{'Server Profile Template Create':
   data   =>
     {
       name                  => 'New SPT',
-      enclosureGroupUri     => 'OneViewSDK Test Enclosure_Group',
+      enclosureGroupUri     => 'EG',
       serverHardwareTypeUri => 'BL460c Gen8 1',
       # connections =>
       # [
@@ -93,6 +93,19 @@ oneview_server_profile_template{'Server Profile Create':
     {
       name                  => 'New SPT #2',
       # serverProfileName     => 'My SP'
+    }
+}
+
+oneview_server_profile_template{'Get Transformation':
+  ensure  => 'get_transformation',
+  require => Oneview_server_profile_template['Server Profile Template Get All'],
+  data    =>
+    {
+      name            => 'New SPT #2',
+      queryParameters => {
+        enclosureGroupUri     => 'EG2',
+        serverHardwareTypeUri => 'BL460c Gen8 1'
+      }
     }
 }
 

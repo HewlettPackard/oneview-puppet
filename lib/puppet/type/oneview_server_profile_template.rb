@@ -30,6 +30,10 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
     newvalue(:set_new_profile) do
       provider.set_new_profile
     end
+
+    newvalue(:get_transformation) do
+      provider.get_transformation
+    end
   end
   # :nocov:
 
