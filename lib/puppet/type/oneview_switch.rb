@@ -38,6 +38,10 @@ Puppet::Type.newtype(:oneview_switch) do
     newvalue(:get_environmental_configuration) do
       provider.get_environmental_configuration
     end
+
+    newvalue(:set_scope_uris) do
+      provider.set_scope_uris
+    end
     # :nocov:
   end
 

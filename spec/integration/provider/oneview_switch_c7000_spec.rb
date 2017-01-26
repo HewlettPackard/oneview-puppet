@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
+provider_class = Puppet::Type.type(:oneview_switch).provider(:c7000)
 
 describe provider_class do
   let(:resource) do
@@ -26,7 +26,8 @@ describe provider_class do
       data:
           {
             'name' => '172.18.20.1'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -39,8 +40,8 @@ describe provider_class do
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_switch' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_switch).provider(:c7000)
     end
 
     it 'exists? should find the Switch' do
@@ -68,7 +69,8 @@ describe provider_class do
     let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
-        ensure: 'get_type'
+        ensure: 'get_type',
+        provider: 'c7000'
       )
     end
 
@@ -86,7 +88,8 @@ describe provider_class do
         data:
             {
               'name'                      => '172.18.200.1'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'exists? should not find the Switch' do
@@ -107,7 +110,8 @@ describe provider_class do
         data:
             {
               'name'                      => '172.18.20.1'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should be able to run through self.instances' do
@@ -128,7 +132,8 @@ describe provider_class do
         data:
             {
               'name'                      => 'Cisco Nexus 50xx'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should be able to get a specific type' do
@@ -137,7 +142,7 @@ describe provider_class do
     end
   end
 
-  context 'given the create parameters' do
+  context 'given the parameters for getting statistics' do
     let(:resource) do
       Puppet::Type.type(:oneview_switch).new(
         name: 'Switch',
@@ -147,7 +152,8 @@ describe provider_class do
               'name'                      => '172.18.20.1',
               'port_name'                 => '1.4',
               # 'subport_number'            => 'test'
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should be able to get statistics' do

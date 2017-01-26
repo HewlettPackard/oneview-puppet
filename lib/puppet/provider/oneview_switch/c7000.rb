@@ -14,39 +14,19 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_switch).provide(:oneview_switch) do
+Puppet::Type::Oneview_switch.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Switch resources using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::Switch
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::Switch.get_all(@client)
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
-
-  # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_type])
-    return true if %w(found get_type).include?(resource['ensure'].to_s)
+    dataless_ensure = [nil, :found, :get_type]
+    super(dataless_ensure)
+    return true if dataless_ensure.include?(resource['ensure'])
     !@resourcetype.find_by(@client, unique_id).empty?
   end
 
@@ -55,11 +35,7 @@ Puppet::Type.type(:oneview_switch).provide(:oneview_switch) do
   end
 
   def destroy
-    @resourcetype.find_by(@client, unique_id).first.remove
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def get_type
@@ -85,6 +61,12 @@ Puppet::Type.type(:oneview_switch).provide(:oneview_switch) do
 
   def get_environmental_configuration
     pretty get_single_resource_instance.environmental_configuration
+    true
+  end
+
+  def set_scope_uris
+    @scope_uris = @data.delete('scope_uris')
+    pretty get_single_resource_instance.set_scope_uris(@scope_uris)
     true
   end
 end
