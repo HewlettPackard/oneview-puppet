@@ -40,6 +40,7 @@ Puppet::Type.newtype(:oneview_fc_network) do
       puts value.class
       # raise 'Inserted value for data is not valid' unless value.class == Hash
     end
+
     def property_matches?(current, desired)
       OneviewSDK::FCNetwork.new(client, current).like?(OneviewSDK::FCNetwork.new(client, desired))
       puts "property matches current: #{current}"
