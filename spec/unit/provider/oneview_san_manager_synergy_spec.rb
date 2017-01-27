@@ -124,9 +124,16 @@ describe provider_class, unit: true do
         allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
         provider.exists?
       end
-      it 'should be able to run through self.instances' do
+
+      it 'should be able to run through instances' do
         expect(provider).to be
       end
+
+      it 'should be able to run through self.instances' do
+        allow_any_instance_of(resourcetype).to receive(:find_by)
+        expect(instance).to be
+      end
+
       it 'should delete the san manager' do
         expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
         expect(provider.destroy).to be

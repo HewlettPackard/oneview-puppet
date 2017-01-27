@@ -45,7 +45,6 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    # context 'given the minimum parameters before San Manager creation' do
     it 'should be an instance of the provider C7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:c7000)
     end
@@ -125,9 +124,16 @@ describe provider_class, unit: true do
         allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
         provider.exists?
       end
-      it 'should be able to run through self.instances' do
+
+      it 'should be able to run through instances' do
         expect(provider).to be
       end
+
+      it 'should be able to run through self.instances' do
+        allow_any_instance_of(resourcetype).to receive(:find_by)
+        expect(instance).to be
+      end
+
       it 'should delete the san manager' do
         expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
         expect(provider.destroy).to be
