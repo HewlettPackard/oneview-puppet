@@ -43,6 +43,10 @@ module Puppet
       OneviewSDK::Client.new(login)
     end
 
+    def client
+      OneviewSDK::Client.new(login)
+    end
+
     def self.instances
       resources = []
       oneview_class.get_all(client).each { |n| resources.push(n) }

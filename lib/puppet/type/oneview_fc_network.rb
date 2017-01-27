@@ -35,7 +35,28 @@ Puppet::Type.newtype(:oneview_fc_network) do
   newproperty(:data) do
     desc 'FC network data hash containing all specifications for the network'
     validate do |value|
-      raise 'Inserted value for data is not valid' unless value.class == Hash
+      puts 'validation'
+      puts value
+      puts value.class
+      # raise 'Inserted value for data is not valid' unless value.class == Hash
     end
+    def property_matches?(current, desired)
+      OneviewSDK::FCNetwork.new(client, current).like?(OneviewSDK::FCNetwork.new(client, desired))
+      puts "property matches current: #{current}"
+      puts "property matches desired: #{desired}"
+      true
+      # return true if super(current, desired)
+      # return date_matches?(resource.parameter(:checksum).value, current, desired)
+    end
+    # def insync?(is)
+    #   puts "\n\ninsync!\n\n"
+    #   puts "\n\n is value: #{is}"
+    #   puts "\n\n should value: #{should}"
+    #   is.sort == should.sort
+    # end
   end
+end
+
+def client
+  OneviewSDK::Client.new(login)
 end

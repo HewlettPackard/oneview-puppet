@@ -21,27 +21,63 @@ Puppet::Type::Oneview_fc_network.provide :c7000, parent: Puppet::OneviewResource
 
   confine true: login[:hardware_variant] == 'C7000'
 
-  mk_resource_methods
-
-  @resourcetype ||= OneviewSDK::FCNetwork
+  # mk_resource_methods
 
   def initialize(*args)
-    @resource_name = 'FCNetwork'
     super(*args)
   end
 
   # Provider methods
   def exists?
     @data = data_parse
-    empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
+    puts "\n\ngoing through exists"
+    @property_hash[:ensure] == :present
+  end
+
+  def self.prefetch(resources)
+    instances.each do |instance|
+      resources[instance.name].provider = instance if resources[instance.name]
+      # if resources[instance.name]
+      #   puts resources[instance.name].inspect
+      #   resources[instance.name].provider = instance
+      # end
+    end
+  end
+
+  def client
+    OneviewSDK::Client.new(login)
+  end
+
+  def data
+    puts "\n\ngoing through data"
+    @property_hash[:data]
+  end
+
+  def data=(value)
+    puts "\n\n going through data=(value)"
+    existing_ov_resource = ov_resource_type.new(client, @property_hash[:data])
+    new_ov_resource = ov_resource_type.new(client, value)
+    puts existing_ov_resource.like?(new_ov_resource) ? @property_hash[:data] : value
+    @property_flush[:data] = existing_ov_resource.like?(new_ov_resource) ? @property_hash[:data] : value
+  end
+
+  def flush
+    puts "\n\ngoing through flush"
+    array_arguments = []
+    puts "\n\n property flush: #{@property_flush.sort}"
+    if @property_flush
+      array_arguments << :data << @property_flush[:data] if @property_flush[:data]
+    end
+    puts "\n\n array arguments: #{array_arguments}"
+    array_arguments
+    # fooset(array_arguments, resource[:name]) unless array_arguments.empty?
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
+    # return true if resource_update(@data, @resourcetype)
+    ov_resource = @resourcetype.new(@client, @data).create
     @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
+    @property_hash[:data] = ov_resource.data
     true
   end
 
@@ -49,10 +85,6 @@ Puppet::Type::Oneview_fc_network.provide :c7000, parent: Puppet::OneviewResource
     get_single_resource_instance.delete
     @property_hash.clear
     true
-  end
-
-  def found
-    find_resources
   end
 
   def resource_name
