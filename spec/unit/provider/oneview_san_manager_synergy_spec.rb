@@ -125,10 +125,6 @@ describe provider_class, unit: true do
         provider.exists?
       end
 
-      it 'should be able to run through instances' do
-        expect(provider).to be
-      end
-
       it 'should be able to run through self.instances' do
         allow_any_instance_of(resourcetype).to receive(:find_by)
         expect(instance).to be
