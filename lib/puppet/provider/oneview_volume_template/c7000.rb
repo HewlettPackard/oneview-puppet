@@ -14,35 +14,15 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
+Puppet::Type::Oneview_volume_template.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Volume Template using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::VolumeTemplate
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
-  end
-
-  def self.instances
-    @client = OneviewSDK::Client.new(login)
-    matches = OneviewSDK::VolumeTemplate.find_by(@client, {})
-    matches.collect do |line|
-      name = line['name']
-      data = line.inspect
-      new(name: name,
-          ensure: :present,
-          data: data)
-    end
-  end
-
-  # Provider methods
   def exists?
     @data = data_parse
     empty_data_check
@@ -71,5 +51,13 @@ Puppet::Type.type(:oneview_volume_template).provide(:oneview_volume_template) do
     query_parameters = @data.delete('query_parameters') || {}
     pretty get_single_resource_instance.get_connectable_volume_templates(query_parameters)
     true
+  end
+
+  def resource_name
+    'VolumeTemplate'
+  end
+
+  def self.resource_name
+    'VolumeTemplate'
   end
 end

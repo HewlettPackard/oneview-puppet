@@ -15,13 +15,16 @@
 ################################################################################
 
 require 'spec_helper'
+require_relative '../../support/fake_response'
+require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
+provider_class = Puppet::Type.type(:oneview_volume_template).provider(:synergy)
 resourcetype = OneviewSDK::VolumeTemplate
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
+  @resourcetype = resourcetype
   let(:resource) do
     Puppet::Type.type(:oneview_volume_template).new(
       name: 'vt',
@@ -38,7 +41,8 @@ describe provider_class, unit: true do
               'capacity'       => '235834383322',
               'storagePoolUri' => '/rest/fake'
             }
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -55,7 +59,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be an instance of the provider oneview_volume_template' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:synergy)
     end
 
     it 'if nothing is found should return false' do
@@ -85,6 +89,11 @@ describe provider_class, unit: true do
     it 'should be able to run through self.instances' do
       allow(resourcetype).to receive(:find_by).and_return([test])
       expect(instance).to be
+    end
+
+    it 'should be able to find the connectable volume templates' do
+      allow_any_instance_of(resourcetype).to receive(:get_connectable_volume_templates).and_return(true)
+      expect(provider.get_connectable_volume_templates).to be
     end
 
     it 'finds the resource' do
