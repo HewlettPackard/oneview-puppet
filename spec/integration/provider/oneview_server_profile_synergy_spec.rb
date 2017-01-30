@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
+provider_class = Puppet::Type.type(:oneview_server_profile).provider(:synergy)
 
 describe provider_class do
   let(:resource) do
@@ -26,9 +26,9 @@ describe provider_class do
       data:
           {
             'name'              => 'Test Server Profile',
-            'type'              => 'ServerProfileV5',
-            'serverHardwareUri' => '172.18.6.15'
-          }
+            'serverHardwareUri' => '172.18.6.6'
+          },
+      provider: 'synergy'
     )
   end
 
@@ -41,8 +41,8 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile).provider(:synergy)
     end
 
     it 'should be able to create the server profile' do
@@ -52,6 +52,58 @@ describe provider_class do
     it 'should be able to find the server profile with no filters' do
       resource['data'] = {}
       expect(provider.found).to be
+    end
+
+    it 'should be able to get_available_targets' do
+      expect(provider.get_available_targets).to be
+    end
+
+    it 'should be able to get_available_networks' do
+      expect(provider.get_available_networks).to be
+    end
+
+    it 'should be able to get_available_servers' do
+      expect(provider.get_available_servers).to be
+    end
+
+    it 'should be able to get_available_storage_systems' do
+      expect(provider.get_available_storage_systems).to be
+    end
+
+    it 'should be able to get_available_storage_system' do
+      expect(provider.get_available_storage_system).to be
+    end
+
+    it 'should be able to get_profile_ports' do
+      expect(provider.get_profile_ports).to be
+    end
+
+    it 'should be able to get_compliance_preview' do
+      expect(provider.get_compliance_preview).to be
+    end
+
+    it 'should be able to get_messages' do
+      expect(provider.get_messages).to be
+    end
+
+    it 'should be able to get_transformation' do
+      expect(provider.get_transformation).to be
+    end
+
+    it 'should be able to update_from_template' do
+      expect(provider.update_from_template).to be
+    end
+
+    it 'should be able to get_sas_logical_jbods' do
+      expect(provider.get_sas_logical_jbods).to be
+    end
+
+    it 'should be able to get_sas_logical_jbod_drives' do
+      expect(provider.get_sas_logical_jbod_drives).to be
+    end
+
+    it 'should be able to get_sas_logical_jbod_attachments' do
+      expect(provider.get_sas_logical_jbod_attachments).to be
     end
 
     it 'should be able to update the server profile' do

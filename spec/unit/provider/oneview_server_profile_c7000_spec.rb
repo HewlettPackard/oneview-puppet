@@ -17,7 +17,13 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
-resourcetype = OneviewSDK::ServerProfile
+api_version = login[:api_version] || 200
+resource_name = 'ServerProfile'
+resourcetype = if api_version == 200
+                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
+               else
+                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
+               end
 fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
 describe provider_class, unit: true do
@@ -30,9 +36,9 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'Profile',
-            'serverHardwareUri' => '/rest/server-hardware/37333036-3831-584D-5131-303030323037',
-            'type' => 'ServerProfileV5'
-          }
+            'serverHardwareUri' => '/rest/server-hardware/37333036-3831-584D-5131-303030323037'
+          },
+      provider: 'c7000'
     )
   end
 
@@ -40,30 +46,26 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  context 'given the minimum parameters before server creation' do
-    before(:each) do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-    end
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
+  before(:each) do
+    allow(resourcetype).to receive(:find_by).and_return([test])
+    provider.exists?
+  end
+
+  context 'given the minimum parameters before server creation' do
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_profile).provider(:c7000)
     end
 
     it 'should raise error when server is not found' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      allow(resourcetype).to receive(:find_by).and_return([])
       expect { provider.found }.to raise_error(/No ServerProfile with the specified data were found on the Oneview Appliance/)
-    end
-
-    it 'should be able to find the server profile' do
-      expect(provider.exists?).to eq(true)
-      expect(provider.found).to be
     end
 
     it 'should be able to create the resource' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
@@ -104,19 +106,54 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get profile ports' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
       allow(resourcetype).to receive(:get_profile_ports).and_return(fake_json_response)
       expect(provider.get_profile_ports).to be
     end
 
     it 'should delete the server profile' do
-      resource['data']['uri'] = '/rest/server-profiles/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resourcetype).to receive(:delete).and_return(true)
       expect(provider.destroy).to be
+    end
+
+    it 'should raise an error for methods that are not available' do
+      expect { provider.get_sas_logical_jbods }.to raise_error(/This ensure method is not available for C7000./)
+      expect { provider.get_sas_logical_jbod_drives }.to raise_error(/This ensure method is not available for C7000./)
+      expect { provider.get_sas_logical_jbod_attachments }.to raise_error(/This ensure method is not available for C7000./)
+    end
+  end
+
+  context 'given the available storage systems query parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_server_profile).new(
+        name: 'Server Profile',
+        ensure: 'get_available_networks',
+        data:
+            {
+              # 'name' => 'Profile',
+              'query_parameters' => {
+                'enclosureGroupUri'     => '/rest/fake',
+                'storageSystemId'       => '/rest/fake',
+                'serverHardwareTypeUri' => '/rest/fake'
+              }
+            },
+        provider: 'c7000'
+      )
+    end
+
+    it 'should successfully get an available storage system' do
+      allow(resourcetype).to receive(:get_available_storage_system).and_return(true)
+      expect(provider.get_available_storage_system).to be
+    end
+
+    it 'should successfully get_available_storage_systems' do
+      allow(resourcetype).to receive(:get_available_storage_systems).and_return(true)
+      expect(provider.get_available_storage_systems).to be
+    end
+
+    it 'should successfully get_available_networks' do
+      allow(resourcetype).to receive(:get_available_networks).and_return(true)
+      provider.exists?
+      expect(provider.get_available_networks).to be
     end
   end
 end

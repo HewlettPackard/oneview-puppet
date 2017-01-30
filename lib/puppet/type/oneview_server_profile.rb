@@ -66,6 +66,18 @@ Puppet::Type.newtype(:oneview_server_profile) do
     newvalue(:get_transformation) do
       provider.get_transformation
     end
+
+    newvalue(:get_sas_logical_jbods) do
+      provider.get_sas_logical_jbods
+    end
+
+    newvalue(:get_sas_logical_jbod_drives) do
+      provider.get_sas_logical_jbod_drives
+    end
+
+    newvalue(:get_sas_logical_jbod_attachments) do
+      provider.get_sas_logical_jbod_attachments
+    end
   end
   #:nocov:
 
