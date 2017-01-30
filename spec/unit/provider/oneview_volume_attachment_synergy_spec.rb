@@ -14,12 +14,11 @@
 # limitations under the License.
 ################################################################################
 
-require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
+provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:synergy)
 
-provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
-resourcetype = OneviewSDK::VolumeAttachment
+api_version = login[:api_version] || 200
+resource_name = 'VolumeAttachment'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -31,7 +30,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'Server Profile Attachment Demo, volume-attachment-demo'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -46,16 +46,6 @@ describe provider_class, unit: true do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-    end
-
-    it 'should be able to run through self.instances' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
-      expect(instance).to be
-    end
-
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
     end
 
     it 'should able to find the specific VA' do
@@ -78,6 +68,13 @@ describe provider_class, unit: true do
     it 'should raise an error if the ensurable absent is used' do
       resource['ensure'] = 'absent'
       expect { provider.destroy }.to raise_error(/Ensure state 'absent' is unavailable for this resource/)
+    end
+
+    it 'should raise an error if there is no name for server profile' do
+      resource['data'].delete('name')
+      error_raised = "A 'name' tag must be specified within data, containing the server profile name and/or server profile "\
+                     'name/volume name to find a specific storage volume attachment'
+      expect { provider.find_for_server_profile }.to raise_error(error_raised)
     end
 
     it 'should be able to get a list of extra unmanaged volumes' do
@@ -103,7 +100,8 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_volume_attachment).new(
         name: 'VA',
-        ensure: 'found'
+        ensure: 'found',
+        provider: 'synergy'
       )
     end
     it 'should able to find all VAs' do
@@ -122,7 +120,8 @@ describe provider_class, unit: true do
             {
               'name' => 'ONEVIEW_PUPPET_TEST VA1',
               'id'   => 'fake'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
