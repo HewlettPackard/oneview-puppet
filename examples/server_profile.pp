@@ -37,29 +37,51 @@ oneview_server_profile{'Server Profile Get Available Targets':
 }
 
 oneview_server_profile{'Server Profile Create':
-  ensure  => 'present',
-  require => Oneview_server_profile['Server Profile Get Available Targets'],
-  data    =>
+  ensure => 'present',
+  data   =>
   {
     name              => 'Test Server Profile',
-    type              => 'ServerProfileV5',
-    serverHardwareUri => '172.18.6.15',
+    serverHardwareUri => '172.18.6.6',
   }
 }
 
 # Optional filters
 oneview_server_profile{'Server Profile Found':
   ensure  => 'found',
-  require => Oneview_server_profile['Server Profile Create'],
-  # data    =>
-  # {
-  #   name => 'Test Server Profile'
-  # }
 }
 
+# This ensure method is only available for Synergy Hardware
+oneview_server_profile{'Server Profile get_sas_logical_jbods':
+  ensure => 'get_sas_logical_jbods',
+  data   =>
+  {
+    name     => 'Test Server Profile',
+  }
+}
+
+# This ensure method is only available for Synergy Hardware
+oneview_server_profile{'Server Profile get_sas_logical_jbod_drives':
+  ensure => 'get_sas_logical_jbod_drives',
+  data   =>
+  {
+    name     => 'Test Server Profile',
+  }
+}
+
+# This ensure method is only available for Synergy Hardware
+oneview_server_profile{'Server Profile get_sas_logical_jbod_attachments':
+  ensure => 'get_sas_logical_jbod_attachments',
+  data   =>
+  {
+    name     => 'Test Server Profile',
+  }
+}
+
+
+# To update/modify the server profile name
 oneview_server_profile{'Server Profile Edit':
   ensure  => 'present',
-  require => Oneview_server_profile['Server Profile Found'],
+  require => Oneview_server_profile['Server Profile Create'],
   data    =>
   {
     name     => 'Test Server Profile',

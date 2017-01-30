@@ -14,19 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
+Puppet::Type::Oneview_server_profile.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Server Profiles using the C7000 variant of the OneView API'
+
+  confine true: login[:hardware_variant] == 'C7000'
+
   mk_resource_methods
-
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ServerProfile
-    @data = {}
-  end
 
   def exists?
     @data = data_parse
@@ -39,19 +34,11 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
     !@resourcetype.find_by(@client, @data).empty?
   end
 
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-  end
-
+  # This destroy deletes all the server profiles that match the data passed in. Use with caution.
   def destroy
     server_profiles = @resourcetype.find_by(@client, @data)
     raise('There were no matching server profiles in the Appliance.') if server_profiles.empty?
     server_profiles.map(&:delete)
-  end
-
-  def found
-    find_resources
   end
 
   # Patch operation
@@ -83,16 +70,17 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
 
   def get_available_storage_systems
     Puppet.notice("\n\nServer Profile Available Storage Systems\n")
-    raise('You must specify the following query attributes: enclosureGroupUri and serverHardwareTypeUri.') unless
-      @query_parameters['enclosureGroupUri'] && @query_parameters['serverHardwareTypeUri']
+    query_ok = @query['enclosureGroupUri'] && @query['serverHardwareTypeUri']
+    raise 'You must specify the following query attributes: enclosureGroupUri and serverHardwareTypeUri.' unless query_ok
     pretty @resourcetype.get_available_storage_systems(@client, @query)
     true
   end
 
   def get_available_storage_system
     Puppet.notice("\n\nServer Profile Available Storage System\n")
-    raise('You must specify the following query attributes: enclosureGroupUri, serverHardwareTypeUri and storageSystemId.') unless
-      @query_parameters['enclosureGroupUri'] && @query_parameters['storageSystemId'] && @query_parameters['serverHardwareTypeUri']
+    raise 'You must specify query attributes for this ensure method' unless @query
+    query_ok = @query['enclosureGroupUri'] && @query['storageSystemId'] && @query['serverHardwareTypeUri']
+    raise 'You must specify the following query attributes: enclosureGroupUri, serverHardwareTypeUri and storageSystemId.' unless query_ok
     pretty @resourcetype.get_available_storage_system(@client, @query)
     true
   end
@@ -119,5 +107,17 @@ Puppet::Type.type(:oneview_server_profile).provide(:oneview_server_profile) do
     Puppet.notice("\n\nServer Profile Transformation\n")
     pretty get_single_resource_instance.get_transformation(@query)
     true
+  end
+
+  def get_sas_logical_jbods
+    raise 'This ensure method is not available for C7000.'
+  end
+
+  def get_sas_logical_jbod_drives
+    raise 'This ensure method is not available for C7000.'
+  end
+
+  def get_sas_logical_jbod_attachments
+    raise 'This ensure method is not available for C7000.'
   end
 end
