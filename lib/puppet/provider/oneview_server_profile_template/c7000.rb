@@ -14,38 +14,18 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
+require_relative '../oneview_resource'
 require 'oneview-sdk'
 
-Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_profile_template) do
+Puppet::Type::Oneview_server_profile_template.provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Server Profile Templates using the C7000 variant of the OneView API'
   mk_resource_methods
-
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    @resourcetype = OneviewSDK::ServerProfileTemplate
-    @data = {}
-  end
 
   def exists?
     @data = data_parse
     empty_data_check
     connections_parse if @data['connections']
     !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-  end
-
-  def found
-    find_resources
   end
 
   # Creates a new server profile based on the current template
@@ -59,5 +39,12 @@ Puppet::Type.type(:oneview_server_profile_template).provide(:oneview_server_prof
       default = 'Server_Profile_created_from_' + @data['name']
       get_single_resource_instance.new_profile.create unless server_profile.find_by(@client, name: default).first
     end
+  end
+
+  def get_transformation
+    Puppet.notice("\n\nServer Profile Template Transformation\n")
+    parameters = @data.delete('queryParameters') || {}
+    pretty get_single_resource_instance.get_transformation(@client, parameters)
+    true
   end
 end
