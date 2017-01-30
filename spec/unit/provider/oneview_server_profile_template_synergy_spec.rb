@@ -52,6 +52,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
     end
 
     it 'should be an instance of the provider synergy' do
@@ -64,7 +65,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should return the resource has been found' do
-      provider.exists?
       expect(provider.found).to be
     end
 
@@ -84,14 +84,12 @@ describe provider_class, unit: true, if: api_version >= 300 do
       allow(OneviewSDK::ServerProfile).to receive(:find_by).and_return([])
       allow_any_instance_of(resourcetype).to receive(:new_profile).and_return(server_profile)
       allow(server_profile).to receive(:create).and_return(server_profile)
-      provider.exists?
       expect(provider.set_new_profile).to be
     end
 
     it 'should not create a server profile with default name when already exists' do
       server_profile = OneviewSDK::ServerProfile.new(@client, name: 'Server_Profile_created_from_SPT')
       allow(OneviewSDK::ServerProfile).to receive(:find_by).and_return([server_profile])
-      provider.exists?
       expect(provider.set_new_profile).to be_nil
     end
 
@@ -101,7 +99,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
       allow(OneviewSDK::ServerProfile).to receive(:find_by).and_return([])
       allow_any_instance_of(resourcetype).to receive(:new_profile).and_return(server_profile)
       allow(server_profile).to receive(:create).and_return(server_profile)
-      provider.exists?
       expect(provider.set_new_profile).to be
     end
 
@@ -109,7 +106,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
       resource['data']['serverProfileName'] = 'New Server Profile'
       server_profile = OneviewSDK::ServerProfile.new(@client, name: 'New Server Profile')
       allow(OneviewSDK::ServerProfile).to receive(:find_by).and_return([server_profile])
-      provider.exists?
       expect(provider.set_new_profile).to be_nil
     end
 
@@ -128,7 +124,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(resourcetype).to receive(:delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      provider.exists?
       expect(provider.destroy).to be
     end
   end
