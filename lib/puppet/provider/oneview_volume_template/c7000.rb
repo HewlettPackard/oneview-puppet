@@ -23,41 +23,9 @@ Puppet::Type::Oneview_volume_template.provide :c7000, parent: Puppet::OneviewRes
 
   mk_resource_methods
 
-  def exists?
-    @data = data_parse
-    empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
-  end
-
   def get_connectable_volume_templates
     query_parameters = @data.delete('query_parameters') || {}
     pretty get_single_resource_instance.get_connectable_volume_templates(query_parameters)
     true
-  end
-
-  def resource_name
-    'VolumeTemplate'
-  end
-
-  def self.resource_name
-    'VolumeTemplate'
   end
 end
