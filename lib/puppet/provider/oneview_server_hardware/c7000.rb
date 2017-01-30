@@ -34,9 +34,8 @@ Puppet::Type::Oneview_server_hardware.provide :c7000, parent: Puppet::OneviewRes
     @data = data_parse
     empty_data_check
     data_parse_for_general
-    %w(from op path value).each { |key| @patch_tags[key] = @data.delete(key) if @data[key] }
-    return false unless @patch_tags.empty?
-    !@resourcetype.find_by(@client, @data).empty?
+    return false if @patch_tags.any?
+    @resourcetype.find_by(@client, @data).any?
   end
 
   def create
@@ -108,6 +107,7 @@ Puppet::Type::Oneview_server_hardware.provide :c7000, parent: Puppet::OneviewRes
   end
 
   def data_parse_for_general
+    %w(from op path value).each { |key| @patch_tags[key] = @data.delete(key) if @data[key] }
     @data['name'] = @data.delete('hostname') if @data['hostname']
     @data.each do |key, _value|
       case key
