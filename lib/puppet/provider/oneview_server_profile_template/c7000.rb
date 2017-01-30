@@ -28,11 +28,6 @@ Puppet::Type::Oneview_server_profile_template.provide :c7000, parent: Puppet::On
     !@resourcetype.find_by(@client, @data).empty?
   end
 
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-  end
-
   # Creates a new server profile based on the current template
   def set_new_profile
     server_profile = OneviewSDK::ServerProfile
