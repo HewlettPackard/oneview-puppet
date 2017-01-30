@@ -16,12 +16,16 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
-resourcetype = OneviewSDK::VolumeTemplate
+provider_class = Puppet::Type.type(:oneview_volume_template).provider(:synergy)
 
-describe provider_class, unit: true do
+api_version = login[:api_version] || 200
+resource_name = 'VolumeTemplate'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
+  @resourcetype = resourcetype
   let(:resource) do
     Puppet::Type.type(:oneview_volume_template).new(
       name: 'vt',
@@ -38,7 +42,8 @@ describe provider_class, unit: true do
               'capacity'       => '235834383322',
               'storagePoolUri' => '/rest/fake'
             }
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -55,17 +60,12 @@ describe provider_class, unit: true do
     end
 
     it 'should be an instance of the provider oneview_volume_template' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:synergy)
     end
 
     it 'if nothing is found should return false' do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
-    end
-
-    it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
     end
 
     it 'runs through the create method' do
@@ -75,22 +75,9 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'deletes the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
-      provider.exists?
-      expect(provider.destroy).to be
-    end
-
-    it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(instance).to be
-    end
-
-    it 'finds the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-      expect(provider.found).to be
+    it 'should be able to find the connectable volume templates' do
+      allow_any_instance_of(resourcetype).to receive(:get_connectable_volume_templates).and_return(true)
+      expect(provider.get_connectable_volume_templates).to be
     end
   end
 end
