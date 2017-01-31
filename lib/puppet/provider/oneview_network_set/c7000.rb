@@ -24,11 +24,7 @@ Puppet::Type::Oneview_network_set.provide :c7000, parent: Puppet::OneviewResourc
   def initialize(*args)
     super(*args)
     api_version ||= login[:api_version] || 200
-    @ethernet ||= if api_version == 200
-                    OneviewSDK::API200::EthernetNetwork
-                  else
-                    Object.const_get("OneviewSDK::API#{api_version}::C7000::EthernetNetwork")
-                  end
+    @ethernet_class ||= OneviewSDK.resource_named(:EthernetNetwork, api_version, 'C7000')
   end
 
   def exists?
@@ -57,7 +53,7 @@ Puppet::Type::Oneview_network_set.provide :c7000, parent: Puppet::OneviewResourc
     return unless @data['networkUris']
     list = []
     @data['networkUris'].each do |item|
-      net = OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+      net = @ethernet_class.find_by(@client, name: item)
       raise('The network #{name} does not exist.') unless net.first
       list.push(net.first['uri'])
     end
