@@ -48,10 +48,6 @@ Puppet::Type::Oneview_sas_interconnect.provide :synergy, parent: Puppet::Oneview
     raise('This resource relies on others to be destroyed.')
   end
 
-  def found
-    find_resources
-  end
-
   def get_types
     Puppet.notice("\n\nSASInterconnect Types\n")
     if @data['name']

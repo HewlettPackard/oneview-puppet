@@ -42,7 +42,7 @@ Puppet::Type.newtype(:oneview_sas_interconnect) do
   newparam(:data) do
     desc 'SAS Interconnect data hash containing all specifications for the resource'
     validate do |value|
-      raise('Inserted value for data is not valid') unless value.class == Hash
+      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
     end
   end
 end
