@@ -25,13 +25,9 @@ Puppet::Type.newtype(:oneview_interconnect) do
       provider.found
     end
 
+    # GETs
     newvalue(:get_link_topologies) do
       provider.get_link_topologies
-    end
-
-    # GETs
-    newvalue(:get_interconnect_type) do
-      provider.get_interconnect_type
     end
 
     newvalue(:get_statistics) do

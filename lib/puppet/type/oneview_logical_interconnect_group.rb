@@ -26,11 +26,6 @@ Puppet::Type.newtype(:oneview_logical_interconnect_group) do
     end
 
     # GETs
-
-    newvalue(:get_logical_interconnect_group) do
-      provider.get_logical_interconnect_group
-    end
-
     newvalue(:get_default_settings) do
       provider.get_default_settings
     end
