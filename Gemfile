@@ -1,5 +1,6 @@
 source 'http://rubygems.org'
 
+gem 'coveralls', require: false
 gem 'facter', '>= 1.7.0'
 gem 'metadata-json-lint'
 gem 'oneview-sdk', '>= 3.0.0'
