@@ -20,11 +20,6 @@ Puppet::Type.type(:oneview_interconnect).provide :synergy, parent: :c7000 do
   confine true: login[:hardware_variant] == 'Synergy'
   defaultfor oneview_synergy_variant: 'Synergy'
 
-  def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Interconnect")
-    super(*args)
-  end
-
   def get_link_topologies
     Puppet.notice("\n\nInterconnect link topologies:\n")
     if @data['name']

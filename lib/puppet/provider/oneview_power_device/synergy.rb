@@ -19,9 +19,4 @@ Puppet::Type.type(:oneview_power_device).provide :synergy, parent: :c7000 do
 
   confine true: login[:hardware_variant] == 'Synergy'
   confine true: login[:api_version] >= 300
-
-  def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::PowerDevice")
-    super(*args)
-  end
 end

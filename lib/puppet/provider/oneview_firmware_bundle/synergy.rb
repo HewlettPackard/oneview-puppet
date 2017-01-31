@@ -18,9 +18,4 @@ Puppet::Type.type(:oneview_firmware_bundle).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Firmware Bundles using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
-
-  def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::FirmwareBundle")
-    super(*args)
-  end
 end

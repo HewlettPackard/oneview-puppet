@@ -14,45 +14,20 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_fcoe_network.provide :c7000 do
+Puppet::Type::Oneview_fcoe_network.provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Fiber Channel over Ethernet Networks using the C7000 variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
 
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    api_version = login[:api_version] || 200
-    @resourcetype ||= if api_version == 200
-                        OneviewSDK::API200::FCoENetwork
-                      else
-                        Object.const_get("OneviewSDK::API#{api_version}::C7000::FCoENetwork")
-                      end
-    @data ||= {}
+  def resource_name
+    'FCoENetwork'
   end
 
-  def exists?
-    @data = data_parse
-    empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-  end
-
-  def found
-    find_resources
+  def self.resource_name
+    'FCoENetwork'
   end
 end

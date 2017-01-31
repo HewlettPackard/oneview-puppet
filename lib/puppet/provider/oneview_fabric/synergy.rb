@@ -19,12 +19,6 @@ Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
 
   confine true: login[:hardware_variant] == 'Synergy'
 
-  def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::Fabric")
-    super(*args)
-  end
-
-  # TODO: Incorporate this into 'present' ensure method.
   def get_reserved_vlan_range
     pretty get_single_resource_instance.get_reserved_vlan_range
   end

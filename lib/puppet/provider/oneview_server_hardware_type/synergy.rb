@@ -18,11 +18,4 @@ Puppet::Type.type(:oneview_server_hardware_type).provide :synergy, parent: :c700
   desc 'Provider for OneView Server Hardware Types using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
-
-  @resourcetype ||= OneviewSDK::ServerHardwareType
-
-  def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::ServerHardwareType")
-    super(*args)
-  end
 end

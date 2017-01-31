@@ -32,14 +32,7 @@ Puppet::Type::Oneview_storage_system.provide :c7000, parent: Puppet::OneviewReso
   end
 
   def destroy
-    storage_system = get_single_resource_instance
-    storage_system.remove
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def get_storage_pools

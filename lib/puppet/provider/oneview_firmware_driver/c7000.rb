@@ -23,10 +23,7 @@ Puppet::Type::Oneview_firmware_driver.provide :c7000, parent: Puppet::OneviewRes
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::FirmwareDriver
-
   def initialize(*args)
-    @resource_name = 'FirmwareDriver'
     super(*args)
     @attributes = {}
   end
@@ -35,7 +32,7 @@ Puppet::Type::Oneview_firmware_driver.provide :c7000, parent: Puppet::OneviewRes
   def exists?
     @data = data_parse
     data_parse_for_general
-    !@resourcetype.find_by(@client, @data).empty?
+    @resourcetype.find_by(@client, @data).any?
   end
 
   def create
@@ -48,13 +45,7 @@ Puppet::Type::Oneview_firmware_driver.provide :c7000, parent: Puppet::OneviewRes
   end
 
   def destroy
-    firmware_driver = get_single_resource_instance
-    firmware_driver.remove
-    @property_hash.clear
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def data_parse_for_general

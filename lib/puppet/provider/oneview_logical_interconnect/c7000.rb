@@ -36,10 +36,6 @@ Puppet::Type::Oneview_logical_interconnect.provide :c7000, parent: Puppet::Onevi
     !li.empty?
   end
 
-  def found
-    find_resources
-  end
-
   def create
     raise('This resource relies on others to be created.')
   end

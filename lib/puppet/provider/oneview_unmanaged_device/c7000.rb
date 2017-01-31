@@ -23,32 +23,18 @@ Puppet::Type::Oneview_unmanaged_device.provide :c7000, parent: Puppet::OneviewRe
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::UnmanagedDevice
-
-  def initialize(*args)
-    @resource_name = 'UnmanagedDevice'
-    super(*args)
-  end
-
   def exists?
-    @data = data_parse
-    empty_data_check([:nil, :found, :absent])
-    !@resourcetype.find_by(@client, @data).empty?
+    super([:nil, :found, :absent])
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).add
+    super(:add)
   end
 
   def destroy
     ud = @resourcetype.find_by(@client, @data)
     raise('There were no matching Unmanaged Devices in the Appliance.') if ud.empty?
     ud.map(&:remove)
-  end
-
-  def found
-    find_resources
   end
 
   def get_environmental_configuration
