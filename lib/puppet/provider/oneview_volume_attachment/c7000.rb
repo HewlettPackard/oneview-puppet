@@ -17,7 +17,7 @@
 require_relative '../oneview_resource'
 
 Puppet::Type::Oneview_volume_attachment.provide :c7000, parent: Puppet::OneviewResource do
-  desc 'Provider for OneView Volume Attachment using the C7000 variant of the OneView API'
+  desc 'Provider for OneView Volume Attachments using the C7000 variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'C7000'
 
@@ -27,7 +27,6 @@ Puppet::Type::Oneview_volume_attachment.provide :c7000, parent: Puppet::OneviewR
     super(*args)
     # Initializes the data so it is parsed only on exists and accessible throughout the methods
     # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data = {}
     @vas = []
   end
 

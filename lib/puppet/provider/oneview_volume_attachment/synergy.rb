@@ -15,7 +15,7 @@
 ################################################################################
 
 Puppet::Type.type(:oneview_volume_attachment).provide :synergy, parent: :c7000 do
-  desc 'Provider for OneView Volume Attachment using the Synergy variant of the OneView API'
+  desc 'Provider for OneView Volume Attachments using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
 end
