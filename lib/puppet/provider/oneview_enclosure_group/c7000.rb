@@ -22,14 +22,6 @@ Puppet::Type::Oneview_enclosure_group.provide :c7000, parent: Puppet::OneviewRes
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
-
-  @resourcetype ||= OneviewSDK::EnclosureGroup
-
-  def initialize(*args)
-    @resource_name = 'EnclosureGroup'
-    super(*args)
-  end
-
   def exists?
     @data = enclosure_group_parse(data_parse)
     empty_data_check
@@ -39,14 +31,6 @@ Puppet::Type::Oneview_enclosure_group.provide :c7000, parent: Puppet::OneviewRes
   def create
     return true if resource_update(@data, @resourcetype)
     @resourcetype.new(@client, enclosure_group_parse(@data)).create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-  end
-
-  def found
-    find_resources
   end
 
   def get_script

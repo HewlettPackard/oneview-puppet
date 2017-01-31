@@ -23,17 +23,8 @@ Puppet::Type::Oneview_logical_downlink.provide :c7000, parent: Puppet::OneviewRe
 
   mk_resource_methods
 
-  # @resourcetype ||= OneviewSDK::LogicalDownlink
-
-  def initialize(*args)
-    @resource_name = 'LogicalDownlink'
-    super(*args)
-  end
-
   def exists?
-    @data = data_parse
-    empty_data_check([nil, :found, :get_without_ethernet])
-    !@resourcetype.find_by(@client, @data).empty?
+    super([nil, :found, :get_without_ethernet])
   end
 
   def create
@@ -42,10 +33,6 @@ Puppet::Type::Oneview_logical_downlink.provide :c7000, parent: Puppet::OneviewRe
 
   def destroy
     raise('This resource relies on others to be destroyed.')
-  end
-
-  def found
-    find_resources
   end
 
   def get_without_ethernet

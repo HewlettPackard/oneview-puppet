@@ -23,13 +23,6 @@ Puppet::Type::Oneview_power_device.provide :c7000, parent: Puppet::OneviewResour
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::PowerDevice
-
-  def initialize(*args)
-    @resource_name = 'PowerDevice'
-    super(*args)
-  end
-
   def exists?
     @data = data_parse
     empty_data_check([:found, :absent])
@@ -39,8 +32,7 @@ Puppet::Type::Oneview_power_device.provide :c7000, parent: Puppet::OneviewResour
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).add
+    super(:add)
   end
 
   # Remove
@@ -48,10 +40,6 @@ Puppet::Type::Oneview_power_device.provide :c7000, parent: Puppet::OneviewResour
     pd = @resourcetype.find_by(@client, @data)
     raise('There were no matching Power Devices in the Appliance.') if pd.empty?
     pd.map(&:remove)
-  end
-
-  def found
-    find_resources
   end
 
   def discover

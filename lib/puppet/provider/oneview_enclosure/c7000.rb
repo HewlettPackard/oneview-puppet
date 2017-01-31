@@ -23,10 +23,7 @@ Puppet::Type::Oneview_enclosure.provide :c7000, parent: Puppet::OneviewResource 
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::Enclosure
-
   def initialize(*args)
-    @resource_name = 'Enclosure'
     super(*args)
     @authentication = {}
     @patch_tags = {}
@@ -52,13 +49,7 @@ Puppet::Type::Oneview_enclosure.provide :c7000, parent: Puppet::OneviewResource 
   end
 
   def destroy
-    get_single_resource_instance.remove
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def set_configuration

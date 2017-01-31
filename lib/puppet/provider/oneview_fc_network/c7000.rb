@@ -23,38 +23,6 @@ Puppet::Type::Oneview_fc_network.provide :c7000, parent: Puppet::OneviewResource
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::FCNetwork
-
-  def initialize(*args)
-    @resource_name = 'FCNetwork'
-    super(*args)
-  end
-
-  # Provider methods
-  def exists?
-    @data = data_parse
-    empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-    @property_hash.clear
-    true
-  end
-
-  def found
-    find_resources
-  end
-
   def resource_name
     'FCNetwork'
   end

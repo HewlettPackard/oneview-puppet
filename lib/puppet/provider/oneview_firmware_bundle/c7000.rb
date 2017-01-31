@@ -23,13 +23,6 @@ Puppet::Type::Oneview_firmware_bundle.provide :c7000, parent: Puppet::OneviewRes
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::FirmwareBundle
-
-  def initialize(*args)
-    @resource_name = 'FirmwareBundle'
-    super(*args)
-  end
-
   def self.instances
     raise Puppet::Error, 'This resource cannot be queried. Please use the Oneview_firmware_driver provider instead'
   end

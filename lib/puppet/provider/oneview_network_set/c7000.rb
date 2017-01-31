@@ -14,30 +14,17 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_network_set.provide :c7000 do
+Puppet::Type::Oneview_network_set.provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Network Sets using the C7000 variant of the OneView API'
 
   mk_resource_methods
 
   def initialize(*args)
     super(*args)
-    @client = OneviewSDK::Client.new(login)
-    api_version = login[:api_version] || 200
-    @resourcetype ||= if api_version == 200
-                        OneviewSDK::API200::NetworkSet
-                      else
-                        Object.const_get("OneviewSDK::API#{api_version}::C7000::NetworkSet")
-                      end
-    @ethernet ||= if api_version == 200
-                    OneviewSDK::API200::EthernetNetwork
-                  else
-                    Object.const_get("OneviewSDK::API#{api_version}::C7000::EthernetNetwork")
-                  end
-    @data ||= {}
+    api_version ||= login[:api_version] || 200
+    @ethernet_class ||= OneviewSDK.resource_named(:EthernetNetwork, api_version, 'C7000')
   end
 
   def exists?
@@ -46,19 +33,6 @@ Puppet::Type::Oneview_network_set.provide :c7000 do
     network_uris
     empty_data_check([:found, :get_without_ethernet])
     !@resourcetype.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
-  end
-
-  def destroy
-    get_single_resource_instance.delete
-  end
-
-  def found
-    find_resources
   end
 
   def get_without_ethernet
@@ -79,7 +53,7 @@ Puppet::Type::Oneview_network_set.provide :c7000 do
     return unless @data['networkUris']
     list = []
     @data['networkUris'].each do |item|
-      net = OneviewSDK::EthernetNetwork.find_by(@client, name: item)
+      net = @ethernet_class.find_by(@client, name: item)
       raise('The network #{name} does not exist.') unless net.first
       list.push(net.first['uri'])
     end

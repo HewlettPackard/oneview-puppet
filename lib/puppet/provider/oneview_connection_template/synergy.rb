@@ -18,9 +18,4 @@ Puppet::Type.type(:oneview_connection_template).provide :synergy, parent: :c7000
   desc 'Provider for OneView Connection Templates using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
-
-  def initialize(*args)
-    @resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::ConnectionTemplate")
-    super(*args)
-  end
 end

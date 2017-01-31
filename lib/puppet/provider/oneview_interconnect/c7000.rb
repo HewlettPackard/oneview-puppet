@@ -23,13 +23,6 @@ Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResour
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::Interconnect
-
-  def initialize(*args)
-    @resource_name = 'Interconnect'
-    super(*args)
-  end
-
   def exists?
     @data = data_parse
     empty_data_check([nil, :found, :get_types, :get_link_topologies])
@@ -45,10 +38,6 @@ Puppet::Type::Oneview_interconnect.provide :c7000, parent: Puppet::OneviewResour
 
   def destroy
     raise('This resource relies on others to be destroyed.')
-  end
-
-  def found
-    find_resources
   end
 
   def get_types

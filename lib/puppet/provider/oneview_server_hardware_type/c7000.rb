@@ -23,32 +23,12 @@ Puppet::Type::Oneview_server_hardware_type.provide :c7000, parent: Puppet::Onevi
 
   mk_resource_methods
 
-  @resourcetype ||= OneviewSDK::ServerHardwareType
-
-  def initialize(*args)
-    @resource_name = 'ServerHardwareType'
-    super(*args)
-    @authentication = {}
-  end
-
-  # Provider methods
-  def exists?
-    @data = data_parse
-    empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
-  end
-
   def create
     resource_update(@data, @resourcetype)
     true
   end
 
   def destroy
-    get_single_resource_instance.remove
-    @property_hash.clear
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 end

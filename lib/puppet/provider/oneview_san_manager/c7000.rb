@@ -26,28 +26,16 @@ Puppet::Type::Oneview_san_manager.provide :c7000, parent: Puppet::OneviewResourc
   def exists?
     @data = data_parse
     parse_provider_uri
-    pretty @data
     empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
+    @resourcetype.find_by(@client, @data).any?
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).add
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
+    super(:add)
   end
 
   def destroy
-    san_manager = get_single_resource_instance
-    Puppet.notice "\n\n Removing san_manager named: #{san_manager['name']}, with uri: #{san_manager['uri']}\n"
-    san_manager.remove
-    @property_hash.clear
-  end
-
-  def found
-    find_resources
+    super(:remove)
   end
 
   def parse_provider_uri

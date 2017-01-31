@@ -25,17 +25,11 @@ Puppet::Type::Oneview_rack.provide :c7000, parent: Puppet::OneviewResource do
 
   # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :absent])
-    !@resourcetype.find_by(@client, @data).empty?
+    super([nil, :found, :absent])
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).add
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
+    super(:add)
   end
 
   def destroy
@@ -46,10 +40,6 @@ Puppet::Type::Oneview_rack.provide :c7000, parent: Puppet::OneviewResource do
       rack.remove
       @property_hash.clear
     end
-  end
-
-  def found
-    find_resources
   end
 
   def get_device_topology

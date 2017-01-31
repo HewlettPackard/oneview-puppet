@@ -14,35 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../login'
-require_relative '../common'
-require 'oneview-sdk'
+require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_fabric.provide :c7000 do
+Puppet::Type::Oneview_fabric.provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Fabrics using the C7000 variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
-
-  def initialize(*args)
-    super(*args)
-    @client = OneviewSDK::Client.new(login)
-    api_version = login[:api_version] || 200
-    @resourcetype ||= if api_version == 200
-                        OneviewSDK::API200::Fabric
-                      else
-                        Object.const_get("OneviewSDK::API#{api_version}::C7000::Fabric")
-                      end
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
-    @data ||= {}
-  end
-
-  def exists?
-    @data = data_parse
-    !@resourcetype.find_by(@client, @data).empty?
-  end
 
   def create
     raise('This resource relies on others to be created.')
@@ -50,10 +29,6 @@ Puppet::Type::Oneview_fabric.provide :c7000 do
 
   def destroy
     raise('This resource relies on others to be destroyed.')
-  end
-
-  def found
-    find_resources
   end
 
   def get_reserved_vlan_range
