@@ -25,8 +25,6 @@ Puppet::Type::Oneview_volume_attachment.provide :c7000, parent: Puppet::OneviewR
 
   def initialize(*args)
     super(*args)
-    # Initializes the data so it is parsed only on exists and accessible throughout the methods
-    # This is not set here due to the 'resources' variable not being accessible in initialize
     @vas = []
   end
 
