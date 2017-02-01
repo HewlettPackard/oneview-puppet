@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'coveralls', require: false
 gem 'facter', '>= 1.7.0'
 gem 'metadata-json-lint'
-gem 'oneview-sdk', '>= 3.0.0'
+gem 'oneview-sdk', '>= 3.1.0'
 gem 'pry'
 gem 'puppet', '>= 4.1'
 gem 'puppet-lint', '>= 0.3.2'

@@ -385,6 +385,7 @@ This resource provides the following ensurable methods for managing server profi
 * `absent` - Deletes a server profile template object from the appliance based on its profile template UUID.
 * `found` - Searches for `oneview_server_profile_template` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `set_new_profile` - Creates a new server profile based on the current template.
+* `get_transformation` - Transforms an existing profile template by supplying a new server hardware type and/or enclosure group. A profile template will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group. All configured connections will have their port assignment set to `Auto`.
 
 
 Example file: [server_profile_template.pp](examples/server_profile_template.pp)
@@ -406,6 +407,9 @@ This resource provides the following ensurable methods for managing server profi
 * `get_compliance_preview` - Gets the preview of manual and automatic updates required to make the server profile consistent with its template.
 * `get_messages` - Retrieves the error or status messages associated with the specified profile.
 * `get_transformation` - Transforms an existing profile by supplying a new server hardware type and/or enclosure group. A profile will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group.
+* `get_sas_logical_jbods` - Gets a paginated collection of SAS logical JBODs based on optional sorting and filtering.
+* `get_sas_logical_jbod_drives` - Returns the list of drives allocated to the specified SAS logical JBOD.
+* `get_sas_logical_jbod_attachments` - Gets a paginated collection of SAS logical JBOD attachments based on optional sorting and filtering.
 
 
 Example file: [server_profile.pp](examples/server_profile.pp)
@@ -444,8 +448,10 @@ This resource provides the following ensurable methods for managing Top-of-rack 
 * `get_type` - Either gets a paginated collection of all the switch types or, if a switch type is specified, gets that specific switch type.
 * `get_statistics` - Gets statistics for a switch, and accepts the port and subport as filters to narrow the list of statistics to show.
 * `get_environmental_configuration` - Gets the environmental configuration for a switch.
+* `set_scope_uris` - Performs a patch operation on the switch for the scopeUris property.
 
 :exclamation: **NOTE:** The `present` ensurable is unavailable for this resource. Creation of this resource is managed by another resource on HPE OneView.
+:warning: For the `Synergy` hardware variant, the only valid ensure method is `get_type`.
 
 Example file: [switch.pp](examples/switch.pp)
 

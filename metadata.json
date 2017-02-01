@@ -1,6 +1,6 @@
 {
   "name": "hewlettpackard-oneview",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "Hewlett Packard Enterprise",
   "summary": "HPE Puppet providers and types for management of HPE OneView Appliances",
   "license": "Apache-2.0",
@@ -34,8 +34,8 @@
   "requirements": [
     {"name":"puppet","version_requirement":">= 4.1.0"},
     {"name": "ruby","version_requirement": ">=2.2.3"},
-    {"name": "oneview-sdk-ruby","version_requirement": ">=3.0.0"}
+    {"name": "oneview-sdk-ruby","version_requirement": ">=3.1.0"}
   ],
-  "tags": [ "oneview", "hpe", "hewlett packard enterprise", "i3s", "image streamer", "bare-metal provisioning" ],
+  "tags": [ "oneview", "hpe", "hewlett packard enterprise", "icsp", "i3s", "image streamer", "bare-metal provisioning" ],
   "data_provider": null
 }
