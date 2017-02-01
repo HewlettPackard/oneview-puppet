@@ -15,9 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
+provider_class = Puppet::Type.type(:oneview_rack).provider(:c7000)
 enclosure_name = login[:enclosure_name] || 'Puppet_Test_Enclosure'
 
 describe provider_class do
@@ -28,7 +28,8 @@ describe provider_class do
       data:
           {
             'name' => 'myrack'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -42,7 +43,7 @@ describe provider_class do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_rack' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_rack).provider(:oneview_rack)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_rack).provider(:c7000)
     end
 
     it 'should raise error when server is not found' do
@@ -73,7 +74,8 @@ describe provider_class do
           'rackMounts' => [
             { 'mountUri' => "#{enclosure_name}, enclosure", 'topUSlot' => 20, 'uHeight' => 10 }
           ]
-        }
+        },
+        provider: 'c7000'
       )
     end
 
