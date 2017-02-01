@@ -20,7 +20,7 @@
 require 'spec_helper'
 require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
-provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
+provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:c7000)
 storage_volume_template = login[:storage_volume_template] || 'Test'
 server_profile_name = login[:server_profile_name] || 'OneViewSDK Test ServerProfile'
 volume_name = login[:volume_name] || 'Volume Test'
@@ -33,7 +33,8 @@ describe provider_class do
       data:
           {
             'name' => "#{storage_volume_template}, #{volume_name}"
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -47,7 +48,7 @@ describe provider_class do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_volume_attachment' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_attachment).provider(:oneview_volume_attachment)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_attachment).provider(:c7000)
     end
 
     it 'should be able to run through self.instances' do
