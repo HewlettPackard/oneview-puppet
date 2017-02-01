@@ -18,7 +18,7 @@
 # have unmanaged volumes in it.
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:synergy)
 storage_volume_template = login[:storage_volume_template] || 'Test'
