@@ -2,38 +2,42 @@
 
 1. [Oneview_connection_template](#oneview_connection_template)
 2. [Oneview_datacenter](#oneview_datacenter)
-3. [Oneview_enclosure_group](#oneview_enclosure_group)
-4. [Oneview_enclosure](#oneview_enclosure)
-5. [Oneview_ethernet_network](#oneview_ethernet_network)
-6. [Oneview_fabric](#oneview_fabric)
-7. [Oneview_fc_network](#oneview_fc_network)
-8. [Oneview_fcoe_network](#oneview_fcoe_network)
-9. [Oneview_firmware_bundle](#oneview_firmware_bundle)
-10. [Oneview_firmware_driver](#oneview_firmware_driver)
-11. [Oneview_interconnect](#oneview_interconnect)
-12. [Oneview_logical_downlink](#oneview_logical_downlink)
-13. [Oneview_logical_enclosure](#oneview_logical_enclosure)
-14. [Oneview_logical_interconnect_group](#oneview_logical_interconnect_group)
-15. [Oneview_logical_interconnect](#oneview_logical_interconnect)
-16. [Oneview_logical_switch](#oneview_logical_switch)
-17. [Oneview_logical_switch_group](#oneview_logical_switch_group)
-18. [Oneview_managed_san](#oneview_managed_san)
-19. [Oneview_network_set](#oneview_network_set)
-20. [Oneview_power_device](#oneview_power_device)
-21. [Oneview_rack](#oneview_rack)
-22. [Oneview_san_manager](#oneview_san_manager)
-23. [Oneview_server_hardware](#oneview_server_hardware)
-24. [Oneview_server_hardware_type](#oneview_server_hardware_type)
-25. [Oneview_server_profile_template](#oneview_server_profile_template)
-26. [Oneview_server_profile](#oneview_server_profile)
-27. [Oneview_storage_pool](#oneview_storage_pool)
-28. [Oneview_storage_system](#oneview_storage_system)
-29. [Oneview_switch](#oneview_switch)
-30. [Oneview_unmanaged_device](#oneview_unmanaged_device)
-31. [Oneview_uplink_set](#oneview_uplink_set)
-32. [Oneview_volume](#oneview_volume)
-33. [Oneview_volume_attachment](#oneview_volume_attachment)
-34. [Oneview_volume_template](#oneview_volume_template)
+3. [Oneview_drive_enclosure](#oneview_drive_enclosure)
+4. [Oneview_enclosure_group](#oneview_enclosure_group)
+5. [Oneview_enclosure](#oneview_enclosure)
+6. [Oneview_ethernet_network](#oneview_ethernet_network)
+7. [Oneview_fabric](#oneview_fabric)
+8. [Oneview_fc_network](#oneview_fc_network)
+9. [Oneview_fcoe_network](#oneview_fcoe_network)
+10. [Oneview_firmware_bundle](#oneview_firmware_bundle)
+11. [Oneview_firmware_driver](#oneview_firmware_driver)
+12. [Oneview_interconnect](#oneview_interconnect)
+13. [Oneview_logical_downlink](#oneview_logical_downlink)
+14. [Oneview_logical_enclosure](#oneview_logical_enclosure)
+15. [Oneview_logical_interconnect_group](#oneview_logical_interconnect_group)
+16. [Oneview_logical_interconnect](#oneview_logical_interconnect)
+17. [Oneview_logical_switch](#oneview_logical_switch)
+18. [Oneview_logical_switch_group](#oneview_logical_switch_group)
+19. [Oneview_managed_san](#oneview_managed_san)
+20. [Oneview_network_set](#oneview_network_set)
+21. [Oneview_power_device](#oneview_power_device)
+22. [Oneview_rack](#oneview_rack)
+23. [Oneview_san_manager](#oneview_san_manager)
+24. [Oneview_sas_interconnect](#oneview_sas_interconnect)
+25. [Oneview_sas_logical_interconnect](#oneview_sas_logical_interconnect)
+26. [Oneview_sas_logical_interconnect_group](#oneview_sas_logical_interconnect_group)
+27. [Oneview_server_hardware](#oneview_server_hardware)
+28. [Oneview_server_hardware_type](#oneview_server_hardware_type)
+29. [Oneview_server_profile_template](#oneview_server_profile_template)
+30. [Oneview_server_profile](#oneview_server_profile)
+31. [Oneview_storage_pool](#oneview_storage_pool)
+32. [Oneview_storage_system](#oneview_storage_system)
+33. [Oneview_switch](#oneview_switch)
+34. [Oneview_unmanaged_device](#oneview_unmanaged_device)
+35. [Oneview_uplink_set](#oneview_uplink_set)
+36. [Oneview_volume](#oneview_volume)
+37. [Oneview_volume_attachment](#oneview_volume_attachment)
+38. [Oneview_volume_template](#oneview_volume_template)
 
 #### oneview_connection_template
 
@@ -216,7 +220,8 @@ This resource provides the following ensurable methods for managing  logical int
 * `get_default_settings` - Gets the default interconnect settings for a logical interconnect group.
 * `get_settings` - Gets the interconnect settings for a logical interconnect group.
 
-Example file: [logical_interconnect_group.pp](examples/logical_interconnect_group.pp)
+Example file for C7000: [logical_interconnect_group.pp](examples/logical_interconnect_group.pp)
+Example file for Synergy: [logical_interconnect_group.pp](examples/logical_interconnect_group_synergy.pp)
 
 #### oneview_logical_interconnect
 
@@ -345,6 +350,48 @@ This resource provides the following ensurable methods for managing SAN resource
 
 Example file: [san_manager.pp](examples/san_manager.pp)
 
+#### oneview_sas_interconnect
+
+This resource provides the following ensurable methods for managing SAS Interconnects on the HPE OneView appliance:
+
+* `present` - Performs a specific `patch` operation for the given interconnect.
+* `found` - Searches for `oneview_sas_interconnect` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `get_types` - Get a paginated collection of all the SAS interconnect types based on optional filtering.
+* `set_refresh_state` - Refresh a `SAS interconnect` by setting the refresh state value to 'refreshPending' in order to trigger a refresh.
+
+:exclamation: **NOTE:** The `absent` ensurable method is unavailable for this resource. Deletion of this resource is managed by another resource on HPE OneView or by HPE OneView internally.
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [sas_interconnect.pp](examples/sas_interconnect.pp)
+
+#### oneview_sas_logical_interconnect
+
+This resource provides the following ensurable methods for managing SAS Logical Interconnects on the HPE OneView appliance:
+
+* `found` - Searches for `oneview_sas_logical_interconnect` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `get_firmware` - Gets baseline firmware information for a SAS logical interconnect.
+* `set_configuration` - Asynchronously applies or re-applies the logical interconnect configuration to all managed interconnects of a logical interconnect.
+* `set_firmware` - Installs firmware to the member interconnects of a logical interconnect.
+* `set_compliance` - Returns a logical interconnect to a consistent state. The current logical interconnect state is compared to the associated logical interconnect group.
+* `replace_drive_enclosure` - When a drive enclosure has been physically replaced, initiate the replacement operation that enables the new drive enclosure to take over as a replacement for the prior drive enclosure. The request requires specification of both the serial numbers of the original drive enclosure and its replacement to be provided.
+
+:exclamation: **NOTE:** The `present` and `absent` ensure methods are unavailable for this resource. Creation and deletion of this resource is managed by another resource on HPE OneView or by HPE OneView internally.
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [sas_logical_interconnect.pp](examples/sas_logical_interconnect.pp)
+
+#### Oneview_sas_logical_interconnect_group
+
+This resource provides the following ensurable methods for managing SAS Logical Interconnects on the HPE OneView appliance:
+
+* `present` - Creates or updates a SAS Logical Interconnect Group using the information provided.
+* `absent` - Deletes the specified a SAS Logical Interconnect Group.
+* `found` - Searches for `oneview_sas_logical_interconnect_group` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [sas_logical_interconnect_group.pp](examples/sas_logical_interconnect_group.pp)
+
 #### oneview_server_hardware
 
 This resource provides the following ensurable methods for managing server hardwares on the HPE OneView appliance:
@@ -407,7 +454,7 @@ This resource provides the following ensurable methods for managing server profi
 * `get_compliance_preview` - Gets the preview of manual and automatic updates required to make the server profile consistent with its template.
 * `get_messages` - Retrieves the error or status messages associated with the specified profile.
 * `get_transformation` - Transforms an existing profile by supplying a new server hardware type and/or enclosure group. A profile will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group.
-* `get_sas_logical_jbods` - Gets a paginated collection of SAS logical JBODs based on optional sorting and filtering.
+* `get_sas_logical_jbods` - Gets a paginated collection of SAS logical JBODs based on optional filtering.
 * `get_sas_logical_jbod_drives` - Returns the list of drives allocated to the specified SAS logical JBOD.
 * `get_sas_logical_jbod_attachments` - Gets a paginated collection of SAS logical JBOD attachments based on optional sorting and filtering.
 
