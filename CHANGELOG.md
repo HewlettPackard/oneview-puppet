@@ -1,7 +1,7 @@
-# 2.1.0 (2017-02-TBD)
+# 2.1.0 (2017-02-03)
 ### Version highlights:
 1. Added full support to OneView Rest API version 300 for the hardware variants C7000 and Synergy to the already existing features.
-2. Implemented a Oneview_resource class for the resources to inherit from, reducing code duplication and complexity.
+2. Implemented the Oneview_resource class to act as parent for the other resources, reducing code duplication and complexity.
 3. Enabled the 'puppet resource <oneview_type>' for most of the providers, allowing the resources to be queried.
 4. Overall refactor and code cleanup.
 
@@ -17,46 +17,47 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 ### Oneview Features supported
 - Connection template
 - Datacenter
+- Drive Enclosure
 - Enclosure
+- Enclosure group
 - Ethernet network
-- Fabrics
+- Fabric
 - FC network
 - FCoE network
-- Firmware bundles
-- Firmware drivers
+- Firmware bundle
+- Firmware driver
 - Interconnect
+- Interconnect link topology
+- Internal link set
 - Logical downlink
-- Logical enclosure
-- Logical interconnect
-- Logical interconnect Group
-- Uplink Set
+- Logical Enclosure
+- Logical Interconnect
+- Logical Interconnect group
 - Logical switch
 - Logical switch group
-- Managed SANs
-- Network set
-- Power devices
-- Racks
-- SAN managers
+- Managed SAN
+- network set
+- Power device
+- Rack
+- SAN manager
+- SAS Interconnect
+- SAS Interconnect type
+- SAS Logical Interconnect
+- SAS Logical Interconnect group
+- SAS Logical JBOD
+- SAS Logical JBOD attachment
 - Server hardware
 - Server hardware type
 - Server profile
 - Server profile template
-- Storage pools
-- Storage systems
-- Switches
+- Storage pool
+- Storage system
+- Switche
+- Unmanaged device
+- Uplink set
 - Volume
 - Volume attachment
 - Volume template
-- Drive Enclosures
-- Interconnect Link Topology
-- Internal Link Set
-- SAS Interconnect
-- SAS Interconnect Type
-- SAS Logical Interconnect
-- SAS Logical Interconnect Group
-- SAS Logical JBOD Attachments
-- SAS Logical JBODs
-- Unmanaged devices
 
 # 2.0.0 (2017-01-05)
 
@@ -91,71 +92,73 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
  * Created smoke, unit, and integration tests for all resources
 
 ### Puppet Types Added
+- Oneview_connection_template
+- Oneview_datacenter
+- Oneview_enclosure
+- Oneview_enclosure_group
 - Oneview_ethernet_network
+- Oneview_fabric
 - Oneview_fc_network
 - Oneview_fcoe_network
-- Oneview_network_set
-- Oneview_connection_template
-- Oneview_fabric
-- Oneview_san_manager
-- Oneview_managed_san
-- Oneview_interconnect
-- Oneview_logical_interconnect
-- Oneview_logical_interconnect_group
-- Oneview_uplink_set
-- Oneview_logical_downlink
-- Oneview_enclosure
-- Oneview_logical_enclosure
-- Oneview_enclosure_group
 - Oneview_firmware_bundle
 - Oneview_firmware_driver
-- Oneview_storage_system
-- Oneview_storage_pool
-- Oneview_volume
-- Oneview_volume_template
-- Oneview_datacenter
-- Oneview_racks
-- Oneview_logical_switch_group
+- Oneview_interconnect
+- Oneview_logical_downlink
+- Oneview_logical_enclosure
+- Oneview_logical_interconnect
+- Oneview_logical_interconnect_group
 - Oneview_logical_switch
-- Oneview_switch
-- Oneview_power_devices
-- Oneview_server_profile
-- Oneview_server_profile_template
+- Oneview_logical_switch_group
+- Oneview_managed_san
+- Oneview_network_set
+- Oneview_power_device
+- Oneview_racks
+- Oneview_san_manager
 - Oneview_server_hardware
 - Oneview_server_hardware_type
-- Oneview_unmanaged_devices
+- Oneview_server_profile
+- Oneview_server_profile_template
+- Oneview_storage_pool
+- Oneview_storage_system
+- Oneview_switch
+- Oneview_unmanaged_device
+- Oneview_uplink_set
+- Oneview_volume
+- Oneview_volume_attachment
+- Oneview_volume_template
 
 ### Oneview Features supported
- - Ethernet network
- - FC network
- - FCOE network
- - Network set
- - Connection template
- - Fabric
- - SAN manager
- - Managed SAN
- - Interconnect
- - Logical interconnect
- - Logical interconnect group
- - Uplink set
- - Logical downlink
- - Enclosure
- - Logical enclosure
- - Enclosure group
- - Firmware bundle
- - Firmware driver
- - Storage system
- - Storage pool
- - Volume
- - Volume template
- - Datacenter
- - Racks
- - Logical switch group
- - Logical switch
- - Switch
- - Power devices
- - Server profile
- - Server profile template
- - Server hardware
- - Server hardware type
- - Unmanaged devices
+- Connection template
+- Datacenter
+- Enclosure
+- Enclosure group
+- Ethernet network
+- Fabric
+- FC network
+- FCOE network
+- Firmware bundle
+- Firmware driver
+- Interconnect
+- Logical downlink
+- Logical enclosure
+- Logical interconnect
+- Logical interconnect group
+- Logical switch
+- Logical switch group
+- Managed SAN
+- Network set
+- Power device
+- Racks
+- SAN manager
+- Server hardware
+- Server hardware type
+- Server profile
+- Server profile template
+- Storage pool
+- Storage system
+- Switch
+- Unmanaged device
+- Uplink set
+- Volume
+- Volume attachment
+- Volume template
