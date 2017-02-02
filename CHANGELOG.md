@@ -17,7 +17,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 ### Oneview Features supported
 - Connection template
 - Datacenter
-- Drive Enclosure
+- Drive enclosure
 - Enclosure
 - Enclosure group
 - Ethernet network
@@ -30,29 +30,29 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Interconnect link topology
 - Internal link set
 - Logical downlink
-- Logical Enclosure
-- Logical Interconnect
-- Logical Interconnect group
+- Logical enclosure
+- Logical interconnect
+- Logical interconnect group
 - Logical switch
 - Logical switch group
 - Managed SAN
-- network set
+- Network set
 - Power device
 - Rack
 - SAN manager
-- SAS Interconnect
-- SAS Interconnect type
-- SAS Logical Interconnect
-- SAS Logical Interconnect group
-- SAS Logical JBOD
-- SAS Logical JBOD attachment
+- SAS interconnect
+- SAS interconnect type
+- SAS logical interconnect
+- SAS logical interconnect group
+- SAS logical JBOD
+- SAS logical JBOD attachment
 - Server hardware
 - Server hardware type
 - Server profile
 - Server profile template
 - Storage pool
 - Storage system
-- Switche
+- Switch
 - Unmanaged device
 - Uplink set
 - Volume
