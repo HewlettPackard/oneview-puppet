@@ -15,24 +15,26 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
-resourcetype = OneviewSDK::NetworkSet
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:NetworkSet, api_version, 'C7000')
+ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  context 'given the min parameters' do
+  context 'given the standard parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_network_set).new(
         name: 'Network Set',
         ensure: 'present',
         data:
             {
-              'name' => 'Network Set'
-            }
+              'name' => 'Network Set',
+              'networkUris' => ['Network1']
+            },
+        provider: 'c7000'
       )
     end
 
@@ -40,7 +42,17 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider Ruby' do
+    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+
+    let(:eth1) { ethernet_class.new(@client, name: resource['data']['networkUris'].first) }
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      provider.exists?
+    end
+
+    it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_network_set).provider(:c7000)
     end
 
@@ -50,34 +62,47 @@ describe provider_class, unit: true do
     end
 
     it 'should return that the resource exists' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
       expect(provider.found).to be
     end
 
     it 'should be able to create the resource' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, name: resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
 
     it 'should be able to delete the resource' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      provider.exists?
+      allow_any_instance_of(resourcetype).to receive(:delete).and_return(true)
       expect(provider.destroy).to be
     end
 
     it 'should be able to get all the network sets without ethernet' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
+      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return([test])
+      expect(provider.get_without_ethernet).to be
+    end
+  end
+  context 'given no data and the found ensure method' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_network_set).new(
+        name: 'Network Set',
+        ensure: 'found',
+        provider: 'c7000'
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:test) { resourcetype.new(@client, {}) }
+
+    before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return([test])
+    end
+
+    it 'should be able to get all the network sets without ethernet' do
+      allow(resourcetype).to receive(:get_without_ethernet).and_return([test])
       expect(provider.get_without_ethernet).to be
     end
   end

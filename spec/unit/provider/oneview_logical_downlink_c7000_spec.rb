@@ -68,7 +68,7 @@ describe provider_class, unit: true do
     end
   end
 
-  context '#get without ethernet', if: login[:api_version] >= 300 do
+  context '#get without ethernet for API 300 onwards', if: login[:api_version] >= 300 do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_downlink).new(
         name: 'Logical Downlink',
@@ -99,7 +99,7 @@ describe provider_class, unit: true do
     end
   end
 
-  context 'api 200', if: login[:api_version] == 200 do
+  context 'for API 200' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_downlink).new(
         name: 'Logical Downlink',
@@ -118,7 +118,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get all the logical downlinks without ethernet' do
-      allow(resourcetype).to receive(:get_without_ethernet).and_return(test)
+      allow(resourcetype).to receive(:get_without_ethernet).and_return([test])
       resource['data'] = {}
       provider.exists?
       expect(provider.get_without_ethernet).to be
