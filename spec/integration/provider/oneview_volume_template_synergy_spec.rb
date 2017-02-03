@@ -15,10 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
 
-provider_class = Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
-storage_pool_name = login[:storage_pool_name] || '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+provider_class = Puppet::Type.type(:oneview_volume_template).provider(:synergy)
+storage_pool_name = login[:storage_pool_name] || '/rest/storage-pools/0CDF3EE5-7749-4257-ABE3-87404A53244E'
 
 describe provider_class do
   let(:resource) do
@@ -28,7 +27,8 @@ describe provider_class do
       data:
           {
             'name' => 'ONEVIEW_PUPPET_TEST'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -40,8 +40,8 @@ describe provider_class do
     before(:each) do
       provider.exists?
     end
-    it 'should be an instance of the provider oneview_volume_template' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:oneview_volume_template)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:synergy)
     end
 
     it 'exists? should not find the volume template' do
@@ -75,7 +75,8 @@ describe provider_class do
                 'capacity'       => '235834383322',
                 'storagePoolUri' => storage_pool_name
               }
-            }
+            },
+        provider: 'synergy'
       )
     end
 
