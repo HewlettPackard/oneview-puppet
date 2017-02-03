@@ -45,7 +45,7 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider oneview_san_manager' do
+    it 'should be an instance of the provider synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:synergy)
     end
 
