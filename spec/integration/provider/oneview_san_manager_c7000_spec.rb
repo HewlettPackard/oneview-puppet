@@ -15,9 +15,9 @@
 ################################################################################
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/provider/', 'login'))
+require_relative '../../../lib/puppet/provider/login'
 
-provider_class = Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
+provider_class = Puppet::Type.type(:oneview_san_manager).provider(:c7000)
 san_manager_host = login[:san_manager_host] || '172.18.15.1'
 san_manager_username = login[:san_manager_username] || 'dcs'
 san_manager_password = login[:san_manager_password] || 'dcs'
@@ -31,7 +31,8 @@ describe provider_class do
       data:
           {
             'providerDisplayName' => san_manager_name
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -44,8 +45,8 @@ describe provider_class do
   let(:instance) { provider.class.instances.first }
 
   context 'given the minimum parameters before server creation' do
-    it 'should be an instance of the provider oneview_san_manager' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:oneview_san_manager)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:c7000)
     end
 
     it 'should raise error when server is not found' do
@@ -84,7 +85,8 @@ describe provider_class do
                   'value' => true
                 }
               ]
-            }
+            },
+        provider: 'c7000'
       )
     end
     it 'should create/add the san manager' do
