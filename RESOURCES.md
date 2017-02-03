@@ -2,38 +2,42 @@
 
 1. [Oneview_connection_template](#oneview_connection_template)
 2. [Oneview_datacenter](#oneview_datacenter)
-3. [Oneview_enclosure_group](#oneview_enclosure_group)
-4. [Oneview_enclosure](#oneview_enclosure)
-5. [Oneview_ethernet_network](#oneview_ethernet_network)
-6. [Oneview_fabric](#oneview_fabric)
-7. [Oneview_fc_network](#oneview_fc_network)
-8. [Oneview_fcoe_network](#oneview_fcoe_network)
-9. [Oneview_firmware_bundle](#oneview_firmware_bundle)
-10. [Oneview_firmware_driver](#oneview_firmware_driver)
-11. [Oneview_interconnect](#oneview_interconnect)
-12. [Oneview_logical_downlink](#oneview_logical_downlink)
-13. [Oneview_logical_enclosure](#oneview_logical_enclosure)
-14. [Oneview_logical_interconnect_group](#oneview_logical_interconnect_group)
-15. [Oneview_logical_interconnect](#oneview_logical_interconnect)
-16. [Oneview_logical_switch](#oneview_logical_switch)
-17. [Oneview_logical_switch_group](#oneview_logical_switch_group)
-18. [Oneview_managed_san](#oneview_managed_san)
-19. [Oneview_network_set](#oneview_network_set)
-20. [Oneview_power_device](#oneview_power_device)
-21. [Oneview_rack](#oneview_rack)
-22. [Oneview_san_manager](#oneview_san_manager)
-23. [Oneview_server_hardware](#oneview_server_hardware)
-24. [Oneview_server_hardware_type](#oneview_server_hardware_type)
-25. [Oneview_server_profile_template](#oneview_server_profile_template)
-26. [Oneview_server_profile](#oneview_server_profile)
-27. [Oneview_storage_pool](#oneview_storage_pool)
-28. [Oneview_storage_system](#oneview_storage_system)
-29. [Oneview_switch](#oneview_switch)
-30. [Oneview_unmanaged_device](#oneview_unmanaged_device)
-31. [Oneview_uplink_set](#oneview_uplink_set)
-32. [Oneview_volume](#oneview_volume)
-33. [Oneview_volume_attachment](#oneview_volume_attachment)
-34. [Oneview_volume_template](#oneview_volume_template)
+3. [Oneview_drive_enclosure](#oneview_drive_enclosure)
+4. [Oneview_enclosure_group](#oneview_enclosure_group)
+5. [Oneview_enclosure](#oneview_enclosure)
+6. [Oneview_ethernet_network](#oneview_ethernet_network)
+7. [Oneview_fabric](#oneview_fabric)
+8. [Oneview_fc_network](#oneview_fc_network)
+9. [Oneview_fcoe_network](#oneview_fcoe_network)
+10. [Oneview_firmware_bundle](#oneview_firmware_bundle)
+11. [Oneview_firmware_driver](#oneview_firmware_driver)
+12. [Oneview_interconnect](#oneview_interconnect)
+13. [Oneview_logical_downlink](#oneview_logical_downlink)
+14. [Oneview_logical_enclosure](#oneview_logical_enclosure)
+15. [Oneview_logical_interconnect_group](#oneview_logical_interconnect_group)
+16. [Oneview_logical_interconnect](#oneview_logical_interconnect)
+17. [Oneview_logical_switch](#oneview_logical_switch)
+18. [Oneview_logical_switch_group](#oneview_logical_switch_group)
+19. [Oneview_managed_san](#oneview_managed_san)
+20. [Oneview_network_set](#oneview_network_set)
+21. [Oneview_power_device](#oneview_power_device)
+22. [Oneview_rack](#oneview_rack)
+23. [Oneview_san_manager](#oneview_san_manager)
+24. [Oneview_sas_interconnect](#oneview_sas_interconnect)
+25. [Oneview_sas_logical_interconnect](#oneview_sas_logical_interconnect)
+26. [Oneview_sas_logical_interconnect_group](#oneview_sas_logical_interconnect_group)
+27. [Oneview_server_hardware](#oneview_server_hardware)
+28. [Oneview_server_hardware_type](#oneview_server_hardware_type)
+29. [Oneview_server_profile_template](#oneview_server_profile_template)
+30. [Oneview_server_profile](#oneview_server_profile)
+31. [Oneview_storage_pool](#oneview_storage_pool)
+32. [Oneview_storage_system](#oneview_storage_system)
+33. [Oneview_switch](#oneview_switch)
+34. [Oneview_unmanaged_device](#oneview_unmanaged_device)
+35. [Oneview_uplink_set](#oneview_uplink_set)
+36. [Oneview_volume](#oneview_volume)
+37. [Oneview_volume_attachment](#oneview_volume_attachment)
+38. [Oneview_volume_template](#oneview_volume_template)
 
 #### oneview_connection_template
 
@@ -58,6 +62,18 @@ This resource provides the following ensurable methods for managing Datacenters 
 
 Example file: [datacenter.pp](examples/datacenter.pp)
 
+#### oneview_drive_enclosure
+
+This resource provides the following ensurable methods for managing Drive Enclosures on the HPE OneView appliance:
+
+* `present` - Performs a specific `patch` operation for the given drive enclosure using the attributes in `data`.
+* `found` - Searches for `oneview_drive_enclosure` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `set_refresh_state` - Refreshes the specified drive enclosure.
+
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [drive_enclosure.pp](examples/drive_enclosure.pp)
+
 #### oneview_enclosure_group
 
 This resource provides the following ensurable methods for managing Enclosure Groups on the HPE OneView appliance:
@@ -77,9 +93,11 @@ This resource provides the following ensurable methods for managing Enclosures o
 * `present` - Takes information about an enclosure (e.g., IP address, username, password) inside a `data` hash and uses it to claim/configure the enclosure and add/update its components on the appliance.
 * `absent` - Removes and unconfigures the specified enclosure from the appliance.
 * `found` - Searches for `oneview_enclosure` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `set_environmental_configuration` - Sets the calibrated max power of an unmanaged or unsupported enclosure.
 * `set_configuration` - Reapplies the appliance's configuration on the specified enclosure.
-* `set_refresh_state` - Refreshes the specified enclosure along with all of its components, including interconnects and servers. The `refreshState` field set to **Refreshing** within the `data` hash.
+* `set_refresh_state` - Refreshes the specified enclosure along with all of its components, including interconnects and servers.
 * `get_script` - Retrieves the script from within an enclosure group specified in `data` and prints the script to the standard output. This requires a script to be set within the enclosure to work.
+* `get_single_sign_on` - Builds the SSO (Single Sign-On) URL parameters for the specified enclosure. This allows the user to log in to the enclosure without providing credentials. This API is currently only supported by C7000 enclosures.
 * `get_utilization` - Retrieves historical utilization data for the specified enclosure, metrics, and time span. Accepts a tag `utilization_parameters` within `data` with the desired query parameters.
 * `get_environmental_configuration` - Gets the settings that describe the environmental configuration (supported feature set, calibrated minimum and maximum power, location and dimensions, etc.) of the specified enclosure resource.
 
@@ -94,6 +112,7 @@ This resource provides the following ensurable methods for managing Ethernet Net
 * `found` - Searches for `oneview_ethernet_network` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `get_associated_profiles` - Gets the profiles that are using a specified Ethernet network.
 * `get_associated_uplink_groups` - Gets the uplink sets that are using a specified Ethernet network.
+* `reset_default_bandwidth` - Retrieves de default connection template bandwidth, compares it to the current network's connection template and updates it if needed.
 
 Example file: [ethernet_network.pp](examples/ethernet_network.pp)
 
@@ -102,6 +121,8 @@ Example file: [ethernet_network.pp](examples/ethernet_network.pp)
 This resource provides the following ensurable methods for managing fabrics on the HPE OneView appliance:
 
 * `found` - Searches for `oneview_fabric` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `get_reserved_vlan_range` - Gets the reserved vlan ID range for the fabric.
+* `set_reserved_vlan_range` - Updates the reserved vlan ID range for the fabric.
 
 :exclamation: **NOTE:**  This resource does NOT accept a `present`/`absent` state as it is created/removed through other HPE OneView resources.
 
@@ -153,9 +174,10 @@ This resource provides the following ensurable methods for managing interconnect
 
 * `present` - Performs a specific `patch` operation for the given interconnect. There is a limited set of interconnect properties that may be changed, and these are: powerState, uidState, deviceResetState. If the interconnect supports the operation, the operation is performed.
 * `found` - Searches for `oneview_interconnect` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
-* `get_types` - Gets a collection of all the interconnect types based on the specified parameters.
 * `get_statistics` - Gets the statistics from an interconnect.
 * `get_name_servers` - Gets the named servers for an interconnect.
+* `get_types` - Gets a collection of all the interconnect types based on the specified parameters.
+* `get_link_topologies` - Gets a paginated collection of all the interconnect link topologies based on the specified parameters. Filters can be used to control the number of interconnect link topologies that are returned. With no filters specified, the API returns all interconnect link toplogies.
 * `update_ports` - Updates the specified interconnect ports.
 * `reset_port_protection` - Triggers a reset of port protection for an interconnect.
 
@@ -198,7 +220,8 @@ This resource provides the following ensurable methods for managing  logical int
 * `get_default_settings` - Gets the default interconnect settings for a logical interconnect group.
 * `get_settings` - Gets the interconnect settings for a logical interconnect group.
 
-Example file: [logical_interconnect_group.pp](examples/logical_interconnect_group.pp)
+Example file for C7000: [logical_interconnect_group.pp](examples/logical_interconnect_group.pp)
+Example file for Synergy: [logical_interconnect_group.pp](examples/logical_interconnect_group_synergy.pp)
 
 #### oneview_logical_interconnect
 
@@ -211,6 +234,8 @@ This resource provides the following ensurable methods for managing logical inte
 * `get_port_monitor` - Gets the port monitor configuration of a logical interconnect.
 * `get_firmware` -Gets the installed firmware for a logical interconnect.
 * `get_internal_vlans` - Gets the internal VLAN IDs for the provisioned networks on a logical interconnect.
+* `get_qos_aggregated_configuration` - Gets the QoS aggregated configuration for the logical interconnect.
+* `get_ethernet_settings` - Gets the Ethernet interconnect settings for the logical interconnect.
 * `set_configuration` - Asynchronously applies or re-applies the logical interconnect configuration to all managed interconnects.
 * `set_compliance` - Gets the configuration script of the specified logical enclosure.
 * `set_telemetry_configuration` - Updates the telemetry configuration of a logical interconnect. Changes to the telemetry configuration are asynchronously applied to all managed interconnects.
@@ -219,6 +244,7 @@ This resource provides the following ensurable methods for managing logical inte
 * `set_port_monitor` - Updates the port monitor configuration of a logical interconnect.
 * `set_firmware` - Installs firmware to a logical interconnect. The three operations that are supported for the firmware update are Stage (uploads firmware to the interconnect), Activate (installs firmware on the interconnect) and Update (which does a Stage and Activate, sequentially).
 * `set_internal_networks` - Updates internal networks on the logical interconnect.
+* `set_ethernet_settings` - Updates the Ethernet interconnect settings for the logical interconnect.
 
 :exclamation: **NOTE:** This resource does not have an `absent` ensurable. The deletion of these resources is managed by other resources.
 
@@ -233,8 +259,11 @@ This resource provides the following ensurable methods for managing logical swit
 * `found` - Searches for `oneview_logical_switch` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `refresh` - Reclaims the top-of-rack switches in a logical switch.
 * `update_credentials` - **DEPRECATED** This method will be removed on upcoming releases.
+* `get_internal_link_sets` - Gets a paginated collection of all internal-link-sets. Filters can be used to control the number of internal link sets that are returned. With no filters specified, the API returns all internal link sets.
 
 :exclamation: **NOTE:** The switches and their credentials must follow the declaration seen in the example file. The update via `present` ensurable is only valid for the Logical Switch name. To update its credentials, the `update_credentials` ensurable must be used.
+
+:warning: This resource type is only supported by the **C7000** hardware variant.
 
 Example file: [logical_switch.pp](examples/logical_switch.pp)
 
@@ -247,6 +276,8 @@ This resource provides the following ensurable methods for managing logical swit
 * `found` - Searches for `oneview_logical_switch_group` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 
 :exclamation: **NOTE:** The declaration of logical switch groups must follow the one seen in the example file.
+
+:warning: This resource type is only supported by the **C7000** hardware variant.
 
 Example file: [logical_switch_group.pp](examples/logical_switch_group.pp)
 
@@ -274,10 +305,6 @@ This resource provides the following ensurable methods for managing network sets
 * `absent` - Deletes a network set. Any connections that reference the network set and are currently deployed will be placed into a **Failed** state.
 * `found` - Searches for `oneview_network_set` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `get_without_ethernet` - Gets a list of network sets, excluding Ethernet networks, based on optional sorting and filtering, and constrained by start and count parameters.
-* `set_native_network` - Sets the native network for the network set.
-* `add_ethernet_network` - Adds an Ethernet network to the network set.
-* `remove_ethernet_network` - Removes an Ethernet network from the network set.
-
 
 Example file: [managed_san.pp](examples/managed_san.pp)
 
@@ -323,6 +350,48 @@ This resource provides the following ensurable methods for managing SAN resource
 
 Example file: [san_manager.pp](examples/san_manager.pp)
 
+#### oneview_sas_interconnect
+
+This resource provides the following ensurable methods for managing SAS Interconnects on the HPE OneView appliance:
+
+* `present` - Performs a specific `patch` operation for the given interconnect.
+* `found` - Searches for `oneview_sas_interconnect` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `get_types` - Get a paginated collection of all the SAS interconnect types based on optional filtering.
+* `set_refresh_state` - Refresh a `SAS interconnect` by setting the refresh state value to 'refreshPending' in order to trigger a refresh.
+
+:exclamation: **NOTE:** The `absent` ensurable method is unavailable for this resource. Deletion of this resource is managed by another resource on HPE OneView or by HPE OneView internally.
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [sas_interconnect.pp](examples/sas_interconnect.pp)
+
+#### oneview_sas_logical_interconnect
+
+This resource provides the following ensurable methods for managing SAS Logical Interconnects on the HPE OneView appliance:
+
+* `found` - Searches for `oneview_sas_logical_interconnect` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `get_firmware` - Gets baseline firmware information for a SAS logical interconnect.
+* `set_configuration` - Asynchronously applies or re-applies the logical interconnect configuration to all managed interconnects of a logical interconnect.
+* `set_firmware` - Installs firmware to the member interconnects of a logical interconnect.
+* `set_compliance` - Returns a logical interconnect to a consistent state. The current logical interconnect state is compared to the associated logical interconnect group.
+* `replace_drive_enclosure` - When a drive enclosure has been physically replaced, initiate the replacement operation that enables the new drive enclosure to take over as a replacement for the prior drive enclosure. The request requires specification of both the serial numbers of the original drive enclosure and its replacement to be provided.
+
+:exclamation: **NOTE:** The `present` and `absent` ensure methods are unavailable for this resource. Creation and deletion of this resource is managed by another resource on HPE OneView or by HPE OneView internally.
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [sas_logical_interconnect.pp](examples/sas_logical_interconnect.pp)
+
+#### Oneview_sas_logical_interconnect_group
+
+This resource provides the following ensurable methods for managing SAS Logical Interconnects on the HPE OneView appliance:
+
+* `present` - Creates or updates a SAS Logical Interconnect Group using the information provided.
+* `absent` - Deletes the specified a SAS Logical Interconnect Group.
+* `found` - Searches for `oneview_sas_logical_interconnect_group` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+
+:warning: This resource type is only supported by the **Synergy** hardware variant.
+
+Example file: [sas_logical_interconnect_group.pp](examples/sas_logical_interconnect_group.pp)
+
 #### oneview_server_hardware
 
 This resource provides the following ensurable methods for managing server hardwares on the HPE OneView appliance:
@@ -363,6 +432,7 @@ This resource provides the following ensurable methods for managing server profi
 * `absent` - Deletes a server profile template object from the appliance based on its profile template UUID.
 * `found` - Searches for `oneview_server_profile_template` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `set_new_profile` - Creates a new server profile based on the current template.
+* `get_transformation` - Transforms an existing profile template by supplying a new server hardware type and/or enclosure group. A profile template will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group. All configured connections will have their port assignment set to `Auto`.
 
 
 Example file: [server_profile_template.pp](examples/server_profile_template.pp)
@@ -384,6 +454,9 @@ This resource provides the following ensurable methods for managing server profi
 * `get_compliance_preview` - Gets the preview of manual and automatic updates required to make the server profile consistent with its template.
 * `get_messages` - Retrieves the error or status messages associated with the specified profile.
 * `get_transformation` - Transforms an existing profile by supplying a new server hardware type and/or enclosure group. A profile will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group.
+* `get_sas_logical_jbods` - Gets a paginated collection of SAS logical JBODs based on optional filtering.
+* `get_sas_logical_jbod_drives` - Returns the list of drives allocated to the specified SAS logical JBOD.
+* `get_sas_logical_jbod_attachments` - Gets a paginated collection of SAS logical JBOD attachments based on optional sorting and filtering.
 
 
 Example file: [server_profile.pp](examples/server_profile.pp)
@@ -422,8 +495,10 @@ This resource provides the following ensurable methods for managing Top-of-rack 
 * `get_type` - Either gets a paginated collection of all the switch types or, if a switch type is specified, gets that specific switch type.
 * `get_statistics` - Gets statistics for a switch, and accepts the port and subport as filters to narrow the list of statistics to show.
 * `get_environmental_configuration` - Gets the environmental configuration for a switch.
+* `set_scope_uris` - Performs a patch operation on the switch for the scopeUris property.
 
 :exclamation: **NOTE:** The `present` ensurable is unavailable for this resource. Creation of this resource is managed by another resource on HPE OneView.
+:warning: For the `Synergy` hardware variant, the only valid ensure method is `get_type`.
 
 Example file: [switch.pp](examples/switch.pp)
 

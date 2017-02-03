@@ -14,16 +14,20 @@
 # limitations under the License.
 ################################################################################
 
+require 'simplecov'
+require 'coveralls'
 require 'rspec-puppet/spec_helper'
 require 'puppet'
 require 'rspec'
 require 'rspec-puppet'
 require 'pry'
-require 'simplecov'
 
 provider_path = 'lib/puppet/provider'
 type_path = 'lib/puppet/type'
 
+Coveralls.wear!
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.profiles.define 'unit' do
   add_filter 'spec/'
   add_group 'Providers', provider_path

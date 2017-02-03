@@ -1,5 +1,6 @@
 [![Puppet Forge](https://img.shields.io/puppetforge/v/hewlettpackard/oneview.svg)](https://forge.puppet.com/hewlettpackard/oneview)
 [![Build Status](https://travis-ci.org/HewlettPackard/oneview-puppet.svg?branch=master)](https://travis-ci.org/HewlettPackard/oneview-puppet)
+[![Coverage Status](https://coveralls.io/repos/github/HewlettPackard/oneview-puppet/badge.svg?branch=master)](https://coveralls.io/github/HewlettPackard/oneview-puppet?branch=master)
 [![Inline docs](http://inch-ci.org/github/HewlettPackard/oneview-puppet.svg?branch=master)](http://inch-ci.org/github/HewlettPackard/oneview-puppet)
 
 # Puppet Module for HPE OneView
@@ -68,11 +69,12 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 * `ONEVIEW_LOG_LEVEL` - The log level of the HPE OneView appliance. This defaults to **info**
 * `ONEVIEW_SSL_ENABLED` - HPE recommends setting this value to **true**
 * `ONEVIEW_HARDWARE_VARIANT` - Set this to C7000 or Synergy, according to the appliance's enclosure's model. This defaults to **C7000**
+:warning: The `Synergy` hardware variant is only available for API version >= 300 (OneView 3.0) :warning:
 
 
 You can assign attributes for your appliances using three methods:
 
-- Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance.
+- Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
 
 - If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
