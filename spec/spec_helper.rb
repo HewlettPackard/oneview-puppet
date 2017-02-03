@@ -27,13 +27,16 @@ type_path = 'lib/puppet/type'
 
 Coveralls.wear!
 
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
 SimpleCov.profiles.define 'unit' do
   add_filter 'spec/'
   add_group 'Providers', provider_path
   add_group 'Types', type_path
-  minimum_coverage 80 # TODO: bump up as we increase coverage. Goal: 95%
-  minimum_coverage_by_file 50 # TODO: bump up as we increase coverage. Goal: 70%
+  minimum_coverage 95 # TODO: bump up as we increase coverage. Goal: 100%
+  minimum_coverage_by_file 70 # TODO: bump up as we increase coverage. Goal: 85%
 end
 
 SimpleCov.profiles.define 'all' do

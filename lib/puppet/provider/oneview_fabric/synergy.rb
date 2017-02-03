@@ -21,6 +21,7 @@ Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
 
   def get_reserved_vlan_range
     pretty get_single_resource_instance.get_reserved_vlan_range
+    true
   end
 
   def set_reserved_vlan_range
