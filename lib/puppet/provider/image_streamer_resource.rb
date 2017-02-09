@@ -14,10 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-require_relative 'login'
-require_relative 'common'
 require_relative 'oneview_resource'
-require 'oneview-sdk'
 
 module Puppet
   # Base provider for OneView resources

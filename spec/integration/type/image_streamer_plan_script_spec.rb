@@ -33,14 +33,16 @@ describe type_class do
   end
 
   it 'should require a name' do
-    expect do type_class.new({})
+    expect do
+      type_class.new({})
     end.to raise_error(Puppet::Error, 'Title or name must be provided')
   end
 
   it 'should require a data hash' do
     modified_config = plan_script_config
     modified_config[:data] = ''
-    expect do type_class.new(modified_config)
+    expect do
+      type_class.new(modified_config)
     end.to raise_error(/Inserted value for data is not valid/)
   end
 end

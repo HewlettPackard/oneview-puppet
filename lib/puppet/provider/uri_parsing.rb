@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '../provider', 'login'))
+require_relative 'login'
 
 def uri_validation(data, client)
   @client = client.nil? ? OneviewSDK::Client.new(login) : client

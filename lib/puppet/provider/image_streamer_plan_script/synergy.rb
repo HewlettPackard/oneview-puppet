@@ -23,10 +23,6 @@ Puppet::Type::Image_streamer_plan_script.provide :synergy, parent: Puppet::Image
 
   mk_resource_methods
 
-  def initialize(values)
-    super
-  end
-
   def exists?
     super([nil, :found, :retrieve_differences])
   end
