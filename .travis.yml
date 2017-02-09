@@ -7,4 +7,4 @@ before_install:
   - gem update bundler
 
 script:
-  - rake test
+  - bundle exec rake test
