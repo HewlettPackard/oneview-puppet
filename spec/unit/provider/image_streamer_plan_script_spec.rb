@@ -56,19 +56,9 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_plan_script).provider(:synergy)
     end
 
-    it 'if nothing is found should return false' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
-    end
-
-    it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to eq(true)
-    end
-
     it 'should run through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
@@ -79,9 +69,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should delete the resource' do
-      resource['data']['uri'] = '/rest/fake'
       allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
-      provider.exists?
       expect(provider.destroy).to be
     end
 
@@ -90,8 +78,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to find the resource' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
       expect(provider.found).to be
     end
   end
