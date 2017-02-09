@@ -13,7 +13,8 @@
     * [Requirements](#requirements)
     * [Beginning with the Puppet Module for HPE OneView](#beginning-with-the-puppet-module-for-hpe-oneview)
 4. [Usage](#usage)
-    * [Appliance authentication](#appliance-authentication)
+    * [OneView Appliance authentication](#oneview-appliance-authentication)
+    * [Synergy Image Streamer Authentication](#synergy-image-streamer-authentication)
     * [Types and providers](#types-and-providers)
 5. [Reference](#reference)
 6. [Contributing and feature requests](#contributing-and-feature-requests)
@@ -57,7 +58,7 @@ git clone https://github.com/HewlettPackard/oneview-puppet <your_module_path>/on
 
 ## Usage
 
-### Appliance Authentication
+### OneView Appliance Authentication
 
 The attributes required for authenticating with your HPE OneView Appliance are:
 
@@ -87,6 +88,29 @@ You can assign attributes for your appliances using three methods:
 :lock: Tip: If you have Docker installed you can use the Dockerfile provided to build an image. Example scripts are also provided in the [docker](docker) folder for building and running using environment variables for OneView parameters (and proxies if required).
 
 Once the authentication is prepared and the manifests containing the resources are written, you can use ``` puppet apply <manifest>``` to run your manifests and execute the desired changes to the system.
+
+### Synergy Image Streamer Authentication
+
+The attributes required for authenticating with your HPE Synergy Image Streamer Appliance are:
+
+* `I3S_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
+* `I3S_TOKEN` - Session token used for authentication.
+* `I3S_API_VERSION` - This defaults to the 300 API version (Minimum supported for Synergy hardware variant).
+* `I3S_LOG_LEVEL` - The log level of the HPE ImageStreamer appliance. This defaults to **info**
+* `I3S_SSL_ENABLED` - HPE recommends setting this value to **true**
+
+
+You can assign attributes for your appliances using three methods:
+
+- Create a json file named `login_i3s.json` on your working directory, and enter the authentication information for your appliance. See [login_i3s.json](examples/login_i3s.json) for an example.
+
+- If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
+
+	* `I3S_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
+
+- Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
+
+:exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 
 ### Types and Providers
 
