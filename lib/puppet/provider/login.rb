@@ -16,24 +16,57 @@
 
 require 'json'
 
+ONEVIEW_AUTH_FILE = 'ONEVIEW_AUTH_FILE'.freeze
+ONEVIEW_URL = 'ONEVIEW_URL'.freeze
+I3S_AUTH_FILE = 'I3S_AUTH_FILE'.freeze
+I3S_URL = 'I3S_URL'.freeze
+
 # This method returns the information necessary in order to log in to the Oneview Appliance
 # The three possible ways of declaring the variables are, respectively:
 def login
   begin
     # - Creating a JSON file with the proper fields and setting the environment variable ONEVIEW_AUTH_FILE to its path
-    credentials = if ENV['ONEVIEW_AUTH_FILE']
-                    JSON.parse(File.read(File.absolute_path(ENV['ONEVIEW_AUTH_FILE'])), symbolize_names: true)
+    credentials = if ENV[ONEVIEW_AUTH_FILE]
+                    load_credentials_from_file_env_var(ONEVIEW_AUTH_FILE)
                   # - Declaring each field as an environment variable
-                  elsif ENV['ONEVIEW_URL']
+                  elsif ENV[ONEVIEW_URL]
                     environment_credentials
                   # - Placing a JSON file in the directory you are running the manifests from
                   else
-                    JSON.parse(File.read(File.expand_path(Dir.pwd + '/login.json', __FILE__)), symbolize_names: true)
+                    load_credentials_from_file('/login.json')
                   end
   rescue
     raise('The Oneview credentials could not be set. Please check the documentation for more information.')
   end
   credentials_parse(credentials)
+end
+
+# This method returns the information necessary in order to log in to the Image Streamer Appliance
+# The three possible ways of declaring the variables are, respectively:
+def login_i3s
+  begin
+    # - Creating a JSON file with the proper fields and setting the environment variable I3S_AUTH_FILE to its path
+    credentials = if ENV[I3S_AUTH_FILE]
+                    load_credentials_from_file_env_var(I3S_AUTH_FILE)
+                  # - Declaring each field as an environment variable
+                  elsif ENV[I3S_URL]
+                    environment_credentials_i3s
+                  # - Placing a JSON file in the directory you are running the manifests from
+                  else
+                    load_credentials_from_file('/login_i3s.json')
+                  end
+  rescue
+    raise('The Image Streamer credentials could not be set. Please check the documentation for more information.')
+  end
+  credentials_parse(credentials)
+end
+
+def load_credentials_from_file_env_var(variable_name)
+  JSON.parse(File.read(File.absolute_path(ENV[variable_name])), symbolize_names: true)
+end
+
+def load_credentials_from_file(filename)
+  JSON.parse(File.read(File.expand_path(Dir.pwd + filename, __FILE__)), symbolize_names: true)
 end
 
 # Returns the credentials set by environment variables
@@ -47,6 +80,18 @@ def environment_credentials
     user:                    ENV['ONEVIEW_USER'] || nil,
     password:                ENV['ONEVIEW_PASSWORD'] || nil,
     hardware_variant:        ENV['ONEVIEW_HARDWARE_VARIANT'] || 'C7000'
+  }
+end
+
+# Returns the credentials set by environment variables
+def environment_credentials_i3s
+  {
+    url:                     ENV['I3S_URL'],
+    ssl_enabled:             ENV['I3S_SSL_ENABLED'],
+    log_level:               ENV['I3S_LOG_LEVEL'] || 'info',
+    api_version:             ENV['I3S_API_VERSION'] || 200,
+    token:                   ENV['I3S_TOKEN'] || nil,
+    hardware_variant:        'Synergy'
   }
 end
 
