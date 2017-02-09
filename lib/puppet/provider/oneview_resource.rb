@@ -27,7 +27,7 @@ module Puppet
       super(value)
       @property_flush ||= {}
       @data ||= {}
-      @client ||= OneviewSDK::Client.new(login)
+      @client ||= client
       @resourcetype ||= ov_resource_type
     end
 
@@ -37,6 +37,10 @@ module Puppet
 
     def oneview_class
       ov_resource_type
+    end
+
+    def client
+      OneviewSDK::Client.new(login)
     end
 
     def self.client
@@ -70,7 +74,7 @@ module Puppet
     end
 
     def exists?(states = [nil, :found])
-      @data = data_parse
+      @data = data_parse(@data, @client)
       empty_data_check(states)
       !@resourcetype.find_by(@client, @data).empty?
       # @property_hash[:ensure] == :present # TODO: Future Improvement: Look into using property_hash for verifying existance globally

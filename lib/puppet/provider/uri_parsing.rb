@@ -16,8 +16,8 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '../provider', 'login'))
 
-def uri_validation(data)
-  @client = OneviewSDK::Client.new(login)
+def uri_validation(data, client)
+  @client = client.nil? ? OneviewSDK::Client.new(login) : client
   uri_recursive_hash(data)
   data
 end
