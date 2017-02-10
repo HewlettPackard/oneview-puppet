@@ -25,13 +25,21 @@ Puppet::Type::Oneview_server_profile.provide :c7000, parent: Puppet::OneviewReso
 
   def exists?
     @data = data_parse
+
     empty_data_check([:found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
                       :get_messages, :get_profile_ports, :get_transformation, :absent])
     # gets the connections' uris
     connections_parse if @data['connections']
     # gets the hash of filters for queries; in case it does not exist, query will be nil
     @query = @data.delete('query_parameters')
-    !@resourcetype.find_by(@client, @data).empty?
+
+    sp = if resource['ensure'] == :present
+           resource_update(@data, @resourcetype)
+           @resourcetype.find_by(@client, unique_id)
+         else
+           @resourcetype.find_by(@client, @data)
+         end
+    !sp.empty?
   end
 
   # This destroy deletes all the server profiles that match the data passed in. Use with caution.
