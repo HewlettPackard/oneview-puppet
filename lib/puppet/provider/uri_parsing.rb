@@ -16,8 +16,8 @@
 
 require_relative 'login'
 
-def uri_validation(data, client)
-  @client = client.nil? ? OneviewSDK::Client.new(login) : client
+def uri_validation(data)
+  @client ||= OneviewSDK::Client.new(login)
   uri_recursive_hash(data)
   data
 end

@@ -25,7 +25,7 @@ def pretty(arg)
 end
 
 # Removes quotes from nil and false values
-def data_parse(data = {}, client = nil)
+def data_parse(data = {})
   data = resource['data'] ||= data
   data.each do |key, value|
     data[key] = nil if value == 'nil'
@@ -33,7 +33,7 @@ def data_parse(data = {}, client = nil)
     data[key] = true if value == 'true'
     data[key] = data[key].to_i if key == 'vlanId'
   end
-  uri_validation(data, client)
+  uri_validation(data)
   data
 end
 

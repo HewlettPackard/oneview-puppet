@@ -21,10 +21,6 @@ module Puppet
   class ImageStreamerResource < Puppet::OneviewResource
     desc 'Base provider for Image Streamer resources'
 
-    def initialize(value = {})
-      super(value)
-    end
-
     def client
       OneviewSDK::ImageStreamer::Client.new(login_i3s)
     end

@@ -74,7 +74,7 @@ module Puppet
     end
 
     def exists?(states = [nil, :found])
-      @data = data_parse(@data, @client)
+      @data = data_parse
       empty_data_check(states)
       !@resourcetype.find_by(@client, @data).empty?
       # @property_hash[:ensure] == :present # TODO: Future Improvement: Look into using property_hash for verifying existance globally
