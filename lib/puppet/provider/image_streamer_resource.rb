@@ -17,7 +17,7 @@
 require_relative 'oneview_resource'
 
 module Puppet
-  # Base provider for OneView resources
+  # Base provider for Image Streamer resources
   class ImageStreamerResource < Puppet::OneviewResource
     desc 'Base provider for Image Streamer resources'
 
