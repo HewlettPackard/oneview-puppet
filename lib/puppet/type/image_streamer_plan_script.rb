@@ -38,7 +38,7 @@ Puppet::Type.newtype(:image_streamer_plan_script) do
   newparam(:data) do
     desc 'Plan Script data hash containing all specifications for the system'
     validate do |value|
-      raise 'Inserted value for data is not valid' unless value.class == Hash
+      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
     end
   end
 end

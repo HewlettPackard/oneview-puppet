@@ -75,13 +75,13 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 
 You can assign attributes for your appliances using three methods:
 
-- Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
+1. Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
 
-- If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
+2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
 	* `ONEVIEW_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
 
-- Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
+3. Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
 
 :exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 
@@ -93,22 +93,22 @@ Once the authentication is prepared and the manifests containing the resources a
 
 The attributes required for authenticating with your HPE Synergy Image Streamer Appliance are:
 
-* `I3S_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
-* `I3S_TOKEN` - Session token used for authentication.
-* `I3S_API_VERSION` - This defaults to the 300 API version (Minimum supported for Synergy hardware variant).
-* `I3S_LOG_LEVEL` - The log level of the HPE ImageStreamer appliance. This defaults to **info**
-* `I3S_SSL_ENABLED` - HPE recommends setting this value to **true**
+* `IMAGE_STREAMER_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
+* `IMAGE_STREAMER_TOKEN` - Image Streamer authentication token. It is the same token used to access the HPE OneView REST API.
+* `IMAGE_STREAMER_API_VERSION` - This defaults to the 300 API version (Minimum supported for Synergy hardware variant).
+* `IMAGE_STREAMER_LOG_LEVEL` - The log level of the HPE Image Streamer appliance. This defaults to **info**
+* `IMAGE_STREAMER_SSL_ENABLED` - HPE recommends setting this value to **true**
 
 
 You can assign attributes for your appliances using three methods:
 
-- Create a json file named `login_i3s.json` on your working directory, and enter the authentication information for your appliance. See [login_i3s.json](examples/login_i3s.json) for an example.
+1. Create a json file named `login_image_streamer.json` on your working directory, and enter the authentication information for your appliance. See [login_image_streamer.json](examples/login_image_streamer.json) for an example.
 
-- If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
+2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
-	* `I3S_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
+	* `IMAGE_STREAMER_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
 
-- Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
+3. Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
 
 :exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 

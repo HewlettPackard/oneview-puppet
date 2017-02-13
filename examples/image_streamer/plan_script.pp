@@ -23,7 +23,7 @@ image_streamer_plan_script{'plan_script_1':
       description => 'Description of this plan script',
       hpProvided  => false,
       planType    => 'deploy',
-      content     => 'echo "test script"',
+      content     => 'echo "test script"'
     }
 }
 

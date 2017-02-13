@@ -112,11 +112,11 @@ module Puppet
 
     # Helpers
     def resource_name
-      self.class.to_s.split('::')[2].split('_').drop(1).collect(&:capitalize).join
+      extract_resource_name(self.class.to_s)
     end
 
     def self.resource_name
-      to_s.split('::')[2].split('_').drop(1).collect(&:capitalize).join
+      extract_resource_name(to_s)
     end
 
     def resource_variant

@@ -38,7 +38,7 @@ describe type_class do
 
   it 'should require a data hash' do
     modified_config = plan_script_config
-    modified_config[:data] = ''
+    modified_config[:data] = 5
     expect { type_class.new(modified_config) }.to raise_error(/Inserted value for data is not valid/)
   end
 end

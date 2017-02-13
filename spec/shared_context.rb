@@ -23,7 +23,7 @@ RSpec.shared_context 'shared context', a: :b do
   end
 end
 
-RSpec.shared_context 'shared context i3s', a: :b do
+RSpec.shared_context 'shared context Image Streamer', a: :b do
   before :each do
     api_version = 300
     options = { url: 'https://oneview.example.com', token: 'ODU3NDcxNjA0OTQ1uMojm0BbKGxEt36dEsVubtxj3lxyhRYx', api_version: api_version }
