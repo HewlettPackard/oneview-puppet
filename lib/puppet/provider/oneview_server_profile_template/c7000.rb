@@ -25,7 +25,10 @@ Puppet::Type::Oneview_server_profile_template.provide :c7000, parent: Puppet::On
     @data = data_parse
     empty_data_check
     connections_parse if @data['connections']
-    !@resourcetype.find_by(@client, @data).empty?
+
+    return @resourcetype.find_by(@client, @data).any? unless resource['ensure'] == :present
+    resource_update(@data, @resourcetype)
+    @resourcetype.find_by(@client, unique_id).any?
   end
 
   # Creates a new server profile based on the current template
