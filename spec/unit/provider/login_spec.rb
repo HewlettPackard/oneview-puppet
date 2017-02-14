@@ -18,7 +18,6 @@ require 'spec_helper'
 require_relative '../../../lib/puppet/provider/login.rb'
 
 describe 'login', unit: true do
-
   let(:fixtures_path) do
     File.absolute_path('spec/support/fixtures/unit/provider')
   end
