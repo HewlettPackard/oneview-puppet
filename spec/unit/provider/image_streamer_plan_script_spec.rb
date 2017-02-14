@@ -35,8 +35,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
             'hpProvided'  => false,
             'planType'    => 'deploy',
             'content'     => 'echo "test script"'
-          },
-      provider: 'synergy'
+          }
     )
   end
 
@@ -52,8 +51,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
       provider.exists?
     end
 
-    it 'should be an instance of the provider synergy' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_plan_script).provider(:synergy)
+    it 'should be an instance of the provider image_streamer' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_plan_script).provider(:image_streamer)
     end
 
     it 'should run through the create method' do

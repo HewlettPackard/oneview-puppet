@@ -25,7 +25,9 @@ def login
     env_var_url:  'ONEVIEW_URL',
     filename:     '/login.json'
   }
-  load_authentication_settings(options)
+  credentials = load_authentication_settings(options)
+  credentials[:hardware_variant] ||= 'C7000'
+  credentials
 end
 
 # This method returns the information necessary in order to log in to the Image Streamer Appliance
@@ -37,9 +39,7 @@ def login_image_streamer
     env_var_url:  'IMAGE_STREAMER_URL',
     filename:     '/login_image_streamer.json'
   }
-  credentials = load_authentication_settings(options)
-  credentials[:hardware_variant] = 'Synergy'
-  credentials
+  load_authentication_settings(options)
 end
 
 def load_authentication_settings(options)
@@ -94,6 +94,5 @@ def credentials_parse(credentials)
     credentials[key] = false if value == 'false'
     credentials[key] = true if value == 'true'
   end
-  credentials[:hardware_variant] ||= 'C7000'
   credentials
 end

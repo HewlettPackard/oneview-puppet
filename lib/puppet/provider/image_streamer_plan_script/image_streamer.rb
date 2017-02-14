@@ -16,10 +16,8 @@
 
 require_relative '../image_streamer_resource'
 
-Puppet::Type::Image_streamer_plan_script.provide :synergy, parent: Puppet::ImageStreamerResource do
-  desc 'Provider for Image Streamer Plan Scripts using the Synergy variant of the OneView API'
-
-  confine true: login_image_streamer[:hardware_variant] == 'Synergy'
+Puppet::Type::Image_streamer_plan_script.provide :image_streamer, parent: Puppet::ImageStreamerResource do
+  desc 'Provider for Image Streamer Plan Scripts using the using Image Streamer API'
 
   mk_resource_methods
 

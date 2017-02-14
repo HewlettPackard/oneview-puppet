@@ -38,8 +38,8 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
-  it 'should be an instance of the provider synergy' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_plan_script).provider(:synergy)
+  it 'should be an instance of the provider image streamer' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_plan_script).provider(:image_streamer)
   end
 
   context 'given the minimum parameters' do

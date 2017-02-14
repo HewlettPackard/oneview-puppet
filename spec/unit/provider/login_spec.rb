@@ -105,8 +105,7 @@ describe 'login', unit: true do
         token:            'NzA3OTg2NjM2NTk21xd-TkijbSwOjm2AvXDAL4LPG49D9K8u',
         ssl_enabled:      true,
         api_version:      300,
-        log_level:        'debug',
-        hardware_variant: 'Synergy'
+        log_level:        'debug'
       }
     end
 
@@ -154,8 +153,7 @@ describe 'login', unit: true do
         ssl_enabled:       false,
         log_level:         'info',
         api_version:       300,
-        token:             nil,
-        hardware_variant:  'Synergy'
+        token:             nil
       }
       expect(login_image_streamer).to eq auth_settings
     end
