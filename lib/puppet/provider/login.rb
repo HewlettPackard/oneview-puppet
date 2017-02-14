@@ -70,7 +70,7 @@ def environment_credentials_from_oneview
     url:                     ENV['ONEVIEW_URL'],
     ssl_enabled:             ENV['ONEVIEW_SSL_ENABLED'],
     log_level:               ENV['ONEVIEW_LOG_LEVEL'] || 'info',
-    api_version:             ENV['ONEVIEW_API_VERSION'] || 200,
+    api_version:             ENV['ONEVIEW_API_VERSION'] ? ENV['ONEVIEW_API_VERSION'].to_i : 200,
     token:                   ENV['ONEVIEW_TOKEN'] || nil,
     user:                    ENV['ONEVIEW_USER'] || nil,
     password:                ENV['ONEVIEW_PASSWORD'] || nil,
@@ -83,7 +83,7 @@ def environment_credentials_from_image_streamer
     url:                     ENV['IMAGE_STREAMER_URL'],
     ssl_enabled:             ENV['IMAGE_STREAMER_SSL_ENABLED'],
     log_level:               ENV['IMAGE_STREAMER_LOG_LEVEL'] || 'info',
-    api_version:             ENV['IMAGE_STREAMER_API_VERSION'] || 300,
+    api_version:             ENV['IMAGE_STREAMER_API_VERSION'] ? ENV['IMAGE_STREAMER_API_VERSION'].to_i : 300,
     token:                   ENV['IMAGE_STREAMER_TOKEN'] || nil
   }
 end
@@ -94,5 +94,4 @@ def credentials_parse(credentials)
     credentials[key] = false if value == 'false'
     credentials[key] = true if value == 'true'
   end
-  credentials
 end
