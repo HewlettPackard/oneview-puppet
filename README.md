@@ -13,7 +13,8 @@
     * [Requirements](#requirements)
     * [Beginning with the Puppet Module for HPE OneView](#beginning-with-the-puppet-module-for-hpe-oneview)
 4. [Usage](#usage)
-    * [Appliance authentication](#appliance-authentication)
+    * [OneView Appliance authentication](#oneview-appliance-authentication)
+    * [Synergy Image Streamer Authentication](#synergy-image-streamer-authentication)
     * [Types and providers](#types-and-providers)
 5. [Reference](#reference)
 6. [Contributing and feature requests](#contributing-and-feature-requests)
@@ -57,7 +58,7 @@ git clone https://github.com/HewlettPackard/oneview-puppet <your_module_path>/on
 
 ## Usage
 
-### Appliance Authentication
+### OneView Appliance Authentication
 
 The attributes required for authenticating with your HPE OneView Appliance are:
 
@@ -74,19 +75,42 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 
 You can assign attributes for your appliances using three methods:
 
-- Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
+1. Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
 
-- If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
+2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
 	* `ONEVIEW_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
 
-- Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
+3. Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
 
 :exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 
 :lock: Tip: If you have Docker installed you can use the Dockerfile provided to build an image. Example scripts are also provided in the [docker](docker) folder for building and running using environment variables for OneView parameters (and proxies if required).
 
 Once the authentication is prepared and the manifests containing the resources are written, you can use ``` puppet apply <manifest>``` to run your manifests and execute the desired changes to the system.
+
+### Synergy Image Streamer Authentication
+
+The attributes required for authenticating with your HPE Synergy Image Streamer Appliance are:
+
+* `IMAGE_STREAMER_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
+* `IMAGE_STREAMER_TOKEN` - The authentication token for the HPE Image Streamer. This is the same token used to access the HPE OneView REST API.
+* `IMAGE_STREAMER_API_VERSION` - The API version for the HPE Image Streamer. This defaults to **300**
+* `IMAGE_STREAMER_LOG_LEVEL` - The log level of the HPE Image Streamer appliance. This defaults to **info**
+* `IMAGE_STREAMER_SSL_ENABLED` - HPE recommends setting this value to **true**
+
+
+You can assign attributes for your appliances using three methods:
+
+1. Create a json file named `login_image_streamer.json` on your working directory, and enter the authentication information for your appliance. See [login_image_streamer.json](examples/login_image_streamer.json) for an example.
+
+2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
+
+	* `IMAGE_STREAMER_AUTH_FILE` - This environment variable should contain the full path to the json file containing the authentication information.
+
+3. Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
+
+:exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 
 ### Types and Providers
 

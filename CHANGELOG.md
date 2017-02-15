@@ -1,3 +1,12 @@
+# Unreleased Changes
+
+## Suggested release: v2.2.0
+### Version highlights:
+1. Added support to the Image Streamer REST API version 300 for OS provisioning through OneView.
+
+### Puppet Types Added
+- Image_streamer_plan_script
+
 # 2.1.0 (2017-02-03)
 ### Version highlights:
 1. Added full support to OneView Rest API version 300 for the hardware variants C7000 and Synergy to the already existing features.

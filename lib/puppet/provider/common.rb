@@ -115,3 +115,9 @@ def connections_parse
     conn['networkUri'] = net.first['uri']
   end
 end
+
+def extract_resource_name(class_name)
+  class_name =~ /Oneview/
+  shift_prefix = Regexp.last_match.nil? ? 2 : 1
+  class_name.split('::')[2].split('_').drop(shift_prefix).collect(&:capitalize).join
+end

@@ -23,6 +23,14 @@ RSpec.shared_context 'shared context', a: :b do
   end
 end
 
+RSpec.shared_context 'shared context Image Streamer', a: :b do
+  before :each do
+    api_version = 300
+    options = { url: 'https://oneview.example.com', token: 'fake_token', api_version: api_version }
+    @client = OneviewSDK::ImageStreamer::Client.new(options)
+  end
+end
+
 RSpec.shared_context 'integration context', a: :b do
   # Context for integration testing:
   # WARNING: Communicates with & modifies a real instance.

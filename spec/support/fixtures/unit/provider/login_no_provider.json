@@ -1,0 +1,9 @@
+{
+  "url": "https://172.16.100.185",
+  "token": "NzA3OTg2NjM2NTk21xd-TkijbSwOjm2AvXDAL4LPG49D9K8u",
+  "user": "administrator",
+  "password": "secret123",
+  "ssl_enabled": "true",
+  "api_version": 300,
+  "log_level": "debug"
+}

@@ -14,10 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-require File.expand_path(File.join(File.dirname(__FILE__), '../provider', 'login'))
+require_relative 'login'
 
 def uri_validation(data)
-  @client = OneviewSDK::Client.new(login)
+  @client ||= OneviewSDK::Client.new(login)
   uri_recursive_hash(data)
   data
 end
