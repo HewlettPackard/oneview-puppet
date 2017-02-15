@@ -3,9 +3,6 @@ rvm:
   - 2.2.5
   - 2.3.1
 
-env:
-  - IMAGE_STREAMER_AUTH_FILE=examples/login_for_integration_i3s_tests.json
-
 before_install:
   - gem update bundler
 

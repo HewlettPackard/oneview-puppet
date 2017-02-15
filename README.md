@@ -94,8 +94,8 @@ Once the authentication is prepared and the manifests containing the resources a
 The attributes required for authenticating with your HPE Synergy Image Streamer Appliance are:
 
 * `IMAGE_STREAMER_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
-* `IMAGE_STREAMER_TOKEN` - Image Streamer authentication token. It is the same token used to access the HPE OneView REST API.
-* `IMAGE_STREAMER_API_VERSION` - This defaults to the 300 API version (Minimum supported for Synergy hardware variant).
+* `IMAGE_STREAMER_TOKEN` - Image Streamer authentication token. The authentication token for the HPE Image Streamer is the same token used to access the HPE OneView REST API.
+* `IMAGE_STREAMER_API_VERSION` - The API version for the HPE Image Streamer. This defaults to the 300.
 * `IMAGE_STREAMER_LOG_LEVEL` - The log level of the HPE Image Streamer appliance. This defaults to **info**
 * `IMAGE_STREAMER_SSL_ENABLED` - HPE recommends setting this value to **true**
 
