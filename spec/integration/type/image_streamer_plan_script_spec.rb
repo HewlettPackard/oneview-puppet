@@ -26,6 +26,23 @@ describe type_class do
     ]
   end
 
+  let :special_ensurables do
+    [
+      :found,
+      :retrieve_differences
+    ]
+  end
+
+  it 'should accept special ensurables' do
+    special_ensurables.each do |value|
+      expect do
+        described_class.new(name: 'Test',
+                            ensure: value,
+                            data: {})
+      end.to_not raise_error
+    end
+  end
+
   it 'should have expected parameters' do
     params.each do |param|
       expect(type_class.parameters).to include(param)
