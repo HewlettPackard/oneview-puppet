@@ -16,7 +16,7 @@
 
 require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_server_hardware_type.provide :c7000, parent: Puppet::OneviewResource do
+Puppet::Type.type(:oneview_server_hardware_type).provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Fiber Channel Networks using the C7000 variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'C7000'

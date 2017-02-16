@@ -17,7 +17,7 @@
 require_relative '../oneview_resource'
 require 'oneview-sdk'
 
-Puppet::Type::Oneview_volume.provide :c7000, parent: Puppet::OneviewResource do
+Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Storage Volumes using the C7000 variant of the OneView API'
 
   mk_resource_methods

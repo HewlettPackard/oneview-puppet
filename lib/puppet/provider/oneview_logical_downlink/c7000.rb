@@ -16,7 +16,7 @@
 
 require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_logical_downlink.provide :c7000, parent: Puppet::OneviewResource do
+Puppet::Type.type(:oneview_logical_downlink).provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Logical Downlinks using the C7000 variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'C7000'

@@ -21,3 +21,5 @@ docker/*.sh
 docker/tests/
 coverage/
 pkg/
+.yardoc/
+doc/
