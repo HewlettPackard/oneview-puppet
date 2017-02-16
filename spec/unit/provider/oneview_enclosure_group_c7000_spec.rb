@@ -15,11 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:oneview_enclosure_group)
-resourcetype = OneviewSDK::EnclosureGroup
+provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:c7000)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:EnclosureGroup, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -69,7 +68,8 @@ describe provider_class, unit: true do
                 'logicalInterconnectGroupUri' => nil
               }
             ]
-          }
+          },
+        provider: 'c7000'
       )
     end
 
