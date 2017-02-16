@@ -15,11 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
-resourcetype = OneviewSDK::Enclosure
+provider_class = Puppet::Type.type(:oneview_enclosure).provider(:synergy)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -41,7 +40,8 @@ describe provider_class, unit: true do
             {
               'view' => 'day'
             }
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -57,8 +57,8 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:c7000)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:synergy)
     end
 
     it 'should be able to run through self.instances' do
@@ -130,7 +130,8 @@ describe provider_class, unit: true do
                 'password' => 'dcs',
                 'enclosureGroupUri' => '/rest/',
                 'licensingIntent' => 'OneView'
-              }
+              },
+          provider: 'synergy'
         )
       end
 
@@ -150,7 +151,7 @@ describe provider_class, unit: true do
         resource['data']['op'] = 'fake_op'
         resource['data']['path'] = 'fake_path'
         resource['data']['value'] = 'fake_value'
-        patch_data = { op: 'fake_op', path: 'fake_path', value: 'fake_value' }
+        patch_data = { 'op' => 'fake_op', 'path' => 'fake_path', 'value' => 'fake_value' }
         test = resourcetype.new(@client, resource['data'])
         allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
         allow(resourcetype).to receive(:find_by).with(anything, unique_id).and_return([test])
