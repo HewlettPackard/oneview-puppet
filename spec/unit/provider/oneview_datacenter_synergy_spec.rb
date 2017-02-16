@@ -15,16 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_datacenter).provider(:c7000)
+provider_class = Puppet::Type.type(:oneview_datacenter).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   OneviewSDK::API200::Datacenter
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::Datacenter")
-                 end
+resourcetype = OneviewSDK.resource_named(:Datacenter, api_version, 'Synergy')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -39,7 +33,8 @@ describe provider_class, unit: true do
               'name' => 'Datacenter',
               'width' => '5000',
               'depth' => '5000'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
@@ -48,7 +43,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:c7000)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:synergy)
     end
 
     it 'should return that the resource does not exists' do
@@ -71,7 +66,8 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_datacenter).new(
         name: 'Datacenter',
-        ensure: 'found'
+        ensure: 'found',
+        provider: 'synergy'
       )
     end
 
@@ -94,7 +90,8 @@ describe provider_class, unit: true do
         data:
             {
               'name' => 'Datacenter'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
