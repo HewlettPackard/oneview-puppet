@@ -15,11 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
-resourcetype = OneviewSDK::EthernetNetwork
+provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:synergy)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'Synergy')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -37,7 +36,8 @@ describe provider_class, unit: true do
             'privateNetwork' => 'true',
             'connectionTemplateUri' => nil,
             'type' => 'ethernet-networkV3'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -46,8 +46,8 @@ describe provider_class, unit: true do
   let(:instance) { provider.class.instances.first }
 
   context 'given the create parameters' do
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:synergy)
     end
 
     it 'should be able to find the resource' do
