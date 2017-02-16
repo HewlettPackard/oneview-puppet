@@ -17,7 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
-resourcetype = OneviewSDK::FCNetwork
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:FCNetwork, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -33,7 +34,8 @@ describe provider_class, unit: true do
             'autoLoginRedistribution' => true,
             'fabricType'              => 'FabricAttach',
             'linkStabilityTime' => 30
-          }
+          },
+      provider: 'c7000'
     )
   end
 
