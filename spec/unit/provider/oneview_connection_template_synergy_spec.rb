@@ -15,16 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_connection_template).provider(:c7000)
+provider_class = Puppet::Type.type(:oneview_connection_template).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   OneviewSDK::API200::ConnectionTemplate
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::ConnectionTemplate")
-                 end
+resourcetype = OneviewSDK.resource_named(:ConnectionTemplate, api_version, 'Synergy')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -37,7 +31,8 @@ describe provider_class, unit: true do
         data:
             {
               'name' => 'CT'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
@@ -45,8 +40,8 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:c7000)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:synergy)
     end
 
     it 'should return that the resource exists' do
