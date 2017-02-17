@@ -15,13 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_power_device).provider(:c7000)
-resourcetype = OneviewSDK::PowerDevice
 
-describe provider_class, unit: true do
+api_version = login[:api_version] || 200
+resource_name = 'PowerDevice'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
+
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
   let(:resource) do
