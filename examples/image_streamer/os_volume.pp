@@ -14,20 +14,19 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../image_streamer_resource'
+# NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
 
-Puppet::Type::Image_streamer_plan_script.provide :image_streamer, parent: Puppet::ImageStreamerResource do
-  desc 'Provider for Image Streamer Plan Scripts using the Image Streamer API'
-
-  mk_resource_methods
-
-  def exists?
-    super([nil, :found, :retrieve_differences])
-  end
-
-  def retrieve_differences
-    plan_script = get_single_resource_instance
-    pretty plan_script.retrieve_differences
-    true
-  end
-end
+image_streamer_os_volume{'os_volume_1':
+    ensure => 'found',
+    data   => {
+      name        => 'OSVolume-6'
+    }
+}
+#
+image_streamer_os_volume{'os_volume_2':
+    ensure  => 'get_details_archive',
+    require => Image_streamer_os_volume['os_volume_1'],
+    data    => {
+      name     => 'OSVolume-6'
+    }
+}
