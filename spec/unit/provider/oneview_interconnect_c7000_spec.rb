@@ -15,13 +15,12 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_interconnect).provider(:c7000)
-resourcetype = OneviewSDK::Interconnect
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:Interconnect, api_version, 'C7000')
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
   let(:resource) do
