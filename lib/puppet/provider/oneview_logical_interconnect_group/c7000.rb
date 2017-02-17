@@ -80,10 +80,8 @@ Puppet::Type::Oneview_logical_interconnect_group.provide :c7000, parent: Puppet:
 
   # Method to allow for a compact syntax to be used for declaring interconnects inside the LIG
   def parse_interconnects
-    puts 'INSIDE INTERCONNECT'
     lig = OneviewSDK.resource_named(:LogicalInterconnectGroup, login[:api_version], login[:hardware_variant]).new(@client, {})
     @interconnects.each do |item|
-      puts "item bay and type: #{item['bay']} #{item['type']}"
       lig.add_interconnect(item['bay'].to_i, item['type'])
     end
     lig['interconnectMapTemplate']
