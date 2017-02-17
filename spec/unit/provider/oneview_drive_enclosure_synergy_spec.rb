@@ -15,16 +15,13 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_drive_enclosure).provider(:synergy)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:DriveEnclosure, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
-  api_version = login[:api_version] || 200
-  resource_name = 'DriveEnclosure'
-  resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}")
 
   let(:resource) do
     Puppet::Type.type(:oneview_drive_enclosure).new(
