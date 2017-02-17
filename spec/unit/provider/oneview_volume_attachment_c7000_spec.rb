@@ -15,14 +15,12 @@
 ################################################################################
 
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:c7000)
-api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   OneviewSDK::API200::VolumeAttachment
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::VolumeAttachment")
-                 end
 
-describe provider_class, unit: true do
+api_version = login[:api_version] || 200
+resource_name = 'VolumeAttachment'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
+
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -32,7 +30,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'Server Profile Attachment Demo, volume-attachment-demo'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -101,7 +100,8 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_volume_attachment).new(
         name: 'VA',
-        ensure: 'found'
+        ensure: 'found',
+        provider: 'c7000'
       )
     end
     it 'should able to find all VAs' do
@@ -120,7 +120,8 @@ describe provider_class, unit: true do
             {
               'name' => 'ONEVIEW_PUPPET_TEST VA1',
               'id'   => 'fake'
-            }
+            },
+        provider: 'c7000'
       )
     end
 
