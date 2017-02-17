@@ -16,8 +16,8 @@
 
 require_relative '../image_streamer_resource'
 
-Puppet::Type::Image_streamer_plan_script.provide :image_streamer, parent: Puppet::ImageStreamerResource do
-  desc 'Provider for Image Streamer Plan Scripts using the using Image Streamer API'
+Puppet::Type.type(:image_streamer_plan_script).provide :image_streamer, parent: Puppet::ImageStreamerResource do
+  desc 'Provider for Image Streamer Plan Scripts using the Image Streamer API'
 
   mk_resource_methods
 

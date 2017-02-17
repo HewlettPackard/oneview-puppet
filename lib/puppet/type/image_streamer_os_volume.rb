@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,28 +14,31 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../oneview_resource'
+Puppet::Type.newtype(:image_streamer_os_volume) do
+  desc "Image Streamer's OS Volume"
 
-Puppet::Type.type(:oneview_fabric).provide :c7000, parent: Puppet::OneviewResource do
-  desc 'Provider for OneView Fabrics using the C7000 variant of the OneView API'
+  # :nocov:
+  ensurable do
+    defaultvalues
 
-  confine true: login[:hardware_variant] == 'C7000'
+    newvalue(:found) do
+      provider.found
+    end
 
-  mk_resource_methods
+    newvalue(:get_details_archive) do
+      provider.get_details_archive
+    end
+  end
+  # :nocov:
 
-  def create
-    raise('This resource relies on others to be created.')
+  newparam(:name, namevar: true) do
+    desc 'OS Volume name'
   end
 
-  def destroy
-    raise('This resource relies on others to be destroyed.')
-  end
-
-  def get_reserved_vlan_range
-    raise('This method is unavailable for the C7000 API')
-  end
-
-  def set_reserved_vlan_range
-    raise('This method is unavailable for the C7000 API')
+  newparam(:data) do
+    desc 'OS Volume data hash containing all specifications for the system'
+    validate do |value|
+      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
+    end
   end
 end

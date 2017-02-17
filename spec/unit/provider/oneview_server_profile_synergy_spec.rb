@@ -33,6 +33,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       data:
           {
             'name' => 'Profile',
+            'description' => 'description',
             'serverHardwareUri' => '/rest/server-hardware/37333036-3831-584D-5131-303030323037'
           },
       provider: 'synergy'
@@ -64,6 +65,26 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       allow(resourcetype).to receive(:find_by).and_return([])
       allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
+      expect(provider.create).to be
+    end
+
+    it 'should create when resource does not exist' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      expect(provider.create).to be
+    end
+
+    it 'should not create when resource is compliant' do
+      expect(provider.exists?).to eq(true)
+      expect(resourcetype).not_to receive(:create)
+      expect(provider.create).to be
+    end
+
+    it 'should update when resource is not compliant' do
+      test['description'] = 'new description'
+      expect_any_instance_of(resourcetype).to receive(:update)
+      expect_any_instance_of(resourcetype).not_to receive(:create)
       expect(provider.create).to be
     end
 

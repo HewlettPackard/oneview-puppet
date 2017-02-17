@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,32 +14,36 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../oneview_resource'
+require_relative '../image_streamer_resource'
 
-Puppet::Type.type(:oneview_unmanaged_device).provide :c7000, parent: Puppet::OneviewResource do
-  desc 'Provider for OneView Unmanaged Devices using the C7000 variant of the OneView API'
-
-  confine true: login[:hardware_variant] == 'C7000'
+Puppet::Type.type(:image_streamer_os_volume).provide :image_streamer, parent: Puppet::ImageStreamerResource do
+  desc 'Provider for Image Streamer OS Volumes using the Image Streamer API'
 
   mk_resource_methods
 
   def exists?
-    super([:nil, :found, :absent])
+    super([nil, :found, :get_details_archive])
   end
 
   def create
-    super(:add)
+    raise 'This ensurable is not supported for this resource.'
   end
 
   def destroy
-    ud = @resourcetype.find_by(@client, @data)
-    raise('There were no matching Unmanaged Devices in the Appliance.') if ud.empty?
-    ud.map(&:remove)
+    raise 'This ensurable is not supported for this resource.'
   end
 
-  def get_environmental_configuration
-    Puppet.notice("\n\nUnmanaged Device Environmental Configuration\n")
-    pretty get_single_resource_instance.environmental_configuration
+  def get_details_archive
+    os_volume = get_single_resource_instance
+    pretty os_volume.get_details_archive
     true
+  end
+
+  def resource_name
+    'OSVolume'
+  end
+
+  def self.resource_name
+    'OSVolume'
   end
 end

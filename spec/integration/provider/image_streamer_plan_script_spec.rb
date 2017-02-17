@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:image_streamer_plan_script).provider(:synergy)
+provider_class = Puppet::Type.type(:image_streamer_plan_script).provider(:image_streamer)
 
 describe provider_class do
   let(:resource) do

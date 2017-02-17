@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,20 +14,19 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../oneview_resource'
+# NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
 
-Puppet::Type.type(:oneview_fc_network).provide :c7000, parent: Puppet::OneviewResource do
-  desc 'Provider for OneView Fiber Channel Networks using the C7000 variant of the OneView API'
-
-  confine true: login[:hardware_variant] == 'C7000'
-
-  mk_resource_methods
-
-  def resource_name
-    'FCNetwork'
-  end
-
-  def self.resource_name
-    'FCNetwork'
-  end
-end
+image_streamer_os_volume{'os_volume_1':
+    ensure => 'found',
+    data   => {
+      name        => 'OSVolume-6'
+    }
+}
+#
+image_streamer_os_volume{'os_volume_2':
+    ensure  => 'get_details_archive',
+    require => Image_streamer_os_volume['os_volume_1'],
+    data    => {
+      name     => 'OSVolume-6'
+    }
+}

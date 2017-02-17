@@ -16,7 +16,7 @@
 
 require_relative '../oneview_resource'
 
-Puppet::Type::Oneview_drive_enclosure.provide :synergy, parent: Puppet::OneviewResource do
+Puppet::Type.type(:oneview_drive_enclosure).provide :synergy, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Drive Enclosures using the Synergy variant of the OneView API'
 
   confine true: login[:hardware_variant] == 'Synergy'
