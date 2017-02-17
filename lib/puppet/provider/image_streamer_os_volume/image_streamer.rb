@@ -16,18 +16,34 @@
 
 require_relative '../image_streamer_resource'
 
-Puppet::Type::Image_streamer_plan_script.provide :image_streamer, parent: Puppet::ImageStreamerResource do
-  desc 'Provider for Image Streamer Plan Scripts using the Image Streamer API'
+Puppet::Type::Image_streamer_os_volume.provide :image_streamer, parent: Puppet::ImageStreamerResource do
+  desc 'Provider for Image Streamer OS Volumes using the Image Streamer API'
 
   mk_resource_methods
 
   def exists?
-    super([nil, :found, :retrieve_differences])
+    super([nil, :found, :get_details_archive])
   end
 
-  def retrieve_differences
-    plan_script = get_single_resource_instance
-    pretty plan_script.retrieve_differences
+  def create
+    raise 'This ensurable is not supported for this resource.'
+  end
+
+  def destroy
+    raise 'This ensurable is not supported for this resource.'
+  end
+
+  def get_details_archive
+    os_volume = get_single_resource_instance
+    pretty os_volume.get_details_archive
     true
+  end
+
+  def resource_name
+    'OSVolume'
+  end
+
+  def self.resource_name
+    'OSVolume'
   end
 end
