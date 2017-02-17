@@ -17,7 +17,7 @@
 require_relative '../oneview_resource'
 require 'oneview-sdk'
 
-Puppet::Type::Oneview_server_profile_template.provide :c7000, parent: Puppet::OneviewResource do
+Puppet::Type.type(:oneview_server_profile_template).provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Server Profile Templates using the C7000 variant of the OneView API'
   mk_resource_methods
 

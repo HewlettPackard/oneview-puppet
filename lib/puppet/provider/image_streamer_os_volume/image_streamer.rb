@@ -16,7 +16,7 @@
 
 require_relative '../image_streamer_resource'
 
-Puppet::Type::Image_streamer_os_volume.provide :image_streamer, parent: Puppet::ImageStreamerResource do
+Puppet::Type.type(:image_streamer_os_volume).provide :image_streamer, parent: Puppet::ImageStreamerResource do
   desc 'Provider for Image Streamer OS Volumes using the Image Streamer API'
 
   mk_resource_methods
