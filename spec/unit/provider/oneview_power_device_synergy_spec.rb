@@ -99,7 +99,8 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
                 'username'     => 'dcs',
                 'password'     => 'dcs'
               }
-            }
+            },
+        provider: 'synergy'
       )
     end
 
@@ -125,7 +126,8 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
               'name' => '172.18.8.11, PDU 1',
               'uidState' => 'On',
               'powerState' => 'On'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
