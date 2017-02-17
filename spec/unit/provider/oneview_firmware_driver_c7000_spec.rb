@@ -17,7 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
-resourcetype = OneviewSDK::FirmwareDriver
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:FirmwareDriver, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -29,7 +30,8 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'FirmwareDriver1_Example'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
@@ -58,7 +60,8 @@ describe provider_class, unit: true do
               'customBaselineName' => 'FirmwareDriver1_Example',
               'baselineUri'        => '/rest/fake',
               'hotfixUris'         => ['/rest/fake']
-            }
+            },
+        provider: 'c7000'
       )
     end
     before(:each) do
