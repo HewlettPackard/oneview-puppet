@@ -20,12 +20,9 @@ require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_name = 'LogicalInterconnectGroup'
-resourcetype ||= if api_version == 200
-                   Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-                 end
+resourcetype ||= OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, 'C7000')
+ethtype ||= OneviewSDK.resource_named(:EthernetNetwork, api_version, 'C7000')
+interconnect_type ||= OneviewSDK.resource_named(:Interconnect, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -35,11 +32,12 @@ describe provider_class, unit: true do
       name: 'LIG',
       ensure: 'present',
       data:
-          {
-            'name' => 'OneViewSDK Test Logical Switch Group',
-            'enclosureType' => 'C7000',
-            'type' => 'logical-interconnect-groupV3'
-          },
+      {
+        'name'          => 'PUPPET_TEST_LIG',
+        'type'          => 'logical-interconnect-groupV300',
+        'enclosureType' => 'C7000',
+        'state'         => 'Active'
+      },
       provider: 'c7000'
     )
   end
@@ -65,24 +63,9 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(false)
     end
 
-    it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow(OneviewSDK::UplinkSet).to receive(:find_by)
-        .and_return([OneviewSDK::UplinkSet.new(@client, name: 'testup', uri: '/rest/fakeup')])
-      allow(OneviewSDK::EthernetNetwork).to receive(:find_by)
-        .and_return([OneviewSDK::EthernetNetwork.new(@client, name: 'testnet', uri: '/rest/fakenet')])
-      allow_any_instance_of(resourcetype).to receive(:add_interconnect).with(1, 'HP VC FlexFabric 10Gb/24-Port Module').and_return('')
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
-      resource['data']['interconnects'] = [{ 'bay' => 1, 'type' => 'HP VC FlexFabric 10Gb/24-Port Module' }]
-      resource['data']['uplinkSets'] = ['test']
-      resource['data']['internalNetworkUris'] = [%w(testnet1 testnet2)]
-      provider.exists?
-      expect(provider.create).to be
-    end
-
     it 'should be able to get the default settings' do
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_default_settings).and_return('Test')
+      allow(resourcetype).to receive(:get_default_settings).and_return('Test')
       expect(provider.get_default_settings).to be
     end
 
@@ -98,6 +81,64 @@ describe provider_class, unit: true do
     it 'deletes the resource' do
       expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
       expect(provider.destroy).to be
+    end
+  end
+
+  context 'given the #uplink sets and interconnects parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_logical_interconnect_group).new(
+        name: 'LIG',
+        ensure: 'present',
+        data:
+        {
+          'name'          => 'PUPPET_TEST_LIG',
+          'type'          => 'logical-interconnect-groupV300',
+          'enclosureType' => 'C7000',
+          'state'         => 'Active',
+          'uplinkSets'    => [
+            {
+              'name'                => 'TUNNEL_ETH_UP_01',
+              'ethernetNetworkType' => 'Tunnel',
+              'networkType'         => 'Ethernet',
+              'lacpTimer'           => 'Short',
+              'mode'                => 'Auto',
+              'uplink_ports'        => [{ 'bay'  => 1,
+                                          'port' => 'X5' },
+                                        { 'bay'  => 1,
+                                          'port' => 'X6' },
+                                        { 'bay'  => 2,
+                                          'port' => 'X7' },
+                                        { 'bay'  => 2,
+                                          'port' => 'X8' }],
+              'networkUris'         => [
+                { name: 'test_network' }
+              ]
+            }
+          ],
+          'interconnects' => [
+            { 'bay'  => 1,
+              'type' => 'HP VC FlexFabric 10Gb/24-Port Module' },
+            { 'bay'  => 2,
+              'type' => 'HP VC FlexFabric 10Gb/24-Port Module' }
+          ],
+          'internalNetworkUris' => ['test']
+        },
+        provider: 'c7000'
+      )
+    end
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(ethtype).to receive(:find_by).and_return([ethtype.new(@client, name: 'fake_eth', uri: '/rest/fake_uri')])
+      allow(interconnect_type).to receive(:get_type).and_return('uri' => '/fake/interconnect_type_uri')
+      provider.exists?
+    end
+
+    it 'runs through the create method' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
     end
   end
 end
