@@ -15,11 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:oneview_fcoe_network)
-resourcetype = OneviewSDK::FCoENetwork
+provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:synergy)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:FCoENetwork, api_version, 'Synergy')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -35,7 +34,8 @@ describe provider_class, unit: true do
               'vlanId' => 100,
               'connectionTemplateUri' => nil,
               'type' => 'fcoe-network'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
@@ -44,7 +44,7 @@ describe provider_class, unit: true do
     let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:c7000)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:synergy)
     end
 
     it 'should be able to find the resource' do
