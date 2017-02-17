@@ -1,18 +1,14 @@
 require 'spec_helper'
 
-type_class = Puppet::Type.type(:image_streamer_plan_script)
+type_class = Puppet::Type.type(:image_streamer_os_volume)
 
-def plan_script_config
+def os_volume_config
   {
-    name: 'plan-script-1',
-    ensure: 'present',
+    name: 'os-volume-1',
+    ensure: 'found',
     data:
         {
-          'name'        => 'Plan Script Puppet',
-          'description' => 'Description of this plan script',
-          'hpProvided'  => false,
-          'planType'    => 'deploy',
-          'content'     => 'echo "test script"'
+          'name' => 'volume-6'
         }
   }
 end
@@ -29,7 +25,7 @@ describe type_class do
   let :special_ensurables do
     [
       :found,
-      :retrieve_differences
+      :get_details_archive
     ]
   end
 
@@ -54,7 +50,7 @@ describe type_class do
   end
 
   it 'should require a data hash' do
-    modified_config = plan_script_config
+    modified_config = os_volume_config
     modified_config[:data] = 5
     expect { type_class.new(modified_config) }.to raise_error(/Inserted value for data is not valid/)
   end
