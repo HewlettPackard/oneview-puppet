@@ -15,11 +15,12 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:synergy)
-resourcetype = OneviewSDK::SANManager
+
+api_version = login[:api_version] || 200
+resource_name = 'SANManager'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true do
   include_context 'shared context'

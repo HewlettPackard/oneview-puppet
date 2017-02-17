@@ -15,16 +15,12 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:c7000)
+
 api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   OneviewSDK::API200::SANManager
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::SANManager")
-                 end
+resource_name = 'SANManager'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -37,7 +33,8 @@ describe provider_class, unit: true do
         data:
             {
               'providerDisplayName' => 'Brocade Network Advisor'
-            }
+            },
+        provider: 'c7000'
       )
     end
 
@@ -85,7 +82,8 @@ describe provider_class, unit: true do
                     'value' => true
                   }
                 ]
-              }
+              },
+          provider: 'c7000'
         )
       end
 
