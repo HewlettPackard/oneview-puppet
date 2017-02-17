@@ -14,20 +14,31 @@
 # limitations under the License.
 ################################################################################
 
-require_relative '../image_streamer_resource'
+Puppet::Type.newtype(:image_streamer_os_volume) do
+  desc "Image Streamer's OS Volume"
 
-Puppet::Type.type(:image_streamer_plan_script).provide :image_streamer, parent: Puppet::ImageStreamerResource do
-  desc 'Provider for Image Streamer Plan Scripts using the Image Streamer API'
+  # :nocov:
+  ensurable do
+    defaultvalues
 
-  mk_resource_methods
+    newvalue(:found) do
+      provider.found
+    end
 
-  def exists?
-    super([nil, :found, :retrieve_differences])
+    newvalue(:get_details_archive) do
+      provider.get_details_archive
+    end
+  end
+  # :nocov:
+
+  newparam(:name, namevar: true) do
+    desc 'OS Volume name'
   end
 
-  def retrieve_differences
-    plan_script = get_single_resource_instance
-    pretty plan_script.retrieve_differences
-    true
+  newparam(:data) do
+    desc 'OS Volume data hash containing all specifications for the system'
+    validate do |value|
+      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
+    end
   end
 end

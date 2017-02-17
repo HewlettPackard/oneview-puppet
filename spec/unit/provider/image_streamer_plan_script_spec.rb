@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:image_streamer_plan_script).provider(:synergy)
+provider_class = Puppet::Type.type(:image_streamer_plan_script).provider(:image_streamer)
 api_version = login_image_streamer[:api_version] || 300
 resource_name = 'PlanScript'
 resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
