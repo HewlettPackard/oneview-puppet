@@ -43,22 +43,27 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
+    let(:test) { resourcetype.new(@client, resource['data']) }
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+    end
+
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:c7000)
     end
 
-    it 'should be able to find the resource' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect(provider.found).to be
-    end
-
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
+    end
+
+    it 'should be able to run through self.instances' do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(instance).to be
     end
 
     it 'deletes the resource' do
