@@ -1,9 +1,9 @@
 ################################################################################
 # (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
+# You may obtain a copy of the License at
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -18,10 +18,11 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:FirmwareDriver, api_version, 'Synergy')
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:FirmwareDriver, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_firmware_driver).new(
@@ -38,6 +39,8 @@ describe provider_class, unit: true do
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_firmware_driver' do
@@ -64,8 +67,8 @@ describe provider_class, unit: true do
         provider: 'synergy'
       )
     end
+
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
         .and_return([test])
       allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
@@ -81,7 +84,7 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end

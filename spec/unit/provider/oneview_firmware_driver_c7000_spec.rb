@@ -39,6 +39,8 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_firmware_driver' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
@@ -64,8 +66,8 @@ describe provider_class, unit: true do
         provider: 'c7000'
       )
     end
+
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
         .and_return([test])
       allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
@@ -81,7 +83,7 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
