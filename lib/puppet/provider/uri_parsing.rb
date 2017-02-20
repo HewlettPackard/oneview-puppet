@@ -102,8 +102,7 @@ def uri_recursive_array(data)
 end
 
 def get_class(key)
-  is_image_streamer = OneviewSDK::ImageStreamer::Client == @client.class
+  sub_module = OneviewSDK::ImageStreamer::Client == @client.class ? 'ImageStreamer::' : ''
   resource_name = "#{key.to_s[0].upcase}#{key[1..key.size - 4]}"
-  return Object.const_get("OneviewSDK::API#{@client.api_version}::#{resource_name}") unless is_image_streamer
-  Object.const_get("OneviewSDK::ImageStreamer::API#{@client.api_version}::#{resource_name}")
+  Object.const_get("OneviewSDK::#{sub_module}API#{@client.api_version}::#{resource_name}")
 end

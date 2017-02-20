@@ -34,7 +34,7 @@ describe 'uri_parsing', unit: true do
     include_context 'shared context'
 
     it 'should get the classname to find a resource' do
-      expect(get_class('enclosureUri')).to eq OneviewSDK::Enclosure
+      expect(get_class('enclosureUri')).to eq OneviewSDK::API300::Enclosure
     end
 
     it 'should raise error when class is not found' do
