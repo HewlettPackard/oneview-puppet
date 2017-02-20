@@ -74,8 +74,6 @@ describe provider_class, unit: true do
       )
     end
 
-    let(:test) { resourcetype.new(@client, resource['data']) }
-
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
