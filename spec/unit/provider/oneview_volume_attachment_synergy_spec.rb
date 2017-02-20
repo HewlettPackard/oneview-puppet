@@ -39,11 +39,10 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:instance) { provider.class.instances.first }
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
@@ -104,6 +103,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
         provider: 'synergy'
       )
     end
+
     it 'should able to find all VAs' do
       test = resourcetype.new(@client, {})
       allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
@@ -136,7 +136,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to get a path by id if id is provided' do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(['fake_path_found']))
       provider.exists?
