@@ -104,13 +104,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       )
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     it 'should refresh the power device' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_refresh_state).to be
     end
@@ -130,10 +124,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
         provider: 'synergy'
       )
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should delete the resource' do
       provider.exists?
