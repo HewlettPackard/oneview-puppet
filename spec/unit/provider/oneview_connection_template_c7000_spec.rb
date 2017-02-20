@@ -40,25 +40,18 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
+    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+    end
+
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:c7000)
     end
 
-    it 'should return that the resource exists' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-    end
-
     it 'should be able to find the connection template' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      expect(provider.found).to be
-    end
-
-    it 'should be able to find the connection template' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
       test['uri'] = '/rest/'
       allow(resourcetype).to receive(:find_by).and_return([])
       provider.exists?
