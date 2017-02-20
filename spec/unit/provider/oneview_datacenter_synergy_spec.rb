@@ -18,10 +18,16 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_datacenter).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:Datacenter, api_version, 'Synergy')
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+  resourcetype = OneviewSDK.resource_named(:Datacenter, api_version, 'Synergy')
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the create parameters' do
     let(:resource) do
@@ -38,10 +44,6 @@ describe provider_class, unit: true do
       )
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:synergy)
     end
@@ -52,7 +54,6 @@ describe provider_class, unit: true do
     end
 
     it 'should create/add the datacenter' do
-      test = resourcetype.new(@client, resource['data'])
       expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name'])
         .and_return([])
@@ -70,10 +71,6 @@ describe provider_class, unit: true do
         provider: 'synergy'
       )
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should not return any datacenters' do
       allow(resourcetype).to receive(:find_by).and_return([])
@@ -95,18 +92,9 @@ describe provider_class, unit: true do
       )
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-    end
-
-    it 'should return that the resource exists' do
-      expect(provider.exists?).to eq(true)
     end
 
     it 'should be able to get the visual content' do
