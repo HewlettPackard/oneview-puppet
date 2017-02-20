@@ -18,10 +18,11 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fc_network).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:FCNetwork, api_version, 'Synergy')
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:FCNetwork, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_fc_network).new(
@@ -55,19 +56,9 @@ describe provider_class, unit: true do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:synergy)
     end
 
-    it 'if nothing is found should return false' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
-    end
-
-    it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to eq(true)
-    end
-
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
