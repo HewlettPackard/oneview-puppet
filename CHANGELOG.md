@@ -8,6 +8,9 @@
 - Image_streamer_os_volume
 - Image_streamer_plan_script
 
+#### Bug fixes & Enhancements:
+- [#105](https://github.com/HewlettPackard/oneview-puppet/issues/105) Create or update uplink sets through logical interconnect groups
+
 # 2.1.0 (2017-02-03)
 ### Version highlights:
 1. Added full support to OneView Rest API version 300 for the hardware variants C7000 and Synergy to the already existing features.
