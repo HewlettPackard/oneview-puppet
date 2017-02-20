@@ -43,6 +43,8 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
     let(:instance) { provider.class.instances.first }
 
+    let(:test) { resourcetype.new(@client, resource['data']) }
+
     it 'should be an instance of the provider Synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:synergy)
     end
@@ -89,7 +91,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'should create/add the san manager' do
-        test = resourcetype.new(@client, resource['data'])
         expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
           .and_return([])
@@ -99,7 +100,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'should update the san manager' do
-        test = resourcetype.new(@client, resource['data'])
         expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
           .and_return([test])
@@ -108,7 +108,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'should parse provider uri the san manager' do
-        test = resourcetype.new(@client, resource['data'])
         expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
           .and_return([test])
