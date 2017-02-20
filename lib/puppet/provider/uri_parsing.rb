@@ -103,6 +103,7 @@ end
 
 def get_class(key)
   sub_module = OneviewSDK::ImageStreamer::Client == @client.class ? 'ImageStreamer::' : ''
+  variant = OneviewSDK::Client == @client.class && @client.api_version > 200 ? "#{resource_variant}::" : ''
   resource_name = "#{key.to_s[0].upcase}#{key[1..key.size - 4]}"
-  Object.const_get("OneviewSDK::#{sub_module}API#{@client.api_version}::#{resource_name}")
+  Object.const_get("OneviewSDK::#{sub_module}API#{@client.api_version}::#{variant}#{resource_name}")
 end

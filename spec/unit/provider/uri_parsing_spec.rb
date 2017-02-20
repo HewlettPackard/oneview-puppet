@@ -21,6 +21,8 @@ describe 'uri_parsing', unit: true do
   describe 'given Image Streamer resources' do
     include_context 'shared context Image Streamer'
 
+    let(:resource_variant) { 'does not apply' }
+
     it 'should get the classname to find a resource' do
       expect(get_class('goldenImageUri')).to eq OneviewSDK::ImageStreamer::API300::GoldenImage
     end
@@ -30,11 +32,27 @@ describe 'uri_parsing', unit: true do
     end
   end
 
-  describe 'given OneView resources' do
+  describe 'given OneView resources and API Version 300' do
     include_context 'shared context'
 
+    let(:resource_variant) { 'C7000' }
+
     it 'should get the classname to find a resource' do
-      expect(get_class('enclosureUri')).to eq OneviewSDK::API300::Enclosure
+      expect(get_class('enclosureUri')).to eq OneviewSDK::API300::C7000::Enclosure
+    end
+
+    it 'should raise error when class is not found' do
+      expect { get_class('invalidUri') }.to raise_error(NameError)
+    end
+  end
+
+  describe 'given OneView resources and API Version 200' do
+    include_context 'shared context OneView API 200'
+
+    let(:resource_variant) { 'C7000' }
+
+    it 'should get the classname to find a resource' do
+      expect(get_class('enclosureUri')).to eq OneviewSDK::API200::Enclosure
     end
 
     it 'should raise error when class is not found' do
