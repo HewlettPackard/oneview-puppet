@@ -18,10 +18,17 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_enclosure).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   let(:resource) do
     Puppet::Type.type(:oneview_enclosure).new(
@@ -45,12 +52,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     )
   end
 
-  let(:provider) { resource.provider }
-
-  let(:instance) { provider.class.instances.first }
-
-  let(:test) { resourcetype.new(@client, resource['data']) }
-
   context 'given the min parameters' do
     before(:each) do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
@@ -59,15 +60,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
     it 'should be an instance of the provider synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:synergy)
-    end
-
-    it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(instance).to be
-    end
-
-    it 'should be able to find the resource' do
-      expect(provider.found).to be
     end
 
     it 'should be able to get the environmental configuration' do
@@ -136,7 +128,6 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'creates the resource' do
-        test = resourcetype.new(@client, resource['data'])
         allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
