@@ -59,7 +59,7 @@ describe provider_class do
       expect(provider.create).to be
     end
   end
-  #
+
   context 'given the golden image exists' do
     let(:resource) do
       Puppet::Type.type(:image_streamer_golden_image).new(

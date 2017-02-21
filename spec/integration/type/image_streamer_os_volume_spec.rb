@@ -31,11 +31,7 @@ describe type_class do
 
   it 'should accept special ensurables' do
     special_ensurables.each do |value|
-      expect do
-        described_class.new(name: 'Test',
-                            ensure: value,
-                            data: {})
-      end.to_not raise_error
+      expect { described_class.new(name: 'Test', ensure: value, data: {}) }.to_not raise_error
     end
   end
 
@@ -52,6 +48,6 @@ describe type_class do
   it 'should require a data hash' do
     modified_config = os_volume_config
     modified_config[:data] = 5
-    expect { type_class.new(modified_config) }.to raise_error(/Inserted value for data is not valid/)
+    expect { type_class.new(modified_config) }.to raise_error(Puppet::Error, /Inserted value for data is not valid/)
   end
 end
