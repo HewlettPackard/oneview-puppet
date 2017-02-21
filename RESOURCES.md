@@ -567,3 +567,43 @@ This resource provides the following ensurable methods for managing storage volu
 * `get_connectable_volume_templates` - Gets the storage volume templates that are available on the specified networks based on the storage system port's expected network connectivity. If no storage volume templates exist that meet the specified connectivity criteria, an empty collection will be returned.
 
 Example file: [volume_template.pp](examples/volume_template.pp)
+
+# Resources for the Puppet Module for HPE Image Streamer
+
+1. [Image_streamer_golden_image](#image_streamer_golden_image)
+2. [image_streamer_os_volume](#image_streamer_os_volume)
+3. [image_streamer_plan_script](#image_streamer_plan_script)
+
+#### image_streamer_golden_image
+
+This resource provides the following ensurable methods for managing Golden Images on the Image Streamer appliance:
+
+* `present` - Adds or updates a golden resource based upon the attributes specified within `data`.
+* `found` - Searches for `image_streamer_golden_image` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `download` - Downloads the content of a golden image.
+* `download_details_archive` - Downloads the details of the golden image capture logs which has been archived.
+* `absent` - Deletes a Golden Image.
+
+Example file: [golden_image.pp](examples/image_streamer/golden_image.pp)
+
+#### image_streamer_os_volume
+
+This resource provides the following ensurable methods for managing OS Volumes on the Image Streamer appliance:
+
+* `found` - Searches for `image_streamer_os_volume` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `get_details_archive` - Gets the details of the archived OS volume.
+
+:exclamation: **NOTE:**  This resource does NOT accept a `present`/`absent` state as it is created/removed through other HPE OneView resources.
+
+Example file: [os_volume.pp](examples/image_streamer/os_volume.pp)
+
+#### image_streamer_plan_script
+
+This resource provides the following ensurable methods for managing Plan Scripts on the Image Streamer appliance:
+
+* `present` - Adds or updates a plan script resource based upon the attributes specified within `data`.
+* `found` - Searches for `image_streamer_plan_script` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `retrieve_differences` - Retrieves the modified contents of the Plan Script.
+* `absent` - Deletes a Plan Script.
+
+Example file: [plan_script.pp](examples/image_streamer/plan_script.pp)
