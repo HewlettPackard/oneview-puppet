@@ -568,7 +568,7 @@ This resource provides the following ensurable methods for managing storage volu
 
 Example file: [volume_template.pp](examples/volume_template.pp)
 
-# Resources for the Puppet Module for HPE Image Streamer
+# HPE Image Streamer resources
 
 1. [Image_streamer_golden_image](#image_streamer_golden_image)
 2. [image_streamer_os_volume](#image_streamer_os_volume)
