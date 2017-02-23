@@ -22,8 +22,8 @@ image_streamer_golden_image{'golden_image_1':
     name         => 'Golden_Image_1',
     description  => 'Golden Image created from the deployed OS Volume',
     imageCapture => true,
-    osVolumeURI  => 'OSVolume-7',
-    buildPlanUri => 'Build Plan Name'
+    osVolumeURI  => 'OSVolume-1',
+    buildPlanUri => 'Build Plan MK'
   }
 }
 
@@ -32,7 +32,7 @@ image_streamer_golden_image{'golden_image_2':
   data   => {
     name              => 'Golden_Image_2',
     description       => 'Golden image added from the file that is uploaded from a local drive',
-    golden_image_path => 'golden_image.zip'
+    golden_image_path => 'golden_image.zip'  # can be either an absolute or relative path
   }
 }
 
@@ -57,7 +57,7 @@ image_streamer_golden_image{'golden_image_5':
   require => Image_streamer_golden_image['golden_image_4'],
   data    => {
     name                 => 'Golden_Image_2',
-    details_archive_path => 'log_archive.zip'
+    details_archive_path => 'log_archive.zip'  # can be either an absolute or relative path
   }
 }
 
@@ -66,7 +66,7 @@ image_streamer_golden_image{'golden_image_6':
   require => Image_streamer_golden_image['golden_image_5'],
   data    => {
     name                       => 'Golden_Image_2',
-    golden_image_download_path => 'golden_image.zip',
+    golden_image_download_path => 'golden_image.zip',  # can be either an absolute or relative path
   }
 }
 
@@ -75,5 +75,13 @@ image_streamer_golden_image{'golden_image_7':
   require => Image_streamer_golden_image['golden_image_6'],
   data    => {
     name => 'Golden_Image_2'
+  }
+}
+
+image_streamer_golden_image{'golden_image_8':
+  ensure  => 'absent',
+  require => Image_streamer_golden_image['golden_image_1'],
+  data    => {
+    name => 'Golden_Image_1'
   }
 }
