@@ -23,7 +23,7 @@ image_streamer_golden_image{'golden_image_1':
     description  => 'Golden Image created from the deployed OS Volume',
     imageCapture => true,
     osVolumeURI  => 'OSVolume-1',
-    buildPlanUri => 'Build Plan MK'
+    buildPlanUri => 'Build Plan Name'
   }
 }
 
