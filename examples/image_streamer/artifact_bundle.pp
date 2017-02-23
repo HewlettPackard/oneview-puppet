@@ -46,9 +46,25 @@ image_streamer_artifact_bundle{'artifact_bundle_3':
 }
 
 image_streamer_artifact_bundle{'artifact_bundle_4':
+  ensure => 'present',
+  data   => {
+    name                 => 'Artifact_Bundle_2_Puppet',
+    artifact_bundle_path => 'examples/image_streamer/artifact_bundle.zip'  # can be either an absolute or relative path
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_5':
   ensure  => 'absent',
   require => Image_streamer_artifact_bundle['artifact_bundle_3'],
   data    => {
     name     => 'Artifact_Bundle_Puppet_Renamed'
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_6':
+  ensure  => 'absent',
+  require => Image_streamer_artifact_bundle['artifact_bundle_4'],
+  data    => {
+    name     => 'Artifact_Bundle_2_Puppet'
   }
 }

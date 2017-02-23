@@ -32,7 +32,9 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
   def create
     current_resource = @resourcetype.find_by(@client, unique_id).first
     if current_resource
-      current_resource.update_name(@data['new_name'])
+      current_resource.update_name(@data['new_name']) if @data['new_name']
+    elsif @data['artifact_bundle_path']
+      @resourcetype.create_from_file(@client, @data['artifact_bundle_path'], @data['name'])
     else
       @resourcetype.new(@client, @data).create
     end

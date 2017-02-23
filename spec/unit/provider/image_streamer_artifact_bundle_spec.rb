@@ -24,53 +24,53 @@ resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context Image Streamer'
 
-  let(:resource) do
-    Puppet::Type.type(:image_streamer_artifact_bundle).new(
-      name: 'artifact-bundle-1',
-      ensure: 'present',
-      data:
-          {
-            'name'        => 'Artifact_Bundle_Puppet',
-            'description' => 'Artifact Bundle with a Plan Script Artifact',
-            'buildPlans' => [{
-              'resourceUri' => 'BuildPlanName',
-              'readOnly'    => false
-            }, {
-              'resourceUri' => '/rest/build-plans/id',
-              'readOnly'    => false
-            }],
-            'deploymentPlans' => [{
-              'resourceUri' => 'DeploymentPlanName',
-              'readOnly'    => false
-            }, {
-              'resourceUri' => '/rest/deployment-plans/id',
-              'readOnly'    => false
-            }],
-            'goldenImages' => [{
-              'resourceUri' => 'GoldenImageName',
-              'readOnly'    => false
-            }, {
-              'resourceUri' => '/rest/golden-images/id',
-              'readOnly'    => false
-            }],
-            'planScripts' => [{
-              'resourceUri' => 'PlanScriptName',
-              'readOnly'    => false
-            }, {
-              'resourceUri' => '/rest/plan-scripts/id',
-              'readOnly'    => false
-            }]
-          }
-    )
-  end
-
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   let(:test) { resourcetype.new(@client, resource['data']) }
 
-  context 'given the Creation parameters' do
+  context 'given the Creation parameters with artifacts' do
+    let(:resource) do
+      Puppet::Type.type(:image_streamer_artifact_bundle).new(
+        name: 'artifact-bundle-1',
+        ensure: 'present',
+        data:
+            {
+              'name'        => 'Artifact_Bundle_Puppet',
+              'description' => 'Artifact Bundle with a Plan Script Artifact',
+              'buildPlans' => [{
+                'resourceUri' => 'BuildPlanName',
+                'readOnly'    => false
+              }, {
+                'resourceUri' => '/rest/build-plans/id',
+                'readOnly'    => false
+              }],
+              'deploymentPlans' => [{
+                'resourceUri' => 'DeploymentPlanName',
+                'readOnly'    => false
+              }, {
+                'resourceUri' => '/rest/deployment-plans/id',
+                'readOnly'    => false
+              }],
+              'goldenImages' => [{
+                'resourceUri' => 'GoldenImageName',
+                'readOnly'    => false
+              }, {
+                'resourceUri' => '/rest/golden-images/id',
+                'readOnly'    => false
+              }],
+              'planScripts' => [{
+                'resourceUri' => 'PlanScriptName',
+                'readOnly'    => false
+              }, {
+                'resourceUri' => '/rest/plan-scripts/id',
+                'readOnly'    => false
+              }]
+            }
+      )
+    end
+
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])
 
@@ -108,6 +108,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.create).to be
     end
 
+    it 'should do nothing when no new_name' do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+      expect_any_instance_of(resourcetype).not_to receive(:update_name)
+      expect(provider.create).to be
+    end
+
     it 'should delete the resource' do
       allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
       expect(provider.destroy).to be
@@ -119,6 +126,32 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'should be able to find the resource' do
       expect(provider.found).to be
+    end
+  end
+
+  context 'given the Creation parameters with a path' do
+    let(:resource) do
+      Puppet::Type.type(:image_streamer_artifact_bundle).new(
+        name: 'artifact-bundle-1',
+        ensure: 'present',
+        data:
+            {
+              'name'                 => 'Artifact_Bundle_Puppet',
+              'artifact_bundle_path' => 'artifact_bundle.zip'
+            }
+      )
+    end
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
+    end
+
+    it 'should create artifact bundle from file when not exists' do
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(resourcetype).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Artifact_Bundle_Puppet').and_return(test)
+      provider.exists?
+      expect(provider.create).to be
     end
   end
 end
