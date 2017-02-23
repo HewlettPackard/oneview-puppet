@@ -10,7 +10,7 @@
 
 #### Bug fixes & Enhancements:
 - [#105](https://github.com/HewlettPackard/oneview-puppet/issues/105) Create or update uplink sets through logical interconnect groups
-- [#119](https://github.com/HewlettPackard/oneview-puppet/issues/119) Build is failing due to a recent change on the method remove_extra_unmanaged_volume
+- [#119](https://github.com/HewlettPackard/oneview-puppet/issues/119) Update unit tests to match updated remove_extra_unmanaged_volume from oneview-ruby-sdk
 
 # 2.1.0 (2017-02-03)
 ### Version highlights:
