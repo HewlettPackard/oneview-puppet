@@ -17,13 +17,13 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:c7000)
-
 api_version = login[:api_version] || 200
-resource_name = 'VolumeAttachment'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
+
+  resource_name = 'VolumeAttachment'
+  resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
   let(:resource) do
     Puppet::Type.type(:oneview_volume_attachment).new(
