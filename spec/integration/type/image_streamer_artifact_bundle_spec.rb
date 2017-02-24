@@ -26,7 +26,9 @@ describe type_class do
     [
       :found,
       :extract,
-      :download
+      :download,
+      :get_backups,
+      :create_backup
     ]
   end
 
@@ -43,7 +45,7 @@ describe type_class do
   end
 
   it 'should require a name' do
-    expect { type_class.new({}) }.to raise_error(Puppet::Error, 'Title or name must be provided')
+    expect { type_class.new({}) }.to raise_error(Puppet::Error, /Title or name must be provided/)
   end
 
   it 'should require a data hash' do

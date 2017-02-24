@@ -65,8 +65,8 @@ describe provider_class do
       expect(provider.create).to be
     end
   end
-  #
-  context 'given the minimum parameters' do
+
+  context 'given the resource was created' do
     let(:resource) do
       Puppet::Type.type(:image_streamer_artifact_bundle).new(
         name: 'artifact-bundle-2',
@@ -81,7 +81,7 @@ describe provider_class do
       provider.exists?
     end
 
-    it 'exists? should find an artifact bundle' do
+    it 'exists? should find the artifact bundle' do
       expect(provider.exists?).to be
     end
 

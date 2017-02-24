@@ -32,6 +32,22 @@ Puppet::Type.newtype(:image_streamer_artifact_bundle) do
     newvalue(:download) do
       provider.download
     end
+
+    newvalue(:get_backups) do
+      provider.get_backups
+    end
+
+    newvalue(:create_backup) do
+      provider.create_backup
+    end
+
+    newvalue(:create_backup_from_file) do
+      provider.create_backup_from_file
+    end
+
+    newvalue(:download_backup) do
+      provider.download_backup
+    end
   end
   # :nocov:
 

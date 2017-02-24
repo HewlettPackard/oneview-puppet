@@ -26,6 +26,7 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
     artifacts_uri_parse('deploymentPlans')
     artifacts_uri_parse('goldenImages')
     artifacts_uri_parse('planScripts')
+    @deployment_group_class = OneviewSDK::ImageStreamer.resource_named('DeploymentGroup', @client.api_version)
     super([nil, :found, :extract, :download])
   end
 
@@ -52,6 +53,43 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
     artifact_bundle = get_single_resource_instance
     artifact_bundle.download(path)
     true
+  end
+
+  def get_backups
+    backups = @resourcetype.get_backups(@client)
+    backups.each { |item| pretty item.data }
+    true
+  end
+
+  def extract_backup
+    @resourcetype.extract_backup(@client, get_deployment_group, 'uri' => '/archive')
+    true
+  end
+
+  def create_backup
+    @resourcetype.create_backup(@client, get_deployment_group)
+    true
+  end
+
+  def create_backup_from_file
+    path = @data.delete('backup_upload_path')
+    @resourcetype.create_backup_from_file!(@client, get_deployment_group, path, File.basename(path), 21_600)
+    true
+  end
+
+  def download_backup
+    path = @data.delete('backup_download_path')
+    backup = @resourcetype.get_backups(@client)
+    @resourcetype.download_backup(@client, path, backup.first)
+    true
+  end
+
+  def get_deployment_group
+    deployment_group_uri = @data.delete('deploymentGroupUri')
+    raise 'The \'deploymentGroupUri\' field is required in data hash to run this action.' unless deployment_group_uri
+    deployment_groups = @deployment_group_class.find_by(@client, 'uri' => deployment_group_uri)
+    raise 'Deployment Group has not been found in the Appliance.' if deployment_groups.empty?
+    deployment_groups.first
   end
 
   def artifacts_uri_parse(artifacts_key)

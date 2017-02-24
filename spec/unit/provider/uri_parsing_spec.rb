@@ -53,7 +53,7 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq expected_result
     end
 
-    it 'should replace resource name by uri when key is named resourceUri' do
+    it 'should replace resource name by uri when key is resourceUri' do
       data = { 'resourceUri' => "#{golden_image_name},GoldenImage" }
 
       expected_result = { 'resourceUri' => golden_image_uri }
@@ -103,7 +103,7 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq expected_result
     end
 
-    it 'should replace resource name by uri when key is named resourceUri' do
+    it 'should replace resource name by uri when key is resourceUri' do
       data = { 'resourceUri' => "#{enclosure_name},Enclosure" }
       expect(uri_validation(data)).to eq 'resourceUri' => enclosure_uri
     end
@@ -151,7 +151,7 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq expected_result
     end
 
-    it 'should replace resource name by uri when key is named resourceUri' do
+    it 'should replace resource name by uri when key is resourceUri' do
       data = { 'resourceUri' => "#{enclosure_name},Enclosure" }
       expect(uri_validation(data)).to eq 'resourceUri' => enclosure_uri
     end

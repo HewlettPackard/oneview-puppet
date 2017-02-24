@@ -71,6 +71,48 @@ image_streamer_artifact_bundle{'artifact_bundle_6':
 }
 
 image_streamer_artifact_bundle{'artifact_bundle_7':
+  ensure  => 'get_backups',
+  require => Image_streamer_artifact_bundle['artifact_bundle_6'],
+  data    => {
+    name => 'Artifact_Bundle_2_Puppet'
+  }
+}
+
+# WARN: If there are any artifacts existing, they will be removed before the extract operation
+# image_streamer_artifact_bundle{'artifact_bundle_8':
+#   ensure => 'extract_backup',
+#   require => Image_streamer_artifact_bundle['artifact_bundle_6'],
+#   data   => {
+#     deploymentGroupUri => 'OSDS'
+#   }
+# }
+
+image_streamer_artifact_bundle{'artifact_bundle_9':
+  ensure  => 'create_backup',
+  require => Image_streamer_artifact_bundle['artifact_bundle_7'],
+  data    => {
+    deploymentGroupUri => 'OSDS'
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_10':
+  ensure  => 'download_backup',
+  require => Image_streamer_artifact_bundle['artifact_bundle_9'],
+  data    => {
+    backup_download_path => 'examples/image_streamer/backup_bundle.zip'  # can be either an absolute or relative path
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_11':
+  ensure  => 'create_backup_from_file',
+  require => Image_streamer_artifact_bundle['artifact_bundle_10'],
+  data    => {
+    deploymentGroupUri => 'OSDS',
+    backup_upload_path => 'examples/image_streamer/ci-backup2017-03-01T17_40_31.628Z.zip' # can be either an absolute or relative path
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_12':
   ensure  => 'absent',
   require => Image_streamer_artifact_bundle['artifact_bundle_3'],
   data    => {
@@ -78,9 +120,9 @@ image_streamer_artifact_bundle{'artifact_bundle_7':
   }
 }
 
-image_streamer_artifact_bundle{'artifact_bundle_8':
+image_streamer_artifact_bundle{'artifact_bundle_13':
   ensure  => 'absent',
-  require => Image_streamer_artifact_bundle['artifact_bundle_6'],
+  require => Image_streamer_artifact_bundle['artifact_bundle_11'],
   data    => {
     name     => 'Artifact_Bundle_2_Puppet'
   }
