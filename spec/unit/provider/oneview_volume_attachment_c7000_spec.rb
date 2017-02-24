@@ -14,14 +14,16 @@
 # limitations under the License.
 ################################################################################
 
+require 'spec_helper'
+
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:c7000)
-
 api_version = login[:api_version] || 200
-resource_name = 'VolumeAttachment'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
+
+  resource_name = 'VolumeAttachment'
+  resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
   let(:resource) do
     Puppet::Type.type(:oneview_volume_attachment).new(
@@ -77,20 +79,13 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to get a list of extra unmanaged volumes' do
-      resource['ensure'] = 'get_extra_unmanaged_volumes'
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('members' => %w(first second)))
+      expect(resourcetype).to receive(:get_extra_unmanaged_volumes).and_return('members' => ['uri' => '/rest/fake'])
       expect(provider.get_extra_unmanaged_volumes).to be
     end
 
     it 'should be able to remove the extra unmanaged volumes' do
-      resource['ensure'] = 'remove_extra_unmanaged_volume'
-      test = resourcetype.new(@client, resource['data'])
-      body = { type: 'ExtraUnmanagedStorageVolumes', resourceUri: resource['data']['uri'] }
       allow(OneviewSDK::ServerProfile).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_post)
-        .with('/rest/storage-volume-attachments/repair', 'body' => body)
-        .and_return(FakeResponse.new('uri' => '/rest/fake'))
-      # expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new({'members' => ['first','second']}))
+      expect(resourcetype).to receive(:remove_extra_unmanaged_volume)
       expect(provider.remove_extra_unmanaged_volume).to be
     end
   end
@@ -130,14 +125,14 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(%w(fake_path_1 fake_path_2)))
+      expect_any_instance_of(resourcetype).to receive(:get_paths).and_return(['/rest/fake1', '/rest/fake2'])
       provider.exists?
       expect(provider.get_paths).to be
     end
 
     it 'should be able to get a path by id if id is provided' do
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(['fake_path_found']))
+      expect_any_instance_of(resourcetype).to receive(:get_path).and_return(['/rest/fake1'])
       provider.exists?
       expect(provider.get_paths).to be
     end

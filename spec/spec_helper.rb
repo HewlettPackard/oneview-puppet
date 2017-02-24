@@ -84,6 +84,10 @@ RSpec.configure do |config|
     end
   end
 
+  if config.filter_manager.inclusions.rules[:unit]
+    ENV['IMAGE_STREAMER_AUTH_FILE'] = 'spec/support/fixtures/unit/provider/login_image_streamer.json'
+  end
+
   config.before(:each) do
     # TODO: Puppet: Probably reverify this once we have have different test profiles
     if config.filter_manager.inclusions.rules[:unit]

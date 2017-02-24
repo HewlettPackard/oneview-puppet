@@ -102,6 +102,8 @@ def uri_recursive_array(data)
 end
 
 def get_class(key)
-  # this gets the SDK class based on key.to_s, removing 'Uri' and capitalizing the 1st letter
-  Object.const_get("OneviewSDK::#{key.to_s[0].upcase}#{key[1..key.size - 4]}")
+  sub_module = OneviewSDK::ImageStreamer::Client == @client.class ? 'ImageStreamer::' : ''
+  variant = OneviewSDK::Client == @client.class && @client.api_version > 200 ? "#{resource_variant}::" : ''
+  resource_name = "#{key.to_s[0].upcase}#{key[1..key.size - 4]}"
+  Object.const_get("OneviewSDK::#{sub_module}API#{@client.api_version}::#{variant}#{resource_name}")
 end
