@@ -49,7 +49,7 @@ describe provider_class do
       expect(provider.exists?).not_to be
     end
 
-    it 'found should return false at first' do
+    it 'should raise an error in case there are no instances of the resource?' do
       expect { provider.found }.to raise_error(/No BuildPlan with the specified data were found on the Oneview Appliance/)
     end
 

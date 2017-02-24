@@ -20,12 +20,4 @@ Puppet::Type.type(:image_streamer_build_plan).provide :image_streamer, parent: P
   desc 'Provider for Image Streamer Build Plan using the Image Streamer API'
 
   mk_resource_methods
-
-  def resource_name
-    'BuildPlan'
-  end
-
-  def self.resource_name
-    'BuildPlan'
-  end
 end

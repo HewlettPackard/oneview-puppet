@@ -18,11 +18,12 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:image_streamer_build_plan).provider(:image_streamer)
 api_version = login_image_streamer[:api_version] || 300
-resource_name = 'BuildPlan'
-resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context Image Streamer'
+
+  resource_name = 'BuildPlan'
+  resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}")
 
   let(:resource) do
     Puppet::Type.type(:image_streamer_build_plan).new(
