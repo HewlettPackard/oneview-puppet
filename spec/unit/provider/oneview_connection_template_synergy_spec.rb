@@ -15,19 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_connection_template).provider(:c7000)
+provider_class = Puppet::Type.type(:oneview_connection_template).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   OneviewSDK::API200::ConnectionTemplate
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::ConnectionTemplate")
-                 end
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:ConnectionTemplate, api_version, 'Synergy')
 
   context 'given the min parameters' do
     let(:resource) do
@@ -37,7 +32,8 @@ describe provider_class, unit: true do
         data:
             {
               'name' => 'CT'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
@@ -45,25 +41,18 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:c7000)
+    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
     end
 
-    it 'should return that the resource exists' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:synergy)
     end
 
     it 'should be able to find the connection template' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
-      expect(provider.found).to be
-    end
-
-    it 'should be able to find the connection template' do
-      test = resourcetype.new(@client, name: resource['data']['name'])
       test['uri'] = '/rest/'
       allow(resourcetype).to receive(:find_by).and_return([])
       provider.exists?

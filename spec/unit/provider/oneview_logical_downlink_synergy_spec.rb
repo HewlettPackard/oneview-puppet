@@ -15,15 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
-@resource_name = 'LogicalDownlink'
-resourcetype ||= Object.const_get("OneviewSDK::API#{login[:api_version]}::Synergy::LogicalDownlink")
+api_version = login[:api_version] || 200
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:LogicalDownlink, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_logical_downlink).new(
@@ -75,8 +74,6 @@ describe provider_class, unit: true do
         provider: 'synergy'
       )
     end
-
-    let(:test) { resourcetype.new(@client, resource['data']) }
 
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])

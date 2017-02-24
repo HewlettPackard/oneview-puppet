@@ -15,13 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:synergy)
-resourcetype = OneviewSDK::SANManager
 
-describe provider_class, unit: true do
+api_version = login[:api_version] || 200
+resource_name = 'SANManager'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
   @resourcetype = resourcetype
@@ -41,6 +42,8 @@ describe provider_class, unit: true do
     let(:provider) { resource.provider }
 
     let(:instance) { provider.class.instances.first }
+
+    let(:test) { resourcetype.new(@client, resource['data']) }
 
     it 'should be an instance of the provider Synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:synergy)
@@ -88,7 +91,6 @@ describe provider_class, unit: true do
       end
 
       it 'should create/add the san manager' do
-        test = resourcetype.new(@client, resource['data'])
         expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
           .and_return([])
@@ -98,7 +100,6 @@ describe provider_class, unit: true do
       end
 
       it 'should update the san manager' do
-        test = resourcetype.new(@client, resource['data'])
         expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
           .and_return([test])
@@ -107,7 +108,6 @@ describe provider_class, unit: true do
       end
 
       it 'should parse provider uri the san manager' do
-        test = resourcetype.new(@client, resource['data'])
         expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         expect(resourcetype).to receive(:find_by).with(anything, 'providerDisplayName' => resource['data']['providerDisplayName'])
           .and_return([test])

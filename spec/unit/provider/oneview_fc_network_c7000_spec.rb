@@ -16,33 +16,26 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_volume_template).provider(:synergy)
+provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
 api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:FCNetwork, api_version, 'C7000')
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
-  resourcetype = OneviewSDK.resource_named(:VolumeTemplate, api_version, 'Synergy')
-
-  @resourcetype = resourcetype
   let(:resource) do
-    Puppet::Type.type(:oneview_volume_template).new(
-      name: 'vt',
+    Puppet::Type.type(:oneview_fc_network).new(
+      name: 'fc',
       ensure: 'present',
       data:
           {
-            'name'         => 'ONEVIEW_PUPPET_TEST',
-            'description'  => 'Volume Template',
-            'type'         => 'StorageVolumeTemplateV3',
-            'stateReason'  => 'None',
-            'provisioning' => {
-              'shareable'      => true,
-              'provisionType'  => 'Thin',
-              'capacity'       => '235834383322',
-              'storagePoolUri' => '/rest/fake'
-            }
+            'name'                    => 'OneViewSDK Test FC Network',
+            'connectionTemplateUri'   => nil,
+            'autoLoginRedistribution' => true,
+            'fabricType'              => 'FabricAttach',
+            'linkStabilityTime' => 30
           },
-      provider: 'synergy'
+      provider: 'c7000'
     )
   end
 
@@ -58,13 +51,8 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       provider.exists?
     end
 
-    it 'should be an instance of the provider oneview_volume_template' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:synergy)
-    end
-
-    it 'if nothing is found should return false' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
+    it 'should be an instance of the provider oneview_fc_network' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:c7000)
     end
 
     it 'runs through the create method' do
@@ -74,9 +62,23 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       expect(provider.create).to be
     end
 
-    it 'should be able to find the connectable volume templates' do
-      allow_any_instance_of(resourcetype).to receive(:get_connectable_volume_templates).and_return(true)
-      expect(provider.get_connectable_volume_templates).to be
+    it 'deletes the resource' do
+      resource['data']['uri'] = '/rest/fake'
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      provider.exists?
+      expect(provider.destroy).to be
+    end
+
+    it 'should be able to run through self.instances' do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(instance).to be
+    end
+
+    it 'finds the resource' do
+      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+      expect(provider.found).to be
     end
   end
 end

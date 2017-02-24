@@ -15,10 +15,8 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_network_set).provider(:oneview_network_set)
+provider_class = Puppet::Type.type(:oneview_network_set).provider(:synergy)
 api_version = login[:api_version] || 300
 resourcetype = OneviewSDK.resource_named(:NetworkSet, api_version, 'Synergy')
 ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'Synergy')

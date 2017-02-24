@@ -15,14 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:oneview_ethernet_network)
-resourcetype = OneviewSDK::EthernetNetwork
+provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:synergy)
+api_version = login[:api_version] || 200
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_ethernet_network).new(
@@ -37,7 +37,8 @@ describe provider_class, unit: true do
             'privateNetwork' => 'true',
             'connectionTemplateUri' => nil,
             'type' => 'ethernet-networkV3'
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -45,21 +46,21 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   context 'given the create parameters' do
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
     end
 
-    it 'should be able to find the resource' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect(provider.found).to be
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:synergy)
     end
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
@@ -68,7 +69,6 @@ describe provider_class, unit: true do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be

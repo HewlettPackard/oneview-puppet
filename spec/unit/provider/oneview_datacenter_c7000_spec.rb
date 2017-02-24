@@ -15,19 +15,19 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_datacenter).provider(:c7000)
 api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   OneviewSDK::API200::Datacenter
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::Datacenter")
-                 end
+resourcetype = OneviewSDK.resource_named(:Datacenter, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the create parameters' do
     let(:resource) do
@@ -39,13 +39,10 @@ describe provider_class, unit: true do
               'name' => 'Datacenter',
               'width' => '5000',
               'depth' => '5000'
-            }
+            },
+        provider: 'c7000'
       )
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should be an instance of the provider Ruby' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_datacenter).provider(:c7000)
@@ -57,7 +54,6 @@ describe provider_class, unit: true do
     end
 
     it 'should create/add the datacenter' do
-      test = resourcetype.new(@client, resource['data'])
       expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
       expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name'])
         .and_return([])
@@ -71,13 +67,10 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_datacenter).new(
         name: 'Datacenter',
-        ensure: 'found'
+        ensure: 'found',
+        provider: 'c7000'
       )
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should not return any datacenters' do
       allow(resourcetype).to receive(:find_by).and_return([])
@@ -94,22 +87,14 @@ describe provider_class, unit: true do
         data:
             {
               'name' => 'Datacenter'
-            }
+            },
+        provider: 'c7000'
       )
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-    end
-
-    it 'should return that the resource exists' do
-      expect(provider.exists?).to eq(true)
     end
 
     it 'should be able to get the visual content' do

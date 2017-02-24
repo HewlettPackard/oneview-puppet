@@ -15,13 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_power_device).provider(:synergy)
-resourcetype = OneviewSDK::PowerDevice
 
-describe provider_class, unit: true do
+api_version = login[:api_version] || 200
+resource_name = 'PowerDevice'
+resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -98,17 +99,12 @@ describe provider_class, unit: true do
                 'username'     => 'dcs',
                 'password'     => 'dcs'
               }
-            }
+            },
+        provider: 'synergy'
       )
     end
 
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
-
     it 'should refresh the power device' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(provider.exists?).to eq(true)
       expect_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_refresh_state).to be
     end
@@ -124,13 +120,10 @@ describe provider_class, unit: true do
               'name' => '172.18.8.11, PDU 1',
               'uidState' => 'On',
               'powerState' => 'On'
-            }
+            },
+        provider: 'synergy'
       )
     end
-
-    let(:provider) { resource.provider }
-
-    let(:instance) { provider.class.instances.first }
 
     it 'should delete the resource' do
       provider.exists?

@@ -15,13 +15,15 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../shared_context'
-require_relative '../../support/fake_response'
 
 provider_class = Puppet::Type.type(:oneview_interconnect).provider(:synergy)
-resourcetype = OneviewSDK::API300::Synergy::Interconnect
-describe provider_class, unit: true do
+api_version = login[:api_version] || 200
+
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:Interconnect, api_version, 'Synergy')
+
   let(:resource) do
     Puppet::Type.type(:oneview_interconnect).new(
       name: 'Interconnect',
@@ -95,11 +97,13 @@ describe provider_class, unit: true do
       expect { provider.create }.to raise_error(/This resource relies on others to be created/)
     end
   end
+
   context 'given the min parameters' do
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([])
       provider.exists?
     end
+
     let(:resource) do
       Puppet::Type.type(:oneview_interconnect).new(
         name: 'Interconnect',
