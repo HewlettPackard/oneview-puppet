@@ -54,6 +54,23 @@ image_streamer_artifact_bundle{'artifact_bundle_4':
 }
 
 image_streamer_artifact_bundle{'artifact_bundle_5':
+  ensure  => 'extract',
+  require => Image_streamer_artifact_bundle['artifact_bundle_4'],
+  data    => {
+    name     => 'Artifact_Bundle_2_Puppet'
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_6':
+  ensure  => 'download',
+  require => Image_streamer_artifact_bundle['artifact_bundle_5'],
+  data    => {
+    name                          => 'Artifact_Bundle_2_Puppet',
+    artifact_bundle_download_path => 'examples/image_streamer/artifact_bundle_downloaded.zip'  # can be either an absolute or relative path
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_7':
   ensure  => 'absent',
   require => Image_streamer_artifact_bundle['artifact_bundle_3'],
   data    => {
@@ -61,9 +78,9 @@ image_streamer_artifact_bundle{'artifact_bundle_5':
   }
 }
 
-image_streamer_artifact_bundle{'artifact_bundle_6':
+image_streamer_artifact_bundle{'artifact_bundle_8':
   ensure  => 'absent',
-  require => Image_streamer_artifact_bundle['artifact_bundle_4'],
+  require => Image_streamer_artifact_bundle['artifact_bundle_6'],
   data    => {
     name     => 'Artifact_Bundle_2_Puppet'
   }

@@ -24,7 +24,9 @@ describe type_class do
 
   let :special_ensurables do
     [
-      :found
+      :found,
+      :extract,
+      :download
     ]
   end
 

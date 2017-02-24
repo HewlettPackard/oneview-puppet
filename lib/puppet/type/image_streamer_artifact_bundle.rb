@@ -24,6 +24,14 @@ Puppet::Type.newtype(:image_streamer_artifact_bundle) do
     newvalue(:found) do
       provider.found
     end
+
+    newvalue(:extract) do
+      provider.extract
+    end
+
+    newvalue(:download) do
+      provider.download
+    end
   end
   # :nocov:
 

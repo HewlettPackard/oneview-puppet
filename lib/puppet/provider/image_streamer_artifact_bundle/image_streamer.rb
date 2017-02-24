@@ -26,7 +26,7 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
     artifacts_uri_parse('deploymentPlans')
     artifacts_uri_parse('goldenImages')
     artifacts_uri_parse('planScripts')
-    super([nil, :found])
+    super([nil, :found, :extract, :download])
   end
 
   def create
@@ -38,6 +38,19 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
     else
       @resourcetype.new(@client, @data).create
     end
+    true
+  end
+
+  def extract
+    artifact_bundle = get_single_resource_instance
+    artifact_bundle.extract
+    true
+  end
+
+  def download
+    path = @data.delete('artifact_bundle_download_path')
+    artifact_bundle = get_single_resource_instance
+    artifact_bundle.download(path)
     true
   end
 

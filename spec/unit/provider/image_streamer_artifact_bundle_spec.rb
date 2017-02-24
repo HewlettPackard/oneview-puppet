@@ -28,9 +28,12 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) {
+    resource['data']['uri'] = '/rest/artifact-bundles/123'
+    resourcetype.new(@client, resource['data'])
+  }
 
-  context 'given the Creation parameters with artifacts' do
+  context 'given the Creation parameters' do
     let(:resource) do
       Puppet::Type.type(:image_streamer_artifact_bundle).new(
         name: 'artifact-bundle-1',
@@ -100,7 +103,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.create).to be
     end
 
-    it 'should rename artifact bundle when new name provided' do
+    it 'should rename artifact bundle when resource exists and new_name provided' do
       allow(resourcetype).to receive(:find_by).and_return([test])
       resource['data']['new_name'] = 'Artifact_Bundle_Renamed'
       provider.exists?
@@ -108,7 +111,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.create).to be
     end
 
-    it 'should do nothing when no new_name' do
+    it 'should do nothing when resource exists and no new_name' do
       allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
       expect_any_instance_of(resourcetype).not_to receive(:update_name)
@@ -127,31 +130,27 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should be able to find the resource' do
       expect(provider.found).to be
     end
-  end
-
-  context 'given the Creation parameters with a path' do
-    let(:resource) do
-      Puppet::Type.type(:image_streamer_artifact_bundle).new(
-        name: 'artifact-bundle-1',
-        ensure: 'present',
-        data:
-            {
-              'name'                 => 'Artifact_Bundle_Puppet',
-              'artifact_bundle_path' => 'artifact_bundle.zip'
-            }
-      )
-    end
-
-    before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      provider.exists?
-    end
 
     it 'should create artifact bundle from file when not exists' do
+      resource['data'] = { 'name' => 'Artifact_Bundle_Puppet', 'artifact_bundle_path' => 'artifact_bundle.zip' }
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(resourcetype).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Artifact_Bundle_Puppet').and_return(test)
       provider.exists?
       expect(provider.create).to be
+    end
+
+    it 'should extract the artifact bundle' do
+      # allow(resourcetype).to receive(:find_by).and_return([test])
+      expect_any_instance_of(resourcetype).to receive(:extract)
+      provider.exists?
+      expect(provider.extract).to be
+    end
+
+    it 'should download the artifact bundle' do
+      resource['data'] = { 'name' => 'Artifact_Bundle_Puppet', 'artifact_bundle_download_path' => 'artifact_bundle_download.zip' }
+      expect_any_instance_of(resourcetype).to receive(:download).with('artifact_bundle_download.zip')
+      provider.exists?
+      expect(provider.download).to be
     end
   end
 end
