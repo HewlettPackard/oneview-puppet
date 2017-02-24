@@ -100,7 +100,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
       resource['data']['uri'] = '/rest/fake'
       test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be

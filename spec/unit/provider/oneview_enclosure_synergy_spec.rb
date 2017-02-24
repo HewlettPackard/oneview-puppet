@@ -128,9 +128,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'creates the resource' do
-        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-        allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
         allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
