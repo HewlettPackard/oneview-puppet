@@ -30,25 +30,17 @@ Puppet::Type.type(:image_streamer_deployment_plan).provide :image_streamer, pare
 
   def parse_build_plan
     return unless @data['oeBuildPlanURI'] && !@data['oeBuildPlanURI'].include?('/rest/')
-    build_plan_client = OneviewSDK::ImageStreamer.resource_named('BuildPlan', @client.api_version)
-    resource = build_plan_client.find_by(@client, name: @data['oeBuildPlanURI'])
+    build_plan_class = OneviewSDK::ImageStreamer.resource_named('BuildPlan', @client.api_version)
+    resource = build_plan_class.find_by(@client, name: @data['oeBuildPlanURI'])
     raise 'Build Plan has not been found in the Appliance.' if resource.empty?
     @data['oeBuildPlanURI'] = resource.first['uri']
   end
 
   def parse_golden_image
     return unless @data['goldenImageURI'] && !@data['goldenImageURI'].include?('/rest/')
-    golden_image_client = OneviewSDK::ImageStreamer.resource_named('GoldenImage', @client.api_version)
-    resource = golden_image_client.find_by(@client, name: @data['goldenImageURI'])
+    golden_image_class = OneviewSDK::ImageStreamer.resource_named('GoldenImage', @client.api_version)
+    resource = golden_image_class.find_by(@client, name: @data['goldenImageURI'])
     raise 'Golden Image has not been found in the Appliance.' if resource.empty?
     @data['goldenImageURI'] = resource.first['uri']
-  end
-
-  def resource_name
-    'DeploymentPlan'
-  end
-
-  def self.resource_name
-    'DeploymentPlan'
   end
 end
