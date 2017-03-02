@@ -5,6 +5,8 @@
 1. Added support to the Image Streamer REST API version 300 for OS provisioning through OneView.
 
 ### Puppet Types Added
+- Image_streamer_artifact_bundle
+- Image_streamer_build_plan
 - Image_streamer_deployment_plan
 - Image_streamer_golden_image
 - Image_streamer_os_volume

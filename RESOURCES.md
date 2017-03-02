@@ -570,9 +570,43 @@ Example file: [volume_template.pp](examples/volume_template.pp)
 
 # HPE Image Streamer resources
 
-1. [Image_streamer_golden_image](#image_streamer_golden_image)
-2. [image_streamer_os_volume](#image_streamer_os_volume)
-3. [image_streamer_plan_script](#image_streamer_plan_script)
+1. [image_streamer_artifact_bundle](#image_streamer_artifact_bundle)
+2. [Image_streamer_build_plan](#Image_streamer_build_plan)
+3. [Image_streamer_deployment_plan](#Image_streamer_deployment_plan)
+4. [Image_streamer_golden_image](#image_streamer_golden_image)
+5. [image_streamer_os_volume](#image_streamer_os_volume)
+6. [image_streamer_plan_script](#image_streamer_plan_script)
+
+#### image_streamer_artifact_bundle
+
+This resource provides the following ensurable methods for managing Artifact Bundles on the Image Streamer appliance:
+
+* `present` - Adds, uploads, or updates an artifact bundle resource based upon the attributes specified within `data`.
+* `found` - Searches for `image_streamer_artifact_bundle` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `extract` - Extracts an artifact bundle and creates the artifacts on the appliance.
+* `download` - Downloads the content of an artifact bundle to a local drive.
+* `get_backups` - Gets information about the backups.
+* `extract_backup` - Extracts the existing backup bundle on the appliance and creates all the artifacts. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
+* `create_backup` - Creates a backup bundle with all the artifacts present on the appliance. At any given point only one backup bundle will exist on the appliance.
+* `create_backup_from_file` - Uploads a backup bundle from a local drive and extracts all the artifacts present in the uploaded file. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
+* `download_backup` - Downloads a backup.
+* `absent` - Deletes an Artifact Bundle.
+
+#### Image_streamer_build_plan
+
+This resource provides the following ensurable methods for managing Build Plans on the Image Streamer appliance:
+
+* `present` - Adds or updates a build plan resource based upon the attributes specified within `data`.
+* `found` - Searches for `Image_streamer_build_plan` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `absent` - Deletes a Build Plan.
+
+#### Image_streamer_deployment_plan
+
+This resource provides the following ensurable methods for managing Deployment Plans on the Image Streamer appliance:
+
+* `present` - Adds or updates a deployment plan resource based upon the attributes specified within `data`.
+* `found` - Searches for `Image_streamer_deployment_plan` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+* `absent` - Deletes a Deployment Plan.
 
 #### image_streamer_golden_image
 
