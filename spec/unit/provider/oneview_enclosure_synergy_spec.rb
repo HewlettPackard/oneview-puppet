@@ -15,14 +15,20 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_enclosure).provider(:oneview_enclosure)
-resourcetype = OneviewSDK::Enclosure
+provider_class = Puppet::Type.type(:oneview_enclosure).provider(:synergy)
+api_version = login[:api_version] || 200
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   let(:resource) do
     Puppet::Type.type(:oneview_enclosure).new(
@@ -41,15 +47,10 @@ describe provider_class, unit: true do
             {
               'view' => 'day'
             }
-          }
+          },
+      provider: 'synergy'
     )
   end
-
-  let(:provider) { resource.provider }
-
-  let(:instance) { provider.class.instances.first }
-
-  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the min parameters' do
     before(:each) do
@@ -57,17 +58,8 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
-    it 'should be an instance of the provider c7000' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:c7000)
-    end
-
-    it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect(instance).to be
-    end
-
-    it 'should be able to find the resource' do
-      expect(provider.found).to be
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure).provider(:synergy)
     end
 
     it 'should be able to get the environmental configuration' do
@@ -130,15 +122,13 @@ describe provider_class, unit: true do
                 'password' => 'dcs',
                 'enclosureGroupUri' => '/rest/',
                 'licensingIntent' => 'OneView'
-              }
+              },
+          provider: 'synergy'
         )
       end
 
       it 'creates the resource' do
-        test = resourcetype.new(@client, resource['data'])
-        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-        allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
         allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
@@ -150,7 +140,7 @@ describe provider_class, unit: true do
         resource['data']['op'] = 'fake_op'
         resource['data']['path'] = 'fake_path'
         resource['data']['value'] = 'fake_value'
-        patch_data = { op: 'fake_op', path: 'fake_path', value: 'fake_value' }
+        patch_data = { 'op' => 'fake_op', 'path' => 'fake_path', 'value' => 'fake_value' }
         test = resourcetype.new(@client, resource['data'])
         allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
         allow(resourcetype).to receive(:find_by).with(anything, unique_id).and_return([test])

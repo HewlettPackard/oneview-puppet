@@ -16,11 +16,13 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
-resourcetype = OneviewSDK::FCNetwork
+provider_class = Puppet::Type.type(:oneview_fc_network).provider(:synergy)
+api_version = login[:api_version] || 200
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:FCNetwork, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_fc_network).new(
@@ -33,7 +35,8 @@ describe provider_class, unit: true do
             'autoLoginRedistribution' => true,
             'fabricType'              => 'FabricAttach',
             'linkStabilityTime' => 30
-          }
+          },
+      provider: 'synergy'
     )
   end
 
@@ -50,22 +53,12 @@ describe provider_class, unit: true do
     end
 
     it 'should be an instance of the provider oneview_fc_network' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:c7000)
-    end
-
-    it 'if nothing is found should return false' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
-    end
-
-    it 'should return true when resource exists' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect(provider.exists?).to eq(true)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fc_network).provider(:synergy)
     end
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end

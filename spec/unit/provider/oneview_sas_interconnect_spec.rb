@@ -17,13 +17,11 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_sas_interconnect).provider(:synergy)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:SASInterconnect, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
-
-  api_version = login[:api_version] || 300
-  resource_name = 'SASInterconnect'
-  resourcetype ||= Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless login[:api_version] == 200
 
   let(:resource) do
     Puppet::Type.type(:oneview_sas_interconnect).new(

@@ -15,17 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:c7000)
 api_version = login[:api_version] || 200
-@resource_name = 'LogicalDownlink'
-resourcetype ||= if api_version == 200
-                   Object.const_get("OneviewSDK::API#{api_version}::#{@resource_name}")
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::#{@resource_name}")
-                 end
+resourcetype = OneviewSDK.resource_named(:LogicalDownlink, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -80,8 +73,6 @@ describe provider_class, unit: true do
         provider: 'c7000'
       )
     end
-
-    let(:test) { resourcetype.new(@client, resource['data']) }
 
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])

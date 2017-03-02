@@ -15,14 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:oneview_fcoe_network)
-resourcetype = OneviewSDK::FCoENetwork
+provider_class = Puppet::Type.type(:oneview_fcoe_network).provider(:synergy)
+api_version = login[:api_version] || 200
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:FCoENetwork, api_version, 'Synergy')
 
   context 'given the create parameters' do
     let(:resource) do
@@ -35,7 +35,8 @@ describe provider_class, unit: true do
               'vlanId' => 100,
               'connectionTemplateUri' => nil,
               'type' => 'fcoe-network'
-            }
+            },
+        provider: 'synergy'
       )
     end
 
@@ -43,22 +44,27 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    it 'should be an instance of the provider Ruby' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:c7000)
+    let(:test) { resourcetype.new(@client, resource['data']) }
+
+    before(:each) do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      provider.exists?
     end
 
-    it 'should be able to find the resource' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect(provider.found).to be
+    it 'should be an instance of the provider Ruby' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fcoe_network).provider(:synergy)
     end
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
+    end
+
+    it 'should be able to run through self.instances' do
+      allow(resourcetype).to receive(:find_by).and_return([test])
+      expect(instance).to be
     end
 
     it 'deletes the resource' do

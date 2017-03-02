@@ -17,7 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
-resourcetype = OneviewSDK::FirmwareDriver
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:FirmwareDriver, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -29,13 +30,16 @@ describe provider_class, unit: true do
       data:
           {
             'name' => 'FirmwareDriver1_Example'
-          }
+          },
+      provider: 'c7000'
     )
   end
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
+
+  let(:test) { resourcetype.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_firmware_driver' do
@@ -58,11 +62,12 @@ describe provider_class, unit: true do
               'customBaselineName' => 'FirmwareDriver1_Example',
               'baselineUri'        => '/rest/fake',
               'hotfixUris'         => ['/rest/fake']
-            }
+            },
+        provider: 'c7000'
       )
     end
+
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
       allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
         .and_return([test])
       allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
@@ -78,7 +83,7 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end

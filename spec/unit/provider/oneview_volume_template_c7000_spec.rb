@@ -17,17 +17,12 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_volume_template).provider(:c7000)
-
-resource_name = 'VolumeTemplate'
 api_version = login[:api_version] || 200
-resourcetype ||= if api_version == 200
-                   Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-                 end
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
+
+  resourcetype = OneviewSDK.resource_named(:VolumeTemplate, api_version, 'C7000')
 
   let(:resource) do
     Puppet::Type.type(:oneview_volume_template).new(
@@ -45,7 +40,8 @@ describe provider_class, unit: true do
               'capacity'       => '235834383322',
               'storagePoolUri' => '/rest/fake'
             }
-          }
+          },
+      provider: 'c7000'
     )
   end
 
