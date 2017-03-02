@@ -6,6 +6,7 @@
 
 ### Puppet Types Added
 - Image_streamer_deployment_plan
+- Image_streamer_golden_image
 - Image_streamer_os_volume
 - Image_streamer_plan_script
 
