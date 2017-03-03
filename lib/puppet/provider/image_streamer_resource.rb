@@ -22,11 +22,11 @@ module Puppet
     desc 'Base provider for Image Streamer resources'
 
     def client
-      OneviewSDK::ImageStreamer::Client.new(login_image_streamer)
+      create_image_streamer_client
     end
 
     def self.client
-      OneviewSDK::ImageStreamer::Client.new(login_image_streamer)
+      create_image_streamer_client
     end
 
     def ov_resource_type
@@ -37,6 +37,11 @@ module Puppet
     def self.ov_resource_type
       api_version = login_image_streamer[:api_version] || 300
       Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}")
+    end
+
+    def create_image_streamer_client
+      return OneviewSDK::ImageStreamer::Client.new(login_image_streamer) unless oneview_credentials_set?
+      OneviewSDK::Client.new(login).new_i3s_client(login_image_streamer)
     end
   end
 end

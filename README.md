@@ -94,15 +94,22 @@ Once the authentication is prepared and the manifests containing the resources a
 The attributes required for authenticating with your HPE Synergy Image Streamer Appliance are:
 
 * `IMAGE_STREAMER_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
-* `IMAGE_STREAMER_TOKEN` - The authentication token for the HPE Image Streamer. This is the same token used to access the HPE OneView REST API.
 * `IMAGE_STREAMER_API_VERSION` - The API version for the HPE Image Streamer. This defaults to **300**
 * `IMAGE_STREAMER_LOG_LEVEL` - The log level of the HPE Image Streamer appliance. This defaults to **info**
 * `IMAGE_STREAMER_SSL_ENABLED` - HPE recommends setting this value to **true**
+
+The following attribute must be set only if you haven't configured the credentials to authenticate with your HPE OneView Appliance:
+
+* `IMAGE_STREAMER_TOKEN` - The authentication token for the HPE Image Streamer. This is the same token used to access the HPE OneView REST API.
+
+:exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 
 
 You can assign attributes for your appliances using three methods:
 
 1. Create a json file named `login_image_streamer.json` on your working directory, and enter the authentication information for your appliance. See [login_image_streamer.json](examples/login_image_streamer.json) for an example.
+
+You must provide a token only if you haven't configured the credentials to authenticate with your HPE OneView Appliance.
 
 2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 

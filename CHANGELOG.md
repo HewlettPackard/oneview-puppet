@@ -12,6 +12,7 @@
 #### Bug fixes & Enhancements:
 - [#105](https://github.com/HewlettPackard/oneview-puppet/issues/105) Create or update uplink sets through logical interconnect groups
 - [#119](https://github.com/HewlettPackard/oneview-puppet/issues/119) Update unit tests to match updated remove_extra_unmanaged_volume from oneview-ruby-sdk
+- [#116](https://github.com/HewlettPackard/oneview-puppet/issues/116) Simplify login to i3s
 
 # 2.1.0 (2017-02-03)
 ### Version highlights:
