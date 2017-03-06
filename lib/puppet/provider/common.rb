@@ -121,3 +121,8 @@ def extract_resource_name(class_name)
   shift_prefix = Regexp.last_match.nil? ? 2 : 1
   class_name.split('::')[2].split('_').drop(shift_prefix).collect(&:capitalize).join
 end
+
+def create_image_streamer_client
+  return OneviewSDK::ImageStreamer::Client.new(login_image_streamer) unless oneview_credentials_set?
+  OneviewSDK::Client.new(login).new_i3s_client(login_image_streamer)
+end
