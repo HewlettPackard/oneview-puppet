@@ -24,7 +24,6 @@ Puppet::Type::Image_streamer_golden_image.provide :image_streamer, parent: Puppe
   def exists?
     super([nil, :found, :download_details_archive, :download])
     @golden_image_path = @data.delete('golden_image_path')
-    uri_getter
     !@resourcetype.find_by(@client, @data).empty?
   end
 
@@ -47,13 +46,5 @@ Puppet::Type::Image_streamer_golden_image.provide :image_streamer, parent: Puppe
     golden_image = get_single_resource_instance
     golden_image.download(download_path)
     true
-  end
-
-  def uri_getter
-    return unless @data['osVolumeURI'] && !@data['osVolumeURI'].include?('/rest/')
-    os_volume_classname = OneviewSDK::ImageStreamer.resource_named('OSVolume', @client.api_version)
-    resource = os_volume_classname.find_by(@client, name: @data['osVolumeURI'])
-    raise 'OSVolume has not been found in the Appliance.' if resource.empty?
-    @data['osVolumeURI'] = resource.first['uri']
   end
 end

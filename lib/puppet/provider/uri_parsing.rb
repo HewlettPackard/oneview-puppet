@@ -28,8 +28,8 @@ def uri_recursive_hash(data)
     # in case the key is either an array or hash
     hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri- or -value is nil-
-    next if value.to_s[0..6].include?('/rest/') || !((key.to_s.include? 'Uri') || (key.to_s == 'uri')) || value.to_s == 'nil' ||
-            value.nil? || value.to_s == 'null' || exception_to_be_treated_within_provider(key)
+    next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include?('Uri') || key.to_s == 'uri' || key.to_s.end_with?('URI')) ||
+            value.nil? || %w(null nil).include?(value.to_s) || exception_to_be_treated_within_provider(key)
     data[key] = get_uri(key)
   end
 end
@@ -56,7 +56,8 @@ end
 def special_resources_check(key)
   special_resources = %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri dependentResourceUri
                          sspUri associatedUplinkSetUri associatedTaskUri parentTaskUri snapshotPoolUri volumeStoragePoolUri
-                         volumeStorageSystemUri baselineUri mountUri nativeNetworkUri enclosureUris)
+                         volumeStorageSystemUri baselineUri mountUri nativeNetworkUri enclosureUris oeBuildPlanURI osVolumeURI
+                         osDeploymentPlanUri)
   return key unless special_resources.include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
   # to make it compatible with the get_class method which will be called after this
@@ -68,6 +69,7 @@ end
 def special_resources_assign(key)
   return generic_resource_fixer if %w(resourceUri actualNetworkUri expectedNetworkUri uri mountUri).include?(key)
   case key
+  # OneView resources
   when 'firmwareBaselineUri', 'sspUri', 'baselineUri' then 'FirmwareDriver'
   when 'actualNetworkSanUri' then 'ManagedSAN'
   when 'dependentResourceUri' then 'LogicalInterconnect'
@@ -77,6 +79,10 @@ def special_resources_assign(key)
   when 'parentTaskUri', 'associatedTaskUri' then 'Task'
   when 'nativeNetworkUri' then 'EthernetNetwork'
   when 'enclosureUris' then 'Enclosure'
+  when 'osDeploymentPlanUri' then 'OSDeploymentPlan'
+  # Image Streamer resources
+  when 'oeBuildPlanURI' then 'BuildPlan'
+  when 'osVolumeURI' then 'OSVolume'
   end
 end
 
