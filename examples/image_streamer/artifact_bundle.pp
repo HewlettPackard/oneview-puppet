@@ -66,7 +66,8 @@ image_streamer_artifact_bundle{'artifact_bundle_6':
   require => Image_streamer_artifact_bundle['artifact_bundle_5'],
   data    => {
     name                          => 'Artifact_Bundle_2_Puppet',
-    artifact_bundle_download_path => 'examples/image_streamer/artifact_bundle_downloaded.zip'  # can be either an absolute or relative path
+    artifact_bundle_download_path => 'examples/image_streamer/artifact_bundle_downloaded.zip',  # can be either an absolute or relative path
+    force                         => false  # does not overwrite the file when it already exists
   }
 }
 
@@ -99,7 +100,8 @@ image_streamer_artifact_bundle{'artifact_bundle_10':
   ensure  => 'download_backup',
   require => Image_streamer_artifact_bundle['artifact_bundle_9'],
   data    => {
-    backup_download_path => 'examples/image_streamer/backup_bundle.zip'  # can be either an absolute or relative path
+    backup_download_path => 'examples/image_streamer/backup_bundle.zip',  # can be either an absolute or relative path
+    force                => false  # does not overwrite the file when it already exists
   }
 }
 

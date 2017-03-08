@@ -50,6 +50,7 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def download
     path = @data.delete('artifact_bundle_download_path')
+    validate_file(path) unless @data.delete('force')
     artifact_bundle = get_single_resource_instance
     artifact_bundle.download(path)
     true
@@ -79,6 +80,7 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def download_backup
     path = @data.delete('backup_download_path')
+    validate_file(path) unless @data.delete('force')
     backup = @resourcetype.get_backups(@client)
     @resourcetype.download_backup(@client, path, backup.first)
     true
@@ -101,5 +103,9 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
       next if artifact['resourceUri'].include?('/rest/')
       artifact['resourceUri'] = "#{artifact['resourceUri']},#{resource_name}"
     end
+  end
+
+  def validate_file(path)
+    raise "File #{path} already exists." if File.exist?(path)
   end
 end

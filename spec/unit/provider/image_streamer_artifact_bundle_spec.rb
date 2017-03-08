@@ -28,6 +28,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:download_path) { '/path/fake-path' }
+
   let(:test) do
     resource['data']['uri'] = '/rest/artifact-bundles/123'
     resource['data']['artifactsbundleID'] = '123'
@@ -141,11 +143,54 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.extract).to be
     end
 
-    it 'should download the artifact bundle' do
-      resource['data'] = { 'name' => 'Artifact_Bundle_Puppet', 'artifact_bundle_download_path' => 'artifact_bundle_download.zip' }
-      provider.exists?
-      expect_any_instance_of(resourcetype).to receive(:download).with('artifact_bundle_download.zip')
-      expect(provider.download).to be
+    context 'given the download ensurable' do
+      before(:each) do
+        resource['data']['artifact_bundle_download_path'] = download_path
+      end
+
+      context 'when file does not exist' do
+        before(:each) do
+          allow(File).to receive(:exist?).with(download_path).and_return(false)
+          expect_any_instance_of(resourcetype).to receive(:download).with(download_path)
+        end
+
+        it 'should download the file' do
+          expect(provider.download).to be
+        end
+
+        it 'should download if force is false' do
+          resource['data']['force'] = false
+          expect(provider.download).to be
+        end
+
+        it 'should download if force is true' do
+          resource['data']['force'] = true
+          expect(provider.download).to be
+        end
+      end
+
+      context 'when file already exists' do
+        before(:each) do
+          allow(File).to receive(:exist?).with(download_path).and_return(true)
+        end
+
+        it 'should raise error' do
+          expect_any_instance_of(resourcetype).not_to receive(:download)
+          expect { provider.download }.to raise_error('File /path/fake-path already exists.')
+        end
+
+        it 'should raise error if force is false' do
+          resource['data']['force'] = false
+          expect_any_instance_of(resourcetype).not_to receive(:download)
+          expect { provider.download }.to raise_error('File /path/fake-path already exists.')
+        end
+
+        it 'should download if force is true' do
+          resource['data']['force'] = true
+          expect_any_instance_of(resourcetype).to receive(:download).with(download_path)
+          expect(provider.download).to be
+        end
+      end
     end
   end
 
@@ -224,12 +269,54 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     context 'given the download_backup ensurable' do
-      it 'should download the backup of the artifact bundle' do
-        resource['data']['backup_download_path'] = '/fake-path'
+      before(:each) do
+        resource['data']['backup_download_path'] = download_path
         test['data'] = { 'downloadURI' => '/rest/artifact-bundles/backups/archive/3aa193b2-9cd9-44fc-a140-ff917db74312' }
-        expect(resourcetype).to receive(:get_backups).and_return([test])
-        expect(resourcetype).to receive(:download_backup).with(anything, '/fake-path', test)
-        expect(provider.download_backup).to be
+        allow(resourcetype).to receive(:get_backups).and_return([test])
+      end
+
+      context 'when file does not exist' do
+        before(:each) do
+          allow(File).to receive(:exist?).with(download_path).and_return(false)
+          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test)
+        end
+
+        it 'should download the file' do
+          expect(provider.download_backup).to be
+        end
+
+        it 'should download if force is false' do
+          resource['data']['force'] = false
+          expect(provider.download_backup).to be
+        end
+
+        it 'should download if force is true' do
+          resource['data']['force'] = true
+          expect(provider.download_backup).to be
+        end
+      end
+
+      context 'when file already exists' do
+        before(:each) do
+          allow(File).to receive(:exist?).with(download_path).and_return(true)
+        end
+
+        it 'should raise error' do
+          expect(resourcetype).not_to receive(:download_backup)
+          expect { provider.download_backup }.to raise_error('File /path/fake-path already exists.')
+        end
+
+        it 'should raise error if force is false' do
+          resource['data']['force'] = false
+          expect(resourcetype).not_to receive(:download_backup)
+          expect { provider.download_backup }.to raise_error('File /path/fake-path already exists.')
+        end
+
+        it 'should download if force is true' do
+          resource['data']['force'] = true
+          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test)
+          expect(provider.download_backup).to be
+        end
       end
     end
 
