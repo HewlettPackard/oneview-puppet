@@ -22,8 +22,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 
 provider_class = Puppet::Type.type(:oneview_enclosure).provider(:c7000)
 enclosure_ip = login[:enclosure_ip] || '172.18.1.13'
-enclosure_username = login[:enclosure_username] || dcs
-enclosure_password = login[:enclosure_password] || dcs
+enclosure_username = login[:enclosure_username] || 'dcs'
+enclosure_password = login[:enclosure_password] || 'dcs'
 enclosure_group = login[:enclosure_group] || 'Puppet Enc Group Test'
 
 describe provider_class do
