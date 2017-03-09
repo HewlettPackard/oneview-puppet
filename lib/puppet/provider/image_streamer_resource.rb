@@ -22,11 +22,15 @@ module Puppet
     desc 'Base provider for Image Streamer resources'
 
     def client
-      create_image_streamer_client
+      self.class.client
     end
 
     def self.client
-      create_image_streamer_client
+      credentials_set = ENV['ONEVIEW_AUTH_FILE'] || ENV['ONEVIEW_URL'] ||
+                        File.exist?(File.expand_path(Dir.pwd + '/login.json', __FILE__))
+
+      return OneviewSDK::Client.new(login).new_i3s_client(login_image_streamer) if credentials_set
+      OneviewSDK::ImageStreamer::Client.new(login_image_streamer)
     end
 
     def ov_resource_type

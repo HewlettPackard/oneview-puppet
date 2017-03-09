@@ -63,27 +63,6 @@ describe 'login', unit: true do
       allow(Dir).to receive(:pwd).and_return('/an/unavailable/path')
     end
 
-    describe '#oneview_credentials_set?' do
-      it 'should be true when credentials are set in an existing file' do
-        allow(Dir).to receive(:pwd).and_return(fixtures_path)
-        expect(oneview_credentials_set?).to be
-      end
-
-      it 'should be true when credentials are set through a file defined in an env var' do
-        ENV['ONEVIEW_AUTH_FILE'] = config_filename_no_provider
-        expect(oneview_credentials_set?).to be
-      end
-
-      it 'should be true when credentials are set through env vars' do
-        ENV['ONEVIEW_URL'] = 'https://172.16.100.185'
-        expect(oneview_credentials_set?).to be
-      end
-
-      it 'should be false when no credentials set' do
-        expect(oneview_credentials_set?).not_to be
-      end
-    end
-
     describe '#login' do
       it 'should load configuration from file' do
         allow(Dir).to receive(:pwd).and_return(fixtures_path)

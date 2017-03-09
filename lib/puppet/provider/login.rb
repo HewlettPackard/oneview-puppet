@@ -16,43 +16,28 @@
 
 require 'json'
 
-def oneview_options
-  {
+# This method returns the information necessary in order to log in to the Oneview Appliance
+def login
+  options = {
     type:         'OneView',
     file_env_var: 'ONEVIEW_AUTH_FILE',
     env_var_url:  'ONEVIEW_URL',
     filename:     '/login.json'
   }
-end
-
-def image_streamer_options
-  {
-    type:         'Image Streamer',
-    file_env_var: 'IMAGE_STREAMER_AUTH_FILE',
-    env_var_url:  'IMAGE_STREAMER_URL',
-    filename:     '/login_image_streamer.json'
-  }
-end
-
-# This method returns the information necessary in order to log in to the Oneview Appliance
-# The three possible ways of declaring the variables are, respectively:
-def login
-  credentials = load_authentication_settings(oneview_options)
+  credentials = load_authentication_settings(options)
   credentials[:hardware_variant] ||= 'C7000'
   credentials
 end
 
 # This method returns the information necessary in order to log in to the Image Streamer Appliance
-# The three possible ways of declaring the variables are, respectively:
 def login_image_streamer
-  load_authentication_settings(image_streamer_options)
-end
-
-def oneview_credentials_set?
-  options = oneview_options
-  return true if ENV[options[:file_env_var]] || ENV[options[:env_var_url]] ||
-                 File.exist?(File.expand_path(Dir.pwd + options[:filename], __FILE__))
-  false
+  options = {
+    type:         'Image Streamer',
+    file_env_var: 'IMAGE_STREAMER_AUTH_FILE',
+    env_var_url:  'IMAGE_STREAMER_URL',
+    filename:     '/login_image_streamer.json'
+  }
+  load_authentication_settings(options)
 end
 
 def load_authentication_settings(options)

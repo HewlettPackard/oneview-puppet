@@ -23,8 +23,20 @@ describe 'image_streamer_resource', unit: true do
   end
 
   context '#client when OneView credentials set' do
-    it 'should be created through OneviewSDK::Client' do
-      allow_any_instance_of(Puppet::ImageStreamerResource).to receive(:oneview_credentials_set?).and_return(true)
+    it 'should be created through OneviewSDK::Client when set via file' do
+      allow(Dir).to receive(:pwd).and_return('spec/support/fixtures/unit/provider/login.json')
+      expect_any_instance_of(OneviewSDK::Client).to receive(:new_i3s_client)
+      Puppet::ImageStreamerResource.new
+    end
+
+    it 'should be created through OneviewSDK::Client when set via filepath stored in env var' do
+      ENV['ONEVIEW_AUTH_FILE'] = 'spec/support/fixtures/unit/provider/login.json'
+      expect_any_instance_of(OneviewSDK::Client).to receive(:new_i3s_client)
+      Puppet::ImageStreamerResource.new
+    end
+
+    it 'should be created through OneviewSDK::Client when set via env vars' do
+      ENV['ONEVIEW_URL'] = 'https://172.16.100.185'
       expect_any_instance_of(OneviewSDK::Client).to receive(:new_i3s_client)
       Puppet::ImageStreamerResource.new
     end
@@ -37,6 +49,12 @@ describe 'image_streamer_resource', unit: true do
   end
 
   context '#client when OneView credentials unset' do
+    before(:each) do
+      ENV['ONEVIEW_AUTH_FILE'] = nil
+      ENV['ONEVIEW_URL'] = nil
+      allow(Dir).to receive(:pwd).and_return('/an/unavailable/path')
+    end
+
     it 'should not be created through OneviewSDK::Client' do
       allow_any_instance_of(Puppet::ImageStreamerResource).to receive(:oneview_credentials_set?).and_return(false)
       expect_any_instance_of(OneviewSDK::Client).not_to receive(:new_i3s_client)
