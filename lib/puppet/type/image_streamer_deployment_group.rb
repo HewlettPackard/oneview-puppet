@@ -19,8 +19,6 @@ Puppet::Type.newtype(:image_streamer_deployment_group) do
 
   # :nocov:
   ensurable do
-    defaultvalues
-
     newvalue(:found) do
       provider.found
     end

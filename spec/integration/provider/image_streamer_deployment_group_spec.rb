@@ -42,6 +42,10 @@ describe provider_class do
   end
 
   context 'given the minimum parameters' do
+    it 'should be able to run through self.instances' do
+      expect(instance).to be
+    end
+
     it 'exists? should return false when the deployment group is absent' do
       expect(provider.exists?).not_to be
     end
