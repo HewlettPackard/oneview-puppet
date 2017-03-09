@@ -570,12 +570,12 @@ Example file: [volume_template.pp](examples/volume_template.pp)
 
 # HPE Image Streamer resources
 
-1. [image_streamer_artifact_bundle](#image_streamer_artifact_bundle)
-2. [Image_streamer_build_plan](#Image_streamer_build_plan)
-3. [Image_streamer_deployment_plan](#Image_streamer_deployment_plan)
+1. [Image_streamer_artifact_bundle](#image_streamer_artifact_bundle)
+2. [Image_streamer_build_plan](#image_streamer_build_plan)
+3. [Image_streamer_deployment_plan](#image_streamer_deployment_plan)
 4. [Image_streamer_golden_image](#image_streamer_golden_image)
-5. [image_streamer_os_volume](#image_streamer_os_volume)
-6. [image_streamer_plan_script](#image_streamer_plan_script)
+5. [Image_streamer_os_volume](#image_streamer_os_volume)
+6. [Image_streamer_plan_script](#image_streamer_plan_script)
 
 #### image_streamer_artifact_bundle
 
@@ -592,7 +592,9 @@ This resource provides the following ensurable methods for managing Artifact Bun
 * `download_backup` - Downloads a backup.
 * `absent` - Deletes an Artifact Bundle.
 
-#### Image_streamer_build_plan
+Example file: [artifact_bundle.pp](examples/image_streamer/artifact_bundle.pp)
+
+#### image_streamer_build_plan
 
 This resource provides the following ensurable methods for managing Build Plans on the Image Streamer appliance:
 
@@ -600,13 +602,17 @@ This resource provides the following ensurable methods for managing Build Plans 
 * `found` - Searches for `Image_streamer_build_plan` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `absent` - Deletes a Build Plan.
 
-#### Image_streamer_deployment_plan
+Example file: [build_plan.pp](examples/image_streamer/build_plan.pp)
+
+#### image_streamer_deployment_plan
 
 This resource provides the following ensurable methods for managing Deployment Plans on the Image Streamer appliance:
 
 * `present` - Adds or updates a deployment plan resource based upon the attributes specified within `data`.
 * `found` - Searches for `Image_streamer_deployment_plan` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `absent` - Deletes a Deployment Plan.
+
+Example file: [deployment_plan.pp](examples/image_streamer/deployment_plan.pp)
 
 #### image_streamer_golden_image
 

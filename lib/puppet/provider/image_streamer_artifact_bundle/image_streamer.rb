@@ -45,15 +45,14 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
   def extract
     artifact_bundle = get_single_resource_instance
     artifact_bundle.extract
-    true
   end
 
   def download
     path = @data.delete('artifact_bundle_download_path')
-    validate_file(path) unless @data.delete('force')
+    force = @data.delete('force')
+    raise "File #{path} already exists." if File.exist?(path) && !force
     artifact_bundle = get_single_resource_instance
     artifact_bundle.download(path)
-    true
   end
 
   def get_backups
@@ -64,7 +63,6 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def extract_backup
     @resourcetype.extract_backup(@client, get_deployment_group, 'uri' => '/archive')
-    true
   end
 
   def create_backup
@@ -80,32 +78,24 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def download_backup
     path = @data.delete('backup_download_path')
-    validate_file(path) unless @data.delete('force')
+    force = @data.delete('force')
+    raise "File #{path} already exists." if File.exist?(path) && !force
     backup = @resourcetype.get_backups(@client)
     @resourcetype.download_backup(@client, path, backup.first)
-    true
   end
 
   def get_deployment_group
-    deployment_group_uri = @data.delete('deploymentGroupUri')
-    raise 'The \'deploymentGroupUri\' field is required in data hash to run this action.' unless deployment_group_uri
-    deployment_groups = @deployment_group_class.find_by(@client, 'uri' => deployment_group_uri)
-    raise 'Deployment Group has not been found in the Appliance.' if deployment_groups.empty?
-    deployment_groups.first
+    raise 'A \'deploymentGroupUri\' field is required in the data hash to run this action.' unless @data['deploymentGroupUri']
+    @deployment_group_class.find_by(@client, 'uri' => @data['deploymentGroupUri']).first
   end
 
   def artifacts_uri_parse(artifacts_key)
     artifacts_list ||= resource['data'][artifacts_key]
-    artifacts_list ||= @data[artifacts_key]
     return unless artifacts_list
-    resource_name = artifacts_key.slice(0, 1).capitalize + artifacts_key.slice(1..-2)
+    resource_name = artifacts_key[0].capitalize + artifacts_key[1..-2]
     artifacts_list.each do |artifact|
       next if artifact['resourceUri'].include?('/rest/')
       artifact['resourceUri'] = "#{artifact['resourceUri']},#{resource_name}"
     end
-  end
-
-  def validate_file(path)
-    raise "File #{path} already exists." if File.exist?(path)
   end
 end

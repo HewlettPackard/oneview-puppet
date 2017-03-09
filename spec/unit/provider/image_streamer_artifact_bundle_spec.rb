@@ -139,7 +139,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should extract the artifact bundle' do
-      expect_any_instance_of(resourcetype).to receive(:extract)
+      expect_any_instance_of(resourcetype).to receive(:extract).and_return(true)
       expect(provider.extract).to be
     end
 
@@ -151,7 +151,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       context 'when file does not exist' do
         before(:each) do
           allow(File).to receive(:exist?).with(download_path).and_return(false)
-          expect_any_instance_of(resourcetype).to receive(:download).with(download_path)
+          expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
         end
 
         it 'should download the file' do
@@ -175,19 +175,19 @@ describe provider_class, unit: true, if: api_version >= 300 do
         end
 
         it 'should raise error' do
-          expect_any_instance_of(resourcetype).not_to receive(:download)
+          expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
           expect { provider.download }.to raise_error('File /path/fake-path already exists.')
         end
 
         it 'should raise error if force is false' do
           resource['data']['force'] = false
-          expect_any_instance_of(resourcetype).not_to receive(:download)
+          expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
           expect { provider.download }.to raise_error('File /path/fake-path already exists.')
         end
 
         it 'should download if force is true' do
           resource['data']['force'] = true
-          expect_any_instance_of(resourcetype).to receive(:download).with(download_path)
+          expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
           expect(provider.download).to be
         end
       end
@@ -212,7 +212,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     let(:message_group_not_found) { /Deployment Group has not been found in the Appliance./ }
 
-    let(:message_group_required) { /The 'deploymentGroupUri' field is required in data hash to run this action./ }
+    let(:message_group_undefined) { /A 'deploymentGroupUri' field is required in the data hash to run this action./ }
 
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])
@@ -231,20 +231,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     context 'given the extract_backup ensurable' do
       it 'should extract the existing backup bundle' do
-        expect(resourcetype).to receive(:extract_backup).with(anything, group, 'uri' => '/archive')
+        expect(resourcetype).to receive(:extract_backup).with(anything, group, 'uri' => '/archive').and_return(true)
         expect(provider.extract_backup).to be
-      end
-
-      it 'should raise error when group not found' do
-        expect(OneviewSDK::ImageStreamer::DeploymentGroup).to receive(:find_by).with(anything, 'uri' => deployment_group_uri).and_return([])
-        expect(resourcetype).not_to receive(:extract_backup)
-        expect { provider.extract_backup }.to raise_error(message_group_not_found)
       end
 
       it 'should raise error when group undefined' do
         resource['data'] = { 'name' => 'value' }
         provider.exists?
-        expect { provider.extract_backup }.to raise_error(message_group_required)
+        expect { provider.extract_backup }.to raise_error(message_group_undefined)
       end
     end
 
@@ -254,17 +248,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
         expect(provider.create_backup).to be
       end
 
-      it 'should raise error when group not found' do
-        expect(OneviewSDK::ImageStreamer::DeploymentGroup).to receive(:find_by).with(anything, 'uri' => deployment_group_uri).and_return([])
-        expect(resourcetype).not_to receive(:create_backup)
-        expect { provider.create_backup }.to raise_error(message_group_not_found)
-      end
-
       it 'should raise error when group undefined' do
         resource['data'] = { 'name' => 'value' }
         provider.exists?
         expect(resourcetype).not_to receive(:create_backup)
-        expect { provider.create_backup }.to raise_error(message_group_required)
+        expect { provider.create_backup }.to raise_error(message_group_undefined)
       end
     end
 
@@ -278,7 +266,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       context 'when file does not exist' do
         before(:each) do
           allow(File).to receive(:exist?).with(download_path).and_return(false)
-          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test)
+          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test).and_return(true)
         end
 
         it 'should download the file' do
@@ -314,7 +302,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
         it 'should download if force is true' do
           resource['data']['force'] = true
-          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test)
+          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test).and_return(true)
           expect(provider.download_backup).to be
         end
       end
@@ -327,17 +315,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
         expect(provider.create_backup_from_file).to be
       end
 
-      it 'should raise error when group not found' do
-        expect(OneviewSDK::ImageStreamer::DeploymentGroup).to receive(:find_by).with(anything, 'uri' => deployment_group_uri).and_return([])
-        expect(resourcetype).not_to receive(:create_backup_from_file!)
-        expect { provider.create_backup_from_file }.to raise_error(message_group_not_found)
-      end
-
       it 'create_backup_from_file should raise error when group undefined' do
         resource['data'] = { 'name' => 'value' }
         provider.exists?
         expect(resourcetype).not_to receive(:create_backup_from_file!)
-        expect { provider.create_backup_from_file }.to raise_error(message_group_required)
+        expect { provider.create_backup_from_file }.to raise_error(message_group_undefined)
       end
     end
   end
