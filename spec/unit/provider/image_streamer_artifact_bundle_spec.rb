@@ -244,7 +244,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     context 'given the create_backup ensurable' do
       it 'should create a backup bundle with all the artifacts present on the appliance' do
-        expect(resourcetype).to receive(:create_backup).with(anything, group)
+        expect(resourcetype).to receive(:create_backup).with(anything, group).and_return('uri' => '/rest/fake/backup.zip')
         expect(provider.create_backup).to be
       end
 
@@ -311,7 +311,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
     context 'given the create_backup_from_file ensurable' do
       it 'should create backup upload and extract the file content' do
         resource['data']['backup_upload_path'] = '/path/fake_file.zip'
-        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, '/path/fake_file.zip', 'fake_file.zip', 21_600)
+        fake_hash = { 'uri' => '/rest/fake/backup.zip' }
+        filepath = '/path/fake_file.zip'
+        filename = 'fake_file.zip'
+        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, filepath, filename, 21_600).and_return(fake_hash)
         expect(provider.create_backup_from_file).to be
       end
 

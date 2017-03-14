@@ -67,13 +67,11 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def create_backup
     @resourcetype.create_backup(@client, get_deployment_group)
-    true
   end
 
   def create_backup_from_file
     path = @data.delete('backup_upload_path')
     @resourcetype.create_backup_from_file!(@client, get_deployment_group, path, File.basename(path), 21_600)
-    true
   end
 
   def download_backup
