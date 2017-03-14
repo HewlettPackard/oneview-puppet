@@ -7,14 +7,17 @@
 ### Puppet Types Added
 - Image_streamer_artifact_bundle
 - Image_streamer_build_plan
+- Image_streamer_deployment_group
 - Image_streamer_deployment_plan
 - Image_streamer_golden_image
 - Image_streamer_os_volume
 - Image_streamer_plan_script
 
 #### Bug fixes & Enhancements:
+- [#103](https://github.com/HewlettPackard/oneview-puppet/issues/103) Unit tests should not require auth files/environment variables from the user
 - [#105](https://github.com/HewlettPackard/oneview-puppet/issues/105) Create or update uplink sets through logical interconnect groups
 - [#119](https://github.com/HewlettPackard/oneview-puppet/issues/119) Update unit tests to match updated remove_extra_unmanaged_volume from oneview-ruby-sdk
+- [#116](https://github.com/HewlettPackard/oneview-puppet/issues/116) Simplify login to i3s
 
 # 2.1.0 (2017-02-03)
 ### Version highlights:

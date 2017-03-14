@@ -17,7 +17,6 @@
 require 'json'
 
 # This method returns the information necessary in order to log in to the Oneview Appliance
-# The three possible ways of declaring the variables are, respectively:
 def login
   options = {
     type:         'OneView',
@@ -31,7 +30,6 @@ def login
 end
 
 # This method returns the information necessary in order to log in to the Image Streamer Appliance
-# The three possible ways of declaring the variables are, respectively:
 def login_image_streamer
   options = {
     type:         'Image Streamer',

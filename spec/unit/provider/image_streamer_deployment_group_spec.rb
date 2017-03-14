@@ -16,17 +16,22 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:image_streamer_os_volume).provider(:image_streamer)
+provider_class = Puppet::Type.type(:image_streamer_deployment_group).provider(:image_streamer)
+api_version = login_image_streamer[:api_version] || 300
+resource_name = 'DeploymentGroup'
+resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
 
-describe provider_class do
+describe provider_class, unit: true, if: api_version >= 300 do
+  include_context 'shared context Image Streamer'
+
   let(:resource) do
-    Puppet::Type.type(:image_streamer_os_volume).new(
-      name: 'os-volume-1',
+    Puppet::Type.type(:image_streamer_deployment_group).new(
+      name: 'deployment-group-1',
       ensure: 'found',
       data:
-          {
-            'name' => 'Volume_absent'
-          }
+        {
+          'name' => 'OSDS'
+        }
     )
   end
 
@@ -34,25 +39,24 @@ describe provider_class do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test) { resourcetype.new(@client, resource['data']) }
+
   before(:each) do
+    allow(resourcetype).to receive(:find_by).and_return([test])
     provider.exists?
   end
 
-  it 'should be an instance of the provider image streamer' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_os_volume).provider(:image_streamer)
-  end
+  context 'given the found parameters' do
+    it 'should be an instance of the provider image_streamer' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_deployment_group).provider(:image_streamer)
+    end
 
-  context 'given the minimum parameters' do
     it 'should be able to run through self.instances' do
       expect(instance).to be
     end
 
-    it 'exists? should return false when the volume is absent' do
-      expect(provider.exists?).not_to be
-    end
-
-    it 'found should raise an error when the volume is absent' do
-      expect { provider.found }.to raise_error(/No OSVolume with the specified data were found on the Oneview Appliance/)
+    it 'should be able to find the resource' do
+      expect(provider.found).to be
     end
 
     it 'create should display unavailable method' do
@@ -61,26 +65,6 @@ describe provider_class do
 
     it 'destroy should display unavailable method' do
       expect { provider.destroy }.to raise_error(/This ensurable is not supported for this resource./)
-    end
-  end
-
-  context 'given an existing OS Volume' do
-    let(:resource) do
-      Puppet::Type.type(:image_streamer_os_volume).new(
-        name: 'os-volume-2',
-        ensure: 'found',
-        data:
-            {
-              'name' => 'OSVolume-6'
-            }
-      )
-    end
-    it 'exists? should find a volume' do
-      expect(provider.exists?).to be
-    end
-
-    it 'should retrieve the details of the archived volume' do
-      expect(provider.get_details_archive).to be
     end
   end
 end

@@ -86,6 +86,7 @@ RSpec.configure do |config|
 
   if config.filter_manager.inclusions.rules[:unit]
     ENV['IMAGE_STREAMER_AUTH_FILE'] = 'spec/support/fixtures/unit/provider/login_image_streamer.json'
+    ENV['ONEVIEW_AUTH_FILE'] = 'spec/support/fixtures/unit/provider/login_no_provider.json'
   end
 
   config.before(:each) do
