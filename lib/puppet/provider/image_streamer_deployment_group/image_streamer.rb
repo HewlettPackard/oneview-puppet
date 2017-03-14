@@ -14,29 +14,18 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.newtype(:image_streamer_os_volume) do
-  desc "Image Streamer's OS Volume"
+require_relative '../image_streamer_resource'
 
-  # :nocov:
-  ensurable do
-    newvalue(:found) do
-      provider.found
-    end
+Puppet::Type.type(:image_streamer_deployment_group).provide :image_streamer, parent: Puppet::ImageStreamerResource do
+  desc 'Provider for Image Streamer Deployment Groups using the Image Streamer API'
 
-    newvalue(:get_details_archive) do
-      provider.get_details_archive
-    end
-  end
-  # :nocov:
+  mk_resource_methods
 
-  newparam(:name, namevar: true) do
-    desc 'OS Volume name'
+  def create
+    raise 'This ensurable is not supported for this resource.'
   end
 
-  newparam(:data) do
-    desc 'OS Volume data hash containing all specifications for the system'
-    validate do |value|
-      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
-    end
+  def destroy
+    raise 'This ensurable is not supported for this resource.'
   end
 end

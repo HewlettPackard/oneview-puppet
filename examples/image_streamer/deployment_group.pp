@@ -14,29 +14,11 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.newtype(:image_streamer_os_volume) do
-  desc "Image Streamer's OS Volume"
+# NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
 
-  # :nocov:
-  ensurable do
-    newvalue(:found) do
-      provider.found
-    end
-
-    newvalue(:get_details_archive) do
-      provider.get_details_archive
-    end
-  end
-  # :nocov:
-
-  newparam(:name, namevar: true) do
-    desc 'OS Volume name'
-  end
-
-  newparam(:data) do
-    desc 'OS Volume data hash containing all specifications for the system'
-    validate do |value|
-      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
-    end
-  end
-end
+image_streamer_deployment_group{'deployment_group_1':
+    ensure => 'found',
+    data   => {
+      name => 'OSDS'
+    }
+}

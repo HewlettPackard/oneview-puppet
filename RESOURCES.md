@@ -570,9 +570,20 @@ Example file: [volume_template.pp](examples/volume_template.pp)
 
 # HPE Image Streamer resources
 
-1. [Image_streamer_golden_image](#image_streamer_golden_image)
-2. [image_streamer_os_volume](#image_streamer_os_volume)
-3. [image_streamer_plan_script](#image_streamer_plan_script)
+1. [Image_streamer_deployment_group](#image_streamer_deployment_group)
+2. [Image_streamer_golden_image](#image_streamer_golden_image)
+3. [Image_streamer_os_volume](#image_streamer_os_volume)
+4. [Image_streamer_plan_script](#image_streamer_plan_script)
+
+#### image_streamer_deployment_group
+
+This resource provides the following ensurable methods for managing Deployment Group on the Image Streamer appliance:
+
+* `found` - Searches for `Image_streamer_deployment_group` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+
+:exclamation: **NOTE:**  This resource does NOT accept a `present`/`absent` state as it is created/removed through other HPE Image Streamer resources.
+
+Example file: [deployment_group.pp](examples/image_streamer/deployment_group.pp)
 
 #### image_streamer_golden_image
 
@@ -593,7 +604,7 @@ This resource provides the following ensurable methods for managing OS Volumes o
 * `found` - Searches for `image_streamer_os_volume` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `get_details_archive` - Gets the details of the archived OS volume.
 
-:exclamation: **NOTE:**  This resource does NOT accept a `present`/`absent` state as it is created/removed through other HPE OneView resources.
+:exclamation: **NOTE:**  This resource does NOT accept a `present`/`absent` state as it is created/removed through other HPE Image Streamer resources.
 
 Example file: [os_volume.pp](examples/image_streamer/os_volume.pp)
 

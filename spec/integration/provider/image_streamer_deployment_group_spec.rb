@@ -16,17 +16,16 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:image_streamer_os_volume).provider(:image_streamer)
+provider_class = Puppet::Type.type(:image_streamer_deployment_group).provider(:image_streamer)
 
 describe provider_class do
   let(:resource) do
-    Puppet::Type.type(:image_streamer_os_volume).new(
-      name: 'os-volume-1',
+    Puppet::Type.type(:image_streamer_deployment_group).new(
+      name: 'deployment-group-1',
       ensure: 'found',
-      data:
-          {
-            'name' => 'Volume_absent'
-          }
+      data: {
+        'name' => 'Absent-Group'
+      }
     )
   end
 
@@ -39,7 +38,7 @@ describe provider_class do
   end
 
   it 'should be an instance of the provider image streamer' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_os_volume).provider(:image_streamer)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:image_streamer_deployment_group).provider(:image_streamer)
   end
 
   context 'given the minimum parameters' do
@@ -47,12 +46,12 @@ describe provider_class do
       expect(instance).to be
     end
 
-    it 'exists? should return false when the volume is absent' do
+    it 'exists? should return false when the deployment group is absent' do
       expect(provider.exists?).not_to be
     end
 
-    it 'found should raise an error when the volume is absent' do
-      expect { provider.found }.to raise_error(/No OSVolume with the specified data were found on the Oneview Appliance/)
+    it 'found should raise an error when the deployment group is absent' do
+      expect { provider.found }.to raise_error(/No DeploymentGroup with the specified data were found on the Oneview Appliance/)
     end
 
     it 'create should display unavailable method' do
@@ -64,23 +63,19 @@ describe provider_class do
     end
   end
 
-  context 'given an existing OS Volume' do
+  context 'given an existing Deployment Group' do
     let(:resource) do
-      Puppet::Type.type(:image_streamer_os_volume).new(
-        name: 'os-volume-2',
+      Puppet::Type.type(:image_streamer_deployment_group).new(
+        name: 'deployment-group-2',
         ensure: 'found',
         data:
             {
-              'name' => 'OSVolume-6'
+              'name' => 'OSDS'
             }
       )
     end
-    it 'exists? should find a volume' do
+    it 'exists? should find a deployment group' do
       expect(provider.exists?).to be
-    end
-
-    it 'should retrieve the details of the archived volume' do
-      expect(provider.get_details_archive).to be
     end
   end
 end
