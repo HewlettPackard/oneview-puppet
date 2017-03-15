@@ -36,15 +36,11 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
       return true unless @data['new_name']
       current_resource.update_name(@data['new_name'])
     elsif @data['artifact_bundle_path']
-      create_from_file
+      @data['timeout'] ||= OneviewSDK::Rest::READ_TIMEOUT
+      @resourcetype.create_from_file(@client, @data['artifact_bundle_path'], @data['name'], @data['timeout']).data
     else
       @resourcetype.new(@client, @data).create.data
     end
-  end
-
-  def create_from_file
-    return @resourcetype.create_from_file(@client, @data['artifact_bundle_path'], @data['name']).data unless @data['timeout']
-    @resourcetype.create_from_file(@client, @data['artifact_bundle_path'], @data['name'], @data['timeout']).data
   end
 
   def extract
@@ -76,7 +72,7 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def create_backup_from_file
     path = @data.delete('backup_upload_path')
-    return @resourcetype.create_backup_from_file!(@client, get_deployment_group, path, File.basename(path)) unless @data['timeout']
+    @data['timeout'] ||= OneviewSDK::Rest::READ_TIMEOUT
     @resourcetype.create_backup_from_file!(@client, get_deployment_group, path, File.basename(path), @data['timeout'])
   end
 

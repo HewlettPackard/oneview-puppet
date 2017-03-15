@@ -135,7 +135,9 @@ describe provider_class, unit: true, if: api_version >= 300 do
       resource['data'] = { 'name' => 'Artifact_Bundle_Puppet', 'artifact_bundle_path' => 'artifact_bundle.zip' }
       provider.exists?
       allow(resourcetype).to receive(:find_by).and_return([])
-      expect(resourcetype).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Artifact_Bundle_Puppet').and_return(test)
+      path = 'artifact_bundle.zip'
+      timeout = OneviewSDK::Rest::READ_TIMEOUT
+      expect(resourcetype).to receive(:create_from_file).with(anything, path, 'Artifact_Bundle_Puppet', timeout).and_return(test)
       expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
       expect(provider.create).to be
     end
@@ -325,7 +327,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
         fake_hash = { 'uri' => '/rest/fake/backup.zip' }
         filepath = '/path/fake_file.zip'
         filename = 'fake_file.zip'
-        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, filepath, filename).and_return(fake_hash)
+        timeout = OneviewSDK::Rest::READ_TIMEOUT
+        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, filepath, filename, timeout).and_return(fake_hash)
         expect(provider.create_backup_from_file).to be
       end
 
