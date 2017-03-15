@@ -15,17 +15,15 @@
 ################################################################################
 require 'spec_helper'
 
-type_class = Puppet::Type.type(:image_streamer_build_plan)
+type_class = Puppet::Type.type(:image_streamer_artifact_bundle)
 
-def build_plan_config
+def plan_script_config
   {
-    name: 'build_plan_1',
+    name: 'artifact_bundle_1',
     ensure: 'present',
     data:
         {
-          'name'            => 'Demo OS Build Plan',
-          'description'     => 'oebuildplan',
-          'oeBuildPlanType' => 'deploy'
+          'name' => 'Artifact Bundle name'
         }
   }
 end
@@ -41,17 +39,17 @@ describe type_class do
 
   let :special_ensurables do
     [
-      :found
+      :found,
+      :extract,
+      :download,
+      :get_backups,
+      :create_backup
     ]
   end
 
   it 'should accept special ensurables' do
     special_ensurables.each do |value|
-      expect do
-        described_class.new(name: 'Test',
-                            ensure: value,
-                            data: {})
-      end.to_not raise_error
+      expect { described_class.new(name: 'Test', ensure: value, data: {}) }.to_not raise_error
     end
   end
 
@@ -62,12 +60,12 @@ describe type_class do
   end
 
   it 'should require a name' do
-    expect { type_class.new({}) }.to raise_error(Puppet::Error, 'Title or name must be provided')
+    expect { type_class.new({}) }.to raise_error(Puppet::Error, /Title or name must be provided/)
   end
 
   it 'should require a data hash' do
-    modified_config = build_plan_config
+    modified_config = plan_script_config
     modified_config[:data] = 5
-    expect { type_class.new(modified_config) }.to raise_error(/Inserted value for data is not valid/)
+    expect { type_class.new(modified_config) }.to raise_error(Puppet::Error, /Inserted value for data is not valid/)
   end
 end
