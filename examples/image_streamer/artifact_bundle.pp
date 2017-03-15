@@ -49,7 +49,8 @@ image_streamer_artifact_bundle{'artifact_bundle_4':
   ensure => 'present',
   data   => {
     name                 => 'Artifact_Bundle_2_Puppet',
-    artifact_bundle_path => 'examples/image_streamer/artifact_bundle.zip'  # can be either an absolute or relative path
+    artifact_bundle_path => 'examples/image_streamer/artifact_bundle.zip',  # can be either an absolute or relative path
+    timeout              => 3600
   }
 }
 
@@ -110,7 +111,8 @@ image_streamer_artifact_bundle{'artifact_bundle_11':
   require => Image_streamer_artifact_bundle['artifact_bundle_10'],
   data    => {
     deploymentGroupUri => 'OSDS',
-    backup_upload_path => 'examples/image_streamer/ci-backup2017-03-01T17_40_31.628Z.zip' # can be either an absolute or relative path
+    backup_upload_path => 'examples/image_streamer/ci-backup2017-03-01T17_40_31.628Z.zip',  # can be either an absolute or relative path
+    timeout            => 3600
   }
 }
 

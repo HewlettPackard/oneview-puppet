@@ -102,13 +102,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should create artifact bundle when not exists' do
       allow(resourcetype).to receive(:find_by).and_return([])
       expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
       expect(provider.create).to be
     end
 
     it 'should rename artifact bundle when resource exists and new_name provided' do
       resource['data']['new_name'] = 'Artifact_Bundle_Renamed'
       provider.exists?
-      expect_any_instance_of(resourcetype).to receive(:update_name).with('Artifact_Bundle_Renamed')
+      expect_any_instance_of(resourcetype).to receive(:update_name).with('Artifact_Bundle_Renamed').and_return(true)
       expect(provider.create).to be
     end
 
@@ -130,11 +131,21 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.found).to be
     end
 
-    it 'should create artifact bundle from file when not exists' do
+    it 'should create artifact bundle from file when not exists with default timeout' do
       resource['data'] = { 'name' => 'Artifact_Bundle_Puppet', 'artifact_bundle_path' => 'artifact_bundle.zip' }
       provider.exists?
       allow(resourcetype).to receive(:find_by).and_return([])
       expect(resourcetype).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Artifact_Bundle_Puppet').and_return(test)
+      expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
+      expect(provider.create).to be
+    end
+
+    it 'should create artifact bundle from file when not exists with given timeout' do
+      resource['data'] = { 'name' => 'Art_Bundle_Puppet', 'artifact_bundle_path' => 'artifact_bundle.zip', 'timeout' => 3_600 }
+      provider.exists?
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(resourcetype).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Art_Bundle_Puppet', 3_600).and_return(test)
+      expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
       expect(provider.create).to be
     end
 
@@ -309,8 +320,18 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     context 'given the create_backup_from_file ensurable' do
-      it 'should create backup upload and extract the file content' do
+      it 'should create backup upload and extract the file content with default timeout' do
         resource['data']['backup_upload_path'] = '/path/fake_file.zip'
+        fake_hash = { 'uri' => '/rest/fake/backup.zip' }
+        filepath = '/path/fake_file.zip'
+        filename = 'fake_file.zip'
+        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, filepath, filename).and_return(fake_hash)
+        expect(provider.create_backup_from_file).to be
+      end
+
+      it 'should create backup upload and extract the file content with given timeout' do
+        resource['data']['backup_upload_path'] = '/path/fake_file.zip'
+        resource['data']['timeout'] = 21_600
         fake_hash = { 'uri' => '/rest/fake/backup.zip' }
         filepath = '/path/fake_file.zip'
         filename = 'fake_file.zip'
