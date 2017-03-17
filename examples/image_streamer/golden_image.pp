@@ -57,7 +57,8 @@ image_streamer_golden_image{'golden_image_5':
   require => Image_streamer_golden_image['golden_image_4'],
   data    => {
     name                 => 'Golden_Image_2',
-    details_archive_path => 'log_archive.zip'  # can be either an absolute or relative path
+    details_archive_path => 'log_archive.zip',  # can be either an absolute or relative path
+    force                => true
   }
 }
 
@@ -66,7 +67,8 @@ image_streamer_golden_image{'golden_image_6':
   require => Image_streamer_golden_image['golden_image_5'],
   data    => {
     name                       => 'Golden_Image_2',
-    golden_image_download_path => 'golden_image.zip',  # can be either an absolute or relative path
+    golden_image_download_path => 'golden_image_downloaded.zip',  # can be either an absolute or relative path
+    force                      => true
   }
 }
 

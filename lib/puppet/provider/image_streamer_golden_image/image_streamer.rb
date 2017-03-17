@@ -35,16 +35,20 @@ Puppet::Type::Image_streamer_golden_image.provide :image_streamer, parent: Puppe
   end
 
   def download_details_archive
-    archive_path = @data.delete('details_archive_path')
+    path = @data.delete('details_archive_path')
+    force = @data.delete('force')
     golden_image = get_single_resource_instance
-    golden_image.download_details_archive(archive_path)
+    raise "File #{path} already exists." if File.exist?(path) && !force
+    golden_image.download_details_archive(path)
     true
   end
 
   def download
-    download_path = @data.delete('golden_image_download_path')
+    path = @data.delete('golden_image_download_path')
+    force = @data.delete('force')
     golden_image = get_single_resource_instance
-    golden_image.download(download_path)
+    raise "File #{path} already exists." if File.exist?(path) && !force
+    golden_image.download(path)
     true
   end
 end
