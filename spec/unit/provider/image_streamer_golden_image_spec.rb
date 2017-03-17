@@ -96,14 +96,27 @@ describe provider_class, unit: true, if: api_version >= 300 do
       )
     end
 
+    let(:expected_data) do
+      { 'name' => resource['data']['name'],
+        'description' => resource['data']['description'] }
+    end
+
     before(:each) do
       allow(resourcetype).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
-    it 'should upload the file and add the golden image resource' do
+    it 'should upload the file and add the golden image resource with default timeout' do
       allow(resourcetype).to receive(:find_by).and_return([])
-      expect(resourcetype).to receive(:add).and_return(test)
+      timeout = OneviewSDK::Rest::READ_TIMEOUT
+      expect(resourcetype).to receive(:add).with(anything, '/path/to/upload/golden_image.zip', expected_data, timeout).and_return(test)
+      expect(provider.create).to be
+    end
+
+    it 'should upload the file and add the golden image resource with given timeout' do
+      resource['data']['timeout'] = 7_200
+      allow(resourcetype).to receive(:find_by).and_return([])
+      expect(resourcetype).to receive(:add).with(anything, '/path/to/upload/golden_image.zip', expected_data, 7_200).and_return(test)
       expect(provider.create).to be
     end
   end

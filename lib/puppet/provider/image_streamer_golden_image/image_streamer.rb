@@ -30,7 +30,8 @@ Puppet::Type::Image_streamer_golden_image.provide :image_streamer, parent: Puppe
   def create
     current_resource = @resourcetype.find_by(@client, unique_id).first
     return super unless @golden_image_path && !current_resource
-    @resourcetype.add(@client, @golden_image_path, @data)
+    timeout = @data.delete('timeout') || OneviewSDK::Rest::READ_TIMEOUT
+    @resourcetype.add(@client, @golden_image_path, @data, timeout)
     true
   end
 

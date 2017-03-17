@@ -32,7 +32,8 @@ image_streamer_golden_image{'golden_image_2':
   data   => {
     name              => 'Golden_Image_2',
     description       => 'Golden image added from the file that is uploaded from a local drive',
-    golden_image_path => 'golden_image.zip'  # can be either an absolute or relative path
+    golden_image_path => 'golden_image.zip',  # can be either an absolute or relative path
+    timeout           => 3600
   }
 }
 
