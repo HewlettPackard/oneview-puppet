@@ -55,10 +55,10 @@ Example file: [connection_template.pp](examples/connection_template.pp)
 
 This resource provides the following ensurable methods for managing Datacenters on the HPE OneView appliance:
 
-* `present` - Adds or updates a data center resource based upon the attributes specified within `data`.
-* `absent` - Deletes the set of datacenters according to the specified parameters within `data`.
+* `present` - Adds or updates a datacenter resource based upon the attributes specified within the `data`.
+* `absent` - Deletes the set of datacenters according to the specified parameters within the `data`.
 * `found` - Searches for `oneview_datacenter` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
-* `get_visual_content` - Gets a list of visual content objects describing each rack within the data center specified in `data`.
+* `get_visual_content` - Gets a list of visual content objects describing each rack within the datacenter specified in the `data`.
 
 Example file: [datacenter.pp](examples/datacenter.pp)
 
@@ -66,7 +66,7 @@ Example file: [datacenter.pp](examples/datacenter.pp)
 
 This resource provides the following ensurable methods for managing Drive Enclosures on the HPE OneView appliance:
 
-* `present` - Performs a specific `patch` operation for the given drive enclosure using the attributes in `data`.
+* `present` - Performs a specific `patch` operation for the given drive enclosure using the attributes in the `data`.
 * `found` - Searches for `oneview_drive_enclosure` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `set_refresh_state` - Refreshes the specified drive enclosure.
 
@@ -80,8 +80,8 @@ This resource provides the following ensurable methods for managing Enclosure Gr
 
 * `present` - Creates or updates an enclosure group. An interconnect bay mapping must be provided for each interconnect bay in the enclosure. For this release, the same logical interconnect group must be provided for each interconnect bay mapping.
 * `absent` - Deletes an enclosure group.
-* `found` - Searches for an `oneview_enclosure_group` resource on the appliance (with or without specific filters) and prints the information to the standard output.
-* `set_script` - Updates the configuration script of the enclosure group with the specified.
+* `found` - Searches for `oneview_enclosure_group` resources on the appliance (with or without specific filters) and prints the information to the standard output.
+* `set_script` - Updates the configuration script of the enclosure group with the specified content.
 * `get_script` - Gets the configuration script of the enclosure group resource specified in `data` and prints it to the standard output.
 
 Example file: [enclosure_group.pp](examples/enclosure_group.pp)
@@ -97,8 +97,8 @@ This resource provides the following ensurable methods for managing Enclosures o
 * `set_configuration` - Reapplies the appliance's configuration on the specified enclosure.
 * `set_refresh_state` - Refreshes the specified enclosure along with all of its components, including interconnects and servers.
 * `get_script` - Retrieves the script from within an enclosure group specified in `data` and prints the script to the standard output. This requires a script to be set within the enclosure to work.
-* `get_single_sign_on` - Builds the SSO (Single Sign-On) URL parameters for the specified enclosure. This allows the user to log in to the enclosure without providing credentials. This API is currently only supported by C7000 enclosures.
-* `get_utilization` - Retrieves historical utilization data for the specified enclosure, metrics, and time span. Accepts a tag `utilization_parameters` within `data` with the desired query parameters.
+* `get_single_sign_on` - Builds the SSO (Single Sign-On) URL parameters for the specified enclosure. This allows the user to login to the enclosure without providing credentials. This API is currently only supported by C7000 enclosures.
+* `get_utilization` - Retrieves historical utilization data for the specified enclosure, metrics, and time span. Accepts a tag `utilization_parameters` within the `data` with the desired query parameters.
 * `get_environmental_configuration` - Gets the settings that describe the environmental configuration (supported feature set, calibrated minimum and maximum power, location and dimensions, etc.) of the specified enclosure resource.
 
 Example file: [enclosure.pp](examples/enclosure.pp)
@@ -107,12 +107,12 @@ Example file: [enclosure.pp](examples/enclosure.pp)
 
 This resource provides the following ensurable methods for managing Ethernet Networks on the HPE OneView appliance:
 
-* `present` - Creates or updates a single Ethernet network, or, given a `vlanIdRange` inside `data`, creates Ethernet networks in bulk.
+* `present` - Creates or updates a single Ethernet network, or, given a `vlanIdRange` inside the `data`, creates Ethernet networks in bulk.
 * `absent` - Deletes an Ethernet network. Any deployed connections that are using the network will be placed into a **Failed** state.
 * `found` - Searches for `oneview_ethernet_network` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `get_associated_profiles` - Gets the profiles that are using a specified Ethernet network.
 * `get_associated_uplink_groups` - Gets the uplink sets that are using a specified Ethernet network.
-* `reset_default_bandwidth` - Retrieves de default connection template bandwidth, compares it to the current network's connection template and updates it if needed.
+* `reset_default_bandwidth` - Retrieves the default connection template bandwidth, compares it to the current network's connection template and updates it if needed.
 
 Example file: [ethernet_network.pp](examples/ethernet_network.pp)
 
@@ -154,7 +154,7 @@ This resource provides the following ensurable methods for uploading firmware SP
 
 * `present` - Uploads an SPP ISO image file or a hotfix file to the HPE OneView appliance. It supports the upload of one hotfix at a time into the system. The `firmware_bundle_path` tag must be specified within the `data` hash containing the path to the desired SPP or hotfix file.
 
-:exclamation: **NOTE:** This resource does not have `absent` or `found` ensurable methods; it is only able to upload the SPPs/Hotfixes to the HPE OneView appliance by using the `present` ensurable.
+:exclamation: **NOTE:** This resource does not have `absent` or `found` ensurable methods; it is only able to upload the SPP/Hotfixes to the HPE OneView appliance by using the `present` ensurable.
 
 Example file: [firmware_bundle.pp](examples/firmware_bundle.pp)
 
@@ -291,9 +291,9 @@ This resource provides the following ensurable methods for managing SANs on the 
 * `get_endpoints` - Retrieves a list of endpoints in a specified SAN.
 * `set_refresh_state` - Sets the refresh state for a specified SAN.
 
-**NOTE 1:** A SAN represents a physical or logical fibre channel SAN or a Flat SAN (i.e. direct wire attach).
+:exclamation: **NOTE 1:** A SAN represents a physical or logical fibre channel SAN or a Flat SAN (i.e. direct wire attach).
 
-**NOTE 2:** This resource does not have an `absent` ensurable. The deletion of these resources is managed by other resources.
+:exclamation: **NOTE 2:** This resource does not have an `absent` ensurable. The deletion of these resources is managed by other resources.
 
 Example file: [managed_san.pp](examples/managed_san.pp)
 
@@ -315,7 +315,7 @@ This resource provides the following ensurable methods for managing Power delive
 * `present` - Adds or updates a power delivery device resource based upon the specified attributes.
 * `absent` - Deletes the set of power-devices according to the specified parameters.
 * `found` - Searches for `oneview_power_device` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
-* `discover` - Add an HPE iPDU and bring all components under management by discovery of its management module.
+* `discover` - Adds an HPE iPDU and bring all components under management by discovery of its management module.
 * `set_refresh_state` - Refreshes a given intelligent power delivery device.
 * `set_power_state` - Sets the power state of the specified power delivery device. The device must be an HPE Intelligent Outlet.
 * `set_uid_state` - Sets the unit identification (UID) light state of the specified power delivery device. The device must be an HPE iPDU component with a locator light (HPE Intelligent Load Segment, HPE AC Module, HPE Intelligent Outlet Bar, or HPE Intelligent Outlet).
@@ -357,7 +357,7 @@ This resource provides the following ensurable methods for managing SAS Intercon
 * `present` - Performs a specific `patch` operation for the given interconnect.
 * `found` - Searches for `oneview_sas_interconnect` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `get_types` - Get a paginated collection of all the SAS interconnect types based on optional filtering.
-* `set_refresh_state` - Refresh a `SAS interconnect` by setting the refresh state value to 'refreshPending' in order to trigger a refresh.
+* `set_refresh_state` - Refreshes a `SAS interconnect` by setting the refresh state value to 'refreshPending' in order to trigger a refresh.
 
 :exclamation: **NOTE:** The `absent` ensurable method is unavailable for this resource. Deletion of this resource is managed by another resource on HPE OneView or by HPE OneView internally.
 :warning: This resource type is only supported by the **Synergy** hardware variant.
@@ -405,7 +405,7 @@ This resource provides the following ensurable methods for managing server hardw
 * `get_remote_console_url` - Generates a Single Sign-On (SSO) session for the iLO Integrated Remote Console Application (IRC) and returns the URL to launch it. If the server hardware is unmanaged or unsupported, the resulting URL will not use SSO and the IRC application will prompt for credentials. Use of this URL requires a previous installation of the iLO IRC and is supported only on Windows clients.
 * `get_environmental_configuration` - Gets the settings that describe the environmental configuration (supported feature set, calibrated minimum and maximum power, location and dimensions, etc.) of the server hardware resource.
 * `get_utilization` - Retrieves historical utilization data for the specified resource, metrics, and time span.
-* `update_ilo_firmware` - Updates the iLO firmware on a physical server to a minimum ILO firmware version required by OneView to manage the server.
+* `update_ilo_firmware` - Updates the iLO firmware on a physical server to a minimum iLO firmware version required by OneView to manage the server.
 * `set_power_state` - Requests a power operation to change the power state of the physical server.
 * `set_refresh_state` - Refreshes the server hardware to fix configuration issues.
 
@@ -420,7 +420,7 @@ This resource provides the following ensurable methods for managing server hardw
 * `absent` - Removes the specified server hardware type.
 * `found` - Searches for `oneview_server_hardware_type` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 
-:exclamation: **NOTE:** The creation of this resource is managed by the HPE OneView itself when creating a server hardware. This provider can only update existing types and remove unused ones.
+:exclamation: **NOTE:** The creation of this resource is managed by the HPE OneView itself when creating the server hardware. This provider can only update existing types and remove unused ones.
 
 Example file: [server_hardware_type.pp](examples/server_hardware_type.pp)
 
@@ -429,7 +429,7 @@ Example file: [server_hardware_type.pp](examples/server_hardware_type.pp)
 This resource provides the following ensurable methods for managing server profile templates on the HPE OneView appliance:
 
 * `present` - Creates or updates a server profile template using the information provided.
-* `absent` - Deletes a server profile template object from the appliance based on its profile template UUID.
+* `absent` - Deletes a server profile template object from the appliance.
 * `found` - Searches for `oneview_server_profile_template` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `set_new_profile` - Creates a new server profile based on the current template.
 * `get_transformation` - Transforms an existing profile template by supplying a new server hardware type and/or enclosure group. A profile template will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group. All configured connections will have their port assignment set to `Auto`.
@@ -442,7 +442,7 @@ Example file: [server_profile_template.pp](examples/server_profile_template.pp)
 This resource provides the following ensurable methods for managing server profiles on the HPE OneView appliance:
 
 * `present` - Creates or updates a server profile using the information provided.
-* `absent` - Deletes all Server Profile objects from the appliance that match the provided filter.
+* `absent` - Deletes all server profile objects from the appliance that match the provided filter.
 * `found` - Searches for `oneview_server_profile` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `update_from_template` - Updates the server profile from the server profile template.
 * `get_available_networks` - Retrieves the list of Ethernet networks, Fibre Channel, networks and network sets that are available to a server profile along with their respective ports.
@@ -465,7 +465,7 @@ Example file: [server_profile.pp](examples/server_profile.pp)
 
 This resource provides the following ensurable methods for managing storage pools on the HPE OneView appliance:
 
-* `present` - Adds storage pool for management by the appliance. If the storage pool is already added but with different attributes to the provided ones, it is removed and then added with the new information.
+* `present` - Adds a storage pool for management by the appliance. If the storage pool is already added but with different attributes to the provided ones, it is removed and then added with the new information.
 * `absent` - Removes an imported storage pool from OneView.
 * `found` - Searches for `oneview_storage_pool` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 
@@ -582,14 +582,14 @@ Example file: [volume_template.pp](examples/volume_template.pp)
 
 This resource provides the following ensurable methods for managing Artifact Bundles on the Image Streamer appliance:
 
-* `present` - Adds, uploads, or updates an artifact bundle resource based upon the attributes specified within `data`.
+* `present` - Adds, uploads, or updates an artifact bundle resource based upon the attributes specified within the `data`.
 * `found` - Searches for `image_streamer_artifact_bundle` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `extract` - Extracts an artifact bundle and creates the artifacts on the appliance.
 * `download` - Downloads the content of an artifact bundle to a local drive.
 * `get_backups` - Gets information about the backups.
-* `extract_backup` - Extracts the existing backup bundle on the appliance and creates all the artifacts. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
+* `extract_backup` - Extracts the existing backup bundle on the appliance and creates all of the artifacts. :exclamation: **NOTE**: If there are any artifacts existing, they will be removed before the extract operation.
 * `create_backup` - Creates a backup bundle with all the artifacts present on the appliance. At any given point only one backup bundle will exist on the appliance.
-* `create_backup_from_file` - Uploads a backup bundle from a local drive and extracts all the artifacts present in the uploaded file. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
+* `create_backup_from_file` - Uploads a backup bundle from a local drive and extracts all the artifacts present in the uploaded file. :exclamation: **NOTE**: If there are any artifacts existing, they will be removed before the extract operation.
 * `download_backup` - Downloads a backup.
 * `absent` - Deletes an Artifact Bundle.
 
@@ -599,7 +599,7 @@ Example file: [artifact_bundle.pp](examples/image_streamer/artifact_bundle.pp)
 
 This resource provides the following ensurable methods for managing Build Plans on the Image Streamer appliance:
 
-* `present` - Adds or updates a build plan resource based upon the attributes specified within `data`.
+* `present` - Adds or updates a build plan resource based on the attributes specified within the `data`.
 * `found` - Searches for `Image_streamer_build_plan` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `absent` - Deletes a Build Plan.
 
@@ -609,7 +609,7 @@ Example file: [build_plan.pp](examples/image_streamer/build_plan.pp)
 
 This resource provides the following ensurable methods for managing Deployment Plans on the Image Streamer appliance:
 
-* `present` - Adds or updates a deployment plan resource based upon the attributes specified within `data`.
+* `present` - Adds or updates a deployment plan resource based upon the attributes specified within the `data`.
 * `found` - Searches for `Image_streamer_deployment_plan` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `absent` - Deletes a Deployment Plan.
 
@@ -617,7 +617,7 @@ Example file: [deployment_plan.pp](examples/image_streamer/deployment_plan.pp)
 
 #### image_streamer_deployment_group
 
-This resource provides the following ensurable methods for managing Deployment Group on the Image Streamer appliance:
+This resource provides the following ensurable methods for managing Deployment Groups on the Image Streamer appliance:
 
 * `found` - Searches for `Image_streamer_deployment_group` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 
@@ -629,7 +629,7 @@ Example file: [deployment_group.pp](examples/image_streamer/deployment_group.pp)
 
 This resource provides the following ensurable methods for managing Golden Images on the Image Streamer appliance:
 
-* `present` - Adds or updates a golden resource based upon the attributes specified within `data`.
+* `present` - Adds or updates a golden resource based upon the attributes specified within the `data`.
 * `found` - Searches for `image_streamer_golden_image` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `download` - Downloads the content of a golden image.
 * `download_details_archive` - Downloads the details of the golden image capture logs which has been archived.
@@ -652,7 +652,7 @@ Example file: [os_volume.pp](examples/image_streamer/os_volume.pp)
 
 This resource provides the following ensurable methods for managing Plan Scripts on the Image Streamer appliance:
 
-* `present` - Adds or updates a plan script resource based upon the attributes specified within `data`.
+* `present` - Adds or updates a plan script resource based upon the attributes specified within the `data`.
 * `found` - Searches for `image_streamer_plan_script` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `retrieve_differences` - Retrieves the modified contents of the Plan Script.
 * `absent` - Deletes a Plan Script.
