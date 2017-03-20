@@ -14,7 +14,17 @@
 # limitations under the License.
 ################################################################################
 
-# This example demonstrates how to create an advanced Gen 9 profile with OS Deployment Settings
+# This example demonstrates how to create an advanced Gen 9 profile with OS Deployment Settings.
+#
+# The Artifact Bundle Zip file contains a Golden Image, Build Plans, Plan Scripts, and a Deployment Plan.
+# The Deployment Plan will provision an OS Image that is not really an OS but rather a very minimal
+# OS Volume having only UEFI boot loader content in a UEFI Extended System Partition.
+# It has a simple configuration to show a message on the server console at boot.
+#
+# Once you run the manifest, you must:
+#  1. Launch server console
+#  2. Power on and boot the server
+#  3. Wait for the server to boot
 
 $file_path = 'examples/image_streamer/files/artifact-bundle-dev.zip'
 
