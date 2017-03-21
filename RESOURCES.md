@@ -582,14 +582,14 @@ Example file: [volume_template.pp](examples/volume_template.pp)
 
 This resource provides the following ensurable methods for managing Artifact Bundles on the Image Streamer appliance:
 
-* `present` - Adds, uploads, or updates an artifact bundle resource based upon the attributes specified within `data`.
+* `present` - Adds, uploads, or updates an artifact bundle resource based upon the attributes specified within `data`. If you are adding an artifact bundle zip file, you can set a `timeout` (in seconds) within the `data`.
 * `found` - Searches for `image_streamer_artifact_bundle` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `extract` - Extracts an artifact bundle and creates the artifacts on the appliance.
 * `download` - Downloads the content of an artifact bundle to a local drive.
 * `get_backups` - Gets information about the backups.
 * `extract_backup` - Extracts the existing backup bundle on the appliance and creates all the artifacts. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
 * `create_backup` - Creates a backup bundle with all the artifacts present on the appliance. At any given point only one backup bundle will exist on the appliance.
-* `create_backup_from_file` - Uploads a backup bundle from a local drive and extracts all the artifacts present in the uploaded file. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
+* `create_backup_from_file` - Uploads a backup bundle from a local drive and extracts all the artifacts present in the uploaded file. You can set a `timeout` (in seconds) within the `data`. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
 * `download_backup` - Downloads a backup.
 * `absent` - Deletes an Artifact Bundle.
 
@@ -629,7 +629,7 @@ Example file: [deployment_group.pp](examples/image_streamer/deployment_group.pp)
 
 This resource provides the following ensurable methods for managing Golden Images on the Image Streamer appliance:
 
-* `present` - Adds or updates a golden resource based upon the attributes specified within `data`.
+* `present` - Adds or updates a golden resource based upon the attributes specified within `data`. If you are adding a golden image zip file, you can set a `timeout` (in seconds) within the `data`.
 * `found` - Searches for `image_streamer_golden_image` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `download` - Downloads the content of a golden image.
 * `download_details_archive` - Downloads the details of the golden image capture logs which has been archived.
