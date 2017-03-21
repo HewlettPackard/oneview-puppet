@@ -58,7 +58,7 @@ image_streamer_golden_image{'golden_image_5':
   data    => {
     name                 => 'Golden_Image_2',
     details_archive_path => 'log_archive.zip',  # can be either an absolute or relative path
-    force                => true
+    force                => false  # does not overwrite the file when it already exists
   }
 }
 
@@ -68,7 +68,7 @@ image_streamer_golden_image{'golden_image_6':
   data    => {
     name                       => 'Golden_Image_2',
     golden_image_download_path => 'golden_image_downloaded.zip',  # can be either an absolute or relative path
-    force                      => true
+    force                      => false    # does not overwrite the file when it already exists
   }
 }
 

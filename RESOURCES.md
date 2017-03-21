@@ -585,12 +585,12 @@ This resource provides the following ensurable methods for managing Artifact Bun
 * `present` - Adds, uploads, or updates an artifact bundle resource based upon the attributes specified within `data`.
 * `found` - Searches for `image_streamer_artifact_bundle` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `extract` - Extracts an artifact bundle and creates the artifacts on the appliance.
-* `download` - Downloads the content of an artifact bundle to a local drive.
+* `download` - Downloads the content of an artifact bundle to a local drive. You can set an option `force` within the `data` with value `true` to force the download even if the file already exists (default is false).
 * `get_backups` - Gets information about the backups.
 * `extract_backup` - Extracts the existing backup bundle on the appliance and creates all the artifacts. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
 * `create_backup` - Creates a backup bundle with all the artifacts present on the appliance. At any given point only one backup bundle will exist on the appliance.
 * `create_backup_from_file` - Uploads a backup bundle from a local drive and extracts all the artifacts present in the uploaded file. :exclamation: If there are any artifacts existing, they will be removed before the extract operation.
-* `download_backup` - Downloads a backup.
+* `download_backup` - Downloads a backup. You can set an option `force` within the `data` with value `true` to force the download even if the file already exists (default is false).
 * `absent` - Deletes an Artifact Bundle.
 
 Example file: [artifact_bundle.pp](examples/image_streamer/artifact_bundle.pp)
@@ -631,8 +631,8 @@ This resource provides the following ensurable methods for managing Golden Image
 
 * `present` - Adds or updates a golden resource based upon the attributes specified within `data`.
 * `found` - Searches for `image_streamer_golden_image` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
-* `download` - Downloads the content of a golden image.
-* `download_details_archive` - Downloads the details of the golden image capture logs which has been archived.
+* `download` - Downloads the content of a golden image. You can set an option `force` within the `data` with value `true` to force the download even if the file already exists (default is false).
+* `download_details_archive` - Downloads the details of the golden image capture logs which has been archived. You can set an option `force` within the `data` with value `true` to force the download even if the file already exists (default is false).
 * `absent` - Deletes a Golden Image.
 
 Example file: [golden_image.pp](examples/image_streamer/golden_image.pp)
