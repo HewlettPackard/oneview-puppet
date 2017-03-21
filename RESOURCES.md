@@ -51,6 +51,8 @@
 6. [Image_streamer_os_volume](#image_streamer_os_volume)
 7. [Image_streamer_plan_script](#image_streamer_plan_script)
 
+# HPE OneView resources
+
 #### oneview_connection_template
 
 This resource provides the following ensurable methods for managing Connection Templates on the HPE OneView appliance:
@@ -579,6 +581,8 @@ This resource provides the following ensurable methods for managing storage volu
 * `get_connectable_volume_templates` - Gets the storage volume templates that are available on the specified networks based on the storage system port's expected network connectivity. If no storage volume templates exist that meet the specified connectivity criteria, an empty collection will be returned.
 
 Example file: [volume_template.pp](examples/volume_template.pp)
+
+# HPE Image Streamer resources
 
 #### image_streamer_artifact_bundle
 
