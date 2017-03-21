@@ -61,7 +61,7 @@ oneview_server_profile{'server_profile_present':
     serverHardwareTypeUri => 'SY 480 Gen9 1',
     enclosureGroupUri     => 'EG',
     enclosureBay          => 2,
-    affinity              => 'Bay',
+    affinity              => 'BayAndServer',
     enclosureUri          => 'SGH537YCES',
     osDeploymentSettings  => {
       osDeploymentPlanUri => 'HPE - Developer 1.0 - Deployment Test (UEFI)'
@@ -73,15 +73,22 @@ oneview_server_profile{'server_profile_present':
     },
     connections           => [{
       id            => 1,
-      name          => 'connection1',
+      name          => 'deploy-network',
       functionType  => 'Ethernet',
-      networkUri    => 'deployARP',
+      networkUri    => 'deploy',
       requestedMbps => 2500,
       requestedVFs  => 'Auto',
       boot          => {
         priority            => 'Primary',
         initiatorNameSource => 'ProfileInitiatorName'
       }
+    }, {
+      id            => 2,
+      name          => 'corp',
+      functionType  => 'Ethernet',
+      networkUri    => 'mgmt',
+      requestedMbps => 2500,
+      requestedVFs  => 'Auto'
     }]
   }
 }
