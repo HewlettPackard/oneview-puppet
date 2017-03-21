@@ -186,3 +186,10 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Volume
 - Volume attachment
 - Volume template
+
+# Unreleased Changes
+
+## Suggested release: v3.2.0
+
+#### Bug fixes & Enhancements:
+- [#95](https://github.com/HewlettPackard/oneview-puppet/issues/95) Improve server profile idempotency
