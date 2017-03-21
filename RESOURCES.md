@@ -1,4 +1,6 @@
-# Resources for the Puppet Module for HPE OneView
+# Summary
+
+## HPE OneView resources
 
 1. [Oneview_connection_template](#oneview_connection_template)
 2. [Oneview_datacenter](#oneview_datacenter)
@@ -38,6 +40,16 @@
 36. [Oneview_volume](#oneview_volume)
 37. [Oneview_volume_attachment](#oneview_volume_attachment)
 38. [Oneview_volume_template](#oneview_volume_template)
+
+## HPE Image Streamer resources
+
+1. [Image_streamer_artifact_bundle](#image_streamer_artifact_bundle)
+2. [Image_streamer_build_plan](#image_streamer_build_plan)
+3. [Image_streamer_deployment_group](#image_streamer_deployment_group)
+4. [Image_streamer_deployment_plan](#image_streamer_deployment_plan)
+5. [Image_streamer_golden_image](#image_streamer_golden_image)
+6. [Image_streamer_os_volume](#image_streamer_os_volume)
+7. [Image_streamer_plan_script](#image_streamer_plan_script)
 
 #### oneview_connection_template
 
@@ -567,16 +579,6 @@ This resource provides the following ensurable methods for managing storage volu
 * `get_connectable_volume_templates` - Gets the storage volume templates that are available on the specified networks based on the storage system port's expected network connectivity. If no storage volume templates exist that meet the specified connectivity criteria, an empty collection will be returned.
 
 Example file: [volume_template.pp](examples/volume_template.pp)
-
-# HPE Image Streamer resources
-
-1. [Image_streamer_artifact_bundle](#image_streamer_artifact_bundle)
-2. [Image_streamer_build_plan](#image_streamer_build_plan)
-3. [Image_streamer_deployment_group](#image_streamer_deployment_group)
-4. [Image_streamer_deployment_plan](#image_streamer_deployment_plan)
-5. [Image_streamer_golden_image](#image_streamer_golden_image)
-6. [Image_streamer_os_volume](#image_streamer_os_volume)
-7. [Image_streamer_plan_script](#image_streamer_plan_script)
 
 #### image_streamer_artifact_bundle
 
