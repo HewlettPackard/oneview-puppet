@@ -13,8 +13,8 @@
     * [Requirements](#requirements)
     * [Beginning with the Puppet Module for HPE OneView](#beginning-with-the-puppet-module-for-hpe-oneview)
 4. [Usage](#usage)
-    * [OneView Appliance authentication](#oneview-appliance-authentication)
-    * [Synergy Image Streamer Authentication](#synergy-image-streamer-authentication)
+    * [OneView appliance authentication](#oneview-appliance-authentication)
+    * [Synergy Image Streamer authentication](#synergy-image-streamer-authentication)
     * [Types and providers](#types-and-providers)
 5. [Reference](#reference)
 6. [Contributing and feature requests](#contributing-and-feature-requests)
@@ -28,11 +28,11 @@ The Puppet Module for HPE OneView provides resource style declaration capabiliti
 
 ## Module description
 
-The Puppet Module for HPE OneView allows for management of HPE OneView Appliances through the use of puppet manifests and resource style declarations, which internally make use of the HPE OneView Ruby SDK and HPE OneView API.
+The Puppet Module for HPE OneView allows for management of HPE OneView Appliances through the use of puppet manifests and resource style declarations, which makes internal use of the HPE OneView Ruby SDK and HPE OneView API.
 
-It adds several resource types to puppet, and uses ensurable methods such as `present`, `absent` and other custom ensurable methods to manage the appliance to allow the user to easily create, update, query and delete resources.
+It adds several resource types to puppet, and uses ensurable methods such as `present`, `absent` and other custom ensurable methods to manage the appliance to allow users to easily create, update, query and delete resources.
 
-For more information on the Puppet module for HPE OneView resource types and their specifications, see the [Usage](#usage) and [examples](examples).
+For more information on the Puppet Module for HPE OneView resource types and their specifications, see the [Usage](#usage) and [examples](examples).
 
 ## Setup
 
@@ -54,11 +54,11 @@ Alternatively, you can clone the source code from https://github.com/HewlettPack
 git clone https://github.com/HewlettPackard/oneview-puppet <your_module_path>/oneview
 ```
 
-:exclamation: HPE recommends that the cloned directory be named `oneview`. It should also be noted that if the directory name contains any dashes it will not be found by puppet.
+:exclamation: **NOTE:** HPE recommends that the cloned directory be named `oneview`. It should also be noted that if the directory name contains any dashes it will not be found by puppet.
 
 ## Usage
 
-### OneView Appliance Authentication
+### OneView appliance authentication
 
 The attributes required for authenticating with your HPE OneView Appliance are:
 
@@ -89,9 +89,9 @@ You can assign attributes for your appliances using three methods:
 
 Once the authentication is prepared and the manifests containing the resources are written, you can use ``` puppet apply <manifest>``` to run your manifests and execute the desired changes to the system.
 
-### Synergy Image Streamer Authentication
+### Synergy Image Streamer authentication
 
-The attributes required for authenticating with your HPE Synergy Image Streamer Appliance are:
+The attributes required for authenticating with your HPE Synergy Image Streamer appliance are:
 
 * `IMAGE_STREAMER_URL` - The web address for the HPE Image Streamer appliance. For example, https://imagestreamer.example.com
 * `IMAGE_STREAMER_API_VERSION` - The API version for the HPE Image Streamer. This defaults to **300**
@@ -107,9 +107,7 @@ The following attribute must be set only if you haven't configured the credentia
 
 You can assign attributes for your appliances using three methods:
 
-1. Create a json file named `login_image_streamer.json` on your working directory, and enter the authentication information for your appliance. See [login_image_streamer.json](examples/login_image_streamer.json) for an example.
-
-You must provide a token only if you haven't configured the credentials to authenticate with your HPE OneView Appliance.
+1. Create a json file named `login_image_streamer.json` on your working directory, and enter the authentication information for your appliance. See [login_image_streamer.json](examples/login_image_streamer.json) for an example. :exclamation: **NOTE:** You must provide a token only if you haven't configured the credentials to authenticate with your HPE OneView Appliance.
 
 2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
