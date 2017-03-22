@@ -21,6 +21,7 @@
 - [#121](https://github.com/HewlettPackard/oneview-puppet/issues/121) Deployment Plan and Golden Image should use the default uri parser
 - [#122](https://github.com/HewlettPackard/oneview-puppet/issues/122) Uri_parsing should support upper case for uri
 - [#133](https://github.com/HewlettPackard/oneview-puppet/issues/133) Allow set a timeout for Image_streamer_golden_image upload
+- [#132](https://github.com/HewlettPackard/oneview-puppet/issues/132) Allow option force for Image_streamer_golden_image download operations
 
 # 2.1.0 (2017-02-03)
 ### Version highlights:
