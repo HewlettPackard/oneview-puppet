@@ -109,14 +109,16 @@ describe provider_class, unit: true, if: api_version >= 300 do
   end
 
   context 'given the Archive Download parameters' do
+    let(:download_path) { '/path/to/download/details_archive.zip' }
+
     let(:resource) do
       Puppet::Type.type(:image_streamer_golden_image).new(
         name: 'golden-image-2',
         ensure: 'download_details_archive',
         data:
             {
-              'name'                     => 'Golden_Image_1',
-              'download_details_archive' => '/path/to/download/details_archive.zip'
+              'name'                 => 'Golden_Image_1',
+              'details_archive_path' => download_path
             }
       )
     end
@@ -126,13 +128,54 @@ describe provider_class, unit: true, if: api_version >= 300 do
       provider.exists?
     end
 
-    it 'should download the archived logs of the golden image' do
-      expect_any_instance_of(resourcetype).to receive(:download_details_archive)
-      expect(provider.download_details_archive).to be
+    context 'when file does not exist' do
+      before(:each) do
+        allow(File).to receive(:exist?).with(download_path).and_return(false)
+        expect_any_instance_of(resourcetype).to receive(:download_details_archive).with(download_path).and_return(true)
+      end
+
+      it 'should download the file' do
+        expect(provider.download_details_archive).to be
+      end
+
+      it 'should download if force is false' do
+        resource['data']['force'] = false
+        expect(provider.download_details_archive).to be
+      end
+
+      it 'should download if force is true' do
+        resource['data']['force'] = true
+        expect(provider.download_details_archive).to be
+      end
+    end
+
+    context 'when file already exists' do
+      before(:each) do
+        allow(File).to receive(:exist?).with(download_path).and_return(true)
+      end
+
+      it 'should raise error' do
+        expect_any_instance_of(resourcetype).not_to receive(:download_details_archive).and_return(true)
+        expect { provider.download_details_archive }.to raise_error('File /path/to/download/details_archive.zip already exists.')
+      end
+
+      it 'should raise error if force is false' do
+        resource['data']['force'] = false
+        expect_any_instance_of(resourcetype).not_to receive(:download_details_archive).and_return(true)
+        expect { provider.download_details_archive }.to raise_error('File /path/to/download/details_archive.zip already exists.')
+      end
+
+      it 'should download if force is true' do
+        resource['data']['force'] = true
+        expect_any_instance_of(resourcetype).to receive(:download_details_archive).with(download_path).and_return(true)
+        expect(provider.download_details_archive).to be
+      end
     end
   end
 
   context 'given the Download parameters' do
+    let(:download_path) { '/path/to/download/golden_image.zip' }
+
     let(:resource) do
       Puppet::Type.type(:image_streamer_golden_image).new(
         name: 'golden-image-2',
@@ -140,7 +183,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
         data:
             {
               'name'                       => 'Golden_Image_1',
-              'golden_image_download_path' => '/path/to/download/golden_image.zip'
+              'golden_image_download_path' => download_path
             }
       )
     end
@@ -150,9 +193,48 @@ describe provider_class, unit: true, if: api_version >= 300 do
       provider.exists?
     end
 
-    it 'should download the golden image' do
-      expect_any_instance_of(resourcetype).to receive(:download)
-      expect(provider.download).to be
+    context 'when file does not exist' do
+      before(:each) do
+        allow(File).to receive(:exist?).with(download_path).and_return(false)
+        expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
+      end
+
+      it 'should download the file' do
+        expect(provider.download).to be
+      end
+
+      it 'should download if force is false' do
+        resource['data']['force'] = false
+        expect(provider.download).to be
+      end
+
+      it 'should download if force is true' do
+        resource['data']['force'] = true
+        expect(provider.download).to be
+      end
+    end
+
+    context 'when file already exists' do
+      before(:each) do
+        allow(File).to receive(:exist?).with(download_path).and_return(true)
+      end
+
+      it 'should raise error' do
+        expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
+        expect { provider.download }.to raise_error('File /path/to/download/golden_image.zip already exists.')
+      end
+
+      it 'should raise error if force is false' do
+        resource['data']['force'] = false
+        expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
+        expect { provider.download }.to raise_error('File /path/to/download/golden_image.zip already exists.')
+      end
+
+      it 'should download if force is true' do
+        resource['data']['force'] = true
+        expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
+        expect(provider.download).to be
+      end
     end
   end
 end
