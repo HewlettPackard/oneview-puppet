@@ -21,7 +21,7 @@
 # OS Volume having only UEFI boot loader content in a UEFI Extended System Partition.
 # It has a simple configuration to show a message on the server console at boot.
 #
-# Once you run the manifest, you must:
+# Once this manifest is run, the following actions must be taken:
 #  1. Launch server console
 #  2. Power on and boot the server
 #  3. Wait for the server to boot
