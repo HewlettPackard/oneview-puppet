@@ -40,7 +40,7 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
 
   def create
     return patch unless @patch_tags.empty?
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     @data = @data.merge(@authentication)
     @data['hostname'] = @data.delete('name') if @data['name']
     ov_resource = @resourcetype.new(@client, @data).add

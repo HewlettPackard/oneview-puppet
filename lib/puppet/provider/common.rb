@@ -37,23 +37,29 @@ def data_parse(data = {})
   data
 end
 
-def resource_update(data, resourcetype)
-  current_resource = resourcetype.find_by(@client, unique_id).first
-  return false unless current_resource
-  current_attributes = current_resource.data
-  new_name_validation(data, resourcetype)
-  raw_merged_data = current_attributes.merge(data)
-  updated_data = Hash[raw_merged_data.to_a - current_attributes.to_a]
-  current_resource.update(updated_data) unless updated_data.empty?
-  @property_hash[:data] = current_resource.data
+# Updates resource if it exists and is different from the expected.
+# Returns false if resource does not exist and true if it exists or if it was updated.
+def resource_update
+  current_resource = @resourcetype.new(@client, @data)
+  return false unless current_resource.retrieve!
+  parse_new_name
+  if current_resource.like?(@data)
+    Puppet.notice "#{@resourcetype} #{@data['name']} is up to date."
+  else
+    Puppet.notice "#{@resourcetype} #{@data['name']} differs from resource in appliance."
+    Puppet.debug "Current attributes: #{JSON.pretty_generate(current_resource.data)}"
+    Puppet.debug "Desired attributes: #{JSON.pretty_generate(@data)}"
+    current_resource.update(@data)
+    @property_hash[:data] = current_resource.data
+  end
   true
 end
 
-def new_name_validation(data, resourcetype)
-  # Validation for name change on resource through flag 'new_name'
-  return unless data['new_name']
-  new_resource_name_used = resourcetype.find_by(@client, name: data['new_name']).first
-  data['name'] = data.delete('new_name') unless new_resource_name_used
+# Validation for name change on resource through flag 'new_name'
+def parse_new_name
+  return unless @data['new_name']
+  raise 'new_name field contains an existing resource name.' if @resourcetype.new(@client, name: @data['new_name']).retrieve!
+  @data['name'] = @data.delete('new_name')
 end
 
 def get_single_resource_instance

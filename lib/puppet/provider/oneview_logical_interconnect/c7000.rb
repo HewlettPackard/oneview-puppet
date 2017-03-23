@@ -28,7 +28,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     empty_data_check
     variable_assignments
     li = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
+           resource_update
            @resourcetype.find_by(@client, unique_id)
          else
            @resourcetype.find_by(@client, @data)

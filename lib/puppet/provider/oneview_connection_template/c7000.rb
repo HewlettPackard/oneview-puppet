@@ -27,7 +27,7 @@ Puppet::Type.type(:oneview_connection_template).provide :c7000, parent: Puppet::
     @data = data_parse
     empty_data_check([nil, :found, :get_default_connection_template])
     ct = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
+           resource_update
            @resourcetype.find_by(@client, unique_id)
          else
            @resourcetype.find_by(@client, @data)

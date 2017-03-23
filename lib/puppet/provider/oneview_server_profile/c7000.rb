@@ -31,7 +31,10 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
     connections_parse if @data['connections']
     # gets the hash of filters for queries; in case it does not exist, query will be nil
     @query = @data.delete('query_parameters')
-    !@resourcetype.find_by(@client, @data).empty?
+    puppet_resource = @resourcetype.new(@client, @data)
+    return false unless puppet_resource.exists?
+    puppet_resource.retrieve!
+    puppet_resource.like?(@data)
   end
 
   # This destroy deletes all the server profiles that match the data passed in. Use with caution.

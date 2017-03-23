@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_enclosure_group).provide :c7000, parent: Puppet::Onev
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     @resourcetype.new(@client, enclosure_group_parse(@data)).create
   end
 

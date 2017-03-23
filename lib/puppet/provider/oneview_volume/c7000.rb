@@ -30,7 +30,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     @resourcetype.new(@client, @data).create
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data

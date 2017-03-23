@@ -82,7 +82,7 @@ module Puppet
 
     # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
     def create(action = :create)
-      return true if resource_update(@data, @resourcetype)
+      return true if resource_update
       ov_resource = if action == :create
                       @resourcetype.new(@client, @data).create
                     elsif action == :add

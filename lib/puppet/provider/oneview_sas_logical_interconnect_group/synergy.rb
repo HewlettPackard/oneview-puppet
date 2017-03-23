@@ -42,7 +42,7 @@ Puppet::Type.type(:oneview_sas_logical_interconnect_group).provide :synergy, par
     lig = @resourcetype.new(@client, @data)
     add_interconnects(lig) if @interconnects
     @data['new_name'] = new_name if new_name
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     lig.create
     @property_hash[:data] = lig.data
     @property_hash[:ensure] = :present

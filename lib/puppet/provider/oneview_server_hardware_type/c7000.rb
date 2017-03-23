@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_server_hardware_type).provide :c7000, parent: Puppet:
   mk_resource_methods
 
   def create
-    resource_update(@data, @resourcetype)
+    resource_update
     true
   end
 

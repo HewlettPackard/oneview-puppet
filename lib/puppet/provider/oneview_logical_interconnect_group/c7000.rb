@@ -46,7 +46,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
     new_name = @data.delete('new_name')
     lig = @resourcetype.new(@client, @data)
     @data['new_name'] = new_name if new_name
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     lig.create
     @property_hash[:data] = lig.data
     @property_hash[:ensure] = :present

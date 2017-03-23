@@ -33,7 +33,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
     # Checks if there is a connection template update
     update_connection_template if @bandwidth
     # Checks if the operation is an update, bulk create or neither
-    return true if bulk_create_check || resource_update(@data, @resourcetype)
+    return true if bulk_create_check || resource_update
     @resourcetype.new(@client, @data).create
   end
 

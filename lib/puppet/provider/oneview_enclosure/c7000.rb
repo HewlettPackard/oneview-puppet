@@ -40,7 +40,7 @@ Puppet::Type.type(:oneview_enclosure).provide :c7000, parent: Puppet::OneviewRes
 
   def create
     patch_enclosure unless @patch_tags.empty?
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     @data = @data.merge(@authentication)
     @resourcetype.new(@client, @data).add
     @property_hash[:ensure] = :present

@@ -18,11 +18,10 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_enclosure).provider(:synergy)
 api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
-
-  resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
 
   let(:provider) { resource.provider }
 
@@ -77,18 +76,22 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       expect(provider.set_refresh_state).to be
     end
 
-    it 'should be able to set the refresh state' do
+    it 'should be able to retrieve utilization statistics' do
       allow_any_instance_of(resourcetype).to receive(:utilization).with(resource['data']['utilization_parameters']).and_return('Test')
       expect(provider.get_utilization).to be
     end
 
-    it 'should be able to set the refresh state' do
+    it 'should be able to get the script from the enclosure' do
       allow_any_instance_of(resourcetype).to receive(:script).and_return('Test')
       expect(provider.get_script).to be
     end
 
-    it 'should be able to set the refresh state' do
+    it '#get_single_sign_on should raise an error' do
       expect { provider.get_single_sign_on }.to raise_error(RuntimeError)
+    end
+
+    it '#set_environmental_configuration should raise an error' do
+      expect { provider.set_environmental_configuration }.to raise_error(RuntimeError)
     end
 
     it 'should be able to work specifying a name instead of an uri' do
@@ -128,24 +131,22 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'creates the resource' do
+        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
         allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+        allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
         allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
       end
 
       it 'patches the resource' do
-        unique_id = { 'uri' => '/rest/fake', 'name' => 'Puppet_Test_Enclosure' }
         resource['data']['uri'] = '/rest/fake'
         resource['data']['op'] = 'fake_op'
         resource['data']['path'] = 'fake_path'
         resource['data']['value'] = 'fake_value'
-        patch_data = { 'op' => 'fake_op', 'path' => 'fake_path', 'value' => 'fake_value' }
         test = resourcetype.new(@client, resource['data'])
-        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-        allow(resourcetype).to receive(:find_by).with(anything, unique_id).and_return([test])
-        expect_any_instance_of(OneviewSDK::Client).to receive(:rest_patch)
-          .with(resource['data']['uri'], { 'body' => [patch_data] }, test.api_version).and_return(FakeResponse.new('uri' => '/rest/fake'))
+        allow(resourcetype).to receive(:find_by).and_return([test])
+        expect_any_instance_of(resourcetype).to receive(:patch).and_return(true)
         provider.exists?
         expect(provider.create).to be
       end

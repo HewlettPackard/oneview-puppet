@@ -36,7 +36,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide :c7000, parent: Puppet:
     lsg = @resourcetype.new(@client, @data)
     lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s) if @switches
     @data['new_name'] = new_name if new_name
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     lsg.create
   end
 end
