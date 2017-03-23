@@ -16,3 +16,6 @@
 
 # Convert all line endings to lf
 * text eol=lf
+
+# Prevent zip files from being normalized regardless of their content
+*.zip	-text
