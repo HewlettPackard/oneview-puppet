@@ -15,11 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:c7000)
-resourcetype = OneviewSDK::UnmanagedDevice
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:UnmanagedDevice, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -52,6 +51,10 @@ describe provider_class, unit: true do
       provider.exists?
     end
 
+    it 'should be able to run through self.instances' do
+      expect(instance).to be
+    end
+
     it 'should be an instance of the provider' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_unmanaged_device).provider(:c7000)
     end
@@ -80,9 +83,8 @@ describe provider_class, unit: true do
     end
 
     it 'should update the resource' do
-      unique_ids = { 'name' => resource['data']['name'], 'uri' => resource['data']['uri'] }
-      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(resourcetype).to receive(:find_by).with(anything, unique_ids).and_return([test])
+      expect_any_instance_of(resourcetype).to receive(:like?).and_return(false)
+      expect_any_instance_of(resourcetype).to receive(:update).and_return(true)
       provider.exists?
       expect(provider.create).to be
     end

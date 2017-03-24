@@ -17,13 +17,11 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
+api_version = login[:api_version] || 200
+resourcetype = OneviewSDK.resource_named(:ServerProfile, api_version, 'Synergy')
+fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
-  api_version = login[:api_version] || 200
-  resource_name = 'ServerProfile'
-  resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
-  fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
-
+describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do
@@ -48,6 +46,9 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   before(:each) do
     allow(resourcetype).to receive(:find_by).and_return([test])
+    allow_any_instance_of(resourcetype).to receive(:exists?).and_return(true)
+    allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(true)
+    allow_any_instance_of(resourcetype).to receive(:like?).and_return(true)
     provider.exists?
   end
 
@@ -61,17 +62,11 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       expect { provider.found }.to raise_error(/No ServerProfile with the specified data were found on the Oneview Appliance/)
     end
 
-    it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+    it 'should create when resource does not exist' do
+      allow_any_instance_of(resourcetype).to receive(:exists?).and_return(false)
+      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(false)
       allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
-      expect(provider.create).to be
-    end
-
-    it 'should create when resource does not exist' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
-      expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
       expect(provider.create).to be
     end
 
@@ -82,8 +77,10 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should update when resource is not compliant' do
-      test['description'] = 'new description'
-      expect_any_instance_of(resourcetype).to receive(:update)
+      allow_any_instance_of(resourcetype).to receive(:exists?).and_return(true)
+      allow_any_instance_of(resourcetype).to receive(:retrieve!).and_return(true)
+      allow_any_instance_of(resourcetype).to receive(:like?).and_return(false)
+      expect_any_instance_of(resourcetype).to receive(:update).and_return(true)
       expect_any_instance_of(resourcetype).not_to receive(:create)
       expect(provider.create).to be
     end
