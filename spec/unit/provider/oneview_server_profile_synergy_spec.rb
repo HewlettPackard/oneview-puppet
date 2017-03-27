@@ -21,7 +21,7 @@ api_version = login[:api_version] || 200
 resourcetype = OneviewSDK.resource_named(:ServerProfile, api_version, 'Synergy')
 fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do
