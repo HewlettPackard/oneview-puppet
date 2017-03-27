@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
 api_version = login[:api_version] || 200
 resource_name = 'Switch'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -65,7 +65,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       )
     end
     it 'should be able to get type for a specific switch' do
-      allow(resourcetype).to receive(:get_type).and_return(['fake_type'])
+      allow(resource_type).to receive(:get_type).and_return(['fake_type'])
       provider.exists?
       expect(provider.get_type).to be
     end
@@ -81,7 +81,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       )
     end
     it 'should be able to get types' do
-      allow(resourcetype).to receive(:get_types).and_return(['fake_type'])
+      allow(resource_type).to receive(:get_types).and_return(['fake_type'])
       provider.exists?
       expect(provider.get_type).to be
     end

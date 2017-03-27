@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_managed_san).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_name = 'ManagedSAN'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -40,11 +40,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
-    allow(resourcetype).to receive(:get_all).and_return([test])
+    allow(resource_type).to receive(:find_by).and_return([test])
+    allow(resource_type).to receive(:get_all).and_return([test])
     provider.exists?
   end
 
@@ -79,8 +79,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
       )
     end
     it 'should create/add the managed san' do
-      allow_any_instance_of(resourcetype).to receive(:set_public_attributes).and_return(test)
-      allow_any_instance_of(resourcetype).to receive(:set_san_policy).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:set_public_attributes).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:set_san_policy).and_return(test)
       expect(provider.create).to be
     end
 
@@ -89,13 +89,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to run through get_zoning_report' do
-      allow_any_instance_of(resourcetype).to receive(:get_zoning_report).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:get_zoning_report).and_return(true)
       expect(provider.get_zoning_report).to be
     end
 
     it 'should be able to run through set_refresh_state' do
       resource['data']['refreshState'] = 'RefreshPending'
-      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:set_refresh_state).and_return(true)
       expect(provider.set_refresh_state).to be
     end
   end
@@ -106,7 +106,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to run through get_endpoints' do
-      allow_any_instance_of(resourcetype).to receive(:get_endpoints).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:get_endpoints).and_return(true)
       expect(provider.get_endpoints).to be
     end
 

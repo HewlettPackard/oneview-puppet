@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:UnmanagedDevice, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:UnmanagedDevice, api_version, 'Synergy')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -43,11 +43,11 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+    let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resourcetype).to receive(:update).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:update).and_return([test])
       provider.exists?
     end
 
@@ -65,32 +65,32 @@ describe provider_class, unit: true do
     end
 
     it 'should not be able to find the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       provider.exists?
       expect { provider.found }.to raise_error(/No UnmanagedDevice with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should delete/remove the resource' do
-      allow_any_instance_of(resourcetype).to receive(:remove).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
       expect(provider.destroy).to be
     end
 
     it 'should create/add the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should update the resource' do
-      expect_any_instance_of(resourcetype).to receive(:like?).and_return(false)
-      expect_any_instance_of(resourcetype).to receive(:update).and_return(true)
+      expect_any_instance_of(resource_type).to receive(:like?).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:update).and_return(true)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should be able to get the environmental configuration' do
-      allow_any_instance_of(resourcetype).to receive(:environmental_configuration).and_return(['test'])
+      allow_any_instance_of(resource_type).to receive(:environmental_configuration).and_return(['test'])
       provider.exists?
       expect(provider.get_environmental_configuration).to be
     end

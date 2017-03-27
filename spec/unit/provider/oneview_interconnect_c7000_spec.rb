@@ -22,7 +22,7 @@ api_version = login[:api_version] || 200
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
-  resourcetype = OneviewSDK.resource_named(:Interconnect, api_version, 'C7000')
+  resource_type = OneviewSDK.resource_named(:Interconnect, api_version, 'C7000')
 
   let(:resource) do
     Puppet::Type.type(:oneview_interconnect).new(
@@ -47,11 +47,11 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the min parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -60,32 +60,32 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to find the interconnects' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       expect(provider.found).to be
     end
 
     it 'should be able to get the name servers' do
-      allow_any_instance_of(resourcetype).to receive(:name_servers).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:name_servers).and_return('Test')
       expect(provider.get_name_servers).to be
     end
 
     it 'should be able to get the types filtered by a name' do
-      allow(resourcetype).to receive(:get_type).and_return('Test')
+      allow(resource_type).to receive(:get_type).and_return('Test')
       expect(provider.get_types).to be
     end
 
     it 'should be able to get the statistics' do
-      allow_any_instance_of(resourcetype).to receive(:statistics).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:statistics).and_return('Test')
       expect(provider.get_statistics).to be
     end
 
     it 'should be able to reset the port protection' do
-      allow_any_instance_of(resourcetype).to receive(:reset_port_protection).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:reset_port_protection).and_return('Test')
       expect(provider.reset_port_protection).to be
     end
 
     it 'should be able to update the ports' do
-      allow_any_instance_of(resourcetype).to receive(:update_port).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:update_port).and_return('Test')
       expect(provider.update_ports).to be
     end
 

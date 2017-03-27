@@ -21,11 +21,11 @@ require_relative '../../shared_context'
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_name = 'UplinkSet'
-resourcetype = if api_version == 200
-                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-               else
-                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-               end
+resource_type = if api_version == 200
+                  Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
+                else
+                  Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
+                end
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -78,14 +78,14 @@ describe provider_class, unit: true do
     end
 
     it 'should return false if resource does not exist' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect { provider.found }.to raise_error(/No UplinkSet with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should return true if resource exists / is found' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)
     end
@@ -93,8 +93,8 @@ describe provider_class, unit: true do
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       test = OneviewSDK::UplinkSet.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
@@ -133,12 +133,12 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       fc_network = OneviewSDK::FCNetwork.new(@client, name: 'Puppet Test FCNetwork', uri: '/rest/fc-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
       allow(OneviewSDK::FCNetwork).to receive(:find_by).and_return([fc_network])
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([logint])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
+      allow_any_instance_of(resource_type).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to eq(true)
     end
@@ -176,12 +176,12 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       fcoe_network = OneviewSDK::FCoENetwork.new(@client, name: 'Puppet Test FCoENetwork', uri: '/rest/fcoe-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
       allow(OneviewSDK::FCoENetwork).to receive(:find_by).and_return([fcoe_network])
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([logint])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
+      allow_any_instance_of(resource_type).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to eq(true)
     end

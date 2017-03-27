@@ -22,7 +22,7 @@ api_version = login[:api_version] || 200
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
-  resourcetype = OneviewSDK.resource_named(:EnclosureGroup, api_version, 'Synergy')
+  resource_type = OneviewSDK.resource_named(:EnclosureGroup, api_version, 'Synergy')
 
   context 'given the create parameters' do
     let(:resource) do
@@ -78,10 +78,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, resource['data']) }
+    let(:test) { resource_type.new(@client, resource['data']) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -90,29 +90,29 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to get the script' do
-      allow_any_instance_of(resourcetype).to receive(:get_script).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_script).and_return('Test')
       expect(provider.get_script).to be
     end
 
     it 'should be able to set the script' do
       resource['data']['script'] = 'Sample'
-      allow_any_instance_of(resourcetype).to receive(:set_script).with('Sample').and_return('Sample')
+      allow_any_instance_of(resource_type).to receive(:set_script).with('Sample').and_return('Sample')
       expect(provider.set_script).to be
     end
   end

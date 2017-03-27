@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_enclosure).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:Enclosure, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
@@ -27,7 +27,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   let(:resource) do
     Puppet::Type.type(:oneview_enclosure).new(
@@ -53,7 +53,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   context 'given the min parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
@@ -62,27 +62,27 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to get the environmental configuration' do
-      allow_any_instance_of(resourcetype).to receive(:environmental_configuration).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:environmental_configuration).and_return('Test')
       expect(provider.get_environmental_configuration).to be
     end
 
     it 'should be able to set the configuration' do
-      allow_any_instance_of(resourcetype).to receive(:configuration).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:configuration).and_return('Test')
       expect(provider.set_configuration).to be
     end
 
     it 'should be able to set the refresh state' do
-      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:set_refresh_state).and_return('Test')
       expect(provider.set_refresh_state).to be
     end
 
     it 'should be able to retrieve utilization statistics' do
-      allow_any_instance_of(resourcetype).to receive(:utilization).with(resource['data']['utilization_parameters']).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:utilization).with(resource['data']['utilization_parameters']).and_return('Test')
       expect(provider.get_utilization).to be
     end
 
     it 'should be able to get the script from the enclosure' do
-      allow_any_instance_of(resourcetype).to receive(:script).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:script).and_return('Test')
       expect(provider.get_script).to be
     end
 
@@ -96,17 +96,17 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
     it 'should be able to work specifying a name instead of an uri' do
       resource['data']['enclosureGroupUri'] = 'Test'
-      test = resourcetype.new(@client, resource['data'])
+      test = resource_type.new(@client, resource['data'])
       allow(OneviewSDK::EnclosureGroup).to receive(:find_by).with(anything, name: resource['data']['enclosureGroupUri']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
     end
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
@@ -131,10 +131,10 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'creates the resource' do
-        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-        allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
-        allow(resourcetype).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
-        allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+        allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
+        allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
+        allow(resource_type).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
+        allow_any_instance_of(resource_type).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
       end
@@ -144,9 +144,9 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
         resource['data']['op'] = 'fake_op'
         resource['data']['path'] = 'fake_path'
         resource['data']['value'] = 'fake_value'
-        test = resourcetype.new(@client, resource['data'])
-        allow(resourcetype).to receive(:find_by).and_return([test])
-        expect_any_instance_of(resourcetype).to receive(:patch).and_return(true)
+        test = resource_type.new(@client, resource['data'])
+        allow(resource_type).to receive(:find_by).and_return([test])
+        expect_any_instance_of(resource_type).to receive(:patch).and_return(true)
         provider.exists?
         expect(provider.create).to be
       end

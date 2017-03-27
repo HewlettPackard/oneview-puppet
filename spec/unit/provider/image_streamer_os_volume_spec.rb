@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:image_streamer_os_volume).provider(:image_streamer)
 api_version = login_image_streamer[:api_version] || 300
 resource_name = 'OSVolume'
-resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context Image Streamer'
@@ -39,10 +39,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
+    allow(resource_type).to receive(:find_by).and_return([test])
     provider.exists?
   end
 
@@ -68,7 +68,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should retrieve the details of the archived volume' do
-      expect_any_instance_of(resourcetype).to receive(:get_details_archive).and_return(['details of archive'])
+      expect_any_instance_of(resource_type).to receive(:get_details_archive).and_return(['details of archive'])
       expect(provider.get_details_archive).to be
     end
   end

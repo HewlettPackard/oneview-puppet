@@ -20,7 +20,7 @@ provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
 
 api_version = login[:api_version] || 200
 resource_name = 'FirmwareBundle'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -60,7 +60,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should create/add the firmware bundle' do
-      allow(resourcetype).to receive(:add).and_return(resource)
+      allow(resource_type).to receive(:add).and_return(resource)
       expect(provider.create).to be
     end
   end

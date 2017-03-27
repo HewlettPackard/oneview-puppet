@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_network_set).provider(:synergy)
 api_version = login[:api_version] || 300
-resourcetype = OneviewSDK.resource_named(:NetworkSet, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:NetworkSet, api_version, 'Synergy')
 ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: api_version >= 300 do
@@ -42,12 +42,12 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+    let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
     let(:eth1) { ethernet_class.new(@client, name: resource['data']['networkUris'].first) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       allow(ethernet_class).to receive(:find_by).and_return([eth1])
       provider.exists?
     end
@@ -57,7 +57,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should return that the resource does not exists' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
 
@@ -66,20 +66,20 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
 
     it 'should be able to delete the resource' do
       resource['data']['uri'] = '/rest/fake'
-      allow_any_instance_of(resourcetype).to receive(:delete).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:delete).and_return(true)
       expect(provider.destroy).to be
     end
 
     it 'should be able to get all the network sets without ethernet' do
-      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:get_without_ethernet).and_return([test])
       expect(provider.get_without_ethernet).to be
     end
   end
@@ -94,15 +94,15 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     let(:provider) { resource.provider }
 
-    let(:test) { resourcetype.new(@client, {}) }
+    let(:test) { resource_type.new(@client, {}) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be able to get all the network sets without ethernet' do
-      allow(resourcetype).to receive(:get_without_ethernet).and_return([test])
+      allow(resource_type).to receive(:get_without_ethernet).and_return([test])
       expect(provider.get_without_ethernet).to be
     end
   end

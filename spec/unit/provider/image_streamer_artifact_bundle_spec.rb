@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:image_streamer_artifact_bundle).provider(:image_streamer)
 api_version = login_image_streamer[:api_version] || 300
 resource_name = 'ArtifactBundle'
-resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context Image Streamer'
@@ -33,7 +33,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
   let(:test) do
     resource['data']['uri'] = '/rest/artifact-bundles/123'
     resource['data']['artifactsbundleID'] = '123'
-    resourcetype.new(@client, resource['data'])
+    resource_type.new(@client, resource['data'])
   end
 
   context 'given the Creation parameters' do
@@ -78,7 +78,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
 
       build_plan = OneviewSDK::ImageStreamer::BuildPlan.new(@client, 'name' => 'BuildPlanName', 'uri' => '/rest/uri/fake-bp')
       allow(OneviewSDK::ImageStreamer::BuildPlan).to receive(:find_by).with(anything, name: 'BuildPlanName').and_return([build_plan])
@@ -100,8 +100,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should create artifact bundle when not exists' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      expect_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
       expect(provider.create).to be
     end
@@ -109,17 +109,17 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should rename artifact bundle when resource exists and new_name provided' do
       resource['data']['new_name'] = 'Artifact_Bundle_Renamed'
       provider.exists?
-      expect_any_instance_of(resourcetype).to receive(:update_name).with('Artifact_Bundle_Renamed').and_return(true)
+      expect_any_instance_of(resource_type).to receive(:update_name).with('Artifact_Bundle_Renamed').and_return(true)
       expect(provider.create).to be
     end
 
     it 'should do nothing when resource exists and no new_name' do
-      expect_any_instance_of(resourcetype).not_to receive(:update_name)
+      expect_any_instance_of(resource_type).not_to receive(:update_name)
       expect(provider.create).to be
     end
 
     it 'should delete the resource' do
-      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
       expect(provider.destroy).to be
     end
 
@@ -134,10 +134,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should create artifact bundle from file when not exists with default timeout' do
       resource['data'] = { 'name' => 'Artifact_Bundle_Puppet', 'artifact_bundle_path' => 'artifact_bundle.zip' }
       provider.exists?
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       path = 'artifact_bundle.zip'
       timeout = OneviewSDK::Rest::READ_TIMEOUT
-      expect(resourcetype).to receive(:create_from_file).with(anything, path, 'Artifact_Bundle_Puppet', timeout).and_return(test)
+      expect(resource_type).to receive(:create_from_file).with(anything, path, 'Artifact_Bundle_Puppet', timeout).and_return(test)
       expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
       expect(provider.create).to be
     end
@@ -145,14 +145,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should create artifact bundle from file when not exists with given timeout' do
       resource['data'] = { 'name' => 'Art_Bundle_Puppet', 'artifact_bundle_path' => 'artifact_bundle.zip', 'timeout' => 3_600 }
       provider.exists?
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(resourcetype).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Art_Bundle_Puppet', 3_600).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      expect(resource_type).to receive(:create_from_file).with(anything, 'artifact_bundle.zip', 'Art_Bundle_Puppet', 3_600).and_return(test)
       expect(test).to receive(:data).and_return('uri' => '/rest/fake/123')
       expect(provider.create).to be
     end
 
     it 'should extract the artifact bundle' do
-      expect_any_instance_of(resourcetype).to receive(:extract).and_return(true)
+      expect_any_instance_of(resource_type).to receive(:extract).and_return(true)
       expect(provider.extract).to be
     end
 
@@ -164,7 +164,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       context 'when file does not exist' do
         before(:each) do
           allow(File).to receive(:exist?).with(download_path).and_return(false)
-          expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
+          expect_any_instance_of(resource_type).to receive(:download).with(download_path).and_return(true)
         end
 
         it 'should download the file' do
@@ -188,19 +188,19 @@ describe provider_class, unit: true, if: api_version >= 300 do
         end
 
         it 'should raise error' do
-          expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
+          expect_any_instance_of(resource_type).not_to receive(:download).and_return(true)
           expect { provider.download }.to raise_error('File /path/fake-path already exists.')
         end
 
         it 'should raise error if force is false' do
           resource['data']['force'] = false
-          expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
+          expect_any_instance_of(resource_type).not_to receive(:download).and_return(true)
           expect { provider.download }.to raise_error('File /path/fake-path already exists.')
         end
 
         it 'should download if force is true' do
           resource['data']['force'] = true
-          expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
+          expect_any_instance_of(resource_type).to receive(:download).with(download_path).and_return(true)
           expect(provider.download).to be
         end
       end
@@ -228,7 +228,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     let(:message_group_undefined) { /A 'deploymentGroupUri' field is required in the data hash to run this action./ }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
       group_data = { 'uri' => deployment_group_uri }
       allow(OneviewSDK::ImageStreamer::DeploymentGroup).to receive(:find_by).with(anything, group_data).and_return([group])
@@ -237,14 +237,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
     context 'given the get_backups ensurable' do
       it 'should display the backup data' do
         test['data'] = { 'downloadURI' => '/rest/artifact-bundles/backups/archive/3aa193b2-9cd9-44fc-a140-ff917db74312' }
-        expect(resourcetype).to receive(:get_backups).with(anything).and_return([test])
+        expect(resource_type).to receive(:get_backups).with(anything).and_return([test])
         expect(provider.get_backups).to be
       end
     end
 
     context 'given the extract_backup ensurable' do
       it 'should extract the existing backup bundle' do
-        expect(resourcetype).to receive(:extract_backup).with(anything, group, 'uri' => '/archive').and_return(true)
+        expect(resource_type).to receive(:extract_backup).with(anything, group, 'uri' => '/archive').and_return(true)
         expect(provider.extract_backup).to be
       end
 
@@ -257,14 +257,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     context 'given the create_backup ensurable' do
       it 'should create a backup bundle with all the artifacts present on the appliance' do
-        expect(resourcetype).to receive(:create_backup).with(anything, group).and_return('uri' => '/rest/fake/backup.zip')
+        expect(resource_type).to receive(:create_backup).with(anything, group).and_return('uri' => '/rest/fake/backup.zip')
         expect(provider.create_backup).to be
       end
 
       it 'should raise error when group undefined' do
         resource['data'] = { 'name' => 'value' }
         provider.exists?
-        expect(resourcetype).not_to receive(:create_backup)
+        expect(resource_type).not_to receive(:create_backup)
         expect { provider.create_backup }.to raise_error(message_group_undefined)
       end
     end
@@ -273,13 +273,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
       before(:each) do
         resource['data']['backup_download_path'] = download_path
         test['data'] = { 'downloadURI' => '/rest/artifact-bundles/backups/archive/3aa193b2-9cd9-44fc-a140-ff917db74312' }
-        allow(resourcetype).to receive(:get_backups).and_return([test])
+        allow(resource_type).to receive(:get_backups).and_return([test])
       end
 
       context 'when file does not exist' do
         before(:each) do
           allow(File).to receive(:exist?).with(download_path).and_return(false)
-          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test).and_return(true)
+          expect(resource_type).to receive(:download_backup).with(anything, download_path, test).and_return(true)
         end
 
         it 'should download the file' do
@@ -303,19 +303,19 @@ describe provider_class, unit: true, if: api_version >= 300 do
         end
 
         it 'should raise error' do
-          expect(resourcetype).not_to receive(:download_backup)
+          expect(resource_type).not_to receive(:download_backup)
           expect { provider.download_backup }.to raise_error('File /path/fake-path already exists.')
         end
 
         it 'should raise error if force is false' do
           resource['data']['force'] = false
-          expect(resourcetype).not_to receive(:download_backup)
+          expect(resource_type).not_to receive(:download_backup)
           expect { provider.download_backup }.to raise_error('File /path/fake-path already exists.')
         end
 
         it 'should download if force is true' do
           resource['data']['force'] = true
-          expect(resourcetype).to receive(:download_backup).with(anything, download_path, test).and_return(true)
+          expect(resource_type).to receive(:download_backup).with(anything, download_path, test).and_return(true)
           expect(provider.download_backup).to be
         end
       end
@@ -328,7 +328,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
         filepath = '/path/fake_file.zip'
         filename = 'fake_file.zip'
         timeout = OneviewSDK::Rest::READ_TIMEOUT
-        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, filepath, filename, timeout).and_return(fake_hash)
+        expect(resource_type).to receive(:create_backup_from_file!).with(anything, group, filepath, filename, timeout).and_return(fake_hash)
         expect(provider.create_backup_from_file).to be
       end
 
@@ -338,14 +338,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
         fake_hash = { 'uri' => '/rest/fake/backup.zip' }
         filepath = '/path/fake_file.zip'
         filename = 'fake_file.zip'
-        expect(resourcetype).to receive(:create_backup_from_file!).with(anything, group, filepath, filename, 21_600).and_return(fake_hash)
+        expect(resource_type).to receive(:create_backup_from_file!).with(anything, group, filepath, filename, 21_600).and_return(fake_hash)
         expect(provider.create_backup_from_file).to be
       end
 
       it 'create_backup_from_file should raise error when group undefined' do
         resource['data'] = { 'name' => 'value' }
         provider.exists?
-        expect(resourcetype).not_to receive(:create_backup_from_file!)
+        expect(resource_type).not_to receive(:create_backup_from_file!)
         expect { provider.create_backup_from_file }.to raise_error(message_group_undefined)
       end
     end

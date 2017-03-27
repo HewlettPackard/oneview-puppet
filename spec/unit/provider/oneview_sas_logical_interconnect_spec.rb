@@ -22,7 +22,7 @@ api_version = login[:api_version] || 200
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
-  resourcetype = OneviewSDK.resource_named(:SASLogicalInterconnect, api_version, 'Synergy')
+  resource_type = OneviewSDK.resource_named(:SASLogicalInterconnect, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_sas_logical_interconnect).new(
@@ -49,11 +49,11 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the min parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -75,17 +75,17 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to get the firmware' do
-      allow_any_instance_of(resourcetype).to receive(:get_firmware).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_firmware).and_return('Test')
       expect(provider.get_firmware).to be
     end
 
     it 'should be able to set the compliance' do
-      allow_any_instance_of(resourcetype).to receive(:compliance).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resource_type).to receive(:compliance).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_compliance).to be
     end
 
     it 'should be able to set the configuration' do
-      allow_any_instance_of(resourcetype).to receive(:configuration).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resource_type).to receive(:configuration).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_configuration).to be
     end
 
@@ -93,12 +93,12 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       allow(OneviewSDK::FirmwareDriver).to receive(:find_by).and_return(
         [OneviewSDK::FirmwareDriver.new(@client, name: 'test')]
       )
-      allow_any_instance_of(resourcetype).to receive(:firmware_update).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:firmware_update).and_return(true)
       expect(provider.set_firmware).to be
     end
 
     it 'should be able to update the drive serial numbers after replacement' do
-      allow_any_instance_of(resourcetype).to receive(:replace_drive_enclosure).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resource_type).to receive(:replace_drive_enclosure).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.replace_drive_enclosure).to be
     end
   end

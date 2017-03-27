@@ -21,11 +21,11 @@ require_relative '../../shared_context'
 provider_class = Puppet::Type.type(:oneview_logical_switch).provider(:oneview_logical_switch)
 api_version = login[:api_version] || 200
 @resource_name = 'LogicalSwitch'
-resourcetype ||= if api_version == 200
-                   Object.const_get("OneviewSDK::API#{api_version}::#{@resource_name}")
-                 else
-                   Object.const_get("OneviewSDK::API#{api_version}::C7000::#{@resource_name}")
-                 end
+resource_type ||= if api_version == 200
+                    Object.const_get("OneviewSDK::API#{api_version}::#{@resource_name}")
+                  else
+                    Object.const_get("OneviewSDK::API#{api_version}::C7000::#{@resource_name}")
+                  end
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -64,11 +64,11 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+  let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
   context 'given the min parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -81,13 +81,13 @@ describe provider_class, unit: true do
     end
 
     it 'should refresh the logical switch' do
-      allow_any_instance_of(resourcetype).to receive(:refresh).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:refresh).and_return(true)
       expect(provider.refresh).to be
     end
 
     it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(resource_type.new(@client, resource['data']))
       expect(provider.create).to be
     end
 

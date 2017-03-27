@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_datacenter).provider(:c7000)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:Datacenter, api_version, 'C7000')
+resource_type = OneviewSDK.resource_named(:Datacenter, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -27,7 +27,7 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the create parameters' do
     let(:resource) do
@@ -49,16 +49,16 @@ describe provider_class, unit: true do
     end
 
     it 'should return that the resource does not exists' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
     end
 
     it 'should create/add the datacenter' do
-      expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name'])
+      expect(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
+      expect(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name'])
         .and_return([])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
       expect(provider.create).to be
     end
   end
@@ -73,7 +73,7 @@ describe provider_class, unit: true do
     end
 
     it 'should not return any datacenters' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).not_to be
       expect { provider.found }.to raise_error(/No Datacenter with the specified data were found on the Oneview Appliance/)
     end
@@ -93,21 +93,21 @@ describe provider_class, unit: true do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
     it 'should be able to get the visual content' do
       visual_content = 'spec/support/fixtures/unit/provider/datacenter_visual_content.json'
-      allow_any_instance_of(resourcetype).to receive(:get_visual_content).and_return(File.read(visual_content))
+      allow_any_instance_of(resource_type).to receive(:get_visual_content).and_return(File.read(visual_content))
       expect(provider.get_visual_content).to eq(true)
     end
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be

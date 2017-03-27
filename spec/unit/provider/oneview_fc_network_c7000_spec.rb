@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:FCNetwork, api_version, 'C7000')
+resource_type = OneviewSDK.resource_named(:FCNetwork, api_version, 'C7000')
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -43,11 +43,11 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the Creation parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -56,27 +56,27 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to run through self.instances' do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
     it 'finds the resource' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect(provider.found).to be
     end

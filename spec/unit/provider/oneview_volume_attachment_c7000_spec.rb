@@ -23,7 +23,7 @@ describe provider_class, unit: true do
   include_context 'shared context'
 
   resource_name = 'VolumeAttachment'
-  resourcetype = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
+  resource_type = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
 
   let(:resource) do
     Puppet::Type.type(:oneview_volume_attachment).new(
@@ -41,21 +41,21 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
     it 'should able to find the specific VA' do
       resource['data']['sanStorage'] = { 'volumeAttachments' => [{ 'volumeUri' => 'fake uri' }] }
       resource['data']['uri'] = 'fake uri'
-      test = resourcetype.new(@client, resource['data'])
+      test = resource_type.new(@client, resource['data'])
       resource['data'].delete('sanStorage')
       resource['data'].delete('uri')
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       allow(OneviewSDK::ServerProfile).to receive(:find_by).with(anything, name: 'Server Profile Attachment Demo').and_return([test])
       allow(OneviewSDK::Volume).to receive(:find_by).with(anything, name: 'volume-attachment-demo').and_return([test])
       expect(provider.found).to be
@@ -79,13 +79,13 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get a list of extra unmanaged volumes' do
-      expect(resourcetype).to receive(:get_extra_unmanaged_volumes).and_return('members' => ['uri' => '/rest/fake'])
+      expect(resource_type).to receive(:get_extra_unmanaged_volumes).and_return('members' => ['uri' => '/rest/fake'])
       expect(provider.get_extra_unmanaged_volumes).to be
     end
 
     it 'should be able to remove the extra unmanaged volumes' do
       allow(OneviewSDK::ServerProfile).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect(resourcetype).to receive(:remove_extra_unmanaged_volume)
+      expect(resource_type).to receive(:remove_extra_unmanaged_volume)
       expect(provider.remove_extra_unmanaged_volume).to be
     end
   end
@@ -100,8 +100,8 @@ describe provider_class, unit: true do
     end
 
     it 'should able to find all VAs' do
-      test = resourcetype.new(@client, {})
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
+      test = resource_type.new(@client, {})
+      allow(resource_type).to receive(:find_by).with(anything, {}).and_return([test])
       expect(provider.found).to be
     end
   end
@@ -123,16 +123,16 @@ describe provider_class, unit: true do
     it 'should be able to get all paths if no id is provided' do
       resource['data'] = { 'name' => 'ONEVIEW_PUPPET_TEST VA1' }
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:get_paths).and_return(['/rest/fake1', '/rest/fake2'])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:get_paths).and_return(['/rest/fake1', '/rest/fake2'])
       provider.exists?
       expect(provider.get_paths).to be
     end
 
     it 'should be able to get a path by id if id is provided' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:get_path).and_return(['/rest/fake1'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:get_path).and_return(['/rest/fake1'])
       provider.exists?
       expect(provider.get_paths).to be
     end

@@ -19,12 +19,12 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_name = 'ServerHardware'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
-  @resourcetype = resourcetype
+  @resource_type = resource_type
   let(:resource) do
     Puppet::Type.type(:oneview_server_hardware).new(
       name: 'server_hardware',
@@ -41,11 +41,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
-    allow(resourcetype).to receive(:get_all).and_return([test])
+    allow(resource_type).to receive(:find_by).and_return([test])
+    allow(resource_type).to receive(:get_all).and_return([test])
     provider.exists?
   end
 
@@ -55,7 +55,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should raise error when server is not found' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect { provider.found }.to raise_error(/No ServerHardware with the specified data were found on the Oneview Appliance/)
     end
   end
@@ -80,8 +80,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(resourcetype.new(@client, resource['data']))
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:add).and_return(resource_type.new(@client, resource['data']))
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
@@ -90,8 +90,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
   context 'given the minimum parameters after server creation' do
     before(:each) do
       resource['data']['uri'] = '/rest/server-hardware/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('Fake Get Statistics'))
       path = 'spec/support/fixtures/unit/provider/server_hardware.json'
       fake_json_response = File.read(path)
@@ -127,8 +127,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
   context 'given the minimum parameters for the SET methods' do
     before(:each) do
       resource['data']['uri'] = '/rest/server-hardware/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       path = 'spec/support/fixtures/unit/provider/server_hardware.json'
       fake_json_response = File.read(path)
       allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(fake_json_response)
@@ -151,13 +151,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'should set the power state to on' do
       resource['data']['power_state'] = 'On'
-      allow_any_instance_of(resourcetype).to receive(:power_on).with(false).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:power_on).with(false).and_return('Test')
       expect(provider.set_power_state).to be
     end
 
     it 'should set the power state to off' do
       resource['data']['power_state'] = 'Off'
-      allow_any_instance_of(resourcetype).to receive(:power_off).with(false).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:power_off).with(false).and_return('Test')
       expect(provider.set_power_state).to be
     end
 
@@ -167,7 +167,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'should be able to set a refresh state' do
       resource['data']['state'] = 'RefreshPending'
-      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).with('RefreshPending', {}).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:set_refresh_state).with('RefreshPending', {}).and_return('Test')
       expect(provider.set_refresh_state).to be
     end
 
@@ -193,7 +193,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       )
     end
     it '#patch should be able to run patch operations' do
-      allow_any_instance_of(resourcetype).to receive(:patch).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:patch).and_return(test)
       expect(provider.create).to be
     end
   end

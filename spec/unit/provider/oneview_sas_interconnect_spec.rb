@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_sas_interconnect).provider(:synergy)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:SASInterconnect, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:SASInterconnect, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
@@ -46,11 +46,11 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
-    allow_any_instance_of(resourcetype).to receive(:patch).and_return(test)
+    allow(resource_type).to receive(:find_by).and_return([test])
+    allow_any_instance_of(resource_type).to receive(:patch).and_return(test)
     provider.exists?
   end
 
@@ -73,12 +73,12 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to get a specific type' do
-      allow(resourcetype).to receive(:get_type).and_return(['fake_type'])
+      allow(resource_type).to receive(:get_type).and_return(['fake_type'])
       expect(provider.get_types).to be
     end
 
     it 'should be able to set a refresh state' do
-      allow_any_instance_of(resourcetype).to receive(:set_refresh_state).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:set_refresh_state).and_return(true)
       expect(provider.set_refresh_state).to be
     end
   end
@@ -93,7 +93,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       )
     end
     it 'should be able to get all types' do
-      allow(resourcetype).to receive(:get_types).and_return(['fake_type1'])
+      allow(resource_type).to receive(:get_types).and_return(['fake_type1'])
       provider.exists?
       expect(provider.get_types).to be
     end

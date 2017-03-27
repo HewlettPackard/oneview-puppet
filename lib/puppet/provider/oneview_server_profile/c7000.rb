@@ -32,8 +32,7 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
     # gets the hash of filters for queries; in case it does not exist, query will be nil
     @query = @data.delete('query_parameters')
     puppet_resource = @resourcetype.new(@client, @data)
-    return false unless puppet_resource.exists?
-    puppet_resource.retrieve!
+    return false unless puppet_resource.retrieve!
     puppet_resource.like?(@data)
   end
 

@@ -22,7 +22,7 @@ provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider
 api_version = login[:api_version] || 300
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
-  resourcetype ||= OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, 'Synergy')
+  resource_type ||= OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, 'Synergy')
   interconnect_type ||= OneviewSDK.resource_named(:Interconnect, api_version, 'Synergy')
 
   include_context 'shared context'
@@ -56,11 +56,11 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the min parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       allow(interconnect_type).to receive(:get_type).and_return('uri' => '/fake/interconnect_type_uri')
       provider.exists?
     end
@@ -70,16 +70,16 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'return false when the resource does not exists' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       allow(OneviewSDK::EthernetNetwork).to receive(:find_by)
         .and_return([OneviewSDK::EthernetNetwork.new(@client, name: 'testnet', uri: '/rest/fakenet')])
-      allow_any_instance_of(resourcetype).to receive(:add_interconnect).and_return('')
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:add_interconnect).and_return('')
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       resource['data']['interconnects'] = [{ 'bay' => 1, 'type' => 'HP VC FlexFabric 10Gb/24-Port Module' }]
       resource['data']['internalNetworkUris'] = [%w(testnet1 testnet2)]
       provider.exists?
@@ -87,12 +87,12 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should be able to get the default settings' do
-      allow(resourcetype).to receive(:get_default_settings).and_return('Test')
+      allow(resource_type).to receive(:get_default_settings).and_return('Test')
       expect(provider.get_default_settings).to be
     end
 
     it 'should be able to get the settings' do
-      allow_any_instance_of(resourcetype).to receive(:get_settings).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_settings).and_return('Test')
       expect(provider.get_settings).to be
     end
 
@@ -101,7 +101,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'deletes the resource' do
-      expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      expect_any_instance_of(resource_type).to receive(:delete).and_return([])
       expect(provider.destroy).to be
     end
   end

@@ -22,7 +22,7 @@ api_version = login[:api_version] || 200
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
 
-  resourcetype = OneviewSDK.resource_named(:VolumeTemplate, api_version, 'C7000')
+  resource_type = OneviewSDK.resource_named(:VolumeTemplate, api_version, 'C7000')
 
   let(:resource) do
     Puppet::Type.type(:oneview_volume_template).new(
@@ -49,11 +49,11 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the Creation parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -62,19 +62,19 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'if nothing is found should return false' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should be able to find the connectable volume templates' do
-      allow_any_instance_of(resourcetype).to receive(:get_connectable_volume_templates).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:get_connectable_volume_templates).and_return(true)
       expect(provider.get_connectable_volume_templates).to be
     end
   end

@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:synergy)
 
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:SANManager, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:SANManager, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: login[:api_version] >= 300 do
   include_context 'shared context'
@@ -41,14 +41,14 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, resource['data']) }
+    let(:test) { resource_type.new(@client, resource['data']) }
 
     it 'should be an instance of the provider Synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:synergy)
     end
 
     it 'should raise error when San Manager is not found' do
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
       provider.exists?
       expect { provider.found }.to raise_error(/No SANManager with the specified data were found on the Oneview Appliance/)
     end
@@ -89,26 +89,26 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'should create/add the san manager' do
-        expect(resourcetype).to receive(:find_by).and_return([])
-        expect_any_instance_of(resourcetype).to receive(:retrieve!).and_return(false)
-        allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+        expect(resource_type).to receive(:find_by).and_return([])
+        expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+        allow_any_instance_of(resource_type).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
       end
 
       it 'should update the san manager' do
-        expect(resourcetype).to receive(:find_by).and_return([])
-        expect_any_instance_of(resourcetype).to receive(:retrieve!).and_return(true)
-        expect_any_instance_of(resourcetype).to receive(:like?).and_return(false)
-        allow_any_instance_of(resourcetype).to receive(:update).and_return(test)
+        expect(resource_type).to receive(:find_by).and_return([])
+        expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+        expect_any_instance_of(resource_type).to receive(:like?).and_return(false)
+        allow_any_instance_of(resource_type).to receive(:update).and_return(test)
         provider.exists?
         expect(provider.create).to be
       end
 
       it 'should replace provider display name by provider uri' do
         resource['data']['providerUri'] = 'New Name'
-        test = resourcetype.new(@client, resource['data'])
-        expect(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+        test = resource_type.new(@client, resource['data'])
+        expect(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
         provider.exists?
       end
     end
@@ -116,14 +116,14 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     context 'given the minimum parameters after San Manager creation' do
       before(:each) do
         resource['data']['uri'] = '/rest/san-managers/fake'
-        test = resourcetype.new(@client, resource['data'])
-        allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-        allow(resourcetype).to receive(:get_all).with(anything).and_return([test])
+        test = resource_type.new(@client, resource['data'])
+        allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+        allow(resource_type).to receive(:get_all).with(anything).and_return([test])
         provider.exists?
       end
 
       it 'should be able to run through self.instances' do
-        allow_any_instance_of(resourcetype).to receive(:find_by)
+        allow_any_instance_of(resource_type).to receive(:find_by)
         expect(instance).to be
       end
 

@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fabric).provider(:synergy)
 api_version = login[:api_version] || 300
-resourcetype = OneviewSDK.resource_named(:Fabric, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:Fabric, api_version, 'Synergy')
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -40,10 +40,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, resource['data']) }
+    let(:test) { resource_type.new(@client, resource['data']) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -61,12 +61,12 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to get_reserved_vlan_range' do
-      allow_any_instance_of(resourcetype).to receive(:get_reserved_vlan_range).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:get_reserved_vlan_range).and_return(true)
       expect(provider.get_reserved_vlan_range).to be
     end
 
     it 'should be able to set_reserved_vlan_range' do
-      allow_any_instance_of(resourcetype).to receive(:set_reserved_vlan_range).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:set_reserved_vlan_range).and_return(true)
       expect(provider.set_reserved_vlan_range).to be
     end
   end
