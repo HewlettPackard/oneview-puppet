@@ -34,12 +34,12 @@ Puppet::Type.type(:oneview_sas_logical_interconnect_group).provide :synergy, par
   def exists?
     super
     @interconnects = @data.delete('interconnects')
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
     new_name = @data.delete('new_name')
-    lig = @resourcetype.new(@client, @data)
+    lig = @resource_type.new(@client, @data)
     add_interconnects(lig) if @interconnects
     @data['new_name'] = new_name if new_name
     return true if resource_update

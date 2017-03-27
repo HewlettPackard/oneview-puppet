@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_interconnect).provide :c7000, parent: Puppet::Oneview
     variable_assignments
     # Checks if there is a patch update to be performed
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
@@ -43,9 +43,9 @@ Puppet::Type.type(:oneview_interconnect).provide :c7000, parent: Puppet::Oneview
   def get_types
     Puppet.notice("\n\nInterconnect Types\n")
     if @data['name']
-      pretty @resourcetype.get_type(@client, @data['name'])
+      pretty @resource_type.get_type(@client, @data['name'])
     else
-      pretty @resourcetype.get_types(@client)
+      pretty @resource_type.get_types(@client)
     end
     true
   end

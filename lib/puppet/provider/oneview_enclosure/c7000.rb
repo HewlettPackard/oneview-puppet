@@ -35,14 +35,14 @@ Puppet::Type.type(:oneview_enclosure).provide :c7000, parent: Puppet::OneviewRes
     empty_data_check
     %w(from op path value).each { |key| @patch_tags[key] = @data.delete(key) if @data[key] }
     %w(hostname username password).each { |key| @authentication[key] = @data.delete(key) if @data[key] }
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
     patch_enclosure unless @patch_tags.empty?
     return true if resource_update
     @data = @data.merge(@authentication)
-    @resourcetype.new(@client, @data).add
+    @resource_type.new(@client, @data).add
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data
     true

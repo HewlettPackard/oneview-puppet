@@ -40,13 +40,13 @@ end
 # Updates resource if it exists and is different from the expected.
 # Returns false if resource does not exist and true if it exists or if it was updated.
 def resource_update
-  current_resource = @resourcetype.new(@client, @data)
+  current_resource = @resource_type.new(@client, @data)
   return false unless current_resource.retrieve!
   parse_new_name
   if current_resource.like?(@data)
-    Puppet.notice "#{@resourcetype} #{@data['name']} is up to date."
+    Puppet.notice "#{@resource_type} #{@data['name']} is up to date."
   else
-    Puppet.notice "#{@resourcetype} #{@data['name']} differs from resource in appliance."
+    Puppet.notice "#{@resource_type} #{@data['name']} differs from resource in appliance."
     Puppet.debug "Current attributes: #{JSON.pretty_generate(current_resource.data)}"
     Puppet.debug "Desired attributes: #{JSON.pretty_generate(@data)}"
     current_resource.update(@data)
@@ -58,14 +58,14 @@ end
 # Validation for name change on resource through flag 'new_name'
 def parse_new_name
   return unless @data['new_name']
-  raise 'new_name field contains an existing resource name.' if @resourcetype.new(@client, name: @data['new_name']).retrieve!
+  raise 'new_name field contains an existing resource name.' if @resource_type.new(@client, name: @data['new_name']).retrieve!
   @data['name'] = @data.delete('new_name')
 end
 
 def get_single_resource_instance
   # Expects to find exactly 1 resources with the data provided, otherwise fails
   # This should NOT be used for deletes/destroys as it can be used without a unique identifier in a context where only one resouce exists.
-  found_resource = @resourcetype.find_by(@client, @data)
+  found_resource = @resource_type.find_by(@client, @data)
   raise 'More than one resource matched the data specified. Specify a unique identifier on data.' if found_resource.size > 1
   raise 'No resources with the specified data specified were found. Specify a valid unique identifier on data.' if found_resource.empty?
   found_resource.first
@@ -79,8 +79,8 @@ end
 
 def find_resources
   # Searches ServerHardware with data matching the manifest data
-  retrieved_resources = @resourcetype.find_by(@client, @data)
-  resource_name = @resourcetype.to_s.split('::').last
+  retrieved_resources = @resource_type.find_by(@client, @data)
+  resource_name = @resource_type.to_s.split('::').last
   # If resources are found, iterate through them and notify. Else just notify.
   raise "\n\nNo #{resource_name} with the specified data were found on the Oneview Appliance\n" if retrieved_resources.empty?
   retrieved_resources.each do |retrieved_resource|

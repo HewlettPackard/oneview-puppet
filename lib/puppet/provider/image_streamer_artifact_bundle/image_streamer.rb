@@ -31,15 +31,15 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
   end
 
   def create
-    current_resource = @resourcetype.find_by(@client, unique_id).first
+    current_resource = @resource_type.find_by(@client, unique_id).first
     if current_resource
       return true unless @data['new_name']
       current_resource.update_name(@data['new_name'])
     elsif @data['artifact_bundle_path']
       @data['timeout'] ||= OneviewSDK::Rest::READ_TIMEOUT
-      @resourcetype.create_from_file(@client, @data['artifact_bundle_path'], @data['name'], @data['timeout']).data
+      @resource_type.create_from_file(@client, @data['artifact_bundle_path'], @data['name'], @data['timeout']).data
     else
-      @resourcetype.new(@client, @data).create.data
+      @resource_type.new(@client, @data).create.data
     end
   end
 
@@ -57,31 +57,31 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
   end
 
   def get_backups
-    backups = @resourcetype.get_backups(@client)
+    backups = @resource_type.get_backups(@client)
     backups.each { |item| pretty item.data }
     true
   end
 
   def extract_backup
-    @resourcetype.extract_backup(@client, get_deployment_group, 'uri' => '/archive')
+    @resource_type.extract_backup(@client, get_deployment_group, 'uri' => '/archive')
   end
 
   def create_backup
-    @resourcetype.create_backup(@client, get_deployment_group)
+    @resource_type.create_backup(@client, get_deployment_group)
   end
 
   def create_backup_from_file
     path = @data.delete('backup_upload_path')
     @data['timeout'] ||= OneviewSDK::Rest::READ_TIMEOUT
-    @resourcetype.create_backup_from_file!(@client, get_deployment_group, path, File.basename(path), @data['timeout'])
+    @resource_type.create_backup_from_file!(@client, get_deployment_group, path, File.basename(path), @data['timeout'])
   end
 
   def download_backup
     path = @data.delete('backup_download_path')
     force = @data.delete('force')
     raise "File #{path} already exists." if File.exist?(path) && !force
-    backup = @resourcetype.get_backups(@client)
-    @resourcetype.download_backup(@client, path, backup.first)
+    backup = @resource_type.get_backups(@client)
+    @resource_type.download_backup(@client, path, backup.first)
   end
 
   def get_deployment_group

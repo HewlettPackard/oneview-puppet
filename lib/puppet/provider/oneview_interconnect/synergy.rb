@@ -23,9 +23,9 @@ Puppet::Type.type(:oneview_interconnect).provide :synergy, parent: :c7000 do
   def get_link_topologies
     Puppet.notice("\n\nInterconnect link topologies:\n")
     if @data['name']
-      pretty @resourcetype.get_link_topology(@client, @data['name'])
+      pretty @resource_type.get_link_topology(@client, @data['name'])
     else
-      pretty @resourcetype.get_link_topologies(@client)
+      pretty @resource_type.get_link_topologies(@client)
     end
     true
   end

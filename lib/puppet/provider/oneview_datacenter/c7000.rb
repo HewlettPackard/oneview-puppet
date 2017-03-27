@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_datacenter).provide :c7000, parent: Puppet::OneviewRe
   end
 
   def destroy
-    datacenter = @resourcetype.find_by(@client, @data)
+    datacenter = @resource_type.find_by(@client, @data)
     raise('There were no matching Datacenters in the Appliance.') if datacenter.empty?
     datacenter.map(&:remove)
   end

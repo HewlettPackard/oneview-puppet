@@ -34,7 +34,7 @@ Puppet::Type.type(:oneview_firmware_bundle).provide :c7000, parent: Puppet::Onev
   end
 
   def create
-    @resourcetype.add(@client, @data['firmware_bundle_path'], @data['timeout'])
+    @resource_type.add(@client, @data['firmware_bundle_path'], @data['timeout'])
   end
 
   def destroy

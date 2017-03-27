@@ -33,7 +33,7 @@ Puppet::Type.type(:oneview_rack).provide :c7000, parent: Puppet::OneviewResource
   end
 
   def destroy
-    racks = @resourcetype.find_by(@client, @data)
+    racks = @resource_type.find_by(@client, @data)
     raise 'No racks matching the specified data were found' if racks.empty?
     racks.each do |rack|
       Puppet.notice "\n\n Removing rack named: #{rack['name']}, with uri: #{rack['uri']}\n"

@@ -32,13 +32,13 @@ Puppet::Type.type(:oneview_firmware_driver).provide :c7000, parent: Puppet::Onev
   def exists?
     @data = data_parse
     data_parse_for_general
-    @resourcetype.find_by(@client, @data).any?
+    @resource_type.find_by(@client, @data).any?
   end
 
   def create
     @data = @data.merge(@attributes)
     @data['customBaselineName'] = @data.delete('name') if @data['name']
-    @resourcetype.new(@client, @data).create
+    @resource_type.new(@client, @data).create
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data
     true
@@ -70,7 +70,7 @@ Puppet::Type.type(:oneview_firmware_driver).provide :c7000, parent: Puppet::Onev
       end
     end
     return if value.to_s[0..6].include?('/rest/')
-    firmware_driver = @resourcetype.find_by(@client, name: value)
+    firmware_driver = @resource_type.find_by(@client, name: value)
     raise "No #{key}s found on the appliance matching the provided name #{value}. Provide a valid name or uri." if firmware_driver.empty?
     if extra
       @attributes[key][extra] = firmware_driver.first['uri']

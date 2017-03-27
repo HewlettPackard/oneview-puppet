@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :synergy, parent:
 
   def get_default_settings
     Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
-    pretty @resourcetype.get_default_settings
+    pretty @resource_type.get_default_settings
     true
   end
 end

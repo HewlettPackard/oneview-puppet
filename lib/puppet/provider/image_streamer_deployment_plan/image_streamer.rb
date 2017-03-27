@@ -23,6 +23,6 @@ Puppet::Type.type(:image_streamer_deployment_plan).provide :image_streamer, pare
 
   def exists?
     super
-    @resourcetype.find_by(@client, @data).any?
+    @resource_type.find_by(@client, @data).any?
   end
 end

@@ -51,7 +51,7 @@ Puppet::Type.type(:oneview_storage_system).provide :c7000, parent: Puppet::Onevi
   end
 
   def get_host_types
-    pretty @resourcetype.get_host_types(@client)
+    pretty @resource_type.get_host_types(@client)
     true
   end
 end

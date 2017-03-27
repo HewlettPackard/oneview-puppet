@@ -28,12 +28,12 @@ Puppet::Type.type(:oneview_logical_switch_group).provide :c7000, parent: Puppet:
     empty_data_check
     switch_type_uri if @data['switchMapTemplate']
     @switches = @data.delete('switches')
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
     new_name = @data.delete('new_name')
-    lsg = @resourcetype.new(@client, @data)
+    lsg = @resource_type.new(@client, @data)
     lsg.set_grouping_parameters(@switches['number_of_switches'].to_i, @switches['type'].to_s) if @switches
     @data['new_name'] = new_name if new_name
     return true if resource_update

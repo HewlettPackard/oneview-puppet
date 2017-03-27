@@ -31,14 +31,14 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
     connections_parse if @data['connections']
     # gets the hash of filters for queries; in case it does not exist, query will be nil
     @query = @data.delete('query_parameters')
-    puppet_resource = @resourcetype.new(@client, @data)
+    puppet_resource = @resource_type.new(@client, @data)
     return false unless puppet_resource.retrieve!
     puppet_resource.like?(@data)
   end
 
   # This destroy deletes all the server profiles that match the data passed in. Use with caution.
   def destroy
-    server_profiles = @resourcetype.find_by(@client, @data)
+    server_profiles = @resource_type.find_by(@client, @data)
     raise('There were no matching server profiles in the Appliance.') if server_profiles.empty?
     server_profiles.map(&:delete)
   end
@@ -50,7 +50,7 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
 
   def get_available_targets
     Puppet.notice("\n\nServer Profile Available Targets\n")
-    pretty @resourcetype.get_available_targets(@client, @query)
+    pretty @resource_type.get_available_targets(@client, @query)
     true
   end
 
@@ -59,14 +59,14 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
     if @data['name'] || @data['uri']
       pretty get_single_resource_instance.get_available_networks
     else
-      pretty @resourcetype.get_available_networks(@client, @query)
+      pretty @resource_type.get_available_networks(@client, @query)
     end
     true
   end
 
   def get_available_servers
     Puppet.notice("\n\nServer Profile Available Targets\n")
-    pretty @resourcetype.get_available_servers(@client, @query)
+    pretty @resource_type.get_available_servers(@client, @query)
     true
   end
 
@@ -74,7 +74,7 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
     Puppet.notice("\n\nServer Profile Available Storage Systems\n")
     query_ok = @query['enclosureGroupUri'] && @query['serverHardwareTypeUri']
     raise 'You must specify the following query attributes: enclosureGroupUri and serverHardwareTypeUri.' unless query_ok
-    pretty @resourcetype.get_available_storage_systems(@client, @query)
+    pretty @resource_type.get_available_storage_systems(@client, @query)
     true
   end
 
@@ -83,13 +83,13 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
     raise 'You must specify query attributes for this ensure method' unless @query
     query_ok = @query['enclosureGroupUri'] && @query['storageSystemId'] && @query['serverHardwareTypeUri']
     raise 'You must specify the following query attributes: enclosureGroupUri, serverHardwareTypeUri and storageSystemId.' unless query_ok
-    pretty @resourcetype.get_available_storage_system(@client, @query)
+    pretty @resource_type.get_available_storage_system(@client, @query)
     true
   end
 
   def get_profile_ports
     Puppet.notice("\n\nServer Profile Compliance Preview\n")
-    pretty @resourcetype.get_profile_ports(@client, @query)
+    pretty @resource_type.get_profile_ports(@client, @query)
     true
   end
 

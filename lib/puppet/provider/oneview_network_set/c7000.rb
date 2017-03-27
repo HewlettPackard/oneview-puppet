@@ -32,13 +32,13 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
     @data = data_parse
     network_uris
     empty_data_check([:found, :get_without_ethernet])
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def get_without_ethernet
     Puppet.notice("\n\nNetwork Set Without Ethernet\n")
     if @data.empty?
-      list = @resourcetype.get_without_ethernet(@client)
+      list = @resource_type.get_without_ethernet(@client)
       raise('There is no Network Set without ethernet in the Oneview appliance.') if list.empty?
       list.each { |item| pretty item }
     else

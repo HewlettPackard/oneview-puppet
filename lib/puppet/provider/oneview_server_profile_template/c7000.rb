@@ -25,7 +25,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide :c7000, parent: Pupp
     @data = data_parse
     empty_data_check
     connections_parse if @data['connections']
-    puppet_resource = @resourcetype.new(@client, @data)
+    puppet_resource = @resource_type.new(@client, @data)
     return false unless puppet_resource.retrieve!
     puppet_resource.like?(@data)
   end

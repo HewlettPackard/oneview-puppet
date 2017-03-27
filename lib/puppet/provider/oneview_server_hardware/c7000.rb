@@ -35,7 +35,7 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
     empty_data_check
     data_parse_for_general
     return false if @patch_tags.any?
-    @resourcetype.find_by(@client, @data).any?
+    @resource_type.find_by(@client, @data).any?
   end
 
   def create
@@ -43,7 +43,7 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
     return true if resource_update
     @data = @data.merge(@authentication)
     @data['hostname'] = @data.delete('name') if @data['name']
-    ov_resource = @resourcetype.new(@client, @data).add
+    ov_resource = @resource_type.new(@client, @data).add
     @property_hash[:data] = ov_resource.data
     @property_hash[:ensure] = :present
   end
