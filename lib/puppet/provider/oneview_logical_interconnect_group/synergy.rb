@@ -26,10 +26,4 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :synergy, parent:
     end
     lig['interconnectMapTemplate']
   end
-
-  def get_default_settings
-    Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
-    pretty @resourcetype.get_default_settings
-    true
-  end
 end
