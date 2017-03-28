@@ -1,7 +1,8 @@
 [![Puppet Forge](https://img.shields.io/puppetforge/v/hewlettpackard/oneview.svg)](https://forge.puppet.com/hewlettpackard/oneview)
+[![Inline docs](http://inch-ci.org/github/HewlettPackard/oneview-puppet.svg?branch=master)](http://inch-ci.org/github/HewlettPackard/oneview-puppet)
 [![Build Status](https://travis-ci.org/HewlettPackard/oneview-puppet.svg?branch=master)](https://travis-ci.org/HewlettPackard/oneview-puppet)
 [![Coverage Status](https://coveralls.io/repos/github/HewlettPackard/oneview-puppet/badge.svg?branch=master)](https://coveralls.io/github/HewlettPackard/oneview-puppet?branch=master)
-[![Inline docs](http://inch-ci.org/github/HewlettPackard/oneview-puppet.svg?branch=master)](http://inch-ci.org/github/HewlettPackard/oneview-puppet)
+[![Code Climate](https://codeclimate.com/github/HewlettPackard/oneview-puppet/badges/gpa.svg)](https://codeclimate.com/github/HewlettPackard/oneview-puppet)
 
 # Puppet Module for HPE OneView
 
