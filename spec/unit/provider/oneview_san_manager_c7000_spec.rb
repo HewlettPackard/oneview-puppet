@@ -21,7 +21,7 @@ provider_class = Puppet::Type.type(:oneview_san_manager).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:SANManager, api_version, 'C7000')
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   context 'given the min parameters' do
@@ -97,7 +97,7 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
       end
 
       it 'should update the san manager' do
-        expect(resource_type).to receive(:find_by).and_return([])
+        expect(resource_type).to receive(:find_by).and_return([test])
         expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
         expect_any_instance_of(resource_type).to receive(:like?).and_return(false)
         allow_any_instance_of(resource_type).to receive(:update).and_return(test)

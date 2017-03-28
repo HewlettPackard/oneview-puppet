@@ -15,6 +15,7 @@
 
 #### Bug fixes & Enhancements:
 - [#95](https://github.com/HewlettPackard/oneview-puppet/issues/95) Improve server profile idempotency
+- [#101](https://github.com/HewlettPackard/oneview-puppet/issues/101) Improve server profile template idempotency 
 - [#103](https://github.com/HewlettPackard/oneview-puppet/issues/103) Unit tests should not require auth files/environment variables from the user
 - [#105](https://github.com/HewlettPackard/oneview-puppet/issues/105) Create or update uplink sets through logical interconnect groups
 - [#116](https://github.com/HewlettPackard/oneview-puppet/issues/116) Simplify login to i3s
