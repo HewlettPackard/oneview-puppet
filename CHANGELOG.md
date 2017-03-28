@@ -22,6 +22,7 @@
 - [#122](https://github.com/HewlettPackard/oneview-puppet/issues/122) Uri_parsing should support upper case for uri
 - [#133](https://github.com/HewlettPackard/oneview-puppet/issues/133) Allow set a timeout for Image_streamer_golden_image upload
 - [#132](https://github.com/HewlettPackard/oneview-puppet/issues/132) Allow option force for Image_streamer_golden_image download operations
+- [#139](https://github.com/HewlettPackard/oneview-puppet/issues/139) Error running oneview_logical_interconnect's ensure method get_default_settings after upgrading OneView SDK to >= v4.1
 
 # 2.1.0 (2017-02-03)
 ### Version highlights:
