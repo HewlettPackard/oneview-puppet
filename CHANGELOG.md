@@ -1,6 +1,4 @@
-# Unreleased Changes
-
-## Suggested release: v2.2.0
+# 2.2.0 (2017-03-28)
 ### Version highlights:
 1. Added support to the Image Streamer REST API version 300 for OS provisioning through OneView.
 
