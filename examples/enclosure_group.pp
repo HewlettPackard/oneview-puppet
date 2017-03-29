@@ -25,7 +25,6 @@ oneview_enclosure_group{'Enclosure Group Create':
       name                        => 'Enclosure Group',
       stackingMode                => 'Enclosure',
       interconnectBayMappingCount => '8',
-      type                        => 'EnclosureGroupV200',
       # interconnectBayMappings     =>
       # [
       #   {
