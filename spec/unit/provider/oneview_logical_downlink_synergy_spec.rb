@@ -18,11 +18,10 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
 api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:LogicalDownlink, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
-
-  resource_type = OneviewSDK.resource_named(:LogicalDownlink, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_logical_downlink).new(

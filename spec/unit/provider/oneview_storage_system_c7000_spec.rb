@@ -15,17 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
+provider_class = Puppet::Type.type(:oneview_storage_system).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_name = 'StorageSystem'
-resource_type = if api_version == 200
-                  Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-                else
-                  Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-                end
+resource_type = OneviewSDK.resource_named(:StorageSystem, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'

@@ -18,17 +18,15 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_volume_attachment).provider(:c7000)
 api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:VolumeAttachment, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  resource_name = 'VolumeAttachment'
-  resource_type = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
-
   let(:resource) do
     Puppet::Type.type(:oneview_volume_attachment).new(
       name: 'VA',
-      ensure: 'present',
+      ensure: 'found',
       data:
           {
             'name' => 'Server Profile Attachment Demo, volume-attachment-demo'
@@ -59,16 +57,6 @@ describe provider_class, unit: true do
       allow(OneviewSDK::ServerProfile).to receive(:find_by).with(anything, name: 'Server Profile Attachment Demo').and_return([test])
       allow(OneviewSDK::Volume).to receive(:find_by).with(anything, name: 'volume-attachment-demo').and_return([test])
       expect(provider.found).to be
-    end
-
-    it 'should raise an error if the ensurable present is used' do
-      resource['ensure'] = 'present'
-      expect { provider.create }.to raise_error(/Ensure state 'present' is unavailable for this resource/)
-    end
-
-    it 'should raise an error if the ensurable absent is used' do
-      resource['ensure'] = 'absent'
-      expect { provider.destroy }.to raise_error(/Ensure state 'absent' is unavailable for this resource/)
     end
 
     it 'should raise an error if there is no name for server profile' do

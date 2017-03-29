@@ -17,12 +17,10 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_power_device).provider(:c7000)
+api_version = login[:api_version] || 300
+resource_type = OneviewSDK.resource_named(:PowerDevice, api_version, :C7000)
 
-api_version = login[:api_version] || 200
-resource_name = 'PowerDevice'
-resource_type = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
-
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do

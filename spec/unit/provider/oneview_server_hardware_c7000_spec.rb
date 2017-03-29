@@ -18,17 +18,11 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_name = 'ServerHardware'
-resource_type = if api_version == 200
-                  Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-                else
-                  Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-                end
+resource_type = OneviewSDK.resource_named(:ServerHardware, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  @resource_type = resource_type
   let(:resource) do
     Puppet::Type.type(:oneview_server_hardware).new(
       name: 'server_hardware',

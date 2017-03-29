@@ -15,16 +15,14 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_rack).provider(:synergy)
-resource_type = OneviewSDK::Rack
+api_version = login[:api_version] || 300
+resource_type = OneviewSDK.resource_named(:Rack, api_version, :Synergy)
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
-  @resource_type = resource_type
   let(:resource) do
     Puppet::Type.type(:oneview_rack).new(
       name: 'rack',
@@ -92,7 +90,8 @@ describe provider_class, unit: true do
           'rackMounts' => [
             { 'mountUri' => '/rest/enclosures/09SGH100X6J1', 'topUSlot' => 20, 'uHeight' => 10 }
           ]
-        }
+        },
+        provider: 'synergy'
       )
     end
     before(:each) do

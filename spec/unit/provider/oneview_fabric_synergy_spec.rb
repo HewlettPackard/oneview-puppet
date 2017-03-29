@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fabric).provider(:synergy)
 api_version = login[:api_version] || 300
-resource_type = OneviewSDK.resource_named(:Fabric, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:Fabric, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'

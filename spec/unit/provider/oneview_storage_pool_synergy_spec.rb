@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:StoragePool, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :Synergy)
 
 describe provider_class, unit: true do
   include_context 'shared context'

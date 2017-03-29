@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:ServerProfile, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:ServerProfile, api_version, :Synergy)
 fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
 describe provider_class, unit: true, if: api_version >= 300 do

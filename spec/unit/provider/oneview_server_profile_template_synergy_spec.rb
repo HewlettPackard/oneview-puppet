@@ -14,14 +14,11 @@
 # limitations under the License.
 ################################################################################
 
-# TODO: review and complete with remaining methods for code coverage 80%+
-# (additional SPT methods)
-
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:ServerProfileTemplate, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:ServerProfileTemplate, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'

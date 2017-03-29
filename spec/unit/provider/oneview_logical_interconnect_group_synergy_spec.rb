@@ -19,12 +19,11 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_interconnect_group).provider(:synergy)
-api_version = login[:api_version] || 300
+api_version = login[:api_version] || 200
+resource_type ||= OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, :Synergy)
+interconnect_type ||= OneviewSDK.resource_named(:Interconnect, api_version, :Synergy)
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
-  resource_type ||= OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, 'Synergy')
-  interconnect_type ||= OneviewSDK.resource_named(:Interconnect, api_version, 'Synergy')
-
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do

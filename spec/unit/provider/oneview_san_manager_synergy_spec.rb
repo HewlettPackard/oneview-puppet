@@ -17,11 +17,10 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:synergy)
-
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:SANManager, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:SANManager, api_version, :Synergy)
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   context 'given the min parameters' do

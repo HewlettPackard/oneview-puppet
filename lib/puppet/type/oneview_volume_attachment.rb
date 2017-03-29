@@ -18,8 +18,6 @@ Puppet::Type.newtype(:oneview_volume_attachment) do
   desc "Oneview's Volume Attachment"
 
   ensurable do
-    defaultvalues
-
     # :nocov:
     # Get methods
     newvalue(:found) do

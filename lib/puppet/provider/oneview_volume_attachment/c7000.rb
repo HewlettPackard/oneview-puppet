@@ -36,14 +36,6 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
     resource['ensure'].to_s == 'present' ? false : true
   end
 
-  def create
-    raise "Ensure state 'present' is unavailable for this resource"
-  end
-
-  def destroy
-    raise "Ensure state 'absent' is unavailable for this resource"
-  end
-
   def found
     @data.empty? ? find_for_empty : find_for_server_profile
     true
@@ -63,7 +55,6 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
     server_profile = OneviewSDK::ServerProfile.find_by(@client, name: @data['name']).first
     raise "\n\nSpecified Server Profile does not exist.\n" unless server_profile
     @resource_type.remove_extra_unmanaged_volume(@client, server_profile)
-    # @resource_type.remove_extra_unmanaged_volume(@client, server_profile['uri'])
     true
   end
 

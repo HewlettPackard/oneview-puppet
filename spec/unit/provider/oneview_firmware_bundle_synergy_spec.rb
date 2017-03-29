@@ -16,11 +16,9 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
-
+provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_name = 'FirmwareBundle'
-resource_type = Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}") unless api_version < 300
+resource_type = OneviewSDK.resource_named(:FirmwareBundle, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -33,7 +31,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
           {
             'firmware_bundle_path' => './spec/support/test_firmware_bundle.spp'
           },
-      provider: 'c7000'
+      provider: 'synergy'
     )
   end
 
@@ -48,7 +46,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be an instance of the provider oneview_firmware_bundle' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:c7000)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:synergy)
     end
 
     it 'should raise error when firmware bundle is not found' do

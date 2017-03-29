@@ -17,9 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_san_manager).provider(:c7000)
-
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:SANManager, api_version, 'C7000')
+resource_type = OneviewSDK.resource_named(:SANManager, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'

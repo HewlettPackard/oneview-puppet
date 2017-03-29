@@ -18,9 +18,9 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_unmanaged_device).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:UnmanagedDevice, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:UnmanagedDevice, api_version, :Synergy)
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   context 'given the add parameters' do

@@ -17,7 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:c7000)
-resource_type = OneviewSDK::LogicalEnclosure
+api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:LogicalEnclosure, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'

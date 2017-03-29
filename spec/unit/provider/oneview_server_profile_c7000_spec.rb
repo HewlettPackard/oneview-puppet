@@ -16,10 +16,9 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
+provider_class = Puppet::Type.type(:oneview_server_profile).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:ServerProfile, api_version, 'C7000')
-
+resource_type = OneviewSDK.resource_named(:ServerProfile, api_version, :C7000)
 fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
 describe provider_class, unit: true do

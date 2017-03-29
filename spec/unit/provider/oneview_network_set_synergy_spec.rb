@@ -18,8 +18,8 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_network_set).provider(:synergy)
 api_version = login[:api_version] || 300
-resource_type = OneviewSDK.resource_named(:NetworkSet, api_version, 'Synergy')
-ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'Synergy')
+resource_type = OneviewSDK.resource_named(:NetworkSet, api_version, :Synergy)
+ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
