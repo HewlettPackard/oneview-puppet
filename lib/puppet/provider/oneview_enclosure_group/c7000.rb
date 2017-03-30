@@ -25,12 +25,12 @@ Puppet::Type.type(:oneview_enclosure_group).provide :c7000, parent: Puppet::Onev
   def exists?
     @data = enclosure_group_parse(data_parse)
     empty_data_check
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, enclosure_group_parse(@data)).create
+    return true if resource_update
+    @resource_type.new(@client, enclosure_group_parse(@data)).create
   end
 
   def get_script

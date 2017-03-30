@@ -31,11 +31,11 @@ Puppet::Type.type(:oneview_uplink_set).provide :c7000, parent: Puppet::OneviewRe
     name_to_uris
     # Taking out portConfigInfos before the find_by since it is not returned
     @port_config = @data.delete('portConfigInfos')
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
-    uplink_set = @resourcetype.new(@client, @data)
+    uplink_set = @resource_type.new(@client, @data)
     uplink_set.add_port_config(@port_config[0], @port_config[1], @port_config[2]) if @port_config
     uplink_set.create
     @property_hash[:ensure] = :present

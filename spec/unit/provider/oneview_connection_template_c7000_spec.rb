@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_connection_template).provider(:c7000)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:ConnectionTemplate, api_version, 'C7000')
+resource_type = OneviewSDK.resource_named(:ConnectionTemplate, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -40,10 +40,10 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, name: resource['data']['name']) }
+    let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -53,9 +53,9 @@ describe provider_class, unit: true do
 
     it 'should be able to find the connection template' do
       test['uri'] = '/rest/'
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       provider.exists?
-      allow(resourcetype).to receive(:get_default).with(anything).and_return(test)
+      allow(resource_type).to receive(:get_default).with(anything).and_return(test)
       expect(provider.get_default_connection_template).to be
     end
 

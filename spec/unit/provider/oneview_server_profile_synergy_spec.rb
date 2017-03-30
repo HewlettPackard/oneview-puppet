@@ -17,13 +17,11 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_profile).provider(:oneview_server_profile)
+api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:ServerProfile, api_version, :Synergy)
+fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
 
-describe provider_class, unit: true, if: login[:api_version] >= 300 do
-  api_version = login[:api_version] || 200
-  resource_name = 'ServerProfile'
-  resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
-  fake_json_response = File.read('spec/support/fixtures/unit/provider/server_profile.json')
-
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -44,10 +42,12 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
+    allow(resource_type).to receive(:find_by).and_return([test])
+    allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+    allow_any_instance_of(resource_type).to receive(:like?).and_return(true)
     provider.exists?
   end
 
@@ -57,94 +57,88 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should raise error when server is not found' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect { provider.found }.to raise_error(/No ServerProfile with the specified data were found on the Oneview Appliance/)
     end
 
-    it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
-      expect(provider.exists?).to eq(false)
-      expect(provider.create).to be
-    end
-
     it 'should create when resource does not exist' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
-      expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
       expect(provider.create).to be
     end
 
     it 'should not create when resource is compliant' do
       expect(provider.exists?).to eq(true)
-      expect(resourcetype).not_to receive(:create)
+      expect(resource_type).not_to receive(:create)
       expect(provider.create).to be
     end
 
     it 'should update when resource is not compliant' do
-      test['description'] = 'new description'
-      expect_any_instance_of(resourcetype).to receive(:update)
-      expect_any_instance_of(resourcetype).not_to receive(:create)
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:like?).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:update).and_return(true)
+      expect_any_instance_of(resource_type).not_to receive(:create)
       expect(provider.create).to be
     end
 
     it 'should be able to perform the patch update' do
-      allow_any_instance_of(resourcetype).to receive(:update_from_template).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow_any_instance_of(resource_type).to receive(:update_from_template).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.update_from_template).to be
     end
 
     it 'should be able to get available targets' do
-      allow(resourcetype).to receive(:get_available_targets).with(anything, nil).and_return(fake_json_response)
+      allow(resource_type).to receive(:get_available_targets).with(anything, nil).and_return(fake_json_response)
       expect(provider.get_available_targets).to be
     end
 
     it 'should be able to get the compliance preview' do
-      allow_any_instance_of(resourcetype).to receive(:get_compliance_preview).and_return(fake_json_response)
+      allow_any_instance_of(resource_type).to receive(:get_compliance_preview).and_return(fake_json_response)
       expect(provider.get_compliance_preview).to be
     end
 
     it 'should be able to get available networks' do
-      allow_any_instance_of(resourcetype).to receive(:get_available_networks).and_return(fake_json_response)
+      allow_any_instance_of(resource_type).to receive(:get_available_networks).and_return(fake_json_response)
       expect(provider.get_available_networks).to be
     end
 
     it 'should be able to get the transformation' do
-      allow_any_instance_of(resourcetype).to receive(:get_transformation).and_return(fake_json_response)
+      allow_any_instance_of(resource_type).to receive(:get_transformation).and_return(fake_json_response)
       expect(provider.get_transformation).to be
     end
 
     it 'should be able to get messages' do
-      allow_any_instance_of(resourcetype).to receive(:get_messages).and_return(fake_json_response)
+      allow_any_instance_of(resource_type).to receive(:get_messages).and_return(fake_json_response)
       expect(provider.get_messages).to be
     end
 
     it 'should be able to get available servers' do
-      allow(resourcetype).to receive(:get_available_servers).and_return(fake_json_response)
+      allow(resource_type).to receive(:get_available_servers).and_return(fake_json_response)
       expect(provider.get_available_servers).to be
     end
 
     it 'should be able to get profile ports' do
-      allow(resourcetype).to receive(:get_profile_ports).and_return(fake_json_response)
+      allow(resource_type).to receive(:get_profile_ports).and_return(fake_json_response)
       expect(provider.get_profile_ports).to be
     end
 
     it 'should delete the server profile' do
-      expect_any_instance_of(resourcetype).to receive(:delete).and_return(true)
+      expect_any_instance_of(resource_type).to receive(:delete).and_return(true)
       expect(provider.destroy).to be
     end
 
     it 'should be able to get a sas logical jbod by name' do
-      allow(resourcetype).to receive(:get_sas_logical_jbod).and_return(true)
+      allow(resource_type).to receive(:get_sas_logical_jbod).and_return(true)
       expect(provider.get_sas_logical_jbods).to be
     end
 
     it 'should be able to get_sas_logical_jbod_drives for a server profile' do
-      allow(resourcetype).to receive(:get_sas_logical_jbod_drives).and_return(true)
+      allow(resource_type).to receive(:get_sas_logical_jbod_drives).and_return(true)
       expect(provider.get_sas_logical_jbod_drives).to be
     end
 
     it 'should be able to get a sas logical jbod attachment by name' do
-      allow(resourcetype).to receive(:get_sas_logical_jbod_attachment).and_return(true)
+      allow(resource_type).to receive(:get_sas_logical_jbod_attachment).and_return(true)
       expect(provider.get_sas_logical_jbod_attachments).to be
     end
   end
@@ -168,28 +162,28 @@ describe provider_class, unit: true, if: login[:api_version] >= 300 do
     end
 
     it 'should successfully get an available storage system' do
-      allow(resourcetype).to receive(:get_available_storage_system).and_return(true)
+      allow(resource_type).to receive(:get_available_storage_system).and_return(true)
       expect(provider.get_available_storage_system).to be
     end
 
     it 'should successfully get_available_storage_systems' do
-      allow(resourcetype).to receive(:get_available_storage_systems).and_return(true)
+      allow(resource_type).to receive(:get_available_storage_systems).and_return(true)
       expect(provider.get_available_storage_systems).to be
     end
 
     it 'should successfully get_available_networks' do
-      allow(resourcetype).to receive(:get_available_networks).and_return(true)
+      allow(resource_type).to receive(:get_available_networks).and_return(true)
       provider.exists?
       expect(provider.get_available_networks).to be
     end
 
     it 'should be able to get all sas logical jbod' do
-      allow(resourcetype).to receive(:get_sas_logical_jbods).and_return(true)
+      allow(resource_type).to receive(:get_sas_logical_jbods).and_return(true)
       expect(provider.get_sas_logical_jbods).to be
     end
 
     it 'should be able to get all sas logical jbod attachment' do
-      allow(resourcetype).to receive(:get_sas_logical_jbod_attachments).and_return(true)
+      allow(resource_type).to receive(:get_sas_logical_jbod_attachments).and_return(true)
       expect(provider.get_sas_logical_jbod_attachments).to be
     end
   end

@@ -35,8 +35,8 @@ Puppet::Type.type(:oneview_logical_switch).provide :c7000, parent: Puppet::Onevi
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    ls = @resourcetype.new(@client, @data)
+    return true if resource_update
+    ls = @resource_type.new(@client, @data)
     set_switches(ls, @switches)
     ls.create
     @property_hash[:data] = ls.data

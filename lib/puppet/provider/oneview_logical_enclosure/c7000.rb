@@ -27,7 +27,7 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
     super
     @patch = @data.delete('patch')
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def get_script

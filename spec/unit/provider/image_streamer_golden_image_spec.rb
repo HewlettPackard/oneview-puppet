@@ -19,14 +19,14 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:image_streamer_golden_image).provider(:image_streamer)
 api_version = login_image_streamer[:api_version] || 300
 resource_name = 'GoldenImage'
-resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
+resource_type = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context Image Streamer'
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   let(:provider) { resource.provider }
 
@@ -47,7 +47,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
 
       build_plan = OneviewSDK::ImageStreamer::BuildPlan.new(@client, 'name' => 'BuildPlanName')
       allow(OneviewSDK::ImageStreamer::BuildPlan).to receive(:find_by).with(anything, name: 'BuildPlanName').and_return([build_plan])
@@ -63,13 +63,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should run through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      expect_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.create).to be
     end
 
     it 'should delete the resource' do
-      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
       expect(provider.destroy).to be
     end
 
@@ -102,21 +102,21 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should upload the file and add the golden image resource with default timeout' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       timeout = OneviewSDK::Rest::READ_TIMEOUT
-      expect(resourcetype).to receive(:add).with(anything, '/path/to/upload/golden_image.zip', expected_data, timeout).and_return(test)
+      expect(resource_type).to receive(:add).with(anything, '/path/to/upload/golden_image.zip', expected_data, timeout).and_return(test)
       expect(provider.create).to be
     end
 
     it 'should upload the file and add the golden image resource with given timeout' do
       resource['data']['timeout'] = 7_200
-      allow(resourcetype).to receive(:find_by).and_return([])
-      expect(resourcetype).to receive(:add).with(anything, '/path/to/upload/golden_image.zip', expected_data, 7_200).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      expect(resource_type).to receive(:add).with(anything, '/path/to/upload/golden_image.zip', expected_data, 7_200).and_return(test)
       expect(provider.create).to be
     end
   end
@@ -137,14 +137,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     context 'when file does not exist' do
       before(:each) do
         allow(File).to receive(:exist?).with(download_path).and_return(false)
-        expect_any_instance_of(resourcetype).to receive(:download_details_archive).with(download_path).and_return(true)
+        expect_any_instance_of(resource_type).to receive(:download_details_archive).with(download_path).and_return(true)
       end
 
       it 'should download the file' do
@@ -168,19 +168,19 @@ describe provider_class, unit: true, if: api_version >= 300 do
       end
 
       it 'should raise error' do
-        expect_any_instance_of(resourcetype).not_to receive(:download_details_archive).and_return(true)
+        expect_any_instance_of(resource_type).not_to receive(:download_details_archive).and_return(true)
         expect { provider.download_details_archive }.to raise_error('File /path/to/download/details_archive.zip already exists.')
       end
 
       it 'should raise error if force is false' do
         resource['data']['force'] = false
-        expect_any_instance_of(resourcetype).not_to receive(:download_details_archive).and_return(true)
+        expect_any_instance_of(resource_type).not_to receive(:download_details_archive).and_return(true)
         expect { provider.download_details_archive }.to raise_error('File /path/to/download/details_archive.zip already exists.')
       end
 
       it 'should download if force is true' do
         resource['data']['force'] = true
-        expect_any_instance_of(resourcetype).to receive(:download_details_archive).with(download_path).and_return(true)
+        expect_any_instance_of(resource_type).to receive(:download_details_archive).with(download_path).and_return(true)
         expect(provider.download_details_archive).to be
       end
     end
@@ -202,14 +202,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     context 'when file does not exist' do
       before(:each) do
         allow(File).to receive(:exist?).with(download_path).and_return(false)
-        expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
+        expect_any_instance_of(resource_type).to receive(:download).with(download_path).and_return(true)
       end
 
       it 'should download the file' do
@@ -233,19 +233,19 @@ describe provider_class, unit: true, if: api_version >= 300 do
       end
 
       it 'should raise error' do
-        expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
+        expect_any_instance_of(resource_type).not_to receive(:download).and_return(true)
         expect { provider.download }.to raise_error('File /path/to/download/golden_image.zip already exists.')
       end
 
       it 'should raise error if force is false' do
         resource['data']['force'] = false
-        expect_any_instance_of(resourcetype).not_to receive(:download).and_return(true)
+        expect_any_instance_of(resource_type).not_to receive(:download).and_return(true)
         expect { provider.download }.to raise_error('File /path/to/download/golden_image.zip already exists.')
       end
 
       it 'should download if force is true' do
         resource['data']['force'] = true
-        expect_any_instance_of(resourcetype).to receive(:download).with(download_path).and_return(true)
+        expect_any_instance_of(resource_type).to receive(:download).with(download_path).and_return(true)
         expect(provider.download).to be
       end
     end

@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_unmanaged_device).provide :c7000, parent: Puppet::One
   end
 
   def destroy
-    ud = @resourcetype.find_by(@client, @data)
+    ud = @resource_type.find_by(@client, @data)
     raise('There were no matching Unmanaged Devices in the Appliance.') if ud.empty?
     ud.map(&:remove)
   end

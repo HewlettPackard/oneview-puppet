@@ -18,11 +18,10 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
 api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:LogicalDownlink, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
-
-  resourcetype = OneviewSDK.resource_named(:LogicalDownlink, api_version, 'Synergy')
 
   let(:resource) do
     Puppet::Type.type(:oneview_logical_downlink).new(
@@ -40,10 +39,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
+    allow(resource_type).to receive(:find_by).and_return([test])
     provider.exists?
   end
 
@@ -76,7 +75,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -84,7 +83,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect { provider.get_without_ethernet }.to raise_error(/The method #get_without_ethernet is unavailable for this resource/)
     end
 
-    xit 'should raise error when running get without ethernet - Test disabled due to bug on oneview-sdk' do
+    it 'should raise error when running get without ethernet' do
       resource['data'] = {}
       provider.exists?
       expect { provider.get_without_ethernet }.to raise_error(/The method #self.get_without_ethernet is unavailable for this resource/)

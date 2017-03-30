@@ -15,13 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_volume).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_name = 'Volume'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+resource_type = OneviewSDK.resource_named(:Volume, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -54,14 +51,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   context 'given the minimum parameters' do
     before(:each) do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
 
     it 'should be able to run through self.instances' do
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, {}).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, {}).and_return([test])
       expect(instance).to be
     end
 
@@ -74,48 +71,48 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(resource_type.new(@client, resource['data']))
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should be able to get the snapshots' do
-      allow_any_instance_of(resourcetype).to receive(:get_snapshots).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_snapshots).and_return('Test')
       expect(provider.get_snapshot).to be
     end
 
     it 'should be able to get a snapshot by name' do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
-      allow_any_instance_of(resourcetype).to receive(:get_snapshot).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_snapshot).and_return('Test')
       expect(provider.get_snapshot).to be
     end
 
     it 'should be able to repair' do
-      allow_any_instance_of(resourcetype).to receive(:repair).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:repair).and_return('Test')
       expect(provider.repair).to be
     end
 
     it 'should be able to get the attachable volumes' do
-      allow(resourcetype).to receive(:get_attachable_volumes).with(anything).and_return('Test')
+      allow(resource_type).to receive(:get_attachable_volumes).with(anything).and_return('Test')
       expect(provider.get_attachable_volumes).to be
     end
 
     it 'should be able to get the extra managed volume paths' do
-      allow(resourcetype).to receive(:get_extra_managed_volume_paths).with(anything).and_return('Test')
+      allow(resource_type).to receive(:get_extra_managed_volume_paths).with(anything).and_return('Test')
       expect(provider.get_extra_managed_volume_paths).to be
     end
 
     it 'should delete the snapshot' do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
-      allow_any_instance_of(resourcetype).to receive(:delete_snapshot).with(resource['data']['snapshotParameters']['name'])
+      allow_any_instance_of(resource_type).to receive(:delete_snapshot).with(resource['data']['snapshotParameters']['name'])
         .and_return('Test')
       expect(provider.delete_snapshot).to be
     end
 
     it 'should create the snapshot' do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
-      allow_any_instance_of(resourcetype).to receive(:create_snapshot).with('name' => resource['data']['snapshotParameters']['name'])
+      allow_any_instance_of(resource_type).to receive(:create_snapshot).with('name' => resource['data']['snapshotParameters']['name'])
         .and_return('Test')
       expect(provider.create_snapshot).to be
     end

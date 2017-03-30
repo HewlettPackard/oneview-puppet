@@ -23,7 +23,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context Image Streamer'
 
   resource_name = 'DeploymentPlan'
-  resourcetype = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
+  resource_type = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}") unless api_version < 300
 
   build_plan_class = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::BuildPlan")
   golden_image_class = Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::GoldenImage")
@@ -47,7 +47,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   let(:buildPlan) { build_plan_class.new(@client, name: resource['data']['oeBuildPlanURI']) }
 
@@ -55,7 +55,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   context 'given the Creation parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       allow(build_plan_class).to receive(:find_by).and_return([buildPlan])
       allow(golden_image_class).to receive(:find_by).and_return([goldenImage])
       provider.exists?
@@ -66,14 +66,14 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should run through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should delete the resource' do
-      allow_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
       expect(provider.destroy).to be
     end
 

@@ -15,15 +15,12 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_name = 'StoragePool'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version < 300
+resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :Synergy)
 
-describe provider_class, unit: true, if: api_version >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do
@@ -44,11 +41,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -65,23 +62,25 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:add).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should be able to destroy and recreate the resource to update its atributes' do
-      expect(resourcetype).to receive(:find_by).and_return([])
-      allow(resourcetype).to receive(:find_by).with(anything, name: resource['name']).and_return(test)
-      allow_any_instance_of(resourcetype).to receive(:remove).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      expect(resource_type).to receive(:find_by).and_return([])
+      expect(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
+      expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should delete the resource' do
-      allow_any_instance_of(resourcetype).to receive(:remove).and_return([])
+      allow_any_instance_of(resource_type).to receive(:remove).and_return([])
       expect(provider.destroy).to be
     end
   end

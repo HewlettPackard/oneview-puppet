@@ -39,14 +39,14 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
     @data['uplinkSets'] = parse_uplink_sets if @uplink_sets
     @data['interconnectMapTemplate'] = parse_interconnects if @interconnects
     @data['internalNetworkUris'] = parse_internal_networks if @internal_network_uris
-    @resourcetype.find_by(@client, @data).any?
+    @resource_type.find_by(@client, @data).any?
   end
 
   def create
     new_name = @data.delete('new_name')
-    lig = @resourcetype.new(@client, @data)
+    lig = @resource_type.new(@client, @data)
     @data['new_name'] = new_name if new_name
-    return true if resource_update(@data, @resourcetype)
+    return true if resource_update
     lig.create
     @property_hash[:data] = lig.data
     @property_hash[:ensure] = :present
@@ -60,7 +60,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
 
   def get_default_settings
     Puppet.notice("\n\nLogical Interconnect Group Default Settings\n")
-    pretty @resourcetype.get_default_settings(@client)
+    pretty @resource_type.get_default_settings(@client)
     true
   end
 

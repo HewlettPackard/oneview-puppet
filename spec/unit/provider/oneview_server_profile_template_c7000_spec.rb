@@ -15,17 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_name = 'ServerProfileTemplate'
-resourcetype = if api_version == 200
-                 Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-               else
-                 Object.const_get("OneviewSDK::API#{api_version}::C7000::#{resource_name}")
-               end
+resource_type = OneviewSDK.resource_named(:ServerProfileTemplate, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -50,10 +43,10 @@ describe provider_class, unit: true do
 
     let(:instance) { provider.class.instances.first }
 
-    let(:test) { resourcetype.new(@client, resource['data']) }
+    let(:test) { resource_type.new(@client, resource['data']) }
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -62,7 +55,7 @@ describe provider_class, unit: true do
     end
 
     it 'should run exists? and return the resource does not exist' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
 
@@ -75,36 +68,36 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(resourcetype.new(@client, resource['data']))
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(resource_type.new(@client, resource['data']))
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
 
     it 'should create when resource does not exist' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
-      expect_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      expect_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.create).to be
     end
 
     it 'should not create when resource is compliant' do
       expect(provider.exists?).to eq(true)
-      expect(resourcetype).not_to receive(:create)
+      expect(resource_type).not_to receive(:create)
       expect(provider.create).to be
     end
 
     it 'should update when resource is not compliant' do
       test['description'] = 'new description'
-      expect_any_instance_of(resourcetype).to receive(:update)
-      expect_any_instance_of(resourcetype).not_to receive(:create)
+      expect_any_instance_of(resource_type).to receive(:update)
+      expect_any_instance_of(resource_type).not_to receive(:create)
       expect(provider.create).to be
     end
 
     it 'should be able to create a server profile with default name using the template' do
       server_profile = OneviewSDK::ServerProfile.new(@client, name: 'Server_Profile_created_from_SPT')
       allow(OneviewSDK::ServerProfile).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:new_profile).and_return(server_profile)
+      allow_any_instance_of(resource_type).to receive(:new_profile).and_return(server_profile)
       allow(server_profile).to receive(:create).and_return(server_profile)
       expect(provider.set_new_profile).to be
     end
@@ -119,7 +112,7 @@ describe provider_class, unit: true do
       resource['data']['serverProfileName'] = 'New Server Profile'
       server_profile = OneviewSDK::ServerProfile.new(@client, name: 'New Server Profile')
       allow(OneviewSDK::ServerProfile).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:new_profile).and_return(server_profile)
+      allow_any_instance_of(resource_type).to receive(:new_profile).and_return(server_profile)
       allow(server_profile).to receive(:create).and_return(server_profile)
       expect(provider.set_new_profile).to be
     end
@@ -137,15 +130,15 @@ describe provider_class, unit: true do
         'serverHardwareTypeUri' => 'SY 480 Gen9 1'
       }
       fake_server_profile = { 'name' => 'Fake profile template with a new configuration' }
-      allow_any_instance_of(resourcetype).to receive(:get_transformation).and_return(fake_server_profile)
+      allow_any_instance_of(resource_type).to receive(:get_transformation).and_return(fake_server_profile)
       expect(provider.get_transformation).to be
     end
 
     it 'should be able to delete the resource' do
       resource['data'] = { 'name' => 'SPT', 'uri' => '/rest/fake' }
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      expect_any_instance_of(resourcetype).to receive(:delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.destroy).to be
     end
   end

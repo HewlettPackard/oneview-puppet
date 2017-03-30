@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_drive_enclosure).provide :synergy, parent: Puppet::On
     super
     return true if @data.empty?
     perform_patch
-    @resourcetype.new(@client, @data).exists?
+    @resource_type.new(@client, @data).exists?
   end
 
   def create

@@ -17,7 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_server_hardware_type).provider(:synergy)
-resourcetype = OneviewSDK::ServerHardwareType
+api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:ServerHardwareType, api_version, :Synergy)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -38,12 +39,12 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the minimum parameters before server creation' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
-      allow(resourcetype).to receive(:get_all).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:get_all).and_return([test])
       provider.exists?
     end
 
@@ -57,19 +58,19 @@ describe provider_class, unit: true do
     end
 
     it 'should raise error when server is not found' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       provider.exists?
       expect { provider.found }.to raise_error(/No ServerHardwareType with the specified data were found on the Oneview Appliance/)
     end
 
     it 'should be able to update the resource name, and change it back' do
-      allow_any_instance_of(resourcetype).to receive(:update).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:update).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should delete the server hardware' do
-      expect_any_instance_of(resourcetype).to receive(:remove).and_return(true)
+      expect_any_instance_of(resource_type).to receive(:remove).and_return(true)
       provider.exists?
       expect(provider.destroy).to be
     end

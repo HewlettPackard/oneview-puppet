@@ -25,6 +25,6 @@ Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
   end
 
   def set_reserved_vlan_range
-    @resourcetype.find_by(@client, unique_id).first.set_reserved_vlan_range(@data['fabric_options'])
+    @resource_type.find_by(@client, unique_id).first.set_reserved_vlan_range(@data['fabric_options'])
   end
 end

@@ -30,8 +30,8 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   end
 
   def create
-    return true if resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
+    return true if resource_update
+    @resource_type.new(@client, @data).create
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data
     true
@@ -40,7 +40,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   def get_attachable_volumes
     Puppet.notice "\n Getting attachable volumes...\n"
     Puppet.notice "\n Displaying list of attachable volumes bellow:\n"
-    pretty @resourcetype.get_attachable_volumes(@client)
+    pretty @resource_type.get_attachable_volumes(@client)
     Puppet.notice "\n <End of the list of attachable volumes>\n"
     true
   end
@@ -48,7 +48,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   def get_extra_managed_volume_paths
     Puppet.notice "\n Getting extra managed volume paths...\n"
     Puppet.notice "\n Displaying list of extra managed volume paths bellow:\n"
-    pretty @resourcetype.get_extra_managed_volume_paths(@client)
+    pretty @resource_type.get_extra_managed_volume_paths(@client)
     Puppet.notice "\n <End of the list of attachable volumes>\n"
     true
   end

@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:c7000)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:LogicalDownlink, api_version, 'C7000')
+resource_type = OneviewSDK.resource_named(:LogicalDownlink, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -39,10 +39,10 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   before(:each) do
-    allow(resourcetype).to receive(:find_by).and_return([test])
+    allow(resource_type).to receive(:find_by).and_return([test])
     provider.exists?
   end
 
@@ -75,7 +75,7 @@ describe provider_class, unit: true do
     end
 
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -83,7 +83,7 @@ describe provider_class, unit: true do
       expect { provider.get_without_ethernet }.to raise_error(/The method #get_without_ethernet is unavailable for this resource/)
     end
 
-    xit 'should raise error when running get without ethernet - Test disabled due to bug on oneview-sdk' do
+    it 'should raise error when running get without ethernet' do
       resource['data'] = {}
       provider.exists?
       expect { provider.get_without_ethernet }.to raise_error(/The method #self.get_without_ethernet is unavailable for this resource/)
@@ -104,12 +104,12 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get logical downlinks without ethernet' do
-      allow_any_instance_of(resourcetype).to receive(:get_without_ethernet).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:get_without_ethernet).and_return(test)
       expect(provider.get_without_ethernet).to be
     end
 
     it 'should be able to get all the logical downlinks without ethernet' do
-      allow(resourcetype).to receive(:get_without_ethernet).and_return([test])
+      allow(resource_type).to receive(:get_without_ethernet).and_return([test])
       resource['data'] = {}
       provider.exists?
       expect(provider.get_without_ethernet).to be

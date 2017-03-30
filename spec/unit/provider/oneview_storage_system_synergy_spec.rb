@@ -15,13 +15,10 @@
 ################################################################################
 
 require 'spec_helper'
-require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
-provider_class = Puppet::Type.type(:oneview_storage_system).provider(:oneview_storage_system)
+provider_class = Puppet::Type.type(:oneview_storage_system).provider(:synergy)
 api_version = login[:api_version] || 200
-resource_name = 'StorageSystem'
-resourcetype = Object.const_get("OneviewSDK::API#{api_version}::Synergy::#{resource_name}") unless api_version == 200
+resource_type = OneviewSDK.resource_named(:StorageSystem, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -48,11 +45,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -69,29 +66,29 @@ describe provider_class, unit: true, if: api_version >= 300 do
     end
 
     it 'should be able to delete the resource' do
-      allow_any_instance_of(resourcetype).to receive(:remove).and_return([])
+      allow_any_instance_of(resource_type).to receive(:remove).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to get the storage pools' do
-      allow_any_instance_of(resourcetype).to receive(:get_storage_pools).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_storage_pools).and_return('Test')
       expect(provider.get_storage_pools).to be
     end
 
     it 'should be able to get the managed ports' do
-      allow_any_instance_of(resourcetype).to receive(:get_managed_ports).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_managed_ports).and_return('Test')
       expect(provider.get_managed_ports).to be
     end
 
     it 'should be able to get the storage pools' do
-      allow(resourcetype).to receive(:get_host_types).and_return('Test')
+      allow(resource_type).to receive(:get_host_types).and_return('Test')
       expect(provider.get_host_types).to be
     end
 
     it 'should be able to create the resource' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:add).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end

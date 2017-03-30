@@ -28,7 +28,7 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
     super
     # Allows find_by to work in case poolName is declared, since find_by returns it as 'name'
     @data['name'] = @data.delete('poolName') if @data['poolName']
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
@@ -44,7 +44,7 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def setup_for_recreation
-    storage_pool = @resourcetype.find_by(@client, name: @data['name'])
+    storage_pool = @resource_type.find_by(@client, name: @data['name'])
     return true if storage_pool.empty?
     storage_pool.first.remove
     true

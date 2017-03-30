@@ -35,8 +35,8 @@ Puppet::Type.type(:oneview_sas_logical_interconnect).provide :synergy, parent: P
     @data = data_parse
     empty_data_check
     variable_assignments
-    return !@resourcetype.find_by(@client, @data).empty? unless @data
-    @resourcetype.new(@client, @data).exists?
+    return !@resource_type.find_by(@client, @data).empty? unless @data
+    @resource_type.new(@client, @data).exists?
   end
 
   def create

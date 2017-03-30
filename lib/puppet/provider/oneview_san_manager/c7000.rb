@@ -27,7 +27,7 @@ Puppet::Type.type(:oneview_san_manager).provide :c7000, parent: Puppet::OneviewR
     @data = data_parse
     parse_provider_uri
     empty_data_check
-    @resourcetype.find_by(@client, @data).any?
+    @resource_type.find_by(@client, @data).any?
   end
 
   def create

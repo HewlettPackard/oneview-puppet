@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
 api_version = login[:api_version] || 200
-resourcetype = OneviewSDK.resource_named(:EthernetNetwork, api_version, 'C7000')
+resource_type = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -45,11 +45,11 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the create parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -58,17 +58,17 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
       provider.exists?
       expect(provider.destroy).to be
@@ -76,46 +76,46 @@ describe provider_class, unit: true do
 
     it 'should be able to get the associated uplink groups' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_associated_uplink_groups).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_associated_uplink_groups).and_return('Test')
       expect(provider.get_associated_uplink_groups).to be
     end
 
     it 'should raise a warning when there are no associated uplink groups to show' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_associated_uplink_groups).and_return('[]')
+      allow_any_instance_of(resource_type).to receive(:get_associated_uplink_groups).and_return('[]')
       expect(provider.get_associated_uplink_groups).to be
     end
 
     it 'should be able to get the associated profiles' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_associated_profiles).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_associated_profiles).and_return('Test')
       expect(provider.get_associated_profiles).to be
     end
 
     it 'should be able to get the associated profiles' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_associated_profiles).and_return('Test')
+      allow_any_instance_of(resource_type).to receive(:get_associated_profiles).and_return('Test')
       expect(provider.get_associated_profiles).to be
     end
 
     it 'should raise a warning when its not able to get the associated profiles' do
       resource['data']['uri'] = '/rest/fake'
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
-      allow_any_instance_of(resourcetype).to receive(:get_associated_profiles).and_return('[]')
+      allow_any_instance_of(resource_type).to receive(:get_associated_profiles).and_return('[]')
       expect(provider.get_associated_profiles).to be
     end
 
@@ -124,9 +124,9 @@ describe provider_class, unit: true do
       resource['data']['connectionTemplateUri'] = '/rest/fake'
       resource['data']['bandwidth'] = { 'maximumbandwidth' => '1000' }
       unique_ids = { 'uri' => '/rest/fake', 'name' => 'Puppet Network' }
-      test = resourcetype.new(@client, resource['data'])
-      allow(resourcetype).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resourcetype).to receive(:find_by).with(anything, unique_ids).and_return([test])
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, unique_ids).and_return([test])
       allow(OneviewSDK::ConnectionTemplate).to receive(:get_default).with(anything).and_return(test)
       allow(OneviewSDK::ConnectionTemplate).to receive(:find_by)
         .with(anything, uri: resource['data']['connectionTemplateUri']).and_return([test])

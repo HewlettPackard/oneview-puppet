@@ -36,21 +36,13 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
     resource['ensure'].to_s == 'present' ? false : true
   end
 
-  def create
-    raise "Ensure state 'present' is unavailable for this resource"
-  end
-
-  def destroy
-    raise "Ensure state 'absent' is unavailable for this resource"
-  end
-
   def found
     @data.empty? ? find_for_empty : find_for_server_profile
     true
   end
 
   def get_extra_unmanaged_volumes
-    extra_unmanaged_volumes = @resourcetype.get_extra_unmanaged_volumes(@client)['members']
+    extra_unmanaged_volumes = @resource_type.get_extra_unmanaged_volumes(@client)['members']
     raise "\n\nNo Unmanaged volumes were found on the appliance.\n\n" if extra_unmanaged_volumes.empty?
     Puppet.notice "\n\nUnmanaged volumes:\n\n"
     extra_unmanaged_volumes.each do |unmanaged_volume|
@@ -62,8 +54,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
   def remove_extra_unmanaged_volume
     server_profile = OneviewSDK::ServerProfile.find_by(@client, name: @data['name']).first
     raise "\n\nSpecified Server Profile does not exist.\n" unless server_profile
-    @resourcetype.remove_extra_unmanaged_volume(@client, server_profile)
-    # @resourcetype.remove_extra_unmanaged_volume(@client, server_profile['uri'])
+    @resource_type.remove_extra_unmanaged_volume(@client, server_profile)
     true
   end
 
@@ -96,8 +87,8 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
   end
 
   def find_for_empty
-    resource_name = @resourcetype.to_s.split('::')
-    vas = @resourcetype.find_by(@client, {})
+    resource_name = @resource_type.to_s.split('::')
+    vas = @resource_type.find_by(@client, {})
     raise "No #{resource_name[1]}s found on the appliance" if vas.empty?
     vas.each do |va|
       Puppet.notice "\n\n Found matching #{resource_name[1]} with the following info: \n"

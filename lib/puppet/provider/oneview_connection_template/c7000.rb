@@ -27,10 +27,10 @@ Puppet::Type.type(:oneview_connection_template).provide :c7000, parent: Puppet::
     @data = data_parse
     empty_data_check([nil, :found, :get_default_connection_template])
     ct = if resource['ensure'] == :present
-           resource_update(@data, @resourcetype)
-           @resourcetype.find_by(@client, unique_id)
+           resource_update
+           @resource_type.find_by(@client, unique_id)
          else
-           @resourcetype.find_by(@client, @data)
+           @resource_type.find_by(@client, @data)
          end
     !ct.empty?
   end
@@ -45,7 +45,7 @@ Puppet::Type.type(:oneview_connection_template).provide :c7000, parent: Puppet::
 
   def get_default_connection_template
     Puppet.notice("\n\nDefault Connection Template")
-    default = @resourcetype.get_default(@client)
+    default = @resource_type.get_default(@client)
     if default['uri']
       puts "\nName: '#{default['name']}'"
       puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"

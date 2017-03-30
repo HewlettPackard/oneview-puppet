@@ -26,15 +26,15 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
   def exists?
     super
     @bandwidth = @data.delete('bandwidth') unless @data['vlanIdRange']
-    @resourcetype.find_by(@client, @data).any?
+    @resource_type.find_by(@client, @data).any?
   end
 
   def create
     # Checks if there is a connection template update
     update_connection_template if @bandwidth
     # Checks if the operation is an update, bulk create or neither
-    return true if bulk_create_check || resource_update(@data, @resourcetype)
-    @resourcetype.new(@client, @data).create
+    return true if bulk_create_check || resource_update
+    @resource_type.new(@client, @data).create
   end
 
   def get_associated_profiles
@@ -72,7 +72,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
     if @data['vlanIdRange']
       Puppet.warning 'Deprecation warning! Bulk creation cannot be correctly maintained with idempotency,
        so it will be discontinued in future releases. Adopt the single resource style creation in the future.'
-      @resourcetype.bulk_create(@client, bulk_parse(@data))
+      @resource_type.bulk_create(@client, bulk_parse(@data))
     else
       false
     end
@@ -87,7 +87,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
   # Checks whether the connection template needs to be updated
   def update_connection_template
     # Get single resource instance cannot be used because its @data may contain new_name
-    network = @resourcetype.find_by(@client, unique_id).first
+    network = @resource_type.find_by(@client, unique_id).first
     @bandwidth.each { |key, value| @bandwidth[key] = value.to_i }
     connection_template = OneviewSDK::ConnectionTemplate.find_by(@client, uri: network['connectionTemplateUri']).first
     connection_template_current_bandwidth = connection_template['bandwidth']

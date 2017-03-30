@@ -27,7 +27,7 @@ Puppet::Type.type(:oneview_switch).provide :c7000, parent: Puppet::OneviewResour
     dataless_ensure = [nil, :found, :get_type]
     super(dataless_ensure)
     return true if dataless_ensure.include?(resource['ensure'])
-    !@resourcetype.find_by(@client, unique_id).empty?
+    !@resource_type.find_by(@client, unique_id).empty?
   end
 
   def create
@@ -41,12 +41,12 @@ Puppet::Type.type(:oneview_switch).provide :c7000, parent: Puppet::OneviewResour
   def get_type
     if @data['name']
       Puppet.notice "\n\n Search for switch type #{@data['name']} started, displaying results bellow:\n"
-      results = @resourcetype.get_type(@client, @data['name'])
+      results = @resource_type.get_type(@client, @data['name'])
       raise "\n\n No switch types corresponding to the name #{@data['name']} were found.\n" unless results
       pretty results
     else
       Puppet.notice "\n\n Search for switch types started, displaying results bellow:\n"
-      pretty @resourcetype.get_types(@client)
+      pretty @resource_type.get_types(@client)
     end
     true
   end

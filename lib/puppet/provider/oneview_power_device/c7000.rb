@@ -28,7 +28,7 @@ Puppet::Type.type(:oneview_power_device).provide :c7000, parent: Puppet::Oneview
     empty_data_check([:found, :absent])
     pd_uri_parser
     variable_assignments
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
@@ -37,13 +37,13 @@ Puppet::Type.type(:oneview_power_device).provide :c7000, parent: Puppet::Oneview
 
   # Remove
   def destroy
-    pd = @resourcetype.find_by(@client, @data)
+    pd = @resource_type.find_by(@client, @data)
     raise('There were no matching Power Devices in the Appliance.') if pd.empty?
     pd.map(&:remove)
   end
 
   def discover
-    pd = @resourcetype.discover(@client, @data)
+    pd = @resource_type.discover(@client, @data)
     Puppet.notice("IPDU #{pd['name']} has been discovered!")
   end
 

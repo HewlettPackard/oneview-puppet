@@ -55,9 +55,6 @@ describe provider_class do
       expect(instance).to be
     end
 
-    it 'should raise an error when the "present" ensurable is specified' do
-      expect { provider.create }.to raise_error(/Ensure state 'present' is unavailable for this resource/)
-    end
     # This requires the VA to be created beforehand
     # it 'should return that the volume attachment was found' do
     #   expect(provider.found).to be
@@ -74,10 +71,6 @@ describe provider_class do
 
     it 'should return the list of paths from the VA' do
       expect(provider.get_paths).to be
-    end
-
-    it 'should raise an error when the "present" ensurable is specified' do
-      expect { provider.destroy }.to raise_error(/Ensure state 'absent' is unavailable for this resource/)
     end
   end
 end

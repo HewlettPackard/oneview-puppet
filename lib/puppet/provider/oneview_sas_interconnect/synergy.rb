@@ -34,10 +34,10 @@ Puppet::Type.type(:oneview_sas_interconnect).provide :synergy, parent: Puppet::O
   def exists?
     @data = data_parse
     empty_data_check([nil, :found, :get_types])
-    return !@resourcetype.find_by(@client, @data).empty? if @data.empty?
+    return !@resource_type.find_by(@client, @data).empty? if @data.empty?
     variable_assignments
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
-    @resourcetype.new(@client, @data).exists?
+    @resource_type.new(@client, @data).exists?
   end
 
   def create
@@ -51,9 +51,9 @@ Puppet::Type.type(:oneview_sas_interconnect).provide :synergy, parent: Puppet::O
   def get_types
     Puppet.notice("\n\nSASInterconnect Types\n")
     if @data['name']
-      pretty @resourcetype.get_type(@client, @data['name'])
+      pretty @resource_type.get_type(@client, @data['name'])
     else
-      pretty @resourcetype.get_types(@client)
+      pretty @resource_type.get_types(@client)
     end
     true
   end

@@ -23,9 +23,9 @@ Puppet::Type.type(:oneview_server_profile).provide :synergy, parent: :c7000 do
   def get_sas_logical_jbods
     Puppet.notice("\n\nLogical JBOD Attachments\n")
     if @data['name']
-      pretty @resourcetype.get_sas_logical_jbod(@client, @data['name'])
+      pretty @resource_type.get_sas_logical_jbod(@client, @data['name'])
     else
-      pretty @resourcetype.get_sas_logical_jbods(@client)
+      pretty @resource_type.get_sas_logical_jbods(@client)
     end
     true
   end
@@ -33,7 +33,7 @@ Puppet::Type.type(:oneview_server_profile).provide :synergy, parent: :c7000 do
   # Retrieves drives by SAS Logical JBOD name
   def get_sas_logical_jbod_drives
     Puppet.notice("\n\nLogical JBOD Drives\n")
-    pretty @resourcetype.get_sas_logical_jbod_drives(@client, @data['name'])
+    pretty @resource_type.get_sas_logical_jbod_drives(@client, @data['name'])
     true
   end
 
@@ -41,9 +41,9 @@ Puppet::Type.type(:oneview_server_profile).provide :synergy, parent: :c7000 do
   def get_sas_logical_jbod_attachments
     Puppet.notice("\n\nLogical JBOD Attachments\n")
     if @data['name']
-      pretty @resourcetype.get_sas_logical_jbod_attachment(@client, @data['name'])
+      pretty @resource_type.get_sas_logical_jbod_attachment(@client, @data['name'])
     else
-      pretty @resourcetype.get_sas_logical_jbod_attachments(@client)
+      pretty @resource_type.get_sas_logical_jbod_attachments(@client)
     end
     true
   end

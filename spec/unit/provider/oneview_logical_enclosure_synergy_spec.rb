@@ -17,9 +17,10 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:synergy)
-resourcetype = OneviewSDK::LogicalEnclosure
+api_version = login[:api_version] || 200
+resource_type = OneviewSDK.resource_named(:LogicalEnclosure, api_version, :Synergy)
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
 
   let(:resource) do
@@ -42,11 +43,11 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resourcetype.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the Creation parameters' do
     before(:each) do
-      allow(resourcetype).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -55,7 +56,7 @@ describe provider_class, unit: true do
     end
 
     it 'if nothing is found should return false' do
-      allow(resourcetype).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
 
@@ -64,14 +65,14 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      allow(resourcetype).to receive(:find_by).and_return([])
-      allow_any_instance_of(resourcetype).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
-      expect_any_instance_of(resourcetype).to receive(:delete).and_return([])
+      expect_any_instance_of(resource_type).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
@@ -85,7 +86,7 @@ describe provider_class, unit: true do
     end
 
     it '#gets the script' do
-      allow_any_instance_of(resourcetype).to receive(:get_script).and_return('')
+      allow_any_instance_of(resource_type).to receive(:get_script).and_return('')
       expect(provider.get_script).to be
     end
 
@@ -94,13 +95,13 @@ describe provider_class, unit: true do
     end
 
     it '#updates the logical enclosure from group -- ~refreshes it' do
-      allow_any_instance_of(resourcetype).to receive(:update_from_group).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:update_from_group).and_return(true)
       expect(provider.updated_from_group).to be
     end
 
     it '#generates a support dump for the logical enclosure' do
       resource['data']['dump'] = 'Random text for dump'
-      allow_any_instance_of(resourcetype).to receive(:support_dump).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:support_dump).and_return(true)
       expect(provider.generate_support_dump).to be
     end
   end

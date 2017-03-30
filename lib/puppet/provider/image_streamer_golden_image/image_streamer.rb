@@ -24,14 +24,14 @@ Puppet::Type::Image_streamer_golden_image.provide :image_streamer, parent: Puppe
   def exists?
     super([nil, :found, :download_details_archive, :download])
     @golden_image_path = @data.delete('golden_image_path')
-    !@resourcetype.find_by(@client, @data).empty?
+    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
-    current_resource = @resourcetype.find_by(@client, unique_id).first
+    current_resource = @resource_type.find_by(@client, unique_id).first
     timeout = @data.delete('timeout') || OneviewSDK::Rest::READ_TIMEOUT
     return super unless @golden_image_path && !current_resource
-    @resourcetype.add(@client, @golden_image_path, @data, timeout)
+    @resource_type.add(@client, @golden_image_path, @data, timeout)
   end
 
   def download_details_archive

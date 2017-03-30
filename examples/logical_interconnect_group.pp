@@ -155,59 +155,45 @@ oneview_logical_interconnect_group{'Puppet LIG C7000 Full':
     'interconnectMapTemplate' => {
       'interconnectMapEntryTemplates' => [
         {
-          'logicalLocation'                => {
+          'logicalLocation'              => {
             'locationEntries' => [
               {
-                'relativeValue'   => 1,
-                'type'            => 'Bay'
+                'relativeValue' => 1,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },
-          'permittedInterconnectTypeUri'   => '/rest/interconnect-types/005ef42f-eb2e-44ff-bc6d-d736d1705f72'
+          'permittedInterconnectTypeUri' => '/rest/interconnect-types/005ef42f-eb2e-44ff-bc6d-d736d1705f72'
         },
         {
-          'logicalLocation'                => {
+          'logicalLocation'              => {
             'locationEntries' => [
               {
-                'relativeValue'   => 2,
-                'type'            => 'Bay'
+                'relativeValue' => 2,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },
-          'permittedInterconnectTypeUri'   => '/rest/interconnect-types/005ef42f-eb2e-44ff-bc6d-d736d1705f72'
-        },
-        {
-          'logicalLocation' => {
-            'locationEntries' => [
-              {
-                'relativeValue'   => 3,
-                'type'            => 'Bay'
-              },
-              {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
-              }
-            ]
-          },
+          'permittedInterconnectTypeUri' => '/rest/interconnect-types/005ef42f-eb2e-44ff-bc6d-d736d1705f72'
         },
         {
           'logicalLocation' => {
             'locationEntries' => [
               {
-                'relativeValue'   => 4,
-                'type'            => 'Bay'
+                'relativeValue' => 3,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },
@@ -216,12 +202,12 @@ oneview_logical_interconnect_group{'Puppet LIG C7000 Full':
           'logicalLocation' => {
             'locationEntries' => [
               {
-                'relativeValue'   => 5,
-                'type'            => 'Bay'
+                'relativeValue' => 4,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },
@@ -230,12 +216,12 @@ oneview_logical_interconnect_group{'Puppet LIG C7000 Full':
           'logicalLocation' => {
             'locationEntries' => [
               {
-                'relativeValue'   => 6,
-                'type'            => 'Bay'
+                'relativeValue' => 5,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },
@@ -244,12 +230,12 @@ oneview_logical_interconnect_group{'Puppet LIG C7000 Full':
           'logicalLocation' => {
             'locationEntries' => [
               {
-                'relativeValue'   => 7,
-                'type'            => 'Bay'
+                'relativeValue' => 6,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },
@@ -258,12 +244,26 @@ oneview_logical_interconnect_group{'Puppet LIG C7000 Full':
           'logicalLocation' => {
             'locationEntries' => [
               {
-                'relativeValue'   => 8,
-                'type'            => 'Bay'
+                'relativeValue' => 7,
+                'type'          => 'Bay'
               },
               {
-                'relativeValue'   => 1,
-                'type'            => 'Enclosure'
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
+              }
+            ]
+          },
+        },
+        {
+          'logicalLocation' => {
+            'locationEntries' => [
+              {
+                'relativeValue' => 8,
+                'type'          => 'Bay'
+              },
+              {
+                'relativeValue' => 1,
+                'type'          => 'Enclosure'
               }
             ]
           },

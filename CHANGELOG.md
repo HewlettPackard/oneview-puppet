@@ -1,3 +1,13 @@
+# Unreleased Changes
+
+## Suggested release: v2.2.1
+### Version highlights:
+1. Major refactor on internal methods. Improved idempotency and logging project-wide.
+
+#### Bug fixes & Enhancements:
+- [#95](https://github.com/HewlettPackard/oneview-puppet/issues/95) Improve server profile idempotency
+- [#101](https://github.com/HewlettPackard/oneview-puppet/issues/101) Improve server profile template idempotency
+
 # 2.2.0 (2017-03-28)
 ### Version highlights:
 1. Added support to the Image Streamer REST API version 300 for OS provisioning through OneView.
@@ -14,12 +24,12 @@
 #### Bug fixes & Enhancements:
 - [#103](https://github.com/HewlettPackard/oneview-puppet/issues/103) Unit tests should not require auth files/environment variables from the user
 - [#105](https://github.com/HewlettPackard/oneview-puppet/issues/105) Create or update uplink sets through logical interconnect groups
-- [#119](https://github.com/HewlettPackard/oneview-puppet/issues/119) Update unit tests to match updated remove_extra_unmanaged_volume from oneview-ruby-sdk
 - [#116](https://github.com/HewlettPackard/oneview-puppet/issues/116) Simplify login to i3s
+- [#119](https://github.com/HewlettPackard/oneview-puppet/issues/119) Update unit tests to match updated remove_extra_unmanaged_volume from oneview-ruby-sdk
 - [#121](https://github.com/HewlettPackard/oneview-puppet/issues/121) Deployment Plan and Golden Image should use the default uri parser
 - [#122](https://github.com/HewlettPackard/oneview-puppet/issues/122) Uri_parsing should support upper case for uri
-- [#133](https://github.com/HewlettPackard/oneview-puppet/issues/133) Allow set a timeout for Image_streamer_golden_image upload
 - [#132](https://github.com/HewlettPackard/oneview-puppet/issues/132) Allow option force for Image_streamer_golden_image download operations
+- [#133](https://github.com/HewlettPackard/oneview-puppet/issues/133) Allow set a timeout for Image_streamer_golden_image upload
 - [#139](https://github.com/HewlettPackard/oneview-puppet/issues/139) Error running oneview_logical_interconnect's ensure method get_default_settings after upgrading OneView SDK to >= v4.1
 
 # 2.1.0 (2017-02-03)
