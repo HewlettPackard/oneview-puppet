@@ -16,22 +16,39 @@
 
 LineLength:
   Max: 140
+
 MethodLength:
   Max: 40
+
+Metrics/AbcSize:
+  Max: 20
+
 Metrics/BlockLength:
   Enabled: false
-Style/AccessorMethodName:
-  Enabled: false
-Metrics/PerceivedComplexity:
+
+Metrics/ClassLength:
   Exclude:
-    - 'lib/puppet/provider/uri_parsing.rb'
+    - 'lib/puppet/provider/oneview_resource.rb'
+
 Metrics/CyclomaticComplexity:
   Max: 10
   Exclude:
     - 'lib/puppet/type/common.rb'
     - 'lib/puppet/provider/uri_parsing.rb'
-Metrics/AbcSize:
-  Max: 20
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/puppet/provider/uri_parsing.rb'
+
+Style/AccessorMethodName:
+  Enabled: false
+
+Style/EndOfLine:
+  EnforcedStyle: lf
+
 Style/GlobalVars:
   Exclude:
     - 'spec/shared_context.rb'
+
+Style/PercentLiteralDelimiters:
+  Enabled: false

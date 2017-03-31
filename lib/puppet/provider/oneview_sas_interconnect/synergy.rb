@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_sas_interconnect).provide :synergy, parent: Puppet::O
   end
 
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check([nil, :found, :get_types])
     return !@resource_type.find_by(@client, @data).empty? if @data.empty?
     variable_assignments

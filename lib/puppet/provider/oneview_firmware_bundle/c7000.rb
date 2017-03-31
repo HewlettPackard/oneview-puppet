@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_firmware_bundle).provide :c7000, parent: Puppet::Onev
 
   # Provider methods
   def exists?
-    @data = data_parse
+    prepare_environment
     raise 'A "firmware_bundle_path" is required for this operation' unless @data['firmware_bundle_path']
   end
 

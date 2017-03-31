@@ -22,7 +22,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide :c7000, parent: Pupp
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check
     connections_parse if @data['connections']
     puppet_resource = @resource_type.new(@client, @data)

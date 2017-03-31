@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_logical_switch_group).provide :c7000, parent: Puppet:
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check
     switch_type_uri if @data['switchMapTemplate']
     @switches = @data.delete('switches')

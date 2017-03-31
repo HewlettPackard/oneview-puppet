@@ -30,33 +30,12 @@ def logical_interconnect
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :get_ethernet_settings,
-      :set_qos_aggregated_configuration,
-      :get_qos_aggregated_configuration,
-      :get_snmp_configuration,
-      :set_snmp_configuration,
-      :set_configuration,
-      :get_port_monitor,
-      :set_port_monitor,
-      :get_telemetry_configuration,
-      :set_telemetry_configuration,
-      :get_firmware,
-      :set_firmware,
-      :set_compliance,
-      :get_internal_vlans,
-      :set_internal_networks
-    ]
+  let(:special_ensurables) do
+    %i[found get_ethernet_settings set_qos_aggregated_configuration get_qos_aggregated_configuration get_snmp_configuration
+       set_snmp_configuration set_configuration get_port_monitor set_port_monitor get_telemetry_configuration
+       set_telemetry_configuration get_firmware set_firmware set_compliance get_internal_vlans set_internal_networks]
   end
 
   it 'should accept special ensurables' do

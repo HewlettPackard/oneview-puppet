@@ -43,7 +43,7 @@ describe provider_class, unit: true do
 
   context 'given the minimum parameters' do
     before(:each) do
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -57,7 +57,7 @@ describe provider_class, unit: true do
     end
 
     it 'should raise error when server is not found' do
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([])
       expect { provider.found }.to raise_error(/No Rack with the specified data were found on the Oneview Appliance/)
     end
 
@@ -90,14 +90,17 @@ describe provider_class, unit: true do
           'rackMounts' => [
             { 'mountUri' => '/rest/enclosures/09SGH100X6J1', 'topUSlot' => 20, 'uHeight' => 10 }
           ]
-        }
+        },
+        provider: 'c7000'
       )
     end
+
     before(:each) do
       resource['data']['uri'] = '/rest/fake'
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
+
     it 'should be able to add a rack resource' do
       uri = { 'uri' => resource['data']['rackMounts'][0]['mountUri'] }
       new_res = Hash[resource['data']['rackMounts'][0].to_a]
@@ -116,18 +119,13 @@ describe provider_class, unit: true do
 
     it 'should allow specifying a name instead of an uri' do
       resource['data']['rackMounts'][0]['mountUri'] = 'Test, enclosure'
-      allow(OneviewSDK::Enclosure).to receive(:find_by).with(anything, name: 'Test').and_return([test])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(OneviewSDK::Enclosure).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       expect(provider.exists?).to be
     end
-  end
 
-  context 'given the minimum parameters' do
     it 'should delete the rack' do
-      resource['data']['uri'] = '/rest/fake/'
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      provider.exists?
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:remove).and_return(true)
       expect(provider.destroy).to be
     end
   end

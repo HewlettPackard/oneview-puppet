@@ -26,7 +26,6 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
     artifacts_uri_parse('deploymentPlans')
     artifacts_uri_parse('goldenImages')
     artifacts_uri_parse('planScripts')
-    @deployment_group_class = OneviewSDK::ImageStreamer.resource_named('DeploymentGroup', @client.api_version)
     super([nil, :found, :extract, :download])
   end
 
@@ -86,6 +85,7 @@ Puppet::Type.type(:image_streamer_artifact_bundle).provide :image_streamer, pare
 
   def get_deployment_group
     raise 'A \'deploymentGroupUri\' field is required in the data hash to run this action.' unless @data['deploymentGroupUri']
+    @deployment_group_class = OneviewSDK::ImageStreamer.resource_named('DeploymentGroup', @client.api_version)
     @deployment_group_class.find_by(@client, 'uri' => @data['deploymentGroupUri']).first
   end
 

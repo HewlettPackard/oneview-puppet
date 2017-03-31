@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check
     variable_assignments
     li = if resource['ensure'] == :present

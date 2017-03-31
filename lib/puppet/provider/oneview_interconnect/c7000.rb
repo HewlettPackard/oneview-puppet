@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_interconnect).provide :c7000, parent: Puppet::Oneview
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check([nil, :found, :get_types, :get_link_topologies])
     variable_assignments
     # Checks if there is a patch update to be performed

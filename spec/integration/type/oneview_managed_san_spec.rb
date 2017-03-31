@@ -44,22 +44,9 @@ def managed_san_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :set_refresh_state,
-      :get_endpoints,
-      :get_zoning_report
-    ]
-  end
+  let(:special_ensurables) { %i[found set_refresh_state get_endpoints get_zoning_report] }
 
   it 'should have expected parameters' do
     params.each do |param|

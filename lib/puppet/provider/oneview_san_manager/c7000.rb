@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_san_manager).provide :c7000, parent: Puppet::OneviewR
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     parse_provider_uri
     empty_data_check
     @resource_type.find_by(@client, @data).any?

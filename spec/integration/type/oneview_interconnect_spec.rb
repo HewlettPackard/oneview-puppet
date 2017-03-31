@@ -30,23 +30,9 @@ def interconnect_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :get_statistics,
-      :get_name_servers,
-      :reset_port_protection,
-      :update_ports
-    ]
-  end
+  let(:special_ensurables) { %i[found get_statistics get_name_servers reset_port_protection update_ports] }
 
   it 'should require a name' do
     expect do

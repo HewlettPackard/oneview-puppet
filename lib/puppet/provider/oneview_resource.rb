@@ -74,19 +74,27 @@ module Puppet
     end
 
     def exists?(states = [nil, :found])
-      @data = data_parse
-      empty_data_check(states)
-      !@resource_type.find_by(@client, @data).empty?
+      prepare_environment
+      return true if empty_data_check(states)
+      @item = @resource_type.new(@client, @data)
+      return false unless @item.retrieve!
+      if @item.like?(@data)
+        Puppet.debug "#{@resource_type} #{@item['name']} is up to date."
+        true
+      else
+        false
+      end
       # @property_hash[:ensure] == :present # TODO: Future Improvement: Look into using property_hash for verifying existance globally
     end
 
-    # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
     def create(action = :create)
       return true if resource_update
       ov_resource = if action == :create
                       @resource_type.new(@client, @data).create
                     elsif action == :add
                       @resource_type.new(@client, @data).add
+                    elsif action == :update
+                      raise 'This resource relies on others to be created.'
                     else
                       raise 'Invalid action for create'
                     end
@@ -94,17 +102,23 @@ module Puppet
       @property_hash[:ensure] = :present
     end
 
-    # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
     def destroy(action = :delete)
       if action == :delete
         get_single_resource_instance.delete
       elsif action == :remove
         get_single_resource_instance.remove
+      elsif action == :multiple_delete
+        @resource_type.find_by(@client, @data).map(&:delete)
+      elsif action == :multiple_remove
+        @resource_type.find_by(@client, @data).map(&:remove)
       else
         raise 'Invalid action specified for destroy'
       end
       @property_hash[:ensure] = :absent
     end
+
+    # This method should be overwritten by resources which require the @data to be modified.
+    def data_parse; end
 
     def found
       find_resources

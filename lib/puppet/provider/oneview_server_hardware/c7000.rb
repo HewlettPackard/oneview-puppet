@@ -31,7 +31,7 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
 
   # Provider methods
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check
     data_parse_for_general
     return false if @patch_tags.any?

@@ -26,7 +26,7 @@ Puppet::Type.type(:oneview_uplink_set).provide :c7000, parent: Puppet::OneviewRe
 
   # Provider methods
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check
     name_to_uris
     # Taking out portConfigInfos before the find_by since it is not returned

@@ -141,7 +141,6 @@ describe provider_class, unit: true do
         ensure: 'get_available_networks',
         data:
             {
-              # 'name' => 'Profile',
               'query_parameters' => {
                 'enclosureGroupUri'     => '/rest/fake',
                 'storageSystemId'       => '/rest/fake',

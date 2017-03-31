@@ -30,7 +30,7 @@ Puppet::Type.type(:oneview_firmware_driver).provide :c7000, parent: Puppet::Onev
 
   # Provider methods
   def exists?
-    @data = data_parse
+    prepare_environment
     data_parse_for_general
     @resource_type.find_by(@client, @data).any?
   end

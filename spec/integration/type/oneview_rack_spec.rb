@@ -30,22 +30,9 @@ def rack_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :get_device_topology,
-      :add_rack_resource,
-      :remove_rack_resource
-    ]
-  end
+  let(:special_ensurables) { %i[found get_device_topology add_rack_resource remove_rack_resource] }
 
   it 'should have expected parameters' do
     params.each do |param|

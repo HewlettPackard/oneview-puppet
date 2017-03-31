@@ -29,9 +29,9 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
 
   def exists?
     # assignments and deletions from @data
-    @data = data_parse
+    prepare_environment
     network_uris
-    empty_data_check([:found, :get_without_ethernet])
+    empty_data_check([nil, :found, :get_without_ethernet])
     !@resource_type.find_by(@client, @data).empty?
   end
 

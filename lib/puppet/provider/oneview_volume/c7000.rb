@@ -26,15 +26,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
 
   # Provider methods
   def exists?
-    super([:found, :get_attachable_volumes, :get_extra_managed_volume_paths])
-  end
-
-  def create
-    return true if resource_update
-    @resource_type.new(@client, @data).create
-    @property_hash[:ensure] = :present
-    @property_hash[:data] = @data
-    true
+    super([nil, :found, :get_attachable_volumes, :get_extra_managed_volume_paths])
   end
 
   def get_attachable_volumes

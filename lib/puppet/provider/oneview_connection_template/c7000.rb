@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_connection_template).provide :c7000, parent: Puppet::
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check([nil, :found, :get_default_connection_template])
     ct = if resource['ensure'] == :present
            resource_update

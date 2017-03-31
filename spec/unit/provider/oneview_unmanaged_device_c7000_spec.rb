@@ -83,7 +83,7 @@ describe provider_class, unit: true do
     end
 
     it 'should update the resource' do
-      expect_any_instance_of(resource_type).to receive(:like?).and_return(false)
+      allow_any_instance_of(resource_type).to receive(:like?).and_return(false)
       expect_any_instance_of(resource_type).to receive(:update).and_return(true)
       provider.exists?
       expect(provider.create).to be

@@ -29,6 +29,11 @@ describe provider_class, unit: true do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
+  before(:each) do
+    allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+    provider.exists?
+  end
+
   context 'given the create parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_datacenter).new(
@@ -49,16 +54,14 @@ describe provider_class, unit: true do
     end
 
     it 'should return that the resource does not exists' do
-      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
       expect(provider.exists?).not_to be
     end
 
     it 'should create/add the datacenter' do
-      expect(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
-      expect(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name'])
-        .and_return([])
-      provider.exists?
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
       allow_any_instance_of(resource_type).to receive(:add).and_return(test)
+      provider.exists?
       expect(provider.create).to be
     end
   end
@@ -74,7 +77,7 @@ describe provider_class, unit: true do
 
     it 'should not return any datacenters' do
       allow(resource_type).to receive(:find_by).and_return([])
-      expect(provider.exists?).not_to be
+      provider.exists?
       expect { provider.found }.to raise_error(/No Datacenter with the specified data were found on the Oneview Appliance/)
     end
   end

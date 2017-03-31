@@ -24,9 +24,13 @@ def pretty(arg)
   puts JSON.pretty_generate(arg)
 end
 
-# Removes quotes from nil and false values
-def data_parse(data = {})
-  data = resource['data'] ||= data
+# Prepares environment variables needed to manage most resources.
+# Transforms 'nil', 'false' and 'true' values passed in as strings into their respective types.
+# Creates the @data global variable.
+# Calls the 'data_parse' method specific to each resource if it exists.
+# Retrieves resource uris using names passed inside uri fields.
+def prepare_environment
+  data = resource['data'] || {}
   data.each do |key, value|
     data[key] = nil if value == 'nil'
     data[key] = false if value == 'false'
@@ -34,7 +38,8 @@ def data_parse(data = {})
     data[key] = data[key].to_i if key == 'vlanId'
   end
   uri_validation(data)
-  data
+  @data = data
+  data_parse
 end
 
 # Updates resource if it exists and is different from the expected.
@@ -103,6 +108,7 @@ end
 # Takes as arguments the states that can be executed without data
 def empty_data_check(states = [nil, :found])
   raise('This action requires the resource data to be declared in the manifest.') if @data.empty? && !states.include?(resource['ensure'])
+  @data.empty?
 end
 
 # Returns the connection uri based on its name and functionType (Ethernet, FC, Network Set)

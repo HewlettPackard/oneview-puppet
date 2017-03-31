@@ -30,25 +30,13 @@ def config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
   let :special_ensurables do
-    [
-      :found,
-      :get_available_servers,
-      :get_available_storage_systems,
-      :get_available_storage_system,
-      :get_profile_ports,
-      :get_messages,
-      :get_available_networks,
-      :get_compliance_preview,
-      :get_available_targets
+    %i[
+      found get_available_servers get_available_storage_systems get_available_storage_system
+      get_profile_ports get_messages get_available_networks get_compliance_preview
+      get_available_targets
     ]
   end
 

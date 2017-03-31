@@ -29,21 +29,9 @@ def plan_script_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :download_details_archive,
-      :download
-    ]
-  end
+  let(:special_ensurables) { %i[found download_details_archive download] }
 
   it 'should accept special ensurables' do
     special_ensurables.each do |value|
