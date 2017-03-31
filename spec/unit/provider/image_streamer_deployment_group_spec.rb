@@ -58,13 +58,5 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should be able to find the resource' do
       expect(provider.found).to be
     end
-
-    it 'create should display unavailable method' do
-      expect { provider.create }.to raise_error(/This ensurable is not supported for this resource./)
-    end
-
-    it 'destroy should display unavailable method' do
-      expect { provider.destroy }.to raise_error(/This ensurable is not supported for this resource./)
-    end
   end
 end

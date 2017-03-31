@@ -20,12 +20,4 @@ Puppet::Type.type(:image_streamer_deployment_group).provide :image_streamer, par
   desc 'Provider for Image Streamer Deployment Groups using the Image Streamer API'
 
   mk_resource_methods
-
-  def create
-    raise 'This ensurable is not supported for this resource.'
-  end
-
-  def destroy
-    raise 'This ensurable is not supported for this resource.'
-  end
 end

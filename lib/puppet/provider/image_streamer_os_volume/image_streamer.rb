@@ -21,21 +21,8 @@ Puppet::Type.type(:image_streamer_os_volume).provide :image_streamer, parent: Pu
 
   mk_resource_methods
 
-  def exists?
-    super([nil, :found, :get_details_archive])
-  end
-
-  def create
-    raise 'This ensurable is not supported for this resource.'
-  end
-
-  def destroy
-    raise 'This ensurable is not supported for this resource.'
-  end
-
   def get_details_archive
-    os_volume = get_single_resource_instance
-    pretty os_volume.get_details_archive
+    pretty get_single_resource_instance.get_details_archive
     true
   end
 

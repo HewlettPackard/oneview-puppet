@@ -20,9 +20,4 @@ Puppet::Type.type(:image_streamer_deployment_plan).provide :image_streamer, pare
   desc 'Provider for Image Streamer Deployment Plan using the Image Streamer API'
 
   mk_resource_methods
-
-  def exists?
-    super
-    @resource_type.find_by(@client, @data).any?
-  end
 end

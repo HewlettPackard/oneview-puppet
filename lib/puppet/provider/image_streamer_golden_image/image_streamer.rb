@@ -21,32 +21,29 @@ Puppet::Type::Image_streamer_golden_image.provide :image_streamer, parent: Puppe
 
   mk_resource_methods
 
-  def exists?
-    super([nil, :found, :download_details_archive, :download])
+  def data_parse
     @golden_image_path = @data.delete('golden_image_path')
-    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
-    current_resource = @resource_type.find_by(@client, unique_id).first
     timeout = @data.delete('timeout') || OneviewSDK::Rest::READ_TIMEOUT
-    return super unless @golden_image_path && !current_resource
+    return super unless @golden_image_path && !@item.retrieve!
     @resource_type.add(@client, @golden_image_path, @data, timeout)
   end
 
   def download_details_archive
-    path = @data.delete('details_archive_path')
-    force = @data.delete('force')
-    golden_image = get_single_resource_instance
-    raise "File #{path} already exists." if File.exist?(path) && !force
-    golden_image.download_details_archive(path)
+    validation_for_download('details_archive_path')
+    get_single_resource_instance.download_details_archive(@path)
   end
 
   def download
-    path = @data.delete('golden_image_download_path')
+    validation_for_download('golden_image_download_path')
+    get_single_resource_instance.download(@path)
+  end
+
+  def validation_for_download(path_type)
+    @path = @data.delete(path_type)
     force = @data.delete('force')
-    golden_image = get_single_resource_instance
-    raise "File #{path} already exists." if File.exist?(path) && !force
-    golden_image.download(path)
+    raise "File #{@path} already exists." if File.exist?(@path) && !force
   end
 end
