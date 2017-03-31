@@ -28,21 +28,17 @@ Puppet::Type.type(:oneview_enclosure_group).provide :c7000, parent: Puppet::Onev
   end
 
   def set_script
-    script = @data.delete('script')
-    raise("\nThe 'script' field is required in data hash to run the set_script action.") unless script
+    script = @data.delete('script') || raise("\nThe 'script' field is required in data hash to run the set_script action.")
     get_single_resource_instance.set_script(script)
     Puppet.notice("Enclosure Group script set to:\n#{script}\n")
   end
 
   def data_parse
-    data = Marshal.load(Marshal.dump(@data))
-    data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount']) if data['interconnectBayMappingCount']
-    if data['interconnectBayMappings']
-      data['interconnectBayMappings'].each do |mapping_attr|
-        mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
-        mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == 'nil'
-      end
+    @data['interconnectBayMappingCount'] = @data['interconnectBayMappingCount'].to_i if @data['interconnectBayMappingCount']
+    return unless @data['interconnectBayMappings']
+    @data['interconnectBayMappings'].each do |mapping_attr|
+      mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
+      mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == 'nil'
     end
-    @data = data
   end
 end
