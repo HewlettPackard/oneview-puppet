@@ -59,7 +59,8 @@ describe provider_class, unit: true do
           ensure: 'present',
           data:
               {
-                'providerDisplayName' => 'Brocade Network Advisor',
+                'name' => '172.18.15.1',
+                'providerUri' => 'Brocade Network Advisor',
                 'connectionInfo' => [
                   {
                     'name' => 'Host',
@@ -87,28 +88,24 @@ describe provider_class, unit: true do
         )
       end
 
+      before(:each) do
+        allow(resource_type).to receive(:find_by).and_return([test])
+        provider.exists?
+      end
+
       it 'should create/add the san manager' do
-        expect(resource_type).to receive(:find_by).and_return([])
-        expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
-        allow_any_instance_of(resource_type).to receive(:add).and_return(test)
+        allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+        expect_any_instance_of(resource_type).to receive(:add).and_return(test)
         provider.exists?
         expect(provider.create).to be
       end
 
       it 'should update the san manager' do
-        expect(resource_type).to receive(:find_by).and_return([test])
-        expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
-        expect_any_instance_of(resource_type).to receive(:like?).and_return(false)
-        allow_any_instance_of(resource_type).to receive(:update).and_return(test)
+        allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+        allow_any_instance_of(resource_type).to receive(:like?).and_return(false)
+        expect_any_instance_of(resource_type).to receive(:update).and_return(test)
         provider.exists?
         expect(provider.create).to be
-      end
-
-      it 'should replace provider display name by provider uri' do
-        resource['data']['providerUri'] = 'New Name'
-        test = resource_type.new(@client, resource['data'])
-        expect(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-        provider.exists?
       end
     end
 

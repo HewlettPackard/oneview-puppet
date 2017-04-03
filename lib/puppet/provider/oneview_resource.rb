@@ -67,8 +67,8 @@ module Puppet
 
     def exists?(states = [nil, :found])
       prepare_environment
-      return true if empty_data_check(states)
       @item = @resource_type.new(@client, @data)
+      return true if empty_data_check(states)
       return false unless @item.retrieve! && @item.like?(@data) && !@data['new_name']
       Puppet.debug "#{@resource_type} #{@item['name']} is up to date."
       true

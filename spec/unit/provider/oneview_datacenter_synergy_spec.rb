@@ -96,7 +96,7 @@ describe provider_class, unit: true do
     end
 
     before(:each) do
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -107,11 +107,7 @@ describe provider_class, unit: true do
     end
 
     it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
-      test = resource_type.new(@client, resource['data'])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:remove).and_return(true)
       provider.exists?
       expect(provider.destroy).to be
     end

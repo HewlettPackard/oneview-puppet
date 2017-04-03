@@ -108,7 +108,7 @@ end
 # Takes as arguments the states that can be executed without data
 def empty_data_check(states = [nil, :found])
   raise('This action requires the resource data to be declared in the manifest.') if @data.empty? && !states.include?(resource['ensure'])
-  @data.empty?
+  return true if states.include?(resource['ensure'])
 end
 
 # Returns the connection uri based on its name and functionType (Ethernet, FC, Network Set)

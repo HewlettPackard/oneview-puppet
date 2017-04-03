@@ -19,7 +19,7 @@ require_relative '../../../lib/puppet/provider/image_streamer_resource.rb'
 
 describe 'image_streamer_resource', unit: true do
   before(:each) do
-    allow_any_instance_of(Puppet::ImageStreamerResource).to receive(:extract_resource_name).and_return('PlanScript')
+    allow(Puppet::ImageStreamerResource).to receive(:resource_name).and_return('PlanScript')
   end
 
   context '#client when OneView credentials set' do
