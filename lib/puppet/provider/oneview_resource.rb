@@ -31,25 +31,17 @@ module Puppet
       @resource_type ||= ov_resource_type
     end
 
-    def self.oneview_class
-      ov_resource_type
-    end
-
-    def oneview_class
-      ov_resource_type
+    def self.client
+      OneviewSDK::Client.new(login)
     end
 
     def client
       OneviewSDK::Client.new(login)
     end
 
-    def self.client
-      OneviewSDK::Client.new(login)
-    end
-
     def self.instances
       resources = []
-      oneview_class.get_all(client).each { |n| resources.push(n) }
+      ov_resource_type.get_all(client).each { |n| resources.push(n) }
       resources.collect do |res|
         resource = {}
         resource[:data] = Hash[res.data.map { |k, v| [k.to_sym, v] }]
@@ -139,20 +131,14 @@ module Puppet
 
     def ov_resource_type
       api_version = login[:api_version] || 200
-      if api_version == 200
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-      else
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
-      end
+      return Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}") if api_version == 200
+      Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
     end
 
     def self.ov_resource_type
       api_version = login[:api_version] || 200
-      if api_version == 200
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-      else
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
-      end
+      return Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}") if api_version == 200
+      Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
     end
   end
 end

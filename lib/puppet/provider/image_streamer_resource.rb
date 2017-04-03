@@ -21,10 +21,6 @@ module Puppet
   class ImageStreamerResource < Puppet::OneviewResource
     desc 'Base provider for Image Streamer resources'
 
-    def client
-      self.class.client
-    end
-
     def self.client
       credentials_set = ENV['ONEVIEW_AUTH_FILE'] || ENV['ONEVIEW_URL'] ||
                         File.exist?(File.expand_path(Dir.pwd + '/login.json', __FILE__))
@@ -33,12 +29,16 @@ module Puppet
       OneviewSDK::ImageStreamer::Client.new(login_image_streamer)
     end
 
-    def ov_resource_type
+    def client
+      self.class.client
+    end
+
+    def self.ov_resource_type
       api_version = login_image_streamer[:api_version] || 300
       Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}")
     end
 
-    def self.ov_resource_type
+    def ov_resource_type
       api_version = login_image_streamer[:api_version] || 300
       Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}")
     end
