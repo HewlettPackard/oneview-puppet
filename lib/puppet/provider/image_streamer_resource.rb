@@ -29,18 +29,9 @@ module Puppet
       OneviewSDK::ImageStreamer::Client.new(login_image_streamer)
     end
 
-    def client
-      self.class.client
-    end
-
     def self.ov_resource_type
       api_version = login_image_streamer[:api_version] || 300
-      Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}")
-    end
-
-    def ov_resource_type
-      api_version = login_image_streamer[:api_version] || 300
-      Object.const_get("OneviewSDK::ImageStreamer::API#{api_version}::#{resource_name}")
+      OneviewSDK::ImageStreamer.resource_named(resource_name, api_version)
     end
   end
 end

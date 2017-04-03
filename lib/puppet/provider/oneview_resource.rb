@@ -36,7 +36,7 @@ module Puppet
     end
 
     def client
-      OneviewSDK::Client.new(login)
+      self.class.client
     end
 
     def self.instances
@@ -113,32 +113,32 @@ module Puppet
     end
 
     # Helpers
-    def resource_name
-      extract_resource_name(self.class.to_s)
-    end
-
     def self.resource_name
-      extract_resource_name(to_s)
+      class_name = to_s
+      class_name =~ /Oneview/
+      shift_prefix = Regexp.last_match.nil? ? 2 : 1
+      class_name.split('::')[2].split('_').drop(shift_prefix).collect(&:capitalize).join
     end
 
-    def resource_variant
-      self.class.to_s.split('::')[3].gsub(/Provider/, '')
+    def resource_name
+      self.class.resource_name
     end
 
     def self.resource_variant
       to_s.split('::')[3].gsub(/Provider/, '')
     end
 
-    def ov_resource_type
-      api_version = login[:api_version] || 200
-      return Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}") if api_version == 200
-      Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
+    def resource_variant
+      self.class.resource_variant
     end
 
     def self.ov_resource_type
       api_version = login[:api_version] || 200
-      return Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}") if api_version == 200
-      Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
+      OneviewSDK.resource_named(resource_name, api_version, resource_variant)
+    end
+
+    def ov_resource_type
+      self.class.ov_resource_type
     end
   end
 end
