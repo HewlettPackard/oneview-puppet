@@ -19,6 +19,10 @@ Puppet::Type.newtype(:oneview_connection_template) do
 
   # :nocov:
   ensurable do
+    newvalue(:present) do
+      provider.present
+    end
+
     newvalue(:found) do
       provider.found
     end

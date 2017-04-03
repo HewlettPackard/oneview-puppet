@@ -69,7 +69,7 @@ module Puppet
       prepare_environment
       return true if empty_data_check(states)
       @item = @resource_type.new(@client, @data)
-      return false unless @item.retrieve! && @item.like?(@data)
+      return false unless @item.retrieve! && @item.like?(@data) && !@data['new_name']
       Puppet.debug "#{@resource_type} #{@item['name']} is up to date."
       true
       # @property_hash[:ensure] == :present # TODO: Future Improvement: Look into using property_hash for verifying existance globally
