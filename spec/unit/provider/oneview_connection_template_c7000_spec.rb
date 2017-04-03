@@ -27,7 +27,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_connection_template).new(
         name: 'Connection Template',
-        ensure: 'present',
+        ensure: 'found',
         data:
             {
               'name' => 'CT'
@@ -57,14 +57,6 @@ describe provider_class, unit: true do
       provider.exists?
       allow(resource_type).to receive(:get_default).with(anything).and_return(test)
       expect(provider.get_default_connection_template).to be
-    end
-
-    it 'should not be able to create the resource' do
-      expect { provider.create }.to raise_error('This resource relies on others to be created.')
-    end
-
-    it 'should not be able to destroy the resource' do
-      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
   end
 end

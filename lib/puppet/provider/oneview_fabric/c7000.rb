@@ -23,14 +23,6 @@ Puppet::Type.type(:oneview_fabric).provide :c7000, parent: Puppet::OneviewResour
 
   mk_resource_methods
 
-  def create
-    raise('This resource relies on others to be created.')
-  end
-
-  def destroy
-    raise('This resource relies on others to be destroyed.')
-  end
-
   def get_reserved_vlan_range
     raise('This method is unavailable for the C7000 API')
   end

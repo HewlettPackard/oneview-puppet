@@ -27,7 +27,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     let(:resource) do
       Puppet::Type.type(:oneview_fabric).new(
         name: 'DefaultFabric',
-        ensure: 'present',
+      ensure: 'found',
         data:
             {
               'name' => 'DefaultFabric'
@@ -49,11 +49,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'should be an instance of the provider synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_fabric).provider(:synergy)
-    end
-
-    it 'should raise errors for ensure methods not supported' do
-      expect { provider.create }.to raise_error('This resource relies on others to be created.')
-      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
     end
 
     it 'should return true if resource is found' do
