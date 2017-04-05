@@ -23,10 +23,6 @@ Puppet::Type.type(:oneview_managed_san).provide :c7000, parent: Puppet::OneviewR
 
   mk_resource_methods
 
-  def resource_name
-    'ManagedSAN'
-  end
-
   def self.resource_name
     'ManagedSAN'
   end

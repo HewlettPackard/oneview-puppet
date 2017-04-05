@@ -23,10 +23,6 @@ Puppet::Type.type(:oneview_sas_interconnect).provide :synergy, parent: Puppet::O
 
   mk_resource_methods
 
-  def resource_name
-    'SASInterconnect'
-  end
-
   def self.resource_name
     'SASInterconnect'
   end
