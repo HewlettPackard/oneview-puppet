@@ -35,22 +35,9 @@ def resource_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :get_associated_profiles,
-      :get_associated_uplink_groups,
-      :reset_default_bandwidth
-    ]
-  end
+  let(:special_ensurables) { %i[found get_associated_profiles get_associated_uplink_groups reset_default_bandwidth] }
 
   it 'should have expected parameters' do
     params.each do |param|

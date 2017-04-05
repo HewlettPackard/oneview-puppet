@@ -27,7 +27,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_fabric).new(
         name: 'DefaultFabric',
-        ensure: 'present',
+        ensure: 'found',
         data:
             {
               'name' => 'DefaultFabric'
@@ -52,8 +52,6 @@ describe provider_class, unit: true do
     end
 
     it 'should raise errors for ensure methods not supported' do
-      expect { provider.create }.to raise_error('This resource relies on others to be created.')
-      expect { provider.destroy }.to raise_error('This resource relies on others to be destroyed.')
       expect { provider.get_reserved_vlan_range }.to raise_error('This method is unavailable for the C7000 API')
       expect { provider.set_reserved_vlan_range }.to raise_error('This method is unavailable for the C7000 API')
     end

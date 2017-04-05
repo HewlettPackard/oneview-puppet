@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_switch).provide :synergy, parent: Puppet::OneviewReso
   mk_resource_methods
 
   def exists?
-    @data = data_parse
+    prepare_environment
     true
   end
 

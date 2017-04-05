@@ -31,25 +31,17 @@ module Puppet
       @resource_type ||= ov_resource_type
     end
 
-    def self.oneview_class
-      ov_resource_type
-    end
-
-    def oneview_class
-      ov_resource_type
-    end
-
-    def client
-      OneviewSDK::Client.new(login)
-    end
-
     def self.client
       OneviewSDK::Client.new(login)
     end
 
+    def client
+      self.class.client
+    end
+
     def self.instances
       resources = []
-      oneview_class.get_all(client).each { |n| resources.push(n) }
+      ov_resource_type.get_all(client).each { |n| resources.push(n) }
       resources.collect do |res|
         resource = {}
         resource[:data] = Hash[res.data.map { |k, v| [k.to_sym, v] }]
@@ -74,19 +66,23 @@ module Puppet
     end
 
     def exists?(states = [nil, :found])
-      @data = data_parse
-      empty_data_check(states)
-      !@resource_type.find_by(@client, @data).empty?
+      prepare_environment
+      @item = @resource_type.new(@client, @data)
+      return true if empty_data_check(states)
+      return false unless @item.retrieve! && @item.like?(@data) && !@data['new_name']
+      Puppet.debug "#{@resource_type} #{@item['name']} is up to date."
+      true
       # @property_hash[:ensure] == :present # TODO: Future Improvement: Look into using property_hash for verifying existance globally
     end
 
-    # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
     def create(action = :create)
       return true if resource_update
       ov_resource = if action == :create
                       @resource_type.new(@client, @data).create
                     elsif action == :add
                       @resource_type.new(@client, @data).add
+                    elsif action == :update
+                      raise 'This resource relies on others to be created.'
                     else
                       raise 'Invalid action for create'
                     end
@@ -94,55 +90,55 @@ module Puppet
       @property_hash[:ensure] = :present
     end
 
-    # TODO: Would be awesome to have this working for everything/most types. Future improvement. Leaving as is in the meanwhile for filler.
     def destroy(action = :delete)
       if action == :delete
         get_single_resource_instance.delete
       elsif action == :remove
         get_single_resource_instance.remove
+      elsif action == :multiple_delete
+        @resource_type.find_by(@client, @data).map(&:delete)
+      elsif action == :multiple_remove
+        @resource_type.find_by(@client, @data).map(&:remove)
       else
         raise 'Invalid action specified for destroy'
       end
       @property_hash[:ensure] = :absent
     end
 
+    # This method should be overwritten by resources which require the @data to be modified.
+    def data_parse; end
+
     def found
       find_resources
     end
 
     # Helpers
-    def resource_name
-      extract_resource_name(self.class.to_s)
-    end
-
     def self.resource_name
-      extract_resource_name(to_s)
+      class_name = to_s
+      class_name =~ /Oneview/
+      shift_prefix = Regexp.last_match.nil? ? 2 : 1
+      class_name.split('::')[2].split('_').drop(shift_prefix).collect(&:capitalize).join
     end
 
-    def resource_variant
-      self.class.to_s.split('::')[3].gsub(/Provider/, '')
+    def resource_name
+      self.class.resource_name
     end
 
     def self.resource_variant
       to_s.split('::')[3].gsub(/Provider/, '')
     end
 
-    def ov_resource_type
-      api_version = login[:api_version] || 200
-      if api_version == 200
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-      else
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
-      end
+    def resource_variant
+      self.class.resource_variant
     end
 
     def self.ov_resource_type
       api_version = login[:api_version] || 200
-      if api_version == 200
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_name}")
-      else
-        Object.const_get("OneviewSDK::API#{api_version}::#{resource_variant}::#{resource_name}")
-      end
+      OneviewSDK.resource_named(resource_name, api_version, resource_variant)
+    end
+
+    def ov_resource_type
+      self.class.ov_resource_type
     end
   end
 end

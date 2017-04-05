@@ -24,8 +24,8 @@ Puppet::Type.type(:oneview_power_device).provide :c7000, parent: Puppet::Oneview
   mk_resource_methods
 
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :absent])
+    prepare_environment
+    empty_data_check([nil, :found, :absent])
     pd_uri_parser
     variable_assignments
     !@resource_type.find_by(@client, @data).empty?

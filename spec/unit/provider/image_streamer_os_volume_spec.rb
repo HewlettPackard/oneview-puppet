@@ -59,14 +59,6 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.found).to be
     end
 
-    it 'create should display unavailable method' do
-      expect { provider.create }.to raise_error(/This ensurable is not supported for this resource./)
-    end
-
-    it 'destroy should display unavailable method' do
-      expect { provider.destroy }.to raise_error(/This ensurable is not supported for this resource./)
-    end
-
     it 'should retrieve the details of the archived volume' do
       expect_any_instance_of(resource_type).to receive(:get_details_archive).and_return(['details of archive'])
       expect(provider.get_details_archive).to be

@@ -24,6 +24,8 @@ Puppet::Type.type(:oneview_datacenter).provide :c7000, parent: Puppet::OneviewRe
   mk_resource_methods
 
   def exists?
+    prepare_environment
+    return @resource_type.find_by(@client, @data).any? if resource['ensure'].to_sym == :absent
     super([nil, :found, :absent])
   end
 
@@ -31,10 +33,9 @@ Puppet::Type.type(:oneview_datacenter).provide :c7000, parent: Puppet::OneviewRe
     super(:add)
   end
 
+  # This method deletes all the datacenters that match the data passed in. Use with caution.
   def destroy
-    datacenter = @resource_type.find_by(@client, @data)
-    raise('There were no matching Datacenters in the Appliance.') if datacenter.empty?
-    datacenter.map(&:remove)
+    super(:multiple_remove)
   end
 
   def get_visual_content

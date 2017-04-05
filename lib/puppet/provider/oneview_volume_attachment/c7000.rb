@@ -30,8 +30,8 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
 
   # Provider methods
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_extra_unmanaged_volumes])
+    prepare_environment
+    empty_data_check([nil, :found, :get_extra_unmanaged_volumes])
     # This method at the moment only has gets, CRUD operations are disabled at SDK
     resource['ensure'].to_s == 'present' ? false : true
   end

@@ -23,10 +23,6 @@ Puppet::Type.type(:oneview_sas_logical_interconnect_group).provide :synergy, par
 
   mk_resource_methods
 
-  def resource_name
-    'SASLogicalInterconnectGroup'
-  end
-
   def self.resource_name
     'SASLogicalInterconnectGroup'
   end

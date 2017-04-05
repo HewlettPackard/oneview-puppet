@@ -18,8 +18,6 @@ Puppet::Type.newtype(:oneview_fabric) do
   desc "Oneview's Fabric"
 
   ensurable do
-    defaultvalues
-
     # :nocov:
     newvalue(:found) do
       provider.found

@@ -33,27 +33,13 @@ def server_hardware_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
   let :special_ensurables do
-    [
-      :found,
-      :get_bios,
-      :get_ilo_sso_url,
-      :get_java_remote_sso_url,
-      :get_remote_console_url,
-      :get_environmental_configuration,
-      :get_utilization,
-      :update_ilo_firmware,
-      :set_refresh_state,
-      :set_power_state
-    ]
+    %i[ found get_bios get_ilo_sso_url get_java_remote_sso_url
+        get_remote_console_url get_environmental_configuration
+        get_utilization update_ilo_firmware set_refresh_state
+        set_power_state ]
   end
 
   it 'should have expected parameters' do

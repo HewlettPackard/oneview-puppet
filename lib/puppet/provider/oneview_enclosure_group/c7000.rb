@@ -22,36 +22,23 @@ Puppet::Type.type(:oneview_enclosure_group).provide :c7000, parent: Puppet::Onev
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
-  def exists?
-    @data = enclosure_group_parse(data_parse)
-    empty_data_check
-    !@resource_type.find_by(@client, @data).empty?
-  end
-
-  def create
-    return true if resource_update
-    @resource_type.new(@client, enclosure_group_parse(@data)).create
-  end
 
   def get_script
     Puppet.notice("Enclosure Group's current script: \n#{get_single_resource_instance.get_script}\n")
   end
 
   def set_script
-    script = @data.delete('script') if @data['script']
-    raise("\nThe 'script' field is required in data hash to run the set_script action.") unless script
+    script = @data.delete('script') || raise("\nThe 'script' field is required in data hash to run the set_script action.")
     get_single_resource_instance.set_script(script)
     Puppet.notice("Enclosure Group script set to:\n#{script}\n")
   end
 
-  def enclosure_group_parse(data)
-    data['interconnectBayMappingCount'] = Integer(data['interconnectBayMappingCount']) if data['interconnectBayMappingCount']
-    if data['interconnectBayMappings']
-      data['interconnectBayMappings'].each do |mapping_attr|
-        mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
-        mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == 'nil'
-      end
+  def data_parse
+    @data['interconnectBayMappingCount'] = @data['interconnectBayMappingCount'].to_i if @data['interconnectBayMappingCount']
+    return unless @data['interconnectBayMappings']
+    @data['interconnectBayMappings'].each do |mapping_attr|
+      mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
+      mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == 'nil'
     end
-    data
   end
 end

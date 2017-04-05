@@ -20,7 +20,7 @@ provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:EnclosureGroup, api_version, :Synergy)
 
-describe provider_class, unit: true, if: api_version >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   context 'given the create parameters' do
@@ -90,17 +90,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'runs through the create method' do
       allow(resource_type).to receive(:find_by).and_return([])
-      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
-      provider.exists?
+      expect_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
-      test = resource_type.new(@client, resource['data'])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
-      provider.exists?
+      allow(resource_type).to receive(:find_by).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:delete).and_return(true)
       expect(provider.destroy).to be
     end
 
@@ -112,6 +108,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should be able to set the script' do
       resource['data']['script'] = 'Sample'
       allow_any_instance_of(resource_type).to receive(:set_script).with('Sample').and_return('Sample')
+      provider.exists?
       expect(provider.set_script).to be
     end
   end

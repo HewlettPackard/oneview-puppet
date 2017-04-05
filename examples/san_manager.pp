@@ -20,8 +20,9 @@
 oneview_san_manager{'san_manager_1':
     ensure => 'present',
     data   => {
-      providerUri    => 'Brocade Network Advisor',
-      connectionInfo => [
+      name                => '172.18.15.1',
+      providerDisplayName => 'Brocade Network Advisor',
+      connectionInfo      => [
       {
         name  => 'Host',
         value => '172.18.15.1'
@@ -49,8 +50,8 @@ oneview_san_manager{'san_manager_1':
 oneview_san_manager{'san_manager_2':
     ensure => 'present',
     data   => {
-      providerUri  => 'Brocade Network Advisor',
-      refreshState => 'RefreshPending',
+      name         => '172.18.15.1',
+      refreshState => 'RefreshPending'
     },
 }
 
@@ -58,13 +59,13 @@ oneview_san_manager{'san_manager_2':
 oneview_san_manager{'san_manager_3':
     ensure => 'found',
     data   => {
-      # providerDisplayName => 'Brocade Network Advisor',
+      providerDisplayName => 'Brocade Network Advisor',
     },
 }
 
 oneview_san_manager{'san_manager_4':
     ensure => 'absent',
     data   => {
-      providerUri => 'Brocade Network Advisor'
+      name         => '172.18.15.1',
     },
 }

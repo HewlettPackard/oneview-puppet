@@ -23,10 +23,6 @@ Puppet::Type.type(:oneview_fcoe_network).provide :c7000, parent: Puppet::Oneview
 
   mk_resource_methods
 
-  def resource_name
-    'FCoENetwork'
-  end
-
   def self.resource_name
     'FCoENetwork'
   end

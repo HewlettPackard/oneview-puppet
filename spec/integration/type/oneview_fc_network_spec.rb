@@ -16,13 +16,7 @@ def fc_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
   it 'should have expected parameters' do
     params.each do |param|

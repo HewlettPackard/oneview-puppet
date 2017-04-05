@@ -23,12 +23,8 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
 
   mk_resource_methods
 
-  # Provider methods
-  def exists?
-    super
-    # Allows find_by to work in case poolName is declared, since find_by returns it as 'name'
+  def data_parse
     @data['name'] = @data.delete('poolName') if @data['poolName']
-    !@resource_type.find_by(@client, @data).empty?
   end
 
   def create
@@ -43,6 +39,9 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
     super(:remove)
   end
 
+  # TODO: Swap this out for a simple message that the resource differs and should be dropped/recreated.
+  # Too dangerous to be trying to drop and recreate without explicitly being told that we want to do that.
+  # Option 2 = use a 'force' tag.
   def setup_for_recreation
     storage_pool = @resource_type.find_by(@client, name: @data['name'])
     return true if storage_pool.empty?

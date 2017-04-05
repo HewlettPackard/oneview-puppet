@@ -21,13 +21,8 @@ Puppet::Type.type(:image_streamer_plan_script).provide :image_streamer, parent: 
 
   mk_resource_methods
 
-  def exists?
-    super([nil, :found, :retrieve_differences])
-  end
-
   def retrieve_differences
-    plan_script = get_single_resource_instance
-    pretty plan_script.retrieve_differences
+    pretty get_single_resource_instance.retrieve_differences
     true
   end
 end

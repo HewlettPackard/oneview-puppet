@@ -47,18 +47,16 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:instance) { provider.class.instances.first }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      test = resource_type.new(@client, resource['data'])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be able to run through self.instances' do
-      test = resource_type.new(@client, resource['data'])
-      allow(resource_type).to receive(:find_by).with(anything, {}).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
@@ -72,7 +70,7 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resource_type).to receive(:find_by).and_return([])
-      allow_any_instance_of(resource_type).to receive(:create).and_return(resource_type.new(@client, resource['data']))
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
@@ -85,6 +83,7 @@ describe provider_class, unit: true do
     it 'should be able to get a snapshot by name' do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
       allow_any_instance_of(resource_type).to receive(:get_snapshot).and_return('Test')
+      provider.exists?
       expect(provider.get_snapshot).to be
     end
 
@@ -107,6 +106,7 @@ describe provider_class, unit: true do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
       allow_any_instance_of(resource_type).to receive(:delete_snapshot).with(resource['data']['snapshotParameters']['name'])
         .and_return('Test')
+      provider.exists?
       expect(provider.delete_snapshot).to be
     end
 
@@ -114,6 +114,7 @@ describe provider_class, unit: true do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
       allow_any_instance_of(resource_type).to receive(:create_snapshot).with('name' => resource['data']['snapshotParameters']['name'])
         .and_return('Test')
+      provider.exists?
       expect(provider.create_snapshot).to be
     end
   end

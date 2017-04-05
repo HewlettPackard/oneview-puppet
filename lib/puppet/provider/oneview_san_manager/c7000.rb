@@ -23,13 +23,6 @@ Puppet::Type.type(:oneview_san_manager).provide :c7000, parent: Puppet::OneviewR
 
   mk_resource_methods
 
-  def exists?
-    @data = data_parse
-    parse_provider_uri
-    empty_data_check
-    @resource_type.find_by(@client, @data).any?
-  end
-
   def create
     super(:add)
   end
@@ -38,14 +31,10 @@ Puppet::Type.type(:oneview_san_manager).provide :c7000, parent: Puppet::OneviewR
     super(:remove)
   end
 
-  def parse_provider_uri
+  def data_parse
     return unless @data['providerUri']
     return if @data['providerUri'].to_s[0..6].include?('/rest/')
     @data['providerDisplayName'] = @data.delete('providerUri')
-  end
-
-  def resource_name
-    'SANManager'
   end
 
   def self.resource_name

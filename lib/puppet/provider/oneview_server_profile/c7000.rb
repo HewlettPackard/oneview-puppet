@@ -23,24 +23,23 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
 
   mk_resource_methods
 
+  # Handle special case where destroy can delete several different server profiles.
   def exists?
-    @data = data_parse
-    empty_data_check([:found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
-                      :get_messages, :get_profile_ports, :get_transformation, :absent])
-    # gets the connections' uris
-    connections_parse if @data['connections']
-    # gets the hash of filters for queries; in case it does not exist, query will be nil
-    @query = @data.delete('query_parameters')
-    puppet_resource = @resource_type.new(@client, @data)
-    return false unless puppet_resource.retrieve!
-    puppet_resource.like?(@data)
+    prepare_environment
+    return @resource_type.find_by(@client, @data).any? if resource['ensure'].to_sym == :absent
+    super([nil, :found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
+           :get_messages, :get_profile_ports, :get_transformation, :absent])
   end
 
-  # This destroy deletes all the server profiles that match the data passed in. Use with caution.
+  # Gets the connection uris if those exist and remove 'query_parameters' from @data
+  def data_parse
+    connections_parse if @data['connections']
+    @query ||= @data.delete('query_parameters')
+  end
+
+  # This method deletes all the server profiles that match the data passed in. Use with caution.
   def destroy
-    server_profiles = @resource_type.find_by(@client, @data)
-    raise('There were no matching server profiles in the Appliance.') if server_profiles.empty?
-    server_profiles.map(&:delete)
+    super(:multiple_delete)
   end
 
   # Patch operation

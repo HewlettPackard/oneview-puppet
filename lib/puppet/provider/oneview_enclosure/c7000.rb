@@ -31,7 +31,7 @@ Puppet::Type.type(:oneview_enclosure).provide :c7000, parent: Puppet::OneviewRes
 
   # Provider methods
   def exists?
-    @data = data_parse
+    prepare_environment
     empty_data_check
     %w(from op path value).each { |key| @patch_tags[key] = @data.delete(key) if @data[key] }
     %w(hostname username password).each { |key| @authentication[key] = @data.delete(key) if @data[key] }

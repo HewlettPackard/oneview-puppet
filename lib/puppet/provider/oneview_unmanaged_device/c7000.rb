@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_unmanaged_device).provide :c7000, parent: Puppet::One
   mk_resource_methods
 
   def exists?
-    super([:nil, :found, :absent])
+    super([nil, :found, :absent])
   end
 
   def create

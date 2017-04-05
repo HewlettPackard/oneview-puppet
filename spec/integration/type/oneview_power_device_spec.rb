@@ -30,23 +30,9 @@ def resource
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :get_utilization,
-      :set_refresh_state,
-      :set_power_state,
-      :set_uid_state
-    ]
-  end
+  let(:special_ensurables) { %i[found get_utilization set_refresh_state set_power_state set_uid_state] }
 
   it 'should have expected parameters' do
     params.each do |param|

@@ -19,9 +19,9 @@ Puppet::Type.newtype(:oneview_connection_template) do
 
   # :nocov:
   ensurable do
-    defaultvalues
-
-    # GETs
+    newvalue(:present) do
+      provider.create
+    end
 
     newvalue(:found) do
       provider.found
@@ -40,7 +40,7 @@ Puppet::Type.newtype(:oneview_connection_template) do
   newparam(:data) do
     desc 'Connection Template attributes'
     validate do |value|
-      raise('Inserted value for data is not valid') unless value.class == Hash
+      raise('Inserted value for data is not valid') unless value.respond_to?(:[]) && value.respond_to?(:[]=)
     end
   end
 end

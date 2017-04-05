@@ -63,17 +63,16 @@ describe provider_class, unit: true do
 
     it 'should be able to create the resource' do
       allow(resource_type).to receive(:find_by).and_return([])
-      expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
       expect_any_instance_of(resource_type).to receive(:add).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'should be able to destroy and recreate the resource to update its atributes' do
-      expect(resource_type).to receive(:find_by).and_return([])
       expect(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
-      expect_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
       allow_any_instance_of(resource_type).to receive(:add).and_return(test)
       provider.exists?
       expect(provider.create).to be

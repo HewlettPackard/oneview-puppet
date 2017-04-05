@@ -24,33 +24,19 @@ Puppet::Type.type(:oneview_connection_template).provide :c7000, parent: Puppet::
   mk_resource_methods
 
   def exists?
-    @data = data_parse
-    empty_data_check([nil, :found, :get_default_connection_template])
-    ct = if resource['ensure'] == :present
-           resource_update
-           @resource_type.find_by(@client, unique_id)
-         else
-           @resource_type.find_by(@client, @data)
-         end
-    !ct.empty?
+    super([nil, :found, :get_default_connection_template])
   end
 
   def create
-    raise('This resource relies on others to be created.')
-  end
-
-  def destroy
-    raise('This resource relies on others to be destroyed.')
+    super(:update)
   end
 
   def get_default_connection_template
-    Puppet.notice("\n\nDefault Connection Template")
+    Puppet.notice "\n\nDefault Connection Template:"
     default = @resource_type.get_default(@client)
-    if default['uri']
-      puts "\nName: '#{default['name']}'"
-      puts "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"
-      puts "(- typicalBandwidth: #{default['bandwidth']['typicalBandwidth']})\n\n"
-    end
-    true
+    return true unless default['uri']
+    Puppet.notice "\nName: '#{default['name']}'"
+    Puppet.notice "(- maximumBandwidth: #{default['bandwidth']['maximumBandwidth']})"
+    Puppet.notice "(- typicalBandwidth: #{default['bandwidth']['typicalBandwidth']})\n\n"
   end
 end

@@ -29,23 +29,10 @@ def plan_script_config
 end
 
 describe type_class do
-  let :params do
-    [
-      :name,
-      :data,
-      :provider
-    ]
-  end
+  let(:test) { resource_type.new(@client, resource['data']) }
+  let(:params) { %i[name data provider] }
 
-  let :special_ensurables do
-    [
-      :found,
-      :extract,
-      :download,
-      :get_backups,
-      :create_backup
-    ]
-  end
+  let(:special_ensurables) { %i[found extract download get_backups create_backup] }
 
   it 'should accept special ensurables' do
     special_ensurables.each do |value|

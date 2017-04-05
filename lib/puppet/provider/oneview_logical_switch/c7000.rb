@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_logical_switch).provide :c7000, parent: Puppet::Onevi
   end
 
   def exists?
-    @data = data_parse
+    prepare_environment
     @switches = @data.delete('switches') if @data['switches']
     super([nil, :found, :get_internal_link_sets])
   end

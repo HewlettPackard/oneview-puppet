@@ -23,10 +23,6 @@ Puppet::Type.type(:oneview_managed_san).provide :c7000, parent: Puppet::OneviewR
 
   mk_resource_methods
 
-  def resource_name
-    'ManagedSAN'
-  end
-
   def self.resource_name
     'ManagedSAN'
   end
@@ -34,7 +30,7 @@ Puppet::Type.type(:oneview_managed_san).provide :c7000, parent: Puppet::OneviewR
   # TODO: This is currently an implementation that does not work with 'puppet resource (...)' command. Revising it in the future would be
   # an improvement.
   def exists?
-    @data = data_parse
+    prepare_environment
     resource['ensure'] == :present ? false : true
   end
 
