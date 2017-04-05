@@ -27,6 +27,10 @@ Puppet::Type.type(:oneview_connection_template).provide :c7000, parent: Puppet::
     super([nil, :found, :get_default_connection_template])
   end
 
+  def create
+    super(:update)
+  end
+
   def get_default_connection_template
     Puppet.notice "\n\nDefault Connection Template:"
     default = @resource_type.get_default(@client)

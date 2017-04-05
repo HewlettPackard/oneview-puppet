@@ -18,7 +18,7 @@ LineLength:
   Max: 140
 
 MethodLength:
-  Max: 40
+  Max: 30
 
 Metrics/AbcSize:
   Max: 20
@@ -26,14 +26,9 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: false
 
-Metrics/ClassLength:
-  Exclude:
-    - 'lib/puppet/provider/oneview_resource.rb'
-
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 7
   Exclude:
-    - 'lib/puppet/type/common.rb'
     - 'lib/puppet/provider/uri_parsing.rb'
 
 Metrics/PerceivedComplexity:
