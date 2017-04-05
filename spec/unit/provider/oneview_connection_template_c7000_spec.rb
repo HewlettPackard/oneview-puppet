@@ -27,7 +27,7 @@ describe provider_class, unit: true do
     let(:resource) do
       Puppet::Type.type(:oneview_connection_template).new(
         name: 'Connection Template',
-        ensure: 'found',
+        ensure: 'present',
         data:
             {
               'name' => 'CT'
@@ -49,6 +49,20 @@ describe provider_class, unit: true do
 
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:c7000)
+    end
+
+    it 'should be able to be updated' do
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:like?).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:update).and_return(true)
+      expect_any_instance_of(resource_type).not_to receive(:create)
+      provider.exists?
+      expect(provider.create).to be
+    end
+
+    it 'should raise an error if no CT matching the passed in exist' do
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      expect { provider.create }.to raise_error(RuntimeError, /This resource relies on others to be created./)
     end
 
     it 'should be able to find the connection template' do

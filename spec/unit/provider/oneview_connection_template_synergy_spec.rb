@@ -20,14 +20,14 @@ provider_class = Puppet::Type.type(:oneview_connection_template).provider(:syner
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:ConnectionTemplate, api_version, :Synergy)
 
-describe provider_class, unit: true, if: api_version >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   context 'given the min parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_connection_template).new(
         name: 'Connection Template',
-        ensure: 'found',
+        ensure: 'present',
         data:
             {
               'name' => 'CT'
@@ -49,6 +49,20 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'should be an instance of the provider synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_connection_template).provider(:synergy)
+    end
+
+    it 'should be able to be updated' do
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:like?).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:update).and_return(true)
+      expect_any_instance_of(resource_type).not_to receive(:create)
+      provider.exists?
+      expect(provider.create).to be
+    end
+
+    it 'should raise an error if no CT matching the passed in exist' do
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      expect { provider.create }.to raise_error(RuntimeError, /This resource relies on others to be created./)
     end
 
     it 'should be able to find the connection template' do
