@@ -89,7 +89,7 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
   }
 }
 
-oneview_logical_interconnect_group{'Logical Interconnect Group Destroy LE':
+oneview_logical_interconnect_group{'Ethernet Logical Interconnect Group Destroy':
   ensure  => 'absent',
   require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Settings'],
   data    => {
@@ -98,7 +98,7 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Destroy LE':
 }
 
 
-oneview_logical_interconnect_group{'Logical Interconnect Group Destroy FC':
+oneview_logical_interconnect_group{'FC Logical Interconnect Group Destroy':
   ensure  => 'absent',
   require => Oneview_logical_interconnect_group['Puppet FC LIG Synergy'],
   data    => {
