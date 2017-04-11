@@ -35,6 +35,9 @@ oneview_logical_interconnect_group{'Puppet Ethernet LIG Synergy':
   }
 }
 
+# The value [-1] for enclosureIndexes indicates that this is a single enclosure
+# logical interconnect group for Virtual Connect SE 16Gb FC Module.
+# It is required for FC Logical Interconnect Groups.
 oneview_logical_interconnect_group{'Puppet FC LIG Synergy':
   ensure => 'present',
   data   => {
