@@ -15,10 +15,10 @@
 ################################################################################
 
 # The Interconnects and Uplink Sets can also be declared as follows:
-oneview_logical_interconnect_group{'Puppet LIG Synergy':
+oneview_logical_interconnect_group{'Puppet Ethernet LIG Synergy':
   ensure => 'present',
   data   => {
-    name               => 'Puppet LIG Synergy',
+    name               => 'Puppet Ethernet LIG Synergy',
     redundancyType     => 'Redundant',
     interconnectBaySet => 3,
     interconnects      =>
@@ -35,11 +35,35 @@ oneview_logical_interconnect_group{'Puppet LIG Synergy':
   }
 }
 
+# The value [-1] for enclosureIndexes indicates that this is a single enclosure
+# logical interconnect group for Virtual Connect SE 16Gb FC Module.
+# It is required for FC Logical Interconnect Groups.
+oneview_logical_interconnect_group{'Puppet FC LIG Synergy':
+  ensure => 'present',
+  data   => {
+    name               => 'Puppet FC LIG Synergy',
+    redundancyType     => 'Redundant',
+    enclosureIndexes   => [-1],
+    interconnectBaySet => 1,
+    interconnects      =>
+    [
+      {
+        bay  => 1,
+        type => 'Virtual Connect SE 16Gb FC Module for Synergy'
+      },
+      {
+        bay  => 4,
+        type => 'Virtual Connect SE 16Gb FC Module for Synergy'
+      },
+    ]
+  }
+}
+
 oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
   ensure  => 'present',
-  require => Oneview_logical_interconnect_group['Puppet LIG Synergy'],
+  require => Oneview_logical_interconnect_group['Puppet Ethernet LIG Synergy'],
   data    => {
-    name     => 'Puppet LIG Synergy',
+    name     => 'Puppet Ethernet LIG Synergy',
     new_name => 'Edited LIG'
   }
 }
@@ -68,10 +92,19 @@ oneview_logical_interconnect_group{'Logical Interconnect Group Get Settings':
   }
 }
 
-oneview_logical_interconnect_group{'Logical Interconnect Group Destroy':
+oneview_logical_interconnect_group{'Ethernet Logical Interconnect Group Destroy':
   ensure  => 'absent',
   require => Oneview_logical_interconnect_group['Logical Interconnect Group Get Settings'],
   data    => {
     name => 'Edited LIG'
+  }
+}
+
+
+oneview_logical_interconnect_group{'FC Logical Interconnect Group Destroy':
+  ensure  => 'absent',
+  require => Oneview_logical_interconnect_group['Puppet FC LIG Synergy'],
+  data    => {
+    name => 'Puppet FC LIG Synergy'
   }
 }
