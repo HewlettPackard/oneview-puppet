@@ -35,7 +35,6 @@ oneview_logical_interconnect_group{'Puppet Ethernet LIG Synergy':
   }
 }
 
-# The Interconnects and Uplink Sets can also be declared as follows:
 oneview_logical_interconnect_group{'Puppet FC LIG Synergy':
   ensure => 'present',
   data   => {
