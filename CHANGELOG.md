@@ -8,6 +8,7 @@
 - [#95](https://github.com/HewlettPackard/oneview-puppet/issues/95) Improve server profile idempotency
 - [#101](https://github.com/HewlettPackard/oneview-puppet/issues/101) Improve server profile template idempotency
 - [#145](https://github.com/HewlettPackard/oneview-puppet/issues/145) Refactor oneview_resource class and common for v2.2.0
+- [#149](https://github.com/HewlettPackard/oneview-puppet/issues/149) Server Profile - Network uris set inside the connections return error
 
 # 2.2.0 (2017-03-28)
 ### Version highlights:
