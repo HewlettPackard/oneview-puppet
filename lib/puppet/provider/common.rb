@@ -115,7 +115,7 @@ end
 # FCoE to be added (no need so far)
 def connections_parse
   @data['connections'].each do |conn|
-    next if conn['uri'].to_s[0..6].include?('/rest/')
+    next if conn['networkUri'].to_s[0..6].include?('/rest/')
     type = case conn['functionType']
            when 'Ethernet' then 'EthernetNetwork'
            when 'FibreChannel' then 'FCNetwork'
@@ -124,7 +124,7 @@ def connections_parse
              'NetworkSet'
            end
     net = objectfromstring(type).find_by(@client, name: conn['networkUri'])
-    raise('The network does not exist in the Appliance.') unless net.first
+    raise("The network #{conn['networkUri']} does not exist in the Appliance.") unless net.first
     conn['networkUri'] = net.first['uri']
   end
 end
