@@ -43,13 +43,16 @@ end
 
 # Gets the Uri for the resource
 def get_uri(key)
-  parsed_key = special_resources_check(key)
-  # looks for the resource
-  resource = get_class(parsed_key).find_by(@client, name: @value)
-  # fails if resource returns an empty hash (no results)
-  raise "'#{@value}' has not been found in the Appliance." if resource.empty?
+  ov_class = get_class(special_resources_check(key))
+  ov_resource = ov_class.find_by(@client, name: @value)
+  if sas_resources_check(ov_resource, ov_class)
+    ov_class = ov_class.to_s.split('::')[-1]
+    ov_resource = OneviewSDK.resource_named("SAS#{ov_class}", login[:api_version], :Synergy).find_by(@client, name: @value)
+  end
+  # fails if ov_resource returns an empty hash (no results)
+  raise "'#{@value}' has not been found in the Appliance." if ov_resource.empty?
   # replaces the parameter name by its uri
-  resource.first.data['uri']
+  ov_resource.first.data['uri']
 end
 
 # Check for special/exceptions to the uri default search
@@ -112,4 +115,10 @@ def get_class(key)
   variant = OneviewSDK::Client == @client.class && @client.api_version > 200 ? "#{resource_variant}::" : ''
   resource_name = "#{key.to_s[0].upcase}#{key[1..key.size - 4]}"
   Object.const_get("OneviewSDK::#{sub_module}API#{@client.api_version}::#{variant}#{resource_name}")
+end
+
+# Used for handling uris that refer to SAS resources
+def sas_resources_check(ov_resource, ov_class)
+  return false unless %w(LogicalInterconnectGroup LogicalInterconnect Interconnect).include?(ov_class.to_s.split('::')[-1])
+  ov_resource.empty? && resource_variant.to_sym == :Synergy
 end
