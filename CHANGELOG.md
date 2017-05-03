@@ -2,7 +2,7 @@
 
 ## Suggested release: v2.2.1
 ### Version highlights:
-1. Major refactor on internal methods. Improved idempotency and logging project-wide and reduced lines of code count.
+1. Major refactor on internal methods. Improved idempotency, logging project-wide and reduced lines of code count.
 
 #### Bug fixes & Enhancements:
 - [#95](https://github.com/HewlettPackard/oneview-puppet/issues/95) Improve server profile idempotency
