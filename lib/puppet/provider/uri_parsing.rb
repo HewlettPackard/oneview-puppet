@@ -45,8 +45,9 @@ end
 def get_uri(key)
   ov_class = get_class(special_resources_check(key))
   ov_resource = ov_class.find_by(@client, name: @value)
-  if sas_lig_check(ov_resource, ov_class)
-    ov_resource = OneviewSDK.resource_named(:SASLogicalInterconnectGroup, login[:api_version], :Synergy).find_by(@client, name: @value)
+  if sas_resources_check(ov_resource, ov_class)
+    ov_class = ov_class.to_s.split('::')[-1]
+    ov_resource = OneviewSDK.resource_named("SAS#{ov_class}", login[:api_version], :Synergy).find_by(@client, name: @value)
   end
   # fails if ov_resource returns an empty hash (no results)
   raise "'#{@value}' has not been found in the Appliance." if ov_resource.empty?
@@ -116,7 +117,8 @@ def get_class(key)
   Object.const_get("OneviewSDK::#{sub_module}API#{@client.api_version}::#{variant}#{resource_name}")
 end
 
-# Used for handling LIG uris which refer to SAS LIG resources
-def sas_lig_check(ov_resource, ov_class)
-  ov_resource.empty? && ov_class.to_s.split('::')[-1] == 'LogicalInterconnectGroup' && resource_variant.to_sym == :Synergy
+# Used for handling uris that refer to SAS resources
+def sas_resources_check(ov_resource, ov_class)
+  return false unless %w(LogicalInterconnectGroup LogicalInterconnect Interconnect).include?(ov_class.to_s.split('::')[-1])
+  ov_resource.empty? && resource_variant.to_sym == :Synergy
 end
