@@ -22,6 +22,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :synergy, parent:
   def parse_interconnects
     lig = OneviewSDK.resource_named(:LogicalInterconnectGroup, login[:api_version], 'Synergy').new(@client, {})
     @interconnects.each do |item|
+      item['enclosure_index'] ||= 1
       lig.add_interconnect(item['bay'].to_i, item['type'], item['logical_downlink'], item['enclosure_index'])
     end
     lig['interconnectMapTemplate']
