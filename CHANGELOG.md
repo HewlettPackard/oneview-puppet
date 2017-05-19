@@ -1,10 +1,8 @@
-# Unreleased Changes
-
-## Suggested release: v2.2.1
+# v2.2.1
 ### Version highlights:
 1. Major refactor on internal methods. Improved idempotency, logging project-wide and reduced lines of code count.
-2. Raised 'oneview-sdk' version used to ~ 4.4.X.
-3. Many bugfixes and improvements.
+2. Raised 'oneview-sdk' version used to ~4.4.
+3. Several bugfixes and improvements.
 
 #### Bug fixes & Enhancements:
 - [#95](https://github.com/HewlettPackard/oneview-puppet/issues/95) Improve server profile idempotency

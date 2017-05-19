@@ -40,7 +40,7 @@ For more information on the Puppet Module for HPE OneView resource types and the
 ### Requirements
 
   - Puppet V4.1 or greater
-  - Ruby V2.2.3 or greater
+  - Ruby V4.4.0 or greater
   - [oneview-sdk-ruby](https://github.com/HewlettPackard/oneview-sdk-ruby) V3.1.0 or greater (available as a gem)
 
 ### Beginning with the Puppet Module for HPE OneView
