@@ -31,6 +31,9 @@ Puppet::Type.type(:oneview_firmware_bundle).provide :c7000, parent: Puppet::Onev
   def exists?
     prepare_environment
     raise 'A "firmware_bundle_path" is required for this operation' unless @data['firmware_bundle_path']
+    filename = File.basename(@data['firmware_bundle_path'], File.extname(@data['firmware_bundle_path'])).tr('.', '_')
+    firmware_list = OneviewSDK.resource_named(:FirmwareDriver, @client.api_version, resource_variant).get_all(@client)
+    firmware_list.find { |fw| filename == fw['resourceId'] }
   end
 
   def create
