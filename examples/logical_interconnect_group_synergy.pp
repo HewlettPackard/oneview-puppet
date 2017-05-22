@@ -14,23 +14,61 @@
 # limitations under the License.
 ################################################################################
 
-# The Interconnects and Uplink Sets can also be declared as follows:
-oneview_logical_interconnect_group{'Puppet Ethernet LIG Synergy':
+# This sample creates a complex LIG with an Uplink and Interconnect using 2 enclosures.
+# If no enclosure_index is provided for interconnects, a value of '1' is assumed.
+$interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
+$interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
+$network_names = [ 'tunnelnet1' ]
+oneview_logical_interconnect_group{'Puppet - Synergy Tunnel LIG with 2 Enclosures':
   ensure => 'present',
   data   => {
-    name               => 'Puppet Ethernet LIG Synergy',
-    redundancyType     => 'Redundant',
+    name               => 'Puppet - Synergy Tunnel LIG with 2 Enclosures',
+    redundancyType     => 'HighlyAvailable',
     interconnectBaySet => 3,
+    enclosureType      => 'SY12000',
+    enclosureIndexes   => [1, 2],
+    uplinkSets         =>
+    [
+      {
+        name                => 'TUNNEL_ETH_UP_01',
+        ethernetNetworkType => 'Tunnel',
+        networkType         => 'Ethernet',
+        lacpTimer           => 'Short',
+        mode                => 'Auto',
+        uplink_ports        => [{ bay             => 3,
+                                  port            => 'Q1',
+                                  type            => $interconnect_type_1,
+                                  enclosure_index => 1 },
+                                { bay             => 6,
+                                  port            => 'Q1',
+                                  type            => $interconnect_type_1,
+                                  enclosure_index => 2 }
+        ],
+        networkUris         => $network_names
+      }
+    ],
     interconnects      =>
     [
       {
-        bay  => 3,
-        type => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+        bay             => 3,
+        type            => $interconnect_type_1,
+        enclosure_index => 1
       },
       {
-        bay  => 6,
-        type => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+        bay             => 6,
+        type            => $interconnect_type_1,
+        enclosure_index => 2
       },
+      {
+        bay             => 3,
+        type            => $interconnect_type_2,
+        enclosure_index => 2
+      },
+      {
+        bay             => 6,
+        type            => $interconnect_type_2,
+        enclosure_index => 1
+      }
     ]
   }
 }
@@ -48,12 +86,14 @@ oneview_logical_interconnect_group{'Puppet FC LIG Synergy':
     interconnects      =>
     [
       {
-        bay  => 1,
-        type => 'Virtual Connect SE 16Gb FC Module for Synergy'
+        bay             => 1,
+        type            => 'Virtual Connect SE 16Gb FC Module for Synergy',
+        enclosure_index => -1
       },
       {
-        bay  => 4,
-        type => 'Virtual Connect SE 16Gb FC Module for Synergy'
+        bay             => 4,
+        type            => 'Virtual Connect SE 16Gb FC Module for Synergy',
+        enclosure_index => -1
       },
     ]
   }
@@ -61,9 +101,9 @@ oneview_logical_interconnect_group{'Puppet FC LIG Synergy':
 
 oneview_logical_interconnect_group{'Logical Interconnect Group Edit':
   ensure  => 'present',
-  require => Oneview_logical_interconnect_group['Puppet Ethernet LIG Synergy'],
+  require => Oneview_logical_interconnect_group['Puppet - Synergy Tunnel LIG with 2 Enclosures'],
   data    => {
-    name     => 'Puppet Ethernet LIG Synergy',
+    name     => 'Puppet - Synergy Tunnel LIG with 2 Enclosures',
     new_name => 'Edited LIG'
   }
 }

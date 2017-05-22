@@ -119,7 +119,8 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
   # Method to add the uplink bay & port to the LIGuplinkSet using helpers
   def set_uplink_ports(uplink_set, uplink_ports)
     uplink_ports.each do |uplink_port|
-      uplink_set.add_uplink(uplink_port['bay'], uplink_port['port'])
+      uplink_port['enclosure_index'] ||= 1
+      uplink_set.add_uplink(uplink_port['bay'], uplink_port['port'], uplink_port['type'], uplink_port['enclosure_index'])
     end
     uplink_set
   end
