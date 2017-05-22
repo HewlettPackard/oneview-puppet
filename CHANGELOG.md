@@ -1,7 +1,7 @@
 # v2.2.1
 ### Version highlights:
 1. Major refactor on internal methods. Improved idempotency, logging project-wide and reduced lines of code count.
-2. Raised 'oneview-sdk' version used to ~4.4.
+2. Raised 'oneview-sdk' version used to ~> 4.4.
 3. Several bugfixes and improvements.
 
 #### Bug fixes & Enhancements:
