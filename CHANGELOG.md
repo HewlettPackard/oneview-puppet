@@ -10,6 +10,7 @@
 - [#145](https://github.com/HewlettPackard/oneview-puppet/issues/145) Refactor oneview_resource class and common for v2.2.0
 - [#149](https://github.com/HewlettPackard/oneview-puppet/issues/149) Server Profile - Network uris set inside the connections return error
 - [#151](https://github.com/HewlettPackard/oneview-puppet/issues/151) SAS Logical Interconnect Group - Name to URI conversion fails on logicalInterconnectGroupUri fields
+- [#153](https://github.com/HewlettPackard/oneview-puppet/issues/153) Idempotence error: Running a ensure => 'present' on a oneview_firmware_bundle resource
 
 # 2.2.0 (2017-03-28)
 ### Version highlights:

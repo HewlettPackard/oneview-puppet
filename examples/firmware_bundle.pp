@@ -19,6 +19,7 @@
 oneview_firmware_bundle{'firmware_bundle_1':
     ensure => 'present',
     data   => {
-      firmware_bundle_path => './spec/support/cp022594.exe'
+      # firmware_bundle_path => './spec/support/cp022594.exe'
+      firmware_bundle_path => 'E:\cp020307.exe' # For Puppet on windows use Windows Pathing
     },
 }

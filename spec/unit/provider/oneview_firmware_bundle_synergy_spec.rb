@@ -19,6 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_firmware_bundle).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:FirmwareBundle, api_version, :Synergy)
+firmware_driver_class = OneviewSDK.resource_named(:FirmwareDriver, api_version, :Synergy)
 
 describe provider_class, unit: true, if: api_version >= 300 do
   include_context 'shared context'
@@ -29,6 +30,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       ensure: 'present',
       data:
           {
+            'resourceId'           => 'test_firmware_bundle',
             'firmware_bundle_path' => './spec/support/test_firmware_bundle.spp'
           },
       provider: 'synergy'
@@ -39,14 +41,16 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   let(:instance) { provider.class.instances.first }
 
+  let(:test_resource) { firmware_driver_class.new(@client, resource['data']) }
+
+  it 'should be an instance of the provider synergy' do
+    expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:synergy)
+  end
+
   context 'given the minimum parameters' do
     before(:each) do
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return('test')
+      allow(firmware_driver_class).to receive(:get_all).and_return([test_resource])
       provider.exists?
-    end
-
-    it 'should be an instance of the provider oneview_firmware_bundle' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_bundle).provider(:synergy)
     end
 
     it 'should raise error when firmware bundle is not found' do
@@ -56,9 +60,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should raise an error since the destroy operation is not supported' do
       expect { provider.destroy }.to raise_error(/"Absent" is not a valid ensurable for firmware bundle./)
     end
+  end
 
+  context 'given the present action' do
     it 'should create/add the firmware bundle' do
-      allow(resource_type).to receive(:add).and_return(resource)
+      expect(firmware_driver_class).to receive(:get_all).and_return([])
+      expect(resource_type).to receive(:add).and_return(test_resource)
+      provider.exists?
       expect(provider.create).to be
     end
   end
