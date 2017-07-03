@@ -65,7 +65,7 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 
 * `ONEVIEW_URL` - The web address for the HPE OneView appliance. For example, https://oneview.example.com
 * `ONEVIEW_TOKEN` - Set either this or the ONEVIEW_USER and ONEVIEW_PASSWORD.
-* `ONEVIEW_USER` - The HPE OneView appliance username. This defaults to **Administrator**.
+* `ONEVIEW_USER` - The HPE OneView appliance username.
 * `ONEVIEW_PASSWORD` - The HPE OneView appliance password.
 * `ONEVIEW_API_VERSION` - This defaults to the 200 API version (Minimum supported by oneview-sdk-ruby).
 * `ONEVIEW_LOG_LEVEL` - The log level of the HPE OneView appliance. This defaults to **info**
