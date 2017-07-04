@@ -26,7 +26,7 @@ def login
   }
   credentials = load_authentication_settings(options)
   credentials[:hardware_variant] ||= 'C7000'
-  credentials[:hardware_variant] = credentials[:hardware_variant].capitalize
+  credentials[:hardware_variant] = credentials[:hardware_variant].to_s.capitalize
   credentials
 end
 
