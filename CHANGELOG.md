@@ -1,3 +1,10 @@
+# v2.2.2 # UNRELEASED CHANGES
+### Version highlights:
+1. Provider names are now case insensitive
+
+#### Bug fixes & Enhancements:
+- [#159](https://github.com/HewlettPackard/oneview-puppet/issues/159) Provider name should not be case sensitive
+
 # v2.2.1 (2017-05-22)
 ### Version highlights:
 1. Major refactor on internal methods. Improved idempotency, logging project-wide and reduced lines of code count.
