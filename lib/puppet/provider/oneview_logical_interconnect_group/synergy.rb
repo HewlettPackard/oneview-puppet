@@ -17,6 +17,7 @@
 Puppet::Type.type(:oneview_logical_interconnect_group).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Fiber Channel Networks using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 
   def parse_interconnects

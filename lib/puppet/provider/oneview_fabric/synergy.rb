@@ -17,6 +17,7 @@
 Puppet::Type.type(:oneview_fabric).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Fabrics using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 
   def get_reserved_vlan_range

@@ -17,6 +17,7 @@
 Puppet::Type.type(:oneview_server_profile).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Server Profiles using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 
   # Retrieves all SAS Logical JBOD OR Retrieves a SAS Logical JBOD by name

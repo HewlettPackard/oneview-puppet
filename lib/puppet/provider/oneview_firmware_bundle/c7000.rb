@@ -19,6 +19,7 @@ require_relative '../oneview_resource'
 Puppet::Type.type(:oneview_firmware_bundle).provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Firmware Bundles using the C7000 variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods

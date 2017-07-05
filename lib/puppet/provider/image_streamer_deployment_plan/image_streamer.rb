@@ -19,5 +19,7 @@ require_relative '../image_streamer_resource'
 Puppet::Type.type(:image_streamer_deployment_plan).provide :image_streamer, parent: Puppet::ImageStreamerResource do
   desc 'Provider for Image Streamer Deployment Plan using the Image Streamer API'
 
+  confine feature: :oneview
+
   mk_resource_methods
 end

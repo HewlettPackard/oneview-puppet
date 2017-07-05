@@ -17,5 +17,6 @@
 Puppet::Type.type(:oneview_unmanaged_device).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Unmanaged Devices using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 end
