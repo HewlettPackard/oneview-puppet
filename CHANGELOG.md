@@ -1,7 +1,7 @@
 # v2.2.2 # UNRELEASED CHANGES
 ### Version highlights:
 1. Provider names are now case insensitive
-2. Added the 'oneview' feature
+2. Added the 'oneview' Puppet feature to require the 'oneview-sdk'
 
 #### Bug fixes & Enhancements:
 - [#159](https://github.com/HewlettPackard/oneview-puppet/issues/159) Provider name should not be case sensitive
