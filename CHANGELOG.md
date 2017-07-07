@@ -1,4 +1,4 @@
-# v2.2.2 # UNRELEASED CHANGES
+# v2.2.2 (2017-07-07)
 ### Version highlights:
 1. Provider names are now case insensitive
 2. Added the 'oneview' Puppet feature to require the 'oneview-sdk'
