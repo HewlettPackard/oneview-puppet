@@ -19,6 +19,7 @@ require_relative '../oneview_resource'
 Puppet::Type.type(:oneview_sas_interconnect).provide :synergy, parent: Puppet::OneviewResource do
   desc 'Provider for OneView SAS Interconnects using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 
   mk_resource_methods

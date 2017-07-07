@@ -19,6 +19,7 @@ require_relative '../oneview_resource'
 Puppet::Type.type(:oneview_switch).provide :synergy, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Switch resources using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 
   mk_resource_methods

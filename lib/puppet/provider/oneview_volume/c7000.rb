@@ -22,6 +22,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
 
   mk_resource_methods
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'C7000'
 
   # Provider methods

@@ -16,7 +16,6 @@
 
 require_relative 'login'
 require_relative 'common'
-require 'oneview-sdk'
 
 module Puppet
   # Base provider for OneView resources

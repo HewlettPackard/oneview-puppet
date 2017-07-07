@@ -17,5 +17,6 @@
 Puppet::Type.type(:oneview_datacenter).provide :synergy, parent: :c7000 do
   desc 'Provider for OneView Datacenters using the Synergy variant of the OneView API'
 
+  confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
 end
