@@ -7,6 +7,17 @@ $network_1 = 'Management'
 $network_2 = 'IS iSCSI'
 $deployment_plan_name = 'Bootstrap_DCOS'
 
+# Powering off the server in order to apply the Server Profile
+# WARNING: This is a non-idempotent operation
+oneview_server_hardware{'Server Hardware Power Off':
+    ensure => 'set_power_state',
+    data   => {
+      hostname    => $server_hardware_name,
+      power_state => 'off',
+    },
+}
+
+# Create and apply a Server Profile, using Image Streamer to deploy the OS
 oneview_server_profile{'Server Profile Creation':
   ensure => 'present',
   data   =>
@@ -66,6 +77,8 @@ oneview_server_profile{'Server Profile Creation':
   }
 }
 
+# Power on the Server Hardware after the Server Profile has been applied
+# WARNING: This is a non-idempotent operation
 oneview_server_hardware{'Server Hardware Power On':
     ensure => 'set_power_state',
     data   => {
