@@ -16,7 +16,7 @@
 
 Gemfile.lock
 spec/fixtures/
-examples/login.json
+examples/login*
 docker/*.sh
 docker/tests/
 coverage/

@@ -24,9 +24,11 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
 
   mk_resource_methods
 
-  # Handle special case where destroy can delete several different server profiles.
+  # Handles special case where destroy can delete several different server profiles.
+  # Also calls load_template method to auto-fill all fields with the values from the specified template.
   def exists?
     prepare_environment
+    load_template(@data['serverProfileTemplateUri'], 'new_profile')
     return @resource_type.find_by(@client, @data).any? if resource['ensure'].to_sym == :absent
     super([nil, :found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
            :get_messages, :get_profile_ports, :get_transformation, :absent])

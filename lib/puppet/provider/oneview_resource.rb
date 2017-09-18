@@ -85,6 +85,7 @@ module Puppet
                     else
                       raise 'Invalid action for create'
                     end
+      Puppet.debug "#{@resource_type} #{@item['name']} created using the following data: #{@data}."
       @property_hash[:data] = ov_resource.data
       @property_hash[:ensure] = :present
     end
@@ -127,12 +128,19 @@ module Puppet
       to_s.split('::')[3].gsub(/Provider/, '')
     end
 
+    def self.api_version
+      login[:api_version] || 200
+    end
+
+    def api_version
+      self.class.api_version
+    end
+
     def resource_variant
       self.class.resource_variant
     end
 
     def self.ov_resource_type
-      api_version = login[:api_version] || 200
       OneviewSDK.resource_named(resource_name, api_version, resource_variant)
     end
 

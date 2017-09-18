@@ -128,3 +128,37 @@ def connections_parse
     conn['networkUri'] = net.first['uri']
   end
 end
+
+# Retrieve a resource by type and identifier (name or data)
+# @param type [String, Symbol] Type of resource to be retrieved. e.g., :GoldenImage, :FCNetwork
+# @param id [String, Symbol, Hash] Name of the resource or Hash of data to retrieve by.
+#   Examples: 'EthNet1', { uri: '/rest/fake/123ABC' }
+# @param ret_attribute [NilClass, String, Symbol] If specified, returns a specific attribute of the resource.
+#   When nil, the complete resource will be returned.
+# @return [OneviewSDK::Resource] if the `ret_attribute` is nil
+# @return [String, Array, Hash] that is, the value of the resource attribute defined by `ret_attribute`
+# @raise [OneviewSDK::NotFound] ResourceNotFound if the resource cannot be found
+# @raise [OneviewSDK::IncompleteResource] If you don't specify any unique identifiers in `id`
+def load_resource(type, id, ret_attribute: nil, base_module: OneviewSDK)
+  raise(ArgumentError, 'Must specify a resource type') unless type
+  return unless id
+  klass = base_module.resource_named(type, api_version, resource_variant)
+  data = id.is_a?(Hash) ? id : { name: id }
+  r = klass.new(@client, data)
+  raise(OneviewSDK::NotFound, "#{type} with data '#{data}' was not found") unless r.retrieve!
+  return r unless ret_attribute
+  r[ret_attribute]
+end
+
+# Retrieve the template to be used for the resource and autofills blank fields with template's values
+# @param uri [String] Uri of the resource
+# @param uri [String] Method specific to the resource which retrieves the require template
+# @param type [String, Symbol] Type of resource to be retrieved. e.g., :ServerProfileTemplate, :ServerProfile
+# @return [Hash] Updated resource data
+# @raise [OneviewSDK::NotFound] ResourceNotFound if the resource cannot be found
+def load_template(uri, method, type = :ServerProfileTemplate)
+  return unless uri
+  template = load_resource(type, uri: uri)
+  template_data = template.send(method, @data['name']).data
+  resource['data'] = template_data.merge(@data)
+end
