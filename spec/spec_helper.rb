@@ -15,6 +15,7 @@
 ################################################################################
 
 require 'simplecov'
+require 'codecov'
 require 'coveralls'
 require 'rspec-puppet/spec_helper'
 require 'puppet'
@@ -28,6 +29,7 @@ type_path = 'lib/puppet/type'
 Coveralls.wear!
 
 SimpleCov.formatters = [
+  SimpleCov::Formatter::Codecov,
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]

@@ -1,3 +1,10 @@
+# v2.2.3
+### Version highlights:
+1. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
+
+#### Bug fixes & Enhancements:
+- [#159](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
+
 # v2.2.2 (2017-07-07)
 ### Version highlights:
 1. Provider names are now case insensitive

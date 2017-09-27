@@ -76,20 +76,21 @@ module Puppet
 
     def create(action = :create)
       return true if resource_update
+      Puppet.info "Performing #{action} of #{resource_name} #{@item['name']} using the following data: \n#{JSON.pretty_generate(@data)}."
       ov_resource = if action == :create
                       @resource_type.new(@client, @data).create
                     elsif action == :add
                       @resource_type.new(@client, @data).add
                     elsif action == :update
                       raise 'This resource relies on others to be created.'
-                    else
-                      raise 'Invalid action for create'
                     end
+      Puppet.debug "#{@resource_type} #{@item['name']} created successfully."
       @property_hash[:data] = ov_resource.data
       @property_hash[:ensure] = :present
     end
 
     def destroy(action = :delete)
+      Puppet.debug "Performing removal of #{resource_name} matching the following data: #{JSON.pretty_generate(@data)}."
       if action == :delete
         get_single_resource_instance.delete
       elsif action == :remove
@@ -98,8 +99,6 @@ module Puppet
         @resource_type.find_by(@client, @data).map(&:delete)
       elsif action == :multiple_remove
         @resource_type.find_by(@client, @data).map(&:remove)
-      else
-        raise 'Invalid action specified for destroy'
       end
       @property_hash[:ensure] = :absent
     end
@@ -127,12 +126,19 @@ module Puppet
       to_s.split('::')[3].gsub(/Provider/, '')
     end
 
+    def self.api_version
+      login[:api_version] || 200
+    end
+
+    def api_version
+      self.class.api_version
+    end
+
     def resource_variant
       self.class.resource_variant
     end
 
     def self.ov_resource_type
-      api_version = login[:api_version] || 200
       OneviewSDK.resource_named(resource_name, api_version, resource_variant)
     end
 
