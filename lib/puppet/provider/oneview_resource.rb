@@ -76,6 +76,7 @@ module Puppet
 
     def create(action = :create)
       return true if resource_update
+      Puppet.info "Performing #{action} of #{resource_name} #{@item['name']} using the following data: \n#{JSON.pretty_generate(@data)}."
       ov_resource = if action == :create
                       @resource_type.new(@client, @data).create
                     elsif action == :add
@@ -85,12 +86,13 @@ module Puppet
                     else
                       raise 'Invalid action for create'
                     end
-      Puppet.debug "#{@resource_type} #{@item['name']} created using the following data: #{@data}."
+      Puppet.debug "#{@resource_type} #{@item['name']} created successfully."
       @property_hash[:data] = ov_resource.data
       @property_hash[:ensure] = :present
     end
 
     def destroy(action = :delete)
+      Puppet.debug "Performing removal of #{resource_name} matching the following data: #{JSON.pretty_generate(@data)}."
       if action == :delete
         get_single_resource_instance.delete
       elsif action == :remove
