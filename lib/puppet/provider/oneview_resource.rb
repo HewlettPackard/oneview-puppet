@@ -83,8 +83,6 @@ module Puppet
                       @resource_type.new(@client, @data).add
                     elsif action == :update
                       raise 'This resource relies on others to be created.'
-                    else
-                      raise 'Invalid action for create'
                     end
       Puppet.debug "#{@resource_type} #{@item['name']} created successfully."
       @property_hash[:data] = ov_resource.data
@@ -101,8 +99,6 @@ module Puppet
         @resource_type.find_by(@client, @data).map(&:delete)
       elsif action == :multiple_remove
         @resource_type.find_by(@client, @data).map(&:remove)
-      else
-        raise 'Invalid action specified for destroy'
       end
       @property_hash[:ensure] = :absent
     end
