@@ -215,6 +215,16 @@ http://h17007.www1.hpe.com/docs/enterprise/servers/oneview2.0/cic-api/en/api-doc
 
 **Feature Requests:** If you have needs not being met by the current implementation, please let us know (via a new issue). This feedback is crucial for us to deliver a useful product. Do not assume we have already thought of everything, because we assure you that is not the case.
 
+## Testing
+ - Style:
+  - Rubocop: `$ rake rubocop`
+  - Puppet Lint: `$ rake lint`
+  - Metadata: `$ rake metadata_lint`
+ - Unit: `$ rake spec`
+ - Run all tests: `$ rake test`
+
+ For more information please refer to the [Testing guidelines](TESTING.md).
+
 ## License
 
 This project is licensed under the Apache 2.0 license. Please see [LICENSE](LICENSE) for more information.
