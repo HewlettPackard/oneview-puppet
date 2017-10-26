@@ -76,7 +76,7 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 
 You can assign attributes for your appliances using three methods:
 
-1. Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
+1. Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login_rename.json](examples/login_rename.json) for an example.
 
 2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
