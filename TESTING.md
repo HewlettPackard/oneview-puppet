@@ -34,7 +34,7 @@ The necessary amount of testing is dictated by both the one performing the imple
 - Each resource must have at least one example file in the [examples](examples) folder.
 Inside those example files, at least one example on the usage of each `ensurable` property for a resource is **required**, with more examples being recommended for complex `ensure` states.
 
-- All the custom provider and type methods are **required** to have unit tests hitting each of its lines of code, achieving 100% line and path coverage for this module.
+- All the custom provider and type methods are **required** to have unit tests hitting each of its lines of code, achieving 100% line coverage for this module.
 
 ### Examples
 Examples on the usage of each `ensure` method available for a specific `resource` are a **requirement** for this module.
@@ -73,7 +73,7 @@ For each resource provider which contains code specific to it, a file should exi
 
   It is not necessary to create spec files for both `providers`, as that would just lead to needless repetition.
 
-  In such a case, the correct approach is to create a spec file specific to the `provider` that only `inherits` the code, and use it to test all of the methods. Ensuring path and line coverage and reducing needless repetition.
+  In such a case, the correct approach is to create a spec file specific to the `provider` that only `inherits` the code, and use it to test all of the methods. Ensuring line coverage and reducing needless repetition.
 
   Another good practice is to create *shared* tests which can be included into the `_spec` files and further reduce the amount of code repetition.
 
