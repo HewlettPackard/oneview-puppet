@@ -19,9 +19,10 @@
     * [Types and providers](#types-and-providers)
 5. [Reference](#reference)
 6. [Contributing and feature requests](#contributing-and-feature-requests)
-7. [License](#license)
-8. [Version and changes](#version-and-changes)
-9. [Authors](#authors)
+7. [Testing](#testing)
+8. [License](#license)
+9. [Version and changes](#version-and-changes)
+10. [Authors](#authors)
 
 ## Overview
 
@@ -76,7 +77,7 @@ The attributes required for authenticating with your HPE OneView Appliance are:
 
 You can assign attributes for your appliances using three methods:
 
-1. Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login.json](examples/login.json) for an example.
+1. Create a json file named `login.json` on your working directory, and enter the authentication information for your appliance. See [login_rename.json](examples/login_rename.json) for an example.
 
 2. If you do not want to use the login file on the working directory, any json file containing the authentication information for the appliance can be used by setting the following environment variable:
 
@@ -214,6 +215,16 @@ http://h17007.www1.hpe.com/docs/enterprise/servers/oneview2.0/cic-api/en/api-doc
 **NOTE:** We reserve the right to reject changes that we feel do not fit the scope of this project. For feature additions, please open an issue to discuss your ideas before doing the work.
 
 **Feature Requests:** If you have needs not being met by the current implementation, please let us know (via a new issue). This feedback is crucial for us to deliver a useful product. Do not assume we have already thought of everything, because we assure you that is not the case.
+
+## Testing
+ - Style:
+   - Rubocop: `$ rake rubocop`
+   - Puppet Lint: `$ rake lint`
+   - Metadata: `$ rake metadata_lint`
+ - Unit: `$ rake spec`
+ - Run all tests: `$ rake test`
+
+ For more information please refer to the [Testing guidelines](TESTING.md).
 
 ## License
 

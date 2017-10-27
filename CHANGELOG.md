@@ -1,6 +1,7 @@
 # v2.2.3
 ### Version highlights:
 1. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
+2. Added [TESTING.md](TESTING.md) file to explain the testing strategy in the module.
 
 #### Bug fixes & Enhancements:
 - [#159](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
