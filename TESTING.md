@@ -69,7 +69,7 @@ For each resource provider which contains code specific to it, a file should exi
 
 - No unit test should require an appliance to run. Any calls to methods of the `oneview-sdk-ruby` which require communication to an appliance should have their expected return values `mocked`.
 - `<_specific_provider>` is optional, if the resource does not have multiple providers it is not necessary.
-- To avoid needless repetition of tests and code, in case a `resource` possesses multiple `providers`, such as `C7000` and `Synergy`, and one of its `providers` only `inherits` code from another provider, but does not have code specific to it:
+- In case a `resource` possesses multiple `providers`, such as `C7000` and `Synergy`, and one of its `providers` only `inherits` from another provider and does not have code specific to it:
 
   It is not necessary to create spec files for both `providers`, as that would just lead to needless repetition.
 
