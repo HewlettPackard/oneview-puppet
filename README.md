@@ -19,9 +19,10 @@
     * [Types and providers](#types-and-providers)
 5. [Reference](#reference)
 6. [Contributing and feature requests](#contributing-and-feature-requests)
-7. [License](#license)
-8. [Version and changes](#version-and-changes)
-9. [Authors](#authors)
+7. [Testing](#testing)
+8. [License](#license)
+9. [Version and changes](#version-and-changes)
+10. [Authors](#authors)
 
 ## Overview
 
@@ -217,9 +218,9 @@ http://h17007.www1.hpe.com/docs/enterprise/servers/oneview2.0/cic-api/en/api-doc
 
 ## Testing
  - Style:
-  - Rubocop: `$ rake rubocop`
-  - Puppet Lint: `$ rake lint`
-  - Metadata: `$ rake metadata_lint`
+   - Rubocop: `$ rake rubocop`
+   - Puppet Lint: `$ rake lint`
+   - Metadata: `$ rake metadata_lint`
  - Unit: `$ rake spec`
  - Run all tests: `$ rake test`
 
