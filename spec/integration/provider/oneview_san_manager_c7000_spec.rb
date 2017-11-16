@@ -23,7 +23,7 @@ san_manager_username = login[:san_manager_username] || 'dcs'
 san_manager_password = login[:san_manager_password] || 'dcs'
 san_manager_name = login[:san_manager_name] || 'Brocade Network Advisor'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_san_manager).new(
       name: 'san_manager',

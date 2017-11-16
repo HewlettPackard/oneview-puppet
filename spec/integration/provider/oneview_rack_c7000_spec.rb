@@ -20,7 +20,7 @@ require_relative '../../../lib/puppet/provider/login'
 provider_class = Puppet::Type.type(:oneview_rack).provider(:c7000)
 enclosure_name = login[:enclosure_name] || 'Puppet_Test_Enclosure'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_rack).new(
       name: 'rack',

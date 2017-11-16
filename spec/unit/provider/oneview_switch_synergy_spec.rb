@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_switch).provider(:oneview_switch)
+provider_class = Puppet::Type.type(:oneview_switch).provider(:synergy)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:Switch, api_version, :Synergy)
 

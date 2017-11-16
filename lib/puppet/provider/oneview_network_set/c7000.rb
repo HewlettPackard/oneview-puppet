@@ -19,13 +19,10 @@ require_relative '../oneview_resource'
 Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewResource do
   desc 'Provider for OneView Network Sets using the C7000 variant of the OneView API'
 
-  mk_resource_methods
+  confine feature: :oneview
+  confine true: login[:hardware_variant] == 'C7000'
 
-  def initialize(*args)
-    super(*args)
-    api_version ||= login[:api_version] || 200
-    @ethernet_class ||= OneviewSDK.resource_named(:EthernetNetwork, api_version, 'C7000')
-  end
+  mk_resource_methods
 
   def exists?
     # assignments and deletions from @data
@@ -52,8 +49,9 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
   def network_uris
     return unless @data['networkUris']
     list = []
+    Puppet.debug("\n\nAPI VERSION: #{api_version} and \nRESOURCE VARIANT: #{resource_variant} \n")
     @data['networkUris'].each do |item|
-      net = @ethernet_class.find_by(@client, name: item)
+      net = OneviewSDK.resource_named(:EthernetNetwork, api_version, resource_variant).find_by(@client, name: item)
       raise('The network #{name} does not exist.') unless net.first
       list.push(net.first['uri'])
     end

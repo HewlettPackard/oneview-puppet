@@ -21,7 +21,7 @@ provider_class = Puppet::Type.type(:oneview_logical_downlink).provider(:synergy)
 # you must have this logical downlink in your appliance
 name = 'LDc3330ee6-8b74-4eaf-9e5d-b14eeb5340b4 (HP VC FlexFabric-20/40 F8 Module)'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_downlink).new(
       name: 'Logical Downlink',

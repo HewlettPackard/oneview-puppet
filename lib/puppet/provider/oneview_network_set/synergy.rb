@@ -19,10 +19,4 @@ Puppet::Type.type(:oneview_network_set).provide :synergy, parent: :c7000 do
 
   confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
-
-  def initialize(*args)
-    api_version ||= login[:api_version] || 300
-    @ethernet_class ||= Object.const_get("OneviewSDK::API#{api_version}::Synergy::EthernetNetwork")
-    super(*args)
-  end
 end

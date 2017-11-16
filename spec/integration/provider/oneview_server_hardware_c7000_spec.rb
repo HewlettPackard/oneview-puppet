@@ -22,7 +22,7 @@ server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.5'
 server_hardware_username = login[:server_hardware_username] || 'dcs'
 server_hardware_password = login[:server_hardware_password] || 'dcs'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_server_hardware).new(
       name: 'server_hardware',

@@ -107,7 +107,7 @@ describe provider_class, unit: true do
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:remove).and_return({})
       provider.exists?
       expect(provider.destroy).to be
     end

@@ -4,7 +4,8 @@
 2. Added [TESTING.md](TESTING.md) file to explain the testing strategy in the module.
 
 #### Bug fixes & Enhancements:
-- [#159](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
+- [#123](https://github.com/HewlettPackard/oneview-puppet/issues/123) Remove rest call from tests
+- [#165](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
 
 # v2.2.2 (2017-07-07)
 ### Version highlights:

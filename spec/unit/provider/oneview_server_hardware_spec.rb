@@ -90,34 +90,36 @@ describe provider_class, unit: true do
       resource['data']['uri'] = '/rest/server-hardware/fake'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('Fake Get Statistics'))
-      path = 'spec/support/fixtures/unit/provider/server_hardware.json'
-      fake_json_response = File.read(path)
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(fake_json_response)
       provider.exists?
     end
 
     it 'should return the bios' do
+      expect_any_instance_of(resource_type).to receive(:get_bios).and_return('Fake Get BIOS')
       expect(provider.get_bios).to be
     end
 
     it 'should return the ilo sso url' do
+      expect_any_instance_of(resource_type).to receive(:get_ilo_sso_url).and_return('Fake get_ilo_sso_url')
       expect(provider.get_ilo_sso_url).to be
     end
 
     it 'should return the java remote sso url' do
+      expect_any_instance_of(resource_type).to receive(:get_java_remote_sso_url).and_return('Fake get_java_remote_sso_url')
       expect(provider.get_java_remote_sso_url).to be
     end
     #
     it 'should return the remote console url' do
+      expect_any_instance_of(resource_type).to receive(:get_remote_console_url).and_return('Fake get_remote_console_url')
       expect(provider.get_remote_console_url).to be
     end
 
     it 'should return the environmental configuratition' do
+      expect_any_instance_of(resource_type).to receive(:environmental_configuration).and_return('Fake get_environmental_configuration')
       expect(provider.get_environmental_configuration).to be
     end
 
     it 'should return the utilization statistics' do
+      expect_any_instance_of(resource_type).to receive(:utilization).and_return('Fake get_utilization')
       expect(provider.get_utilization).to be
     end
   end
@@ -127,14 +129,11 @@ describe provider_class, unit: true do
       resource['data']['uri'] = '/rest/server-hardware/fake'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      path = 'spec/support/fixtures/unit/provider/server_hardware.json'
-      fake_json_response = File.read(path)
-      allow_any_instance_of(OneviewSDK::Client).to receive(:response_handler).and_return(fake_json_response)
       provider.exists?
     end
 
     it 'should update the ilo firmware' do
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_put).and_return(FakeResponse.new('Fake Get Statistics'))
+      expect_any_instance_of(resource_type).to receive(:update_ilo_firmware).and_return(test)
       expect(provider.update_ilo_firmware).to be
     end
 
@@ -170,7 +169,7 @@ describe provider_class, unit: true do
     end
 
     it 'should delete the server hardware' do
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:remove).and_return({})
       expect(provider.destroy).to be
     end
   end

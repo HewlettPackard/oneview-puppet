@@ -20,7 +20,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 provider_class = Puppet::Type.type(:oneview_volume).provider(:c7000)
 storage_pool_name = login[:storage_pool_name] || 'FST_CPG1'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_volume).new(
       name: 'Enclosure',

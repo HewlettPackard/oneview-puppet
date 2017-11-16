@@ -14,25 +14,26 @@
 # limitations under the License.
 ################################################################################
 
-require 'simplecov'
+require 'simplecov' # This needs to be imported before codecov/coveralls
 require 'codecov'
 require 'coveralls'
-require 'rspec-puppet/spec_helper'
+require 'oneview-sdk'
+require 'pry'
 require 'puppet'
 require 'rspec'
 require 'rspec-puppet'
-require 'pry'
+require 'rspec-puppet/spec_helper'
+
+require_relative 'shared_context'
+require_relative 'support/fake_response'
 
 provider_path = 'lib/puppet/provider'
 type_path = 'lib/puppet/type'
 
 Coveralls.wear!
 
-SimpleCov.formatters = [
-  SimpleCov::Formatter::Codecov,
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
+SimpleCov.formatters = [SimpleCov::Formatter::Codecov, Coveralls::SimpleCov::Formatter, SimpleCov::Formatter::HTMLFormatter]
+
 SimpleCov.profiles.define 'unit' do
   add_filter 'spec/'
   add_group 'Providers', provider_path
@@ -45,60 +46,40 @@ SimpleCov.profiles.define 'all' do
   add_filter 'spec/'
   add_group 'Providers', provider_path
   add_group 'Types', type_path
-  minimum_coverage 50 # TODO: bump up as we increase coverage. Goal: 85%
-  minimum_coverage_by_file 30 # TODO: bump up as we increase coverage. Goal: 70%
 end
-
-if RSpec.configuration.filter_manager.inclusions.rules[:unit]
-  SimpleCov.start 'unit'
-else # Run both
-  SimpleCov.start 'all'
-end
-
-require 'oneview-sdk'
-require_relative 'shared_context'
-require_relative 'support/fake_response'
-# require_relative 'integration/sequence_and_naming'
-# require_relative 'system/light_profile/resource_names'
 
 RSpec.configure do |config|
-  # NOTE: Puppet specific declarations
+  # Rspec-puppet specific configuration
   config.module_path  = File.expand_path(File.join(File.dirname(__FILE__), 'fixtures/modules'))
-  # Using an empty site.pp file to avoid: https://github.com/rodjek/rspec-puppet/issues/15
   config.manifest_dir = File.expand_path(File.join(File.dirname(__FILE__), 'fixtures/manifests'))
-  # End of puppet specific declarations
 
   # Rspec output Configurations
-  # Use color in STDOUT
-  config.color = true
+  config.color = true # Use color in STDOUT
+  config.tty = true # Use color not only in STDOUT but also in pagers and files
+  config.formatter = :documentation # Use the specified formatter (:progress, :html, :textmate)
 
-  # Use color not only in STDOUT but also in pagers and files
-  config.tty = true
-
-  # Use the specified formatter
-  config.formatter = :documentation # :progress, :html, :textmate
-  # End of Rspec output Configurations
-
-  # Sort integration and system tests
-  if config.filter_manager.inclusions.rules[:integration] || config.filter_manager.inclusions.rules[:system]
+  # Sort integration tests
+  if config.filter_manager.inclusions.rules[:integration]
     config.register_ordering(:global) do |items|
       items.sort_by { |i| [(i.metadata[:type] || 0), (i.metadata[:sequence] || 100)] }
     end
   end
 
+  # Set fake login files for unit tests
   if config.filter_manager.inclusions.rules[:unit]
     ENV['IMAGE_STREAMER_AUTH_FILE'] = 'spec/support/fixtures/unit/provider/login_image_streamer.json'
     ENV['ONEVIEW_AUTH_FILE'] = 'spec/support/fixtures/unit/provider/login_no_provider.json'
+    SimpleCov.start 'unit' # Runs simplecov with minimum coverage relating to unit tests
+  else # Run both
+    SimpleCov.start 'all' # Runs simplecov with no coverage restrictions, applicable to integration tests
   end
 
   config.before(:each) do
-    # TODO: Puppet: Probably reverify this once we have have different test profiles
-    if config.filter_manager.inclusions.rules[:unit]
+    unless config.filter_manager.inclusions.rules[:integration] # If not using the integration flag, sets the mocks required for unit tests
       # Mock appliance version and login api requests, as well as loading trusted certs
-      allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(300)
-      allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_return('secretToken')
-      # Mock method which define max api version
+      allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(500)
       allow_any_instance_of(OneviewSDK::ImageStreamer::Client).to receive(:appliance_i3s_api_version).and_return(500)
+      allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_return('secretToken')
       allow(OneviewSDK::SSLHelper).to receive(:load_trusted_certs).and_return(nil)
     end
 
@@ -106,5 +87,17 @@ RSpec.configure do |config|
     %w(ONEVIEWSDK_URL ONEVIEWSDK_USER ONEVIEWSDK_PASSWORD ONEVIEWSDK_TOKEN ONEVIEWSDK_SSL_ENABLED).each do |name|
       ENV[name] = nil
     end
+  end
+
+  # Redirect stderr and stdout to Null
+  original_stderr = $stderr
+  original_stdout = $stdout
+  config.before(:all) do
+    $stderr = File.open(File::NULL, 'w')
+    $stdout = File.open(File::NULL, 'w')
+  end
+  config.after(:all) do
+    $stderr = original_stderr
+    $stdout = original_stdout
   end
 end

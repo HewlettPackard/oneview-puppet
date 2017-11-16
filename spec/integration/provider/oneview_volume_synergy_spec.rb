@@ -21,7 +21,7 @@ provider_class = Puppet::Type.type(:oneview_volume).provider(:synergy)
 api_version = login[:api_version] || 200
 storage_pool_name = login[:storage_pool_name] || 'FST_CPG1'
 
-describe provider_class, if: api_version >= 300 do
+describe provider_class, integration: true, if: api_version >= 300 do
   let(:resource) do
     Puppet::Type.type(:oneview_volume).new(
       name: 'Enclosure',

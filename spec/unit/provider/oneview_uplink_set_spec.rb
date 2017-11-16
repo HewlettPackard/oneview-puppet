@@ -88,7 +88,7 @@ describe provider_class, unit: true do
       test = OneviewSDK::UplinkSet.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['name']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:delete).and_return({})
       provider.exists?
       expect(provider.destroy).to be
     end
@@ -117,7 +117,7 @@ describe provider_class, unit: true do
                 [{ value: 1, type: 'Bay' }, { value: '/rest/enclosures/09SGH100X6J1', type: 'Enclosure' }, { value: 'X1', type: 'Port' }]
               ],
               'fcNetworkUris' => [
-                '/rest/fake/1', '/rest/fake/2'
+                'fc1', '/rest/fake/2'
               ],
               'logicalInterconnectUri' => '/rest/fake/3'
             },
@@ -129,7 +129,7 @@ describe provider_class, unit: true do
       allow(resource_type).to receive(:find_by).and_return([])
       fc_network = OneviewSDK::FCNetwork.new(@client, name: 'Puppet Test FCNetwork', uri: '/rest/fc-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
-      allow(OneviewSDK::FCNetwork).to receive(:find_by).and_return([fc_network])
+      expect(OneviewSDK::FCNetwork).to receive(:find_by).and_return([fc_network])
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([logint])
       allow_any_instance_of(resource_type).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
       provider.exists?
@@ -160,7 +160,7 @@ describe provider_class, unit: true do
                 [{ value: 1, type: 'Bay' }, { value: '/rest/enclosures/09SGH100X6J1', type: 'Enclosure' }, { value: 'X1', type: 'Port' }]
               ],
               'fcoeNetworkUris' => [
-                '/rest/fake/1', '/rest/fake/2'
+                'fcoe1', '/rest/fake/2'
               ],
               'logicalInterconnectUri' => '/rest/fake/3'
             },
@@ -172,7 +172,7 @@ describe provider_class, unit: true do
       allow(resource_type).to receive(:find_by).and_return([])
       fcoe_network = OneviewSDK::FCoENetwork.new(@client, name: 'Puppet Test FCoENetwork', uri: '/rest/fcoe-networks/fake')
       logint = OneviewSDK::LogicalInterconnect.new(@client, name: 'Encl1-Test Oneview', uri: '/rest/logical-interconnects/fake')
-      allow(OneviewSDK::FCoENetwork).to receive(:find_by).and_return([fcoe_network])
+      expect(OneviewSDK::FCoENetwork).to receive(:find_by).and_return([fcoe_network])
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([logint])
       allow_any_instance_of(resource_type).to receive(:create).and_return(OneviewSDK::UplinkSet.new(@client, resource['data']))
       provider.exists?

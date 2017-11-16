@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_power_device).provider(:c7000)
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_power_device).new(
       name: 'Power Device',
@@ -51,7 +51,7 @@ describe provider_class do
     end
   end
 
-  describe provider_class do
+  describe provider_class, integration: true do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
@@ -78,7 +78,7 @@ describe provider_class do
     end
   end
 
-  describe provider_class do
+  describe provider_class, integration: true do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
@@ -111,7 +111,7 @@ describe provider_class do
     end
   end
 
-  describe provider_class do
+  describe provider_class, integration: true do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',
@@ -139,7 +139,7 @@ describe provider_class do
     end
   end
 
-  describe provider_class do
+  describe provider_class, integration: true do
     let(:resource) do
       Puppet::Type.type(:oneview_power_device).new(
         name: 'Power Device',

@@ -28,7 +28,7 @@ def plan_script_config
   }
 end
 
-describe type_class do
+describe type_class, integration: true do
   let(:test) { resource_type.new(@client, resource['data']) }
   let(:params) { %i[name data provider] }
 

@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:oneview_enclosure_group)
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_enclosure_group).new(
       name: 'Enclosure Group',

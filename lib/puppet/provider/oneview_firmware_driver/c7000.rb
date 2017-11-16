@@ -55,7 +55,6 @@ Puppet::Type.type(:oneview_firmware_driver).provide :c7000, parent: Puppet::Onev
       case key
       when 'baselineUri' then
         @attributes['baselineUri'] = @data.delete('baselineUri')
-      #   parse_uris_for_firmware_driver('baselineUri', @attributes['baselineUri'])
       when 'hotfixUris' then
         @attributes['hotfixUris'] = @data.delete('hotfixUris')
         parse_uris_for_firmware_driver('hotfixUris', @attributes['hotfixUris'])
@@ -67,17 +66,12 @@ Puppet::Type.type(:oneview_firmware_driver).provide :c7000, parent: Puppet::Onev
     if value.is_a? Array
       value.each_with_index do |array_value, array_key|
         parse_uris_for_firmware_driver(key, array_value, array_key)
-        return true
       end
+      return true
     end
     return if value.to_s[0..6].include?('/rest/')
     firmware_driver = @resource_type.find_by(@client, name: value)
     raise "No #{key}s found on the appliance matching the provided name #{value}. Provide a valid name or uri." if firmware_driver.empty?
-    if extra
-      @attributes[key][extra] = firmware_driver.first['uri']
-    else
-      @attributes[key] = firmware_driver.first['uri']
-    end
+    @attributes[key][extra] = firmware_driver.first['uri'] if extra
   end
-  true
 end

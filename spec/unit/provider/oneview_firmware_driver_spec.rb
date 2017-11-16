@@ -1,9 +1,9 @@
 ################################################################################
 # (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
-# You may obtain a copy of the License at
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -16,11 +16,11 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:synergy)
+provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:FirmwareDriver, api_version, :Synergy)
+resource_type = OneviewSDK.resource_named(:FirmwareDriver, api_version, :C7000)
 
-describe provider_class, unit: true, if: api_version >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do
@@ -31,7 +31,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
           {
             'name' => 'FirmwareDriver1_Example'
           },
-      provider: 'synergy'
+      provider: 'c7000'
     )
   end
 
@@ -43,7 +43,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
   context 'given the minimum parameters' do
     it 'should be an instance of the provider oneview_firmware_driver' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:synergy)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
     end
 
     it 'should raise error when Firmware Driver is not found' do
@@ -60,10 +60,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
         data:
             {
               'customBaselineName' => 'FirmwareDriver1_Example',
-              'baselineUri'        => '/rest/fake',
-              'hotfixUris'         => ['/rest/fake']
+              'baselineUri'        => 'fw0',
+              'hotfixUris'         => ['/rest/fake', 'fw1']
             },
-        provider: 'synergy'
+        provider: 'c7000'
       )
     end
 
@@ -71,7 +71,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
       allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
         .and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
-      allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][0]).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][1]).and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']).and_return([])
       allow(resource_type).to receive(:get_all).with(anything).and_return([test])
       provider.exists?
@@ -92,12 +92,12 @@ describe provider_class, unit: true, if: api_version >= 300 do
       resource['data']['uri'] = '/rest/firmware-drivers/fake'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:remove).and_return({})
       expect(provider.destroy).to be
     end
 
     it 'should be able to work specifying a name instead of an uri' do
-      resource['data']['baselineUri'] = '/rest/firmware-drivers/fake'
+      resource['data']['baselineUri'] = 'Test'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])

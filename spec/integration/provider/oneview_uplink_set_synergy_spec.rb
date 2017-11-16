@@ -21,7 +21,7 @@ provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:synergy)
 api_version = login[:api_version] || 200
 logical_interconnect_name = login[:logical_interconnect_name] || 'Encl1-Test Oneview'
 
-describe provider_class, if: api_version >= 300 do
+describe provider_class, integration: true, if: api_version >= 300 do
   let(:resource) do
     Puppet::Type.type(:oneview_uplink_set).new(
       name: 'Enclosure',

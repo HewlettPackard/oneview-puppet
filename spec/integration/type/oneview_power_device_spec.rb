@@ -29,7 +29,7 @@ def resource
   }
 end
 
-describe type_class do
+describe type_class, integration: true do
   let(:params) { %i[name data provider] }
 
   let(:special_ensurables) { %i[found get_utilization set_refresh_state set_power_state set_uid_state] }

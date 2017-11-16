@@ -20,7 +20,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 api_version = login[:api_version] || 200
 provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:c7000)
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_server_profile_template).new(
       name: 'Test_SPT',

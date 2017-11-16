@@ -24,7 +24,7 @@ provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:synergy)
 storage_pool_name = login[:storage_pool_name] || 'FST_CPG2'
 storage_system_name = login[:storage_system_name] || 'ThreePAR7200-8147'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_storage_pool).new(
       name: 'Storage Pool',

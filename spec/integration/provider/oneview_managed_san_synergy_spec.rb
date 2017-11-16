@@ -20,7 +20,7 @@ require_relative '../../../lib/puppet/provider/login'
 provider_class = Puppet::Type.type(:oneview_managed_san).provider(:synergy)
 managed_san_name = login[:managed_san_name] || 'SAN1_0'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_managed_san).new(
       name: 'managed_san',

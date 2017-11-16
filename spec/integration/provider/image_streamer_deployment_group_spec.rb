@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:image_streamer_deployment_group).provider(:image_streamer)
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:image_streamer_deployment_group).new(
       name: 'deployment-group-1',

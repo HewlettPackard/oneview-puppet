@@ -13,7 +13,7 @@ def deployment_group_config
   }
 end
 
-describe type_class do
+describe type_class, integration: true do
   let(:params) { %i[name data provider] }
 
   let(:special_ensurables) { [:found] }

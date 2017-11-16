@@ -43,7 +43,7 @@ def managed_san_config
   }
 end
 
-describe type_class do
+describe type_class, integration: true do
   let(:params) { %i[name data provider] }
 
   let(:special_ensurables) { %i[found set_refresh_state get_endpoints get_zoning_report] }

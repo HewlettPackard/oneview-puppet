@@ -25,7 +25,7 @@ storage_volume_template = login[:storage_volume_template] || 'Test'
 server_profile_name = login[:server_profile_name] || 'OneViewSDK Test ServerProfile'
 volume_name = login[:volume_name] || 'Volume Test'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_volume_attachment).new(
       name: 'Volume Attachment',
