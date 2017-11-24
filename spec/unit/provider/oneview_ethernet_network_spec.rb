@@ -16,11 +16,11 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:synergy)
+provider_class = Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:EthernetNetwork, api_version, :Synergy)
+resource_type = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000)
 
-describe provider_class, unit: true, if: api_version >= 300 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do
@@ -37,7 +37,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
             'connectionTemplateUri' => nil,
             'type' => 'ethernet-networkV3'
           },
-      provider: 'synergy'
+      provider: 'c7000'
     )
   end
 
@@ -53,8 +53,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
       provider.exists?
     end
 
-    it 'should be an instance of the provider synergy' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:synergy)
+    it 'should be an instance of the provider c7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_ethernet_network).provider(:c7000)
     end
 
     it 'runs through the create method' do
@@ -68,7 +68,8 @@ describe provider_class, unit: true, if: api_version >= 300 do
       resource['data']['uri'] = '/rest/fake'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:delete).and_return({})
       provider.exists?
       expect(provider.destroy).to be
     end

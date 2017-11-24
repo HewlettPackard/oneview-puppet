@@ -26,7 +26,7 @@ enclosure_username = login[:enclosure_username] || 'dcs'
 enclosure_password = login[:enclosure_password] || 'dcs'
 enclosure_group = login[:enclosure_group] || 'Puppet Enc Group Test'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_enclosure).new(
       name: 'Enclosure',

@@ -24,7 +24,7 @@ storage_system_username = login[:storage_system_username] || 'dcs'
 storage_system_password = login[:storage_system_password] || 'dcs'
 storage_system_domain = login[:storage_system_domain] || 'TestDomain'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_storage_system).new(
       name: 'Enclosure',

@@ -30,7 +30,7 @@ def storage_pool_config
   }
 end
 
-describe type_class do
+describe type_class, integration: true do
   let(:params) { %i[name data provider] }
 
   it 'should have expected parameters' do

@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:image_streamer_build_plan).provider(:image_streamer)
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:image_streamer_build_plan).new(
       name: 'build_plan_1',

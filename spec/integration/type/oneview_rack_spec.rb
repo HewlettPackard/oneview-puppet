@@ -29,7 +29,7 @@ def rack_config
   }
 end
 
-describe type_class do
+describe type_class, integration: true do
   let(:params) { %i[name data provider] }
 
   let(:special_ensurables) { %i[found get_device_topology add_rack_resource remove_rack_resource] }

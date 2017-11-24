@@ -20,7 +20,7 @@ provider_class = Puppet::Type.type(:oneview_fabric).provider(:c7000)
 
 # you must have the DefaultFabric in the Appliance
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_fabric).new(
       name: 'Fabric',

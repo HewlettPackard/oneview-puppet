@@ -21,7 +21,7 @@ provider_class = Puppet::Type.type(:oneview_firmware_driver).provider(:c7000)
 firmware_baseline_name = login[:firmware_baseline_name] || 'Service Pack for ProLiant'
 firmware_hotfix_names = login[:firmware_hotfix_names] || ['Online ROM Flash Component for Windows x64 - HPE ProLiant XL260a Gen9 Server']
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_firmware_driver).new(
       name: 'firmware_driver',

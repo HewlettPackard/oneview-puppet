@@ -20,7 +20,7 @@ provider_class = Puppet::Type.type(:oneview_connection_template).provider(:c7000
 
 # you must have this connection template in your appliance
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_connection_template).new(
       name: 'Connection Template',

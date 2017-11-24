@@ -82,6 +82,16 @@ describe provider_class, unit: true do
       expect(provider.found).to be
     end
 
+    it 'should raise an error when LI does not exist' do
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
+      provider.exists?
+      expect { provider.create }.to raise_error(RuntimeError, /This resource relies on others to be created./)
+    end
+
+    it 'should raise an error when trying to remove LI' do
+      expect { provider.destroy }.to raise_error(RuntimeError, /This resource relies on others to be destroyed./)
+    end
+
     it 'should be able to get the qos configuration' do
       allow_any_instance_of(resource_type).to receive(:get_qos_aggregated_configuration).and_return('Test')
       expect(provider.get_qos_aggregated_configuration).to be

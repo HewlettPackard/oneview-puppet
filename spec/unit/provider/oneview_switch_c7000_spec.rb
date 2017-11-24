@@ -71,7 +71,7 @@ describe provider_class, unit: true do
       resource['data']['uri'] = '/rest/fake'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new(Test))
+      expect_any_instance_of(resource_type).to receive(:environmental_configuration).and_return('Fake env configuration')
       expect(provider.exists?).to eq(true)
       expect(provider.get_environmental_configuration).to be
     end
@@ -80,7 +80,7 @@ describe provider_class, unit: true do
       resource['data']['uri'] = '/rest/fake'
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect_any_instance_of(resource_type).to receive(:remove).and_return({})
       expect(provider.exists?).to eq(true)
       expect(provider.destroy).to be
     end
@@ -185,7 +185,7 @@ describe provider_class, unit: true do
       }
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, data_for_findby).and_return([test])
-      expect_any_instance_of(OneviewSDK::Client).to receive(:rest_get).and_return(FakeResponse.new('Fake Get Statistics'))
+      expect_any_instance_of(resource_type).to receive(:statistics).and_return('Fake Get Statistics')
       provider.exists?
       expect(provider.get_statistics).to be
     end

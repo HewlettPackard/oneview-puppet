@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview_logical_enclosure)
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_enclosure).new(
       name: 'Puppet_Test_Enclosure',

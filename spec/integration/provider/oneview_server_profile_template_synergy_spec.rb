@@ -20,7 +20,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 api_version = login[:api_version] || 200
 provider_class = Puppet::Type.type(:oneview_server_profile_template).provider(:synergy)
 
-describe provider_class, if: api_version >= 300 do
+describe provider_class, integration: true, if: api_version >= 300 do
   let(:resource) do
     Puppet::Type.type(:oneview_server_profile_template).new(
       name: 'Test_SPT',

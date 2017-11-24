@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:image_streamer_golden_image).provider(:image_streamer)
 golden_image_path = login[:golden_image_path] || './spec/support/golden_image.zip'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:image_streamer_golden_image).new(
       name: 'golden-image-1',

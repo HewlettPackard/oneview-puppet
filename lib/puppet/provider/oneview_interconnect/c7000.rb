@@ -54,13 +54,7 @@ Puppet::Type.type(:oneview_interconnect).provide :c7000, parent: Puppet::Oneview
   # it is possible to query by either portName, subportNumber or nothing (for all)
   def get_statistics
     Puppet.notice("\n\nInterconnect Statistics\n")
-    if @statistics
-      @statistics['portName'] = nil unless @statistics['portName']
-      @statistics['subportNumber'] = nil unless @statistics['subportNumber']
-      pretty get_single_resource_instance.statistics(@statistics['portName'], @statistics['subportNumber'])
-    else
-      get_single_resource_instance.statistics
-    end
+    pretty get_single_resource_instance.statistics(@statistics['portName'], @statistics['subportNumber'])
     true
   end
 
@@ -94,6 +88,6 @@ Puppet::Type.type(:oneview_interconnect).provide :c7000, parent: Puppet::Oneview
   def variable_assignments
     @patch = @data.delete('patch')
     @ports = @data.delete('ports')
-    @statistics = @data.delete('statistics')
+    @statistics = @data.delete('statistics') || {}
   end
 end

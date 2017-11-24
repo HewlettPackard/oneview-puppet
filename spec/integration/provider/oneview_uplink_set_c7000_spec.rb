@@ -20,7 +20,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '../../../lib/puppet/
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:c7000)
 logical_interconnect_name = login[:logical_interconnect_name] || 'Encl1-Test Oneview'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_uplink_set).new(
       name: 'Enclosure',

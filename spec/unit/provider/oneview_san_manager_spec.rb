@@ -16,9 +16,9 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:oneview_san_manager).provider(:synergy)
+provider_class = Puppet::Type.type(:oneview_san_manager).provider(:c7000)
 api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:SANManager, api_version, :Synergy)
+resource_type = OneviewSDK.resource_named(:SANManager, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -32,7 +32,7 @@ describe provider_class, unit: true do
             {
               'providerDisplayName' => 'Brocade Network Advisor'
             },
-        provider: 'synergy'
+        provider: 'c7000'
       )
     end
 
@@ -42,8 +42,8 @@ describe provider_class, unit: true do
 
     let(:test) { resource_type.new(@client, resource['data']) }
 
-    it 'should be an instance of the provider Synergy' do
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:synergy)
+    it 'should be an instance of the provider C7000' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_san_manager).provider(:c7000)
     end
 
     it 'should raise error when San Manager is not found' do
@@ -84,7 +84,7 @@ describe provider_class, unit: true do
                   }
                 ]
               },
-          provider: 'synergy'
+          provider: 'c7000'
         )
       end
 
@@ -124,7 +124,7 @@ describe provider_class, unit: true do
       end
 
       it 'should delete the san manager' do
-        expect_any_instance_of(OneviewSDK::Client).to receive(:rest_delete).and_return(FakeResponse.new('uri' => '/rest/fake'))
+        expect_any_instance_of(resource_type).to receive(:remove).and_return({})
         expect(provider.destroy).to be
       end
     end

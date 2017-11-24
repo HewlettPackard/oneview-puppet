@@ -19,7 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_volume_template).provider(:synergy)
 storage_pool_name = login[:storage_pool_name] || '/rest/storage-pools/0CDF3EE5-7749-4257-ABE3-87404A53244E'
 
-describe provider_class do
+describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_volume_template).new(
       name: 'Volume Template',
