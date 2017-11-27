@@ -169,7 +169,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
   end
 
   def hash_merge(base_hash, new_hash)
-    base_hash.each do |key, _value|
+    base_hash.each_key do |key|
       # checks if the value is present in the new hash
       next unless new_hash[key]
       if base_hash[key].is_a?(Hash)

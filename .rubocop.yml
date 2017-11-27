@@ -20,6 +20,14 @@ LineLength:
 MethodLength:
   Max: 30
 
+Lint/BooleanSymbol:
+  Exclude:
+    - 'lib/puppet/provider/**/*.rb'
+
+Lint/RescueWithoutErrorClass:
+  Exclude:
+    - 'lib/puppet/provider/login.rb'
+
 Metrics/AbcSize:
   Max: 20
 
@@ -35,10 +43,10 @@ Metrics/PerceivedComplexity:
   Exclude:
     - 'lib/puppet/provider/uri_parsing.rb'
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
-Style/EndOfLine:
+Layout/EndOfLine:
   EnforcedStyle: lf
 
 Style/GlobalVars:

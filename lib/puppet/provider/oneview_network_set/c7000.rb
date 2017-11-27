@@ -52,7 +52,7 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
     Puppet.debug("\n\nAPI VERSION: #{api_version} and \nRESOURCE VARIANT: #{resource_variant} \n")
     @data['networkUris'].each do |item|
       net = OneviewSDK.resource_named(:EthernetNetwork, api_version, resource_variant).find_by(@client, name: item)
-      raise('The network #{name} does not exist.') unless net.first
+      raise("The network #{name} does not exist.") unless net.first
       list.push(net.first['uri'])
     end
     @data['networkUris'] = list

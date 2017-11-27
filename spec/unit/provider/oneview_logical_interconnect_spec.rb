@@ -70,7 +70,7 @@ describe provider_class, unit: true do
 
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect)
-        .provider(:c7000)
+                                                        .provider(:c7000)
     end
 
     it 'return false when the resource does not exists' do

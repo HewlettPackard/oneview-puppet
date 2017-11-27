@@ -51,7 +51,7 @@ Puppet::Type.type(:oneview_firmware_driver).provide :c7000, parent: Puppet::Onev
 
   def data_parse_for_general
     @data['name'] = @data.delete('customBaselineName') if @data['customBaselineName']
-    @data.each do |key, _value|
+    @data.each_key do |key|
       case key
       when 'baselineUri' then
         @attributes['baselineUri'] = @data.delete('baselineUri')

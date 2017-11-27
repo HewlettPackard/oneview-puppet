@@ -2,10 +2,15 @@
 ### Version highlights:
 1. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
 2. Added [TESTING.md](TESTING.md) file to explain the testing strategy in the module.
+3. Solved security issues regarding Rubocop by updating the gem dependency to use the latest version currently available (0.51.0).
 
 #### Bug fixes & Enhancements:
 - [#123](https://github.com/HewlettPackard/oneview-puppet/issues/123) Remove rest call from tests
 - [#165](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
+
+##### Security specific issues:
+- [#169](https://github.com/HewlettPackard/oneview-puppet/issues/169) Update rubocop to latest version
+
 
 # v2.2.2 (2017-07-07)
 ### Version highlights:

@@ -34,7 +34,7 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
     prepare_environment
     empty_data_check([nil, :found, :get_extra_unmanaged_volumes])
     # This method at the moment only has gets, CRUD operations are disabled at SDK
-    resource['ensure'].to_s == 'present' ? false : true
+    resource['ensure'].to_s != 'present'
   end
 
   def found

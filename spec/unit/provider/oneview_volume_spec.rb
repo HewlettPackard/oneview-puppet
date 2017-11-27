@@ -105,7 +105,7 @@ describe provider_class, unit: true do
     it 'should delete the snapshot' do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
       allow_any_instance_of(resource_type).to receive(:delete_snapshot).with(resource['data']['snapshotParameters']['name'])
-        .and_return('Test')
+                                                                       .and_return('Test')
       provider.exists?
       expect(provider.delete_snapshot).to be
     end
@@ -113,7 +113,7 @@ describe provider_class, unit: true do
     it 'should create the snapshot' do
       resource['data']['snapshotParameters'] = { 'name' => 'Snapshot' }
       allow_any_instance_of(resource_type).to receive(:create_snapshot).with('name' => resource['data']['snapshotParameters']['name'])
-        .and_return('Test')
+                                                                       .and_return('Test')
       provider.exists?
       expect(provider.create_snapshot).to be
     end
