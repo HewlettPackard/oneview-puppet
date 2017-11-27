@@ -14,63 +14,61 @@
 # limitations under the License.
 ################################################################################
 
-oneview_logical_interconnect{'Logical Interconnect Found':
-  ensure => 'found',
-  data   =>
-    {
-      name => 'Encl2-my enclosure logical interconnect group'
-    }
-}
+$logical_interconnect_name = 'le1-lig1'
 
-oneview_logical_interconnect{'Logical Interconnect Get All':
-  ensure => 'found'
-}
-
-oneview_logical_interconnect{'Logical Interconnect QoS Get':
-  ensure => 'get_qos_aggregated_configuration',
-  data   =>
-    {
-      name => 'Encl2-my enclosure logical interconnect group'
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect Port Monitor Set':
-  ensure => 'set_port_monitor',
-  data   =>
-    {
-      name        => 'Encl2-my enclosure logical interconnect group',
-      portMonitor =>
-      {
-        enablePortMonitor => false
-      }
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect Port Monitor Get':
-  ensure => 'get_port_monitor',
-  data   =>
-    {
-      name => 'Encl2-my enclosure logical interconnect group',
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect Internal Vlan':
-  ensure => 'get_internal_vlans',
-  data   =>
-    {
-      name => 'Encl2-my enclosure logical interconnect group'
-    }
-}
-
+# oneview_logical_interconnect{'Logical Interconnect Found':
+#   ensure => 'found',
+#   data   =>
+#     {
+#       name => $logical_interconnect_name
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Get All':
+#   ensure => 'found'
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect QoS Get':
+#   ensure => 'get_qos_aggregated_configuration',
+#   data   =>
+#     {
+#       name => $logical_interconnect_name
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Port Monitor Set':
+#   ensure => 'set_port_monitor',
+#   data   =>
+#     {
+#       name => $logical_interconnect_name,
+#       portMonitor =>
+#       {
+#         enablePortMonitor => false
+#       }
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Port Monitor Get':
+#   ensure => 'get_port_monitor',
+#   data   =>
+#     {
+#       name => $logical_interconnect_name,
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Internal Vlan':
+#   ensure => 'get_internal_vlans',
+#   data   =>
+#     {
+#       name => $logical_interconnect_name
+#     }
+# }
+#
 oneview_logical_interconnect{'Logical Interconnect SNMP Config Get':
   ensure => 'get_snmp_configuration',
   data   =>
     {
-      name              => 'Encl2-my enclosure logical interconnect group',
-      snmpConfiguration =>
-      {
-        enabled => false
-      }
+      name              => $logical_interconnect_name
     }
 }
 
@@ -78,52 +76,58 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
   ensure => 'set_snmp_configuration',
   data   =>
     {
-      name              => 'Encl2-my enclosure logical interconnect group',
+      name              => $logical_interconnect_name,
       snmpConfiguration =>
       {
-        enabled => true
+        enabled => false
       }
     }
 }
-
-oneview_logical_interconnect{'Logical Interconnect Compliance':
-  ensure => 'set_compliance',
-  data   =>
-    {
-      name => 'Encl2-my enclosure logical interconnect group'
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect Internal Networks':
-  ensure => 'set_internal_networks',
-  data   =>
-    {
-      name             => 'Encl2-my enclosure logical interconnect group',
-      internalNetworks => ['NET', 'Ethernet 1']
-    }
-}
-
-oneview_logical_interconnect{'Logical Interconnect Set Configuration':
-  ensure => 'set_configuration',
-  data   =>
-  {
-    name => 'Encl2-my enclosure logical interconnect group'
-  }
-}
-
-# Both the firmware driver identifier and a command need to be specified
-# The firmrware driver identifier can be either its name or uri, as follows:
-oneview_logical_interconnect{'Logical Interconnect Set Firmware':
-  ensure => 'set_firmware',
-  data   =>
-    {
-      name     => 'Encl2-my enclosure logical interconnect group',
-      firmware =>
-      {
-        command => 'Stage',
-        sspUri  => 'fake_firmware.iso',
-        # sspUri  => '/rest/firmware-drivers/fake_firmware',
-        force   => false
-      }
-    }
-}
+#
+# oneview_logical_interconnect{'Logical Interconnect Compliance':
+#   ensure => 'set_compliance',
+#   data   =>
+#     {
+#       name => $logical_interconnect_name
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Internal Networks':
+#   ensure => 'set_internal_networks',
+#   data   =>
+#     {
+#       name             => $logical_interconnect_name,
+#       internalNetworks => ['NET', 'Ethernet 1']
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Set Configuration':
+#   ensure => 'set_configuration',
+#   data   =>
+#   {
+#     name => $logical_interconnect_name
+#   }
+# }
+#
+# # Both the firmware driver identifier and a command need to be specified
+# # The firmrware driver identifier can be either its name or uri, as follows:
+# oneview_logical_interconnect{'Logical Interconnect Set Firmware':
+#   ensure => 'set_firmware',
+#   name => $logical_interconnect_name,
+#   data   =>
+#     {
+#       firmware =>
+#       {
+#         command => 'Stage',
+#         sspUri  => 'Online ROM Flash Component for Windows - Smart Array P700m',
+#         # sspUri  => '/rest/firmware-drivers/fake_firmware',
+#         force   => false
+#       }
+#     }
+# }
+#
+# oneview_logical_interconnect{'Logical Interconnect Set Ethernet Settings':
+#   ensure => 'set_ethernet_settings',
+#   # name => $logical_interconnect_name,
+#   data   =>    { name => $logical_interconnect_name, macRefreshInterval => 10 }
+# }

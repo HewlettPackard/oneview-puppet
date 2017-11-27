@@ -28,13 +28,9 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     prepare_environment
     empty_data_check
     variable_assignments
-    li = if resource['ensure'] == :present
-           resource_update
-           @resource_type.find_by(@client, unique_id)
-         else
-           @resource_type.find_by(@client, @data)
-         end
-    !li.empty?
+    resource_update if resource['ensure'] == :present
+    @ov_resource = @resource_type.new(@client, name: (@data.delete('name') || resource['name']))
+    @ov_resource.retrieve!
   end
 
   def create
@@ -80,44 +76,40 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
 
   def set_configuration
     Puppet.notice('Setting Logical Interconnect configuration...')
-    get_single_resource_instance.configuration
-    true
+    @ov_resource.configuration
   end
 
   def set_compliance
     Puppet.notice('Setting Logical Interconnect compliance...')
-    get_single_resource_instance.compliance
-    true
+    @ov_resource.compliance
   end
 
   def set_ethernet_settings
-    resource = set_info('Ethernet Settings', 'ethernetSettings', @ethernet_settings)
-    resource.update_ethernet_settings
-    true
+    Puppet.notice('Setting Ethernet settings...')
+    @ov_resource.update_ethernet_settings
   end
 
   def set_telemetry_configuration
-    resource = set_info('Telemetry Configuration', 'telemetryConfiguration', @telemetry_configuration)
-    resource.update_telemetry_configuration
-    true
+    Puppet.notice('Setting Telemetry configuration...')
+    @ov_resource.update_telemetry_configuration
   end
 
   def set_qos_aggregated_configuration
-    resource = set_info('QoS Configuration', 'qosConfiguration', @qos_configuration)
-    resource.update_qos_configuration
-    true
+    Puppet.notice('Setting QoS Configuration...')
+    @ov_resource.qosConfiguration
+    @ov_resource.update_qos_configuration
   end
 
   def set_snmp_configuration
-    resource = set_info('SNMP Configuration', 'snmpConfiguration', @snmp_configuration)
-    resource.update_snmp_configuration
-    true
+    Puppet.notice('Setting SNMP Configuration...')
+    puts "CONF:\n"
+    pretty get_diff(@ov_resource['snmpConfiguration'], resource['data']['snmpConfiguration'])
+    @ov_resource.update_snmp_configuration
   end
 
   def set_port_monitor
-    resource = set_info('Port Monitor', 'portMonitor', @port_monitor)
-    resource.update_port_monitor
-    true
+    Puppet.notice('Setting Port Monitor...')
+    @ov_resource.update_port_monitor
   end
 
   def set_firmware
@@ -126,8 +118,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     fw_uri = @firmware_options.delete('sspUri')
     fw_object = OneviewSDK::FirmwareDriver.find_by(@client, uri: fw_uri)
     raise('No matching firmware drivers were found in the Appliance.') unless fw_object.first
-    get_single_resource_instance.firmware_update(command, fw_object.first, @firmware_options)
-    true
+    @ov_resource.firmware_update(command, fw_object.first, @firmware_options)
   end
 
   def set_internal_networks
@@ -135,10 +126,10 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     list = []
     @internal_networks.each do |net|
       object = OneviewSDK::EthernetNetwork.find_by(@client, name: net)
-      raise('No matching networks were found in the Appliance.') unless object.first
+      raise("No networks matching the name #{net} were found in the Appliance.") unless object.first
       list.push(object.first)
     end
-    get_single_resource_instance.update_internal_networks(*list)
+    @ov_resource.update_internal_networks(*list)
     true
   end
 
@@ -156,28 +147,32 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
 
   def get_info(notice, parameter)
     Puppet.notice("\n\n#{notice}\n")
-    pretty get_single_resource_instance.data[parameter]
+    pretty get_single_resource_instance[parameter]
     true
   end
 
-  def set_info(notice, parameter, global_var)
-    Puppet.notice("Updating #{notice}...")
-    resource = get_single_resource_instance
-    updated_hash = hash_merge(resource[parameter], global_var)
-    resource[parameter] = updated_hash
-    resource
-  end
-
-  def hash_merge(base_hash, new_hash)
-    base_hash.each do |key, _value|
-      # checks if the value is present in the new hash
-      next unless new_hash[key]
-      if base_hash[key].is_a?(Hash)
-        base_hash[key].merge!(new_hash[key])
-      else
-        base_hash[key] = new_hash[key]
-      end
-    end
-    base_hash
-  end
+  # def set_info(notice, parameter, global_var)
+  #   Puppet.notice("Updating #{notice}...")
+  #   logical_interconnect = load_resource(:LogicalInterconnect, (@data.delete('name') || resource['name']))
+  #   Puppet.debug('AFTER LOAD')
+  #   Puppet.debug("notice: #{notice}\n parameter: #{parameter}\n global_var: #{global_var}")
+  #   updated_hash = hash_merge(resource[parameter], global_var)
+  #   Puppet.debug('AFTER MERGE')
+  #   logical_interconnect[parameter] = updated_hash
+  #   Puppet.debug('AFTER PARAMETER ASSIGN')
+  #   logical_interconnect
+  # end
+  #
+  # def hash_merge(base_hash, new_hash)
+  #   base_hash.each do |key, _value|
+  #     # checks if the value is present in the new hash
+  #     next unless new_hash[key]
+  #     if base_hash[key].is_a?(Hash)
+  #       base_hash[key].merge!(new_hash[key])
+  #     else
+  #       base_hash[key] = new_hash[key]
+  #     end
+  #   end
+  #   base_hash
+  # end
 end
