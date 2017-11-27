@@ -32,7 +32,7 @@ Puppet::Type.type(:oneview_managed_san).provide :c7000, parent: Puppet::OneviewR
   # an improvement.
   def exists?
     prepare_environment
-    resource['ensure'] == :present ? false : true
+    resource['ensure'] != :present
   end
 
   def create

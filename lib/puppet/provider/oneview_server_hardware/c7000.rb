@@ -110,7 +110,7 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
   def data_parse_for_general
     %w(from op path value).each { |key| @patch_tags[key] = @data.delete(key) if @data[key] }
     @data['name'] = @data.delete('hostname') if @data['hostname']
-    @data.each do |key, _value|
+    @data.each_key do |key|
       case key
       when 'username' then
         @authentication['username'] = @data.delete('username')

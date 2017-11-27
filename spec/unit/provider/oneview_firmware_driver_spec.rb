@@ -69,7 +69,7 @@ describe provider_class, unit: true do
 
     before(:each) do
       allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['customBaselineName'])
-        .and_return([test])
+                                               .and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['baselineUri']).and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']['hotfixUris'][1]).and_return([test])
       allow(resource_type).to receive(:find_by).with(anything, name: resource['data']).and_return([])

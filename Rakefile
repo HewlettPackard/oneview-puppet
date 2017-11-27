@@ -34,7 +34,7 @@ task :lint do
   success = true
 
   linter = PuppetLint.new
-  linter.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
+  linter.configuration.log_format = '%<path>s:%<linenumber>s:%<check>s:%<KIND>s:%<message>s'
 
   lintrc = '.puppet-lintrc'
   if File.file?(lintrc)
