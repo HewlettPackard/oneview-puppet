@@ -64,7 +64,6 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     before(:each) do
       test = resource_type.new(@client, resource['data'])
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
@@ -75,7 +74,6 @@ describe provider_class, unit: true do
     end
 
     it 'return false when the resource does not exists' do
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
     end
@@ -85,7 +83,6 @@ describe provider_class, unit: true do
     end
 
     it 'should raise an error when LI does not exist' do
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
       provider.exists?
       expect { provider.create }.to raise_error(RuntimeError, /This resource relies on others to be created./)
@@ -112,7 +109,6 @@ describe provider_class, unit: true do
 
     it 'should be able to get the vlans' do
       test_network = OneviewSDK::EthernetNetwork.new(@client, name: 'NET')
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'NET').and_return([test_network])
       allow_any_instance_of(resource_type).to receive(:list_vlan_networks).and_return([test_network])
       expect(provider.get_internal_vlans).to be
@@ -177,7 +173,6 @@ describe provider_class, unit: true do
 
     before(:each) do
       test = resource_type.new(@client, resource['data'])
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end

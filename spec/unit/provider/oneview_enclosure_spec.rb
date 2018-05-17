@@ -53,7 +53,6 @@ describe provider_class, unit: true do
 
   context 'given the min parameters' do
     before(:each) do
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
