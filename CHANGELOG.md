@@ -1,6 +1,15 @@
-# v2.3.0 (UnReleased)
+# v2.3.0 (Unreleased)
+### Version highlights:
+1. Added full support to OneView Rest API version 500 and 600 for the hardware variants C7000 and Synergy to the already existing features.
+
+### Notes
+This release extends the full support for the Synergy and C7000 APIs to all the resources previously supported.
+
 #### Bug fixes & Enhancements:
 - [#172](https://github.com/HewlettPackard/oneview-puppet/issues/172) Unit tests updated for ruby version 2.4.0 and above.
+
+### Oneview Features supported
+- FC network
 
 # v2.2.3
 ### Version highlights:
