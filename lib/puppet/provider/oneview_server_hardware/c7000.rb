@@ -84,6 +84,14 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
     true
   end
 
+  def get_firmware_inventory
+    pretty get_single_resource_instance.get_firmware_by_id
+  end
+
+  def get_physical_server_hardware
+    pretty get_single_resource_instance.get_physical_server_hardware 
+  end
+
   def update_ilo_firmware
     pretty get_single_resource_instance.update_ilo_firmware
     true
@@ -135,5 +143,11 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
     server_hardware = get_single_resource_instance
     pretty server_hardware.patch(@patch_tags['op'], @patch_tags['path'], @patch_tags['value'])
     true
+  end
+
+  def add_multiple_servers
+    @data = @data.merge(@authentication)
+    @data['hostname'] = @data.delete('name') if @data['name']
+    resources = @resource_type.new(@client, @data).add_multiple_servers
   end
 end

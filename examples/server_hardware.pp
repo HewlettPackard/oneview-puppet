@@ -20,7 +20,7 @@
 oneview_server_hardware{'server_hardware_1':
     ensure => 'present',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
       username        => 'dcs',
       password        => 'dcs',
       licensingIntent => 'OneView'
@@ -34,45 +34,72 @@ oneview_server_hardware{'server_hardware_2':
 oneview_server_hardware{'server_hardware_3':
     ensure => 'present',
     data   => {
-      hostname => '172.18.6.6',
+      hostname => '172.18.6.14',
       op       => 'add',
       path     => '/scopeUris/-',
-      value    => '/rest/scopes/3b292baf-8b59-4671-9e5c-deca07496c60'
+      value    => '/rest/scopes/eec90be8-e810-4aef-b976-57c2c2cce030'
     },
 }
+
+oneview_server_hardware{'server_hardware_8':
+    ensure => 'add_multiple_servers',
+    data   => {
+      hostname        => '172.18.6.13',
+      username        => 'dcs',
+      password        => 'dcs',
+      licensingIntent => 'OneView',
+      mpHostsAndRanges => ['172.18.6.13-172.18.6.14']
+    },
+}
+
 # NOTE: This is a function specific for GEN9 Servers
 # oneview_server_hardware{'server_hardware_3':
 #     ensure => 'get_bios',
 #     data   => {
-#       hostname        => '172.18.6.6',
+#       hostname        => '172.18.6.14',
 #     },
 # }
 
 oneview_server_hardware{'server_hardware_4':
     ensure => 'get_ilo_sso_url',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
     },
 }
 
 oneview_server_hardware{'server_hardware_5':
     ensure => 'get_java_remote_sso_url',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
     },
 }
 
 oneview_server_hardware{'server_hardware_6':
     ensure => 'get_remote_console_url',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
     },
 }
 
 oneview_server_hardware{'server_hardware_7':
     ensure => 'get_environmental_configuration',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
+    },
+}
+
+oneview_server_hardware{'server_hardware_52':
+    ensure => 'get_firmware_inventory',
+    data   => {
+      hostname        => '172.18.6.14',
+    },
+}
+
+# NOTE: This resource available only with API500 and above
+oneview_server_hardware{'server_hardware_51':
+    ensure => 'get_physical_server_hardware',
+    data   => {
+      hostname        => '172.18.6.14',
     },
 }
 
@@ -80,7 +107,7 @@ oneview_server_hardware{'server_hardware_7':
 oneview_server_hardware{'server_hardware_8':
     ensure => 'get_utilization',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
       queryParameters => {
         fields => ['AmbientTemperature']
       }
@@ -90,14 +117,14 @@ oneview_server_hardware{'server_hardware_8':
 oneview_server_hardware{'server_hardware_9':
     ensure => 'update_ilo_firmware',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
     },
 }
 
 oneview_server_hardware{'server_hardware_10':
     ensure => 'set_power_state',
     data   => {
-      hostname    => '172.18.6.6',
+      hostname    => '172.18.6.14',
       power_state => 'on',
     },
 }
@@ -107,7 +134,7 @@ oneview_server_hardware{'server_hardware_10':
 oneview_server_hardware{'server_hardware_11':
     ensure => 'set_refresh_state',
     data   => {
-      hostname => '172.18.6.6',
+      hostname => '172.18.6.14',
       state    => 'RefreshPending'
     },
 }
@@ -115,9 +142,11 @@ oneview_server_hardware{'server_hardware_11':
 oneview_server_hardware{'server_hardware_12':
     ensure => 'absent',
     data   => {
-      hostname        => '172.18.6.6',
+      hostname        => '172.18.6.14',
       username        => 'dcs',
       password        => 'dcs',
       licensingIntent => 'OneView'
     },
 }
+
+
