@@ -1,3 +1,7 @@
+# v2.3.0 (UnReleased)
+#### Bug fixes & Enhancements:
+- [#172](https://github.com/HewlettPackard/oneview-puppet/issues/172) Unit tests updated for ruby version 2.4.0 and above.
+
 # v2.2.3
 ### Version highlights:
 1. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
