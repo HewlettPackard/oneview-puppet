@@ -122,6 +122,16 @@ describe provider_class, unit: true do
       expect_any_instance_of(resource_type).to receive(:utilization).and_return('Fake get_utilization')
       expect(provider.get_utilization).to be
     end
+
+    it 'should return the firmware inventory' do
+      expect_any_instance_of(resource_type).to receive(:get_firmware_by_id).and_return('Fake get_firmware_inventory')
+      expect(provider.get_utilization).to be
+    end
+
+    it 'should return the physical server hardware details' do
+      expect_any_instance_of(resource_type).to receive(:get_physical_server_hardware).and_return('Fake get_physical_server_hardware')
+      expect(provider.get_utilization).to be
+    end
   end
 
   context 'given the minimum parameters for the SET methods' do

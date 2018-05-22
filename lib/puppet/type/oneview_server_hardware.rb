@@ -48,11 +48,11 @@ Puppet::Type.newtype(:oneview_server_hardware) do
     newvalue(:get_utilization) do
       provider.get_utilization
     end
-  
+
     newvalue(:get_firmware_inventory) do
       provider.get_firmware_inventory
     end
- 
+
     newvalue(:get_physical_server_hardware) do
       provider.get_physical_server_hardware
     end

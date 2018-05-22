@@ -89,7 +89,7 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
   end
 
   def get_physical_server_hardware
-    pretty get_single_resource_instance.get_physical_server_hardware 
+    pretty get_single_resource_instance.get_physical_server_hardware
   end
 
   def update_ilo_firmware
@@ -148,6 +148,6 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
   def add_multiple_servers
     @data = @data.merge(@authentication)
     @data['hostname'] = @data.delete('name') if @data['name']
-    resources = @resource_type.new(@client, @data).add_multiple_servers
+    @resource_type.new(@client, @data).add_multiple_servers
   end
 end
