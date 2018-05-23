@@ -86,10 +86,12 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
 
   def get_firmware_inventory
     pretty get_single_resource_instance.get_firmware_by_id
+    true
   end
 
   def get_physical_server_hardware
     pretty get_single_resource_instance.get_physical_server_hardware
+    true
   end
 
   def update_ilo_firmware

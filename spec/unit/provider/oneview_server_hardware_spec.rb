@@ -85,6 +85,29 @@ describe provider_class, unit: true do
     end
   end
 
+  context 'given parameters to add multiple servers' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_server_hardware).new(
+        name: 'server_hardware',
+        ensure: 'add_multiple_servers',
+        data:
+            {
+              'hostname'        => '172.18.6.5',
+              'username'        => 'dcs',
+              'password'        => 'dcs',
+              'licensingIntent' => 'OneView',
+              'mpHostsAndRanges' => ['172.18.6.13-172.18.6.14']
+            },
+        provider: 'c7000'
+      )
+    end
+
+    it 'should be able to create the resource' do
+      allow_any_instance_of(resource_type).to receive(:add_multiple_servers).and_return('fake')
+      expect(provider.add_multiple_servers).to be
+    end
+  end
+
   context 'given the minimum parameters after server creation' do
     before(:each) do
       resource['data']['uri'] = '/rest/server-hardware/fake'
@@ -107,7 +130,7 @@ describe provider_class, unit: true do
       expect_any_instance_of(resource_type).to receive(:get_java_remote_sso_url).and_return('Fake get_java_remote_sso_url')
       expect(provider.get_java_remote_sso_url).to be
     end
-    #
+
     it 'should return the remote console url' do
       expect_any_instance_of(resource_type).to receive(:get_remote_console_url).and_return('Fake get_remote_console_url')
       expect(provider.get_remote_console_url).to be
@@ -125,12 +148,12 @@ describe provider_class, unit: true do
 
     it 'should return the firmware inventory' do
       expect_any_instance_of(resource_type).to receive(:get_firmware_by_id).and_return('Fake get_firmware_inventory')
-      expect(provider.get_utilization).to be
+      expect(provider.get_firmware_inventory).to be
     end
 
     it 'should return the physical server hardware details' do
       expect_any_instance_of(resource_type).to receive(:get_physical_server_hardware).and_return('Fake get_physical_server_hardware')
-      expect(provider.get_utilization).to be
+      expect(provider.get_physical_server_hardware).to be
     end
   end
 
