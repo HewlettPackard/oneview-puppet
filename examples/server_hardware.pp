@@ -44,11 +44,11 @@ oneview_server_hardware{'server_hardware_3':
 oneview_server_hardware{'server_hardware_8':
     ensure => 'add_multiple_servers',
     data   => {
-      hostname        => '172.18.6.13',
-      username        => 'dcs',
-      password        => 'dcs',
-      licensingIntent => 'OneView',
-      mpHostsAndRanges => ['172.18.6.13-172.18.6.14']
+      hostname          => '172.18.6.13',
+      username          => 'dcs',
+      password          => 'dcs',
+      licensingIntent   => 'OneView',
+      mpHostsAndRanges  => ['172.18.6.13-172.18.6.14']
     },
 }
 
