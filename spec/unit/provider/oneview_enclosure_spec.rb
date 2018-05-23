@@ -53,6 +53,7 @@ describe provider_class, unit: true do
 
   context 'given the min parameters' do
     before(:each) do
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
     end
@@ -135,7 +136,6 @@ describe provider_class, unit: true do
         allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
         allow(resource_type).to receive(:find_by).with(anything, uri: '/rest/fake').and_return([test])
         allow_any_instance_of(resource_type).to receive(:add).and_return(test)
-        # allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
         provider.exists?
         expect(provider.create).to be
       end
