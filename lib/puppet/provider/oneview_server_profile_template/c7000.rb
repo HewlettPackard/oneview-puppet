@@ -27,6 +27,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide :c7000, parent: Pupp
     connections_parse if @data['connections']
     puppet_resource = @resource_type.new(@client, @data)
     return false unless puppet_resource.retrieve!
+    super([nil, :found, :get_transformation, :get_available_networks, :absent])
     puppet_resource.like?(@data)
   end
 
@@ -47,6 +48,13 @@ Puppet::Type.type(:oneview_server_profile_template).provide :c7000, parent: Pupp
     Puppet.notice("\n\nServer Profile Template Transformation\n")
     parameters = @data.delete('queryParameters') || {}
     pretty get_single_resource_instance.get_transformation(@client, parameters)
+    true
+  end
+
+  def get_available_networks
+    Puppet.notice("\n\nServer Profile Template Available Networks\n")
+    parameters = @data.delete('queryParameters') || {}
+    pretty get_single_resource_instance.get_available_networks(@client, parameters)
     true
   end
 end

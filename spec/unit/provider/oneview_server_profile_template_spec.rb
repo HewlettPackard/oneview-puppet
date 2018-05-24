@@ -134,6 +134,16 @@ describe provider_class, unit: true do
       expect(provider.get_transformation).to be
     end
 
+    it 'should be able to get a server profile template with available networks', if: api_version >= 600 do
+      resource['data']['queryParameters'] = {
+        'enclosureGroupUri'     => 'NameInterconn40GB',
+        'serverHardwareTypeUri' => 'SY 480 Gen9 1'
+      }
+      fake_server_profile = { 'name' => 'Fake profile template' }
+      allow_any_instance_of(resource_type).to receive(:get_available_networks).and_return(fake_server_profile)
+      expect(provider.get_available_networks).to be
+    end
+
     it 'should be able to delete the resource' do
       resource['data'] = { 'name' => 'SPT', 'uri' => '/rest/fake' }
       test = resource_type.new(@client, resource['data'])

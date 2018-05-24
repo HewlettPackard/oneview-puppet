@@ -69,6 +69,15 @@ describe provider_class, integration: true do
       expect(provider.get_transformation).to be
     end
 
+    it 'should be able to get a server profile template with available networks', if: api_version >= 300 do
+      resource['data']['queryParameters'] = {
+        'enclosureGroupUri'     => 'EG2',
+        'serverHardwareTypeUri' => 'BL460c Gen8 1'
+      }
+      provider.exists?
+      expect(provider.get_available_networks).to be
+    end
+
     it 'should be able to destroy the server profile template' do
       expect(provider.destroy).to be
     end

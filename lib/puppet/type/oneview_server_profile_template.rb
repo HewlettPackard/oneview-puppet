@@ -34,6 +34,10 @@ Puppet::Type.newtype(:oneview_server_profile_template) do
     newvalue(:get_transformation) do
       provider.get_transformation
     end
+
+    newvalue(:get_available_networks) do
+      provider.get_available_networks
+    end
   end
   # :nocov:
 
