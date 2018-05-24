@@ -24,6 +24,15 @@
 #     }
 # }
 
+
+oneview_logical_enclosure{'logical_enc1':
+    ensure => 'reapplay_configuration',
+    data   => {
+      name                      =>  'Puppet_Test_Enclosure',
+    }
+}
+
+
 oneview_logical_enclosure{'logical_enc1':
     ensure => 'get_script',
     data   => {
