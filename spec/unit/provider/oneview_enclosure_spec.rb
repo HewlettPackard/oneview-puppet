@@ -130,6 +130,10 @@ describe provider_class, unit: true do
         )
       end
 
+      before(:each) do
+        allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      end
+
       it 'creates the resource' do
         allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([])
         allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([])
