@@ -447,7 +447,7 @@ This resource provides the following ensurable methods for managing server profi
 * `found` - Searches for `oneview_server_profile_template` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 * `set_new_profile` - Creates a new server profile based on the current template.
 * `get_transformation` - Transforms an existing profile template by supplying a new server hardware type and/or enclosure group. A profile template will be returned with a new configuration based on the capabilities of the supplied server hardware type and/or enclosure group. All configured connections will have their port assignment set to `Auto`.
-
+* `get_available_networks` - Retrieves the list of Ethernet networks, Fibre Channel, networks and network sets that are available to a server profile template along with their respective ports.
 
 Example file: [server_profile_template.pp](examples/server_profile_template.pp)
 
