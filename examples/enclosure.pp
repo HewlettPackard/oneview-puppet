@@ -24,9 +24,9 @@ oneview_enclosure{'Enclosure Create':
       hostname          => '172.18.1.13',
       username          => 'dcs',
       password          => 'dcs',
-      enclosureGroupUri => 'Puppet Enc Group Test',
-      # enclosureGroupUri => '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-      licensingIntent   => 'OneView',
+      #state             => 'Monitored',
+      licensingIntent   => 'OneViewNoiLO',
+      enclosureGroupUri => '/rest/enclosure-groups/8cc4aad0-5dac-47e5-871d-050289855567'
       # firmwareBaselineUri => 'Service Pack for ProLiant',
       # updateFirmwareOn => 'EnclosureOnly'
     }
@@ -78,6 +78,20 @@ oneview_enclosure{'Enclosure set refresh state':
         refreshState => 'RefreshPending',
     }
 }
+
+#oneview_enclosure{'Create Certificate signing request':
+#    ensure  => 'create_csr',
+#    data    => {
+#      type                => 'CertificateDtoV2',
+#      organization        => 'Acme Corp.',
+#      organizationalUnit  => 'IT',
+#      locality            => 'Townburgh',
+#      state               => 'Mississippi',
+#      country             => 'US',
+#      email               => 'admin@example.com',
+#      commonName          => 'fe80::2:0:9:1%eth2'        
+#    }
+#}
 
 # Leaving this commented since it requires a script to be put inside the enclosure to work
 # oneview_enclosure{'Enclosure get script':
