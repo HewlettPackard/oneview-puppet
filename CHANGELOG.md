@@ -11,6 +11,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 ### Oneview Features supported
 - Ethernet network
 - FC network
+- Logical interconnect
 
 # v2.2.3
 ### Version highlights:
