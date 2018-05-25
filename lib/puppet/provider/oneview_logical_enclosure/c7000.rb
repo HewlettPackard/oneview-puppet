@@ -33,7 +33,7 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
 
   def reapplay_configuration
     Puppet.notice "\n\n-- Start reconfiguration"
-    get_signle_resource_instace.reconfigure
+    get_single_resource_instance.reconfigure
   end
 
   def get_script

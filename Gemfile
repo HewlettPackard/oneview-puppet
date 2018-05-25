@@ -1,10 +1,10 @@
 source 'http://rubygems.org'
 
 gem 'codecov', require: false, group: :test
-gem 'coveralls', require: false
+gem 'coveralls', '0.8.21', require: false
 gem 'facter', '>= 1.7.0'
 gem 'metadata-json-lint'
-gem 'oneview-sdk', '~> 4.4'
+gem 'oneview-sdk', '~> 5.5'
 gem 'pry'
 gem 'puppet', '>= 4.1'
 gem 'puppet-lint', '>= 0.3.2'
