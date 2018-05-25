@@ -21,11 +21,11 @@ provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:oneview
 describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_enclosure).new(
-      name: 'Puppet_Test_Enclosure',
+      name: 'e10',
       ensure: 'present',
       data:
           {
-            'name' => 'Puppet_Test_Enclosure',
+            'name' => 'e10',
             'type' => 'LogicalEnclosure'
           },
       provider: 'c7000'
@@ -52,16 +52,20 @@ describe provider_class, integration: true do
     it 'should successfuly run update from group' do
       expect(provider.updated_from_group).to be
     end
+
+    it 'should successfuly run reapplay_configuration' do
+      expect(provider.reapplay_configuration).to be
+    end
   end
 
   context 'given the script parameter' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
-        name: 'Puppet_Test_Enclosure',
+        name: 'e10',
         ensure: 'present',
         data:
             {
-              'name'                    => 'Puppet_Test_Enclosure',
+              'name'                    => 'e10',
               'script'                  => 'This is a script example'
             },
         provider: 'c7000'
@@ -76,11 +80,11 @@ describe provider_class, integration: true do
   context 'given the dump parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
-        name: 'Puppet_Test_Enclosure',
+        name: 'e10',
         ensure: 'generate_support_dump',
         data:
             {
-              'name'                    => 'Puppet_Test_Enclosure',
+              'name'                    => 'e10',
               'dump'                    =>
                   {
                     'errorCode' => 'Mydump',
