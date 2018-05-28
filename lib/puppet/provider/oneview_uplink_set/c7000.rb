@@ -36,7 +36,10 @@ Puppet::Type.type(:oneview_uplink_set).provide :c7000, parent: Puppet::OneviewRe
   end
 
   def create
+    new_name = @data.delete('new_name')
     uplink_set = @resource_type.new(@client, @data)
+    @data['new_name'] = new_name if new_name
+    return true if resource_update
     uplink_set.add_port_config(@port_config[0], @port_config[1], @port_config[2]) if @port_config
     uplink_set.create
     @property_hash[:ensure] = :present
