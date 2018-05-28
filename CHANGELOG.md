@@ -13,6 +13,9 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Ethernet network
 - FC network
 - Logical interconnect
+- SAS interconnect
+- SAS interconnect type
+- Sas logical interconnect
 - Uplink set
 
 # v2.2.3
