@@ -101,6 +101,80 @@ describe provider_class, integration: true do
     end
   end
 
+  # Negative testing create certificate request
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure).new(
+        name: 'Enclosure',
+        ensure: 'create_csr',
+        data:
+            {
+              'uri'                 => '/rest/enclosures/09SGH104X6J1',
+              'type'                => 'CertificateDtoV2',
+              'organization'        => 'Acme Corp.',
+              'organizationalUnit'  => 'IT',
+              'locality'            => 'Townburgh',
+              'state'               => 'Mississippi',
+              'country'             => 'US',
+              'email'               => 'admin@example.com',
+              'commonName'          => 'fe80::2:0:9:1%eth2',
+              'bay_number'          => '1'
+            }
+      )
+    end
+
+    it 'should not be able to create the certificate request' do
+      provider.exists?
+      expect { provider.create_csr}.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
+    end
+  end
+
+  # Negative testing get_csr
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure).new(
+        name: 'Enclosure',
+        ensure: 'get_csr',
+        data:
+            {
+               'uri'           => '/rest/enclosures/09SGH104X6J1',
+               'bay_number'    => '1'
+            }
+      )
+    end
+
+    it 'should not be able to get the certificate request' do
+      provider.exists?
+      expect { provider.get_csr}.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
+    end
+  end
+
+  # Negative testing import certificate
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure).new(
+        name: 'Enclosure',
+        ensure: 'import_csr',
+        data:
+            {
+               'uri'           => '/rest/enclosures/09SGH104X6J1',
+               'bay_number'    => '1'
+            }
+      )
+    end
+
+    it 'should not be able to import certificate request' do
+      provider.exists?
+      expect { provider.import_csr}.to raise_error(
+        /No resources with the specified data specified were found. Specify a valid unique identifier on data./
+      )
+    end
+  end
+
   context 'given the minimum parameters' do
     before(:each) do
       provider.exists?
@@ -180,6 +254,68 @@ describe provider_class, integration: true do
     it 'should be able to get utilization data from the enclosure' do
       provider.exists?
       expect(provider.get_utilization).to be
+    end
+  end
+
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure).new(
+        name: 'Enclosure',
+        ensure: 'create_csr',
+        data:
+            {
+              'uri'                 => '/rest/enclosures/09SGH104X6J1',
+              'type'                => 'CertificateDtoV2',
+              'organization'        => 'Acme Corp.',
+              'organizationalUnit'  => 'IT',
+              'locality'            => 'Townburgh',
+              'state'               => 'Mississippi',
+              'country'             => 'US',
+              'email'               => 'admin@example.com',
+              'commonName'          => 'fe80::2:0:9:1%eth2',
+              'bay_number'          => '1'
+            }
+      )
+    end
+    it 'should be ablt to create a certificate request' do
+      provider.exists?
+      expect(provider.create_csr).to be
+    end
+  end
+
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure).new(
+        name: 'Enclosure',
+        ensure: 'get_csr',
+        data:
+            {
+               'uri'           => '/rest/enclosures/09SGH104X6J1',
+               'bay_number'    => '1'
+            }
+      )
+    end
+    it 'should be able to get the certificate request' do
+      provider.exists?
+      expect(provider.get_csr).to be
+    end
+  end
+
+  context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_enclosure).new(
+        name: 'Enclosure',
+        ensure: 'import_csr',
+        data:
+            {
+               'uri'           => '/rest/enclosures/09SGH104X6J1',
+               'bay_number'    => '1'
+            }
+      )
+    end
+    it 'should be able to import the certifiacte request' do
+      provider.exists?
+      expect(provider.import_csr).to be
     end
   end
 
