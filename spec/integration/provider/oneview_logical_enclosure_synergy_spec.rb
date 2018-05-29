@@ -56,7 +56,6 @@ describe provider_class, integration: true do
     it 'should successfuly run reapplay_configuration' do
       expect(provider.reapplay_configuration).to be
     end
-
   end
 
   context 'given the script parameter' do
