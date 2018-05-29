@@ -1,4 +1,4 @@
-###############################################################################e
+################################################################################
 # (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,6 @@ require_relative '../../../lib/puppet/provider/login'
 
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:synergy)
 server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.4'
-server_hardware_username = login[:server_hardware_username] || 'dcs'
-server_hardware_password = login[:server_hardware_password] || 'dcs'
 
 describe provider_class, integration: true do
   let(:resource) do
@@ -60,7 +58,7 @@ describe provider_class, integration: true do
         ensure: 'present',
         data:
             {
-              'name'        => '0000A66101, bay 3'
+              'name' => '0000A66101, bay 3'
             },
         provider: 'synergy'
       )

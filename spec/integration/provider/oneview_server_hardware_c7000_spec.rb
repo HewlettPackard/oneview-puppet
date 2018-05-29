@@ -82,13 +82,14 @@ describe provider_class, integration: true do
       Puppet::Type.type(:oneview_server_hardware).new(
         name: 'server_hardwares',
         ensure: 'add_multiple_servers',
-        data: {
-                'hostname'        => server_hardware_hostname,
-                'username'        => server_hardware_username,
-                'password'        => server_hardware_password,
-                'licensingIntent' => 'OneView',
-                'mpHostsAndRanges'=> ['172.18.6.14']
-        },
+        data:
+            {
+              'hostname'         => server_hardware_hostname,
+              'username'         => server_hardware_username,
+              'password'         => server_hardware_password,
+              'licensingIntent'  => 'OneView',
+              'mpHostsAndRanges' => ['172.18.6.14']
+            },
         provider: 'c7000'
       )
     end
@@ -101,7 +102,7 @@ describe provider_class, integration: true do
       expect(provider.add_multiple_servers).to be
     end
   end
-  
+
   context 'given the minimum parameters after server creation' do
     it 'should return the ilo sso url' do
       expect(provider.get_ilo_sso_url).to be
@@ -122,7 +123,7 @@ describe provider_class, integration: true do
     it 'should return the utilization statistics' do
       expect(provider.get_utilization).to be
     end
-    
+
     it 'should return firmware inventory' do
       expect(provider.get_firmware_inventory).to be
     end
@@ -171,5 +172,4 @@ describe provider_class, integration: true do
       expect(provider.destroy).to be
     end
   end
-
- end
+end

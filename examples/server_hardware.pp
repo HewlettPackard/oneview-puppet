@@ -148,5 +148,3 @@ oneview_server_hardware{'server_hardware_15':
       licensingIntent => 'OneView'
     },
 }
-
-
