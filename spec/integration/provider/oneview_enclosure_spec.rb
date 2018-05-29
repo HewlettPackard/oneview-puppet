@@ -125,7 +125,7 @@ describe provider_class, integration: true do
 
     it 'should not be able to create the certificate request' do
       provider.exists?
-      expect { provider.create_csr}.to raise_error(
+      expect { provider.create_csr }.to raise_error(
         /No resources with the specified data specified were found. Specify a valid unique identifier on data./
       )
     end
@@ -139,15 +139,15 @@ describe provider_class, integration: true do
         ensure: 'get_csr',
         data:
             {
-               'uri'           => '/rest/enclosures/09SGH104X6J1',
-               'bay_number'    => '1'
+              'uri'           => '/rest/enclosures/09SGH104X6J1',
+              'bay_number'    => '1'
             }
       )
     end
 
     it 'should not be able to get the certificate request' do
       provider.exists?
-      expect { provider.get_csr}.to raise_error(
+      expect { provider.get_csr }.to raise_error(
         /No resources with the specified data specified were found. Specify a valid unique identifier on data./
       )
     end
@@ -161,15 +161,15 @@ describe provider_class, integration: true do
         ensure: 'import_csr',
         data:
             {
-               'uri'           => '/rest/enclosures/09SGH104X6J1',
-               'bay_number'    => '1'
+              'uri'           => '/rest/enclosures/09SGH104X6J1',
+              'bay_number'    => '1'
             }
       )
     end
 
     it 'should not be able to import certificate request' do
       provider.exists?
-      expect { provider.import_csr}.to raise_error(
+      expect { provider.import_csr }.to raise_error(
         /No resources with the specified data specified were found. Specify a valid unique identifier on data./
       )
     end
@@ -290,8 +290,8 @@ describe provider_class, integration: true do
         ensure: 'get_csr',
         data:
             {
-               'uri'           => '/rest/enclosures/09SGH104X6J1',
-               'bay_number'    => '1'
+              'uri'           => '/rest/enclosures/09SGH104X6J1',
+              'bay_number'    => '1'
             }
       )
     end
@@ -308,8 +308,8 @@ describe provider_class, integration: true do
         ensure: 'import_csr',
         data:
             {
-               'uri'           => '/rest/enclosures/09SGH104X6J1',
-               'bay_number'    => '1'
+              'uri'           => '/rest/enclosures/09SGH104X6J1',
+              'bay_number'    => '1'
             }
       )
     end

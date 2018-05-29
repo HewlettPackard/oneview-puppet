@@ -80,35 +80,35 @@ oneview_enclosure{'Enclosure set refresh state':
 }
 
 oneview_enclosure{'Create Certificate signing request':
-    ensure  => 'create_csr',
-    data    => {
-        uri                 => '/rest/enclosures/09SGH104X6J1',
-        type                => 'CertificateDtoV2',
-        organization        => 'Acme Corp.',
-        organizationalUnit  => 'IT',
-        locality            => 'Townburgh',
-        state               => 'Mississippi',
-        country             => 'US',
-        email               => 'admin@example.com',
-        commonName          => 'fe80::2:0:9:1%eth2',
-        bay_number          => '1'
+    ensure => 'create_csr',
+    data   => {
+        uri                => '/rest/enclosures/09SGH104X6J1',
+        type               => 'CertificateDtoV2',
+        organization       => 'Acme Corp.',
+        organizationalUnit => 'IT',
+        locality           => 'Townburgh',
+        state              => 'Mississippi',
+        country            => 'US',
+        email              => 'admin@example.com',
+        commonName         => 'fe80::2:0:9:1%eth2',
+        bay_number         => '1'
     }
 }
 
 oneview_enclosure{'Get certificate signing request':
-    ensure    => 'get_csr',
-    data      => {
-        uri           => '/rest/enclosures/09SGH104X6J1',
-        bay_number    => '1'
+    ensure => 'get_csr',
+    data   => {
+        uri        => '/rest/enclosures/09SGH104X6J1',
+        bay_number => '1'
     }
 }
 
 oneview_enclosure{'Import certificate signing request':
-    ensure    => 'import_csr',
+    ensure  => 'import_csr',
     require => Oneview_enclosure['Get certificate signing request'],
-    data      => {
-        uri           => '/rest/enclosures/09SGH104X6J1',
-        bay_number    => '1'
+    data    => {
+        uri        => '/rest/enclosures/09SGH104X6J1',
+        bay_number => '1'
     }
 }
 

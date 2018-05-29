@@ -173,7 +173,6 @@ describe provider_class, unit: true do
         resource['data']['state'] = 'fake_value'
         resource['data']['country'] = 'fake_value'
         resource['data']['email'] = 'fake@fake.com'
-        test = resource_type.new(@client, resource['data'])
         expect_any_instance_of(resource_type).to receive(:create_csr_request).and_return(true)
         provider.exists?
         expect(provider.create_csr).to be
