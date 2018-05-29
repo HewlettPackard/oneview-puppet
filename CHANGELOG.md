@@ -9,8 +9,16 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - [#172](https://github.com/HewlettPackard/oneview-puppet/issues/172) Unit tests updated for ruby version 2.4.0 and above.
 
 ### Oneview Features supported
+- Enclosure group
 - Ethernet network
 - FC network
+- FCoE network
+- Logical interconnect
+- SAS interconnect
+- SAS interconnect type
+- Sas logical interconnect
+- Sas logical interconnect group
+- Uplink set
 
 # v2.2.3
 ### Version highlights:
