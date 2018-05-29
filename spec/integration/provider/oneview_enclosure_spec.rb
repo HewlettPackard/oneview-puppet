@@ -277,7 +277,7 @@ describe provider_class, integration: true do
             }
       )
     end
-    it 'should be ablt to create a certificate request' do
+    it 'should be able to create a certificate request' do
       provider.exists?
       expect(provider.create_csr).to be
     end
