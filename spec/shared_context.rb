@@ -17,7 +17,7 @@
 # General context for unit testing:
 RSpec.shared_context 'shared context', a: :b do
   before :each do
-    api_version = 300
+    api_version = 600
     options = { url: 'https://oneview.example.com', user: 'Administrator', password: 'secret123', api_version: api_version }
     @client = OneviewSDK::Client.new(options)
   end

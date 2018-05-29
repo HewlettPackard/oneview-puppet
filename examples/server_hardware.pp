@@ -41,7 +41,7 @@ oneview_server_hardware{'server_hardware_3':
     },
 }
 
-oneview_server_hardware{'server_hardware_8':
+oneview_server_hardware{'server_hardware_4':
     ensure => 'add_multiple_servers',
     data   => {
       hostname         => '172.18.6.13',
@@ -60,35 +60,35 @@ oneview_server_hardware{'server_hardware_8':
 #     },
 # }
 
-oneview_server_hardware{'server_hardware_4':
+oneview_server_hardware{'server_hardware_5':
     ensure => 'get_ilo_sso_url',
     data   => {
       hostname        => '172.18.6.14',
     },
 }
 
-oneview_server_hardware{'server_hardware_5':
+oneview_server_hardware{'server_hardware_6':
     ensure => 'get_java_remote_sso_url',
     data   => {
       hostname        => '172.18.6.14',
     },
 }
 
-oneview_server_hardware{'server_hardware_6':
+oneview_server_hardware{'server_hardware_7':
     ensure => 'get_remote_console_url',
     data   => {
       hostname        => '172.18.6.14',
     },
 }
 
-oneview_server_hardware{'server_hardware_7':
+oneview_server_hardware{'server_hardware_8':
     ensure => 'get_environmental_configuration',
     data   => {
       hostname        => '172.18.6.14',
     },
 }
 
-oneview_server_hardware{'server_hardware_52':
+oneview_server_hardware{'server_hardware_9':
     ensure => 'get_firmware_inventory',
     data   => {
       hostname        => '172.18.6.14',
@@ -96,7 +96,7 @@ oneview_server_hardware{'server_hardware_52':
 }
 
 # NOTE: This resource available only with API500 and above
-oneview_server_hardware{'server_hardware_51':
+oneview_server_hardware{'server_hardware_10':
     ensure => 'get_physical_server_hardware',
     data   => {
       hostname        => '172.18.6.14',
@@ -104,7 +104,7 @@ oneview_server_hardware{'server_hardware_51':
 }
 
 # NOTE: This resource accepts an optional field 'queryParameters' to filter out information
-oneview_server_hardware{'server_hardware_8':
+oneview_server_hardware{'server_hardware_11':
     ensure => 'get_utilization',
     data   => {
       hostname        => '172.18.6.14',
@@ -114,14 +114,14 @@ oneview_server_hardware{'server_hardware_8':
     },
 }
 
-oneview_server_hardware{'server_hardware_9':
+oneview_server_hardware{'server_hardware_12':
     ensure => 'update_ilo_firmware',
     data   => {
       hostname        => '172.18.6.14',
     },
 }
 
-oneview_server_hardware{'server_hardware_10':
+oneview_server_hardware{'server_hardware_13':
     ensure => 'set_power_state',
     data   => {
       hostname    => '172.18.6.14',
@@ -131,7 +131,7 @@ oneview_server_hardware{'server_hardware_10':
 
 # NOTE: This resource requires a state of 'RefreshPending'
 # NOTE: This resource accepts an optional field 'options' for refreshing the server hardware
-oneview_server_hardware{'server_hardware_11':
+oneview_server_hardware{'server_hardware_14':
     ensure => 'set_refresh_state',
     data   => {
       hostname => '172.18.6.14',
@@ -139,7 +139,7 @@ oneview_server_hardware{'server_hardware_11':
     },
 }
 
-oneview_server_hardware{'server_hardware_12':
+oneview_server_hardware{'server_hardware_15':
     ensure => 'absent',
     data   => {
       hostname        => '172.18.6.14',
