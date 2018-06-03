@@ -21,11 +21,11 @@ provider_class = Puppet::Type.type(:oneview_logical_enclosure).provider(:c7000)
 describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_enclosure).new(
-      name: 'e10',
+      name: 'Puppet_Test_Enclosure',
       ensure: 'present',
       data:
           {
-            'name' => 'e10',
+            'name' => 'Puppet_Test_Enclosure',
             'type' => 'LogicalEnclosure'
           },
       provider: 'c7000'
@@ -61,11 +61,11 @@ describe provider_class, integration: true do
   context 'given the script parameter' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
-        name: 'e10',
+        name: 'Puppet_Test_Enclosure',
         ensure: 'present',
         data:
             {
-              'name'                    => 'e10',
+              'name'                    => 'Puppet_Test_Enclosure',
               'script'                  => 'This is a script example'
             },
         provider: 'c7000'
@@ -80,11 +80,11 @@ describe provider_class, integration: true do
   context 'given the dump parameters' do
     let(:resource) do
       Puppet::Type.type(:oneview_logical_enclosure).new(
-        name: 'e10',
+        name: 'Puppet_Test_Enclosure',
         ensure: 'generate_support_dump',
         data:
             {
-              'name'                    => 'e10',
+              'name'                    => 'Puppet_Test_Enclosure',
               'dump'                    =>
                   {
                     'errorCode' => 'Mydump',
