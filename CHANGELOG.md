@@ -18,6 +18,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - SAS interconnect type
 - Sas logical interconnect
 - Sas logical interconnect group
+- Switch
 - Uplink set
 
 # v2.2.3

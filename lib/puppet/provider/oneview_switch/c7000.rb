@@ -52,11 +52,10 @@ Puppet::Type.type(:oneview_switch).provide :c7000, parent: Puppet::OneviewResour
     true
   end
 
-  # Remove port_name and subport_number from data hash for comparisons and usage
+  # Remove port_name from data hash for comparisons and usage
   def get_statistics
     port_name = @data.delete('port_name')
-    subport_number = @data.delete('subport_number')
-    pretty get_single_resource_instance.statistics(port_name, subport_number)
+    pretty get_single_resource_instance.statistics(port_name)
     true
   end
 
