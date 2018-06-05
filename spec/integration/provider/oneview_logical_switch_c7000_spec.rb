@@ -82,10 +82,11 @@ describe provider_class, integration: true do
       expect(provider.destroy).to be
     end
 
-    it 'should be able to update the logical switch credentials' do
-      resource['data'].delete('logicalSwitchGroupUri')
-      expect(provider.update_credentials).to be
-    end
+    # This method was depricated from verson 500
+    # it 'should be able to update the logical switch credentials' do
+    #   resource['data'].delete('logicalSwitchGroupUri')
+    #   expect(provider.update_credentials).to be
+    # end
   end
 
   context 'given the credentials' do
