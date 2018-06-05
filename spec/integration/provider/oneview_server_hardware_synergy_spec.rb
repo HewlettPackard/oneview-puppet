@@ -18,15 +18,13 @@ require 'spec_helper'
 require_relative '../../../lib/puppet/provider/login'
 
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:synergy)
-server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.5'
-server_hardware_username = login[:server_hardware_username] || 'dcs'
-server_hardware_password = login[:server_hardware_password] || 'dcs'
+server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.4'
 
 describe provider_class, integration: true do
   let(:resource) do
     Puppet::Type.type(:oneview_server_hardware).new(
       name: 'server_hardware',
-      ensure: 'found',
+      ensure: 'present',
       data:
           {
             'hostname' => server_hardware_hostname
@@ -43,7 +41,7 @@ describe provider_class, integration: true do
 
   let(:instance) { provider.class.instances.first }
 
-  context 'given the minimum parameters before server creation' do
+  context 'given minimum parameters to find the resource' do
     it 'should be an instance of the provider synergy' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_server_hardware).provider(:synergy)
     end
@@ -53,31 +51,19 @@ describe provider_class, integration: true do
     end
   end
 
-  context 'given the create parameters' do
+  context 'given enough parameters to find the resource' do
     let(:resource) do
       Puppet::Type.type(:oneview_server_hardware).new(
         name: 'server_hardware',
         ensure: 'present',
         data:
             {
-              'hostname'        => server_hardware_hostname,
-              'username'        => server_hardware_username,
-              'password'        => server_hardware_password,
-              'licensingIntent' => 'OneView'
+              'name' => '0000A66101, bay 3'
             },
         provider: 'synergy'
       )
     end
-    it 'should be able to run through self.instances' do
-      expect(instance).to be
-    end
 
-    it 'should create/add the server hardware' do
-      expect(provider.create).to be
-    end
-  end
-
-  context 'given the minimum parameters after server creation' do
     it 'should return the ilo sso url' do
       expect(provider.get_ilo_sso_url).to be
     end
@@ -96,6 +82,10 @@ describe provider_class, integration: true do
 
     it 'should return the utilization statistics' do
       expect(provider.get_utilization).to be
+    end
+
+    it 'should return firmware inventory' do
+      expect(provider.get_firmware_inventory).to be
     end
 
     it 'should update the ilo firmware' do
@@ -125,17 +115,9 @@ describe provider_class, integration: true do
       expect { provider.set_refresh_state }.to raise_error(/A "state" specified in data is required for this action./)
     end
 
-    it 'should wait before trying to delete the server hardware' do
-      sleep 120
-    end
-
     it 'should be able to set a refresh state' do
       resource['data']['state'] = 'RefreshPending'
       expect(provider.set_refresh_state).to be
-    end
-
-    it 'should delete the server hardware' do
-      expect(provider.destroy).to be
     end
   end
 end
