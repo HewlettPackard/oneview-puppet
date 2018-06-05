@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../../lib/puppet/provider/login'
 
 provider_class = Puppet::Type.type(:oneview_server_hardware).provider(:c7000)
-server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.5'
+server_hardware_hostname = login[:server_hardware_hostname] || '172.18.6.14'
 server_hardware_username = login[:server_hardware_username] || 'dcs'
 server_hardware_password = login[:server_hardware_password] || 'dcs'
 
@@ -77,6 +77,32 @@ describe provider_class, integration: true do
     end
   end
 
+  context 'given parameters for adding multiple servers' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_server_hardware).new(
+        name: 'server_hardwares',
+        ensure: 'add_multiple_servers',
+        data:
+            {
+              'hostname'         => server_hardware_hostname,
+              'username'         => server_hardware_username,
+              'password'         => server_hardware_password,
+              'licensingIntent'  => 'OneView',
+              'mpHostsAndRanges' => ['172.18.6.14']
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    it 'should add multiple server hardwares' do
+      expect(provider.add_multiple_servers).to be
+    end
+  end
+
   context 'given the minimum parameters after server creation' do
     it 'should return the ilo sso url' do
       expect(provider.get_ilo_sso_url).to be
@@ -96,6 +122,14 @@ describe provider_class, integration: true do
 
     it 'should return the utilization statistics' do
       expect(provider.get_utilization).to be
+    end
+
+    it 'should return firmware inventory' do
+      expect(provider.get_firmware_inventory).to be
+    end
+
+    it 'should return physical server hardware' do
+      expect(provider.get_physical_server_hardware).to be
     end
 
     it 'should update the ilo firmware' do
