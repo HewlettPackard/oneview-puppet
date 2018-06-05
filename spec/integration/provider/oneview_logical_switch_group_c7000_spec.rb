@@ -27,11 +27,10 @@ describe provider_class, integration: true do
             'name' => 'OneViewSDK Test Logical Switch Group',
             'category' => 'logical-switch-groups',
             'state' => 'Active',
-            'type' => 'logical-switch-group',
             'switches' =>
             {
               'number_of_switches' => '1',
-              'type' => 'Cisco Nexus 50xx'
+              'type' => 'Cisco Nexus 56xx'
             }
           },
       provider: 'c7000'
