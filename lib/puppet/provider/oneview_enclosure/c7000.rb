@@ -122,7 +122,6 @@ Puppet::Type.type(:oneview_enclosure).provide :c7000, parent: Puppet::OneviewRes
     @options = enclosure.get_csr_request(bay_number)
     @data[:type] = @options.delete('type')
     @data[:base64Data] = @options.delete('base64Data')
-    pretty @data
     pretty enclosure.import_certificate(@data, bay_number)
     true
   end
