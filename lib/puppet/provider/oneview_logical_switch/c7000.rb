@@ -49,10 +49,11 @@ Puppet::Type.type(:oneview_logical_switch).provide :c7000, parent: Puppet::Onevi
   end
 
   def get_internal_link_sets
+    internal_link_set = OneviewSDK.resource_named('InternalLinkSet', api_version, resource_variant)
     if @data['name']
-      pretty ov_resource_type.get_internal_link_set(@client, @data['name'])
+      pretty internal_link_set.get_internal_link_set(@client, @data['name'])
     else
-      pretty ov_resource_type.get_internal_link_sets(@client)
+      pretty internal_link_set.get_internal_link_sets(@client)
     end
     true
   end
