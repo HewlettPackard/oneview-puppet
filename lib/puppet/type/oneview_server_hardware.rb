@@ -49,8 +49,15 @@ Puppet::Type.newtype(:oneview_server_hardware) do
       provider.get_utilization
     end
 
-    # Set methods
+    newvalue(:get_firmware_inventory) do
+      provider.get_firmware_inventory
+    end
 
+    newvalue(:get_physical_server_hardware) do
+      provider.get_physical_server_hardware
+    end
+
+    # Set methods
     newvalue(:update_ilo_firmware) do
       provider.update_ilo_firmware
     end
@@ -63,6 +70,10 @@ Puppet::Type.newtype(:oneview_server_hardware) do
       provider.set_power_state
     end
     # :nocov:
+
+    newvalue(:add_multiple_servers) do
+      provider.add_multiple_servers
+    end
   end
 
   newparam(:name, namevar: true) do

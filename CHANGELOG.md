@@ -13,11 +13,17 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Ethernet network
 - FC network
 - FCoE network
+- Interconnect
+- Interconnect link topology
+- Interconnect type
 - Logical interconnect
+- Network set
 - SAS interconnect
 - SAS interconnect type
 - Sas logical interconnect
 - Sas logical interconnect group
+- Server hardware
+- Storage system
 - Switch
 - Uplink set
 
