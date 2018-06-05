@@ -19,6 +19,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Interconnect type
 - Logical interconnect
 - Logical switch
+- Network set
 - SAS interconnect
 - SAS interconnect type
 - Sas logical interconnect
