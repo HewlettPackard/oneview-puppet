@@ -13,17 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-# oneview_logical_enclosure{'logical_enc0':
-#     ensure  => 'present',
-#     data    => {
-#       name                      =>  'one_enclosure_le',
-#       enclosureUris             =>  'rest/enclosures/09SGH100X6J1',
-#       enclosureGroupUri         =>  '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#       firmwareBaselineUri       =>  'null',
-#       forceInstallFirmware       =>  'false',
-#     }
-# }
-
+oneview_logical_enclosure{'logical_enc0':
+     ensure  => 'present',
+     data    => {
+       name                      =>  'e10',
+       enclosureUris             =>  ['/rest/enclosures/0000000000A66101',
+                                      '/rest/enclosures/0000000000A66102',
+                                      '/rest/enclosures/0000000000A66103'],
+       enclosureGroupUri         =>  '/rest/enclosure-groups/9f450e4a-52a7-4b67-9bfe-6b0dcf2a358e',
+       firmwareBaselineUri       =>  'null',
+       forceInstallFirmware       =>  'false',
+     }
+}
 
 oneview_logical_enclosure{'logical_enc1':
     ensure => 'reapplay_configuration',
