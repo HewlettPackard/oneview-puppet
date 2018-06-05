@@ -29,7 +29,7 @@ oneview_logical_enclosure{'logical_enc0':
 oneview_logical_enclosure{'logical_enc1':
     ensure => 'reapplay_configuration',
     data   => {
-      name                      =>  'e10',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
@@ -37,14 +37,14 @@ oneview_logical_enclosure{'logical_enc1':
 oneview_logical_enclosure{'logical_enc2':
     ensure => 'get_script',
     data   => {
-      name                      =>  'e10',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
 oneview_logical_enclosure{'logical_enc3':
     ensure => 'set_script',
     data   => {
-      name   =>  'e10',
+      name   =>  'Puppet_Test_Enclosure',
       script =>  'This is a script example',
     }
 }
@@ -52,21 +52,21 @@ oneview_logical_enclosure{'logical_enc3':
 oneview_logical_enclosure{'logical_enc4':
     ensure => 'get_script',
     data   => {
-      name                      =>  'e10',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
 oneview_logical_enclosure{'logical_enc5':
     ensure => 'updated_from_group',
     data   => {
-      name                      =>  'e10',
+      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
 oneview_logical_enclosure{'logical_enc6':
     ensure => 'generate_support_dump',
     data   => {
-      name =>  'e10',
+      name =>  'Puppet_Test_Enclosure',
       dump =>
         {
           errorCode            => 'Mydump',
