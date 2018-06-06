@@ -25,7 +25,7 @@ Puppet::Type.newtype(:oneview_storage_pool) do
     end
 
     newvalue(:reachable) do
-      provider.reachable_pools
+      provider.reachable
     end
 
     # :nocov:
