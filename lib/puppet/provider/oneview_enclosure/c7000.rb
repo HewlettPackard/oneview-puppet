@@ -102,4 +102,27 @@ Puppet::Type.type(:oneview_enclosure).provide :c7000, parent: Puppet::OneviewRes
     enclosure = get_single_resource_instance
     enclosure.patch(@patch_tags['op'], @patch_tags['path'], @patch_tags['value'])
   end
+
+  def create_csr
+    bay_number = @data.delete('bay_number')
+    uri = @data.delete('uri')
+    @resource_type.new(@client, uri: uri).create_csr_request(@data, bay_number)
+  end
+
+  def get_csr
+    bay_number = @data.delete('bay_number')
+    enclosure = get_single_resource_instance
+    pretty enclosure.get_csr_request(bay_number)
+    true
+  end
+
+  def import_csr
+    bay_number = @data.delete('bay_number')
+    enclosure = get_single_resource_instance
+    @options = enclosure.get_csr_request(bay_number)
+    @data[:type] = @options.delete('type')
+    @data[:base64Data] = @options.delete('base64Data')
+    pretty enclosure.import_certificate(@data, bay_number)
+    true
+  end
 end

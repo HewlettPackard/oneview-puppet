@@ -42,6 +42,8 @@ describe provider_class, unit: true do
             'enclosureGroupUri' => '/rest/',
             'licensingIntent' => 'OneView',
             'refreshState' => 'RefreshPending',
+            'bay_number'   => '1',
+            'base64data'   => 'Fake cert',
             'utilization_parameters' =>
             {
               'view' => 'day'
@@ -92,6 +94,14 @@ describe provider_class, unit: true do
 
     it '#set_environmental_configuration should raise an error' do
       expect { provider.set_environmental_configuration }.to raise_error(RuntimeError)
+    end
+
+    it 'should be able to get the certificate signing request' do
+      allow_any_instance_of(resource_type).to receive(:get_csr_request).with(resource['data']['bay_number']).and_return('Test')
+    end
+
+    it 'should be able to import the certificate signing request' do
+      allow_any_instance_of(resource_type).to receive(:import_certificate).with(resource['data']['bay_number']).and_return('Test')
     end
 
     it 'should be able to work specifying a name instead of an uri' do
@@ -153,6 +163,19 @@ describe provider_class, unit: true do
         expect_any_instance_of(resource_type).to receive(:patch).and_return(true)
         provider.exists?
         expect(provider.create).to be
+      end
+
+      it 'creates a certificate signing request' do
+        resource['data']['type'] = 'CertificateDtoV2'
+        resource['data']['uri'] = '/rest/fake'
+        resource['data']['organization'] = 'Acme'
+        resource['data']['organizationalUnit'] = 'IT'
+        resource['data']['state'] = 'fake_value'
+        resource['data']['country'] = 'fake_value'
+        resource['data']['email'] = 'fake@fake.com'
+        expect_any_instance_of(resource_type).to receive(:create_csr_request).and_return(true)
+        provider.exists?
+        expect(provider.create_csr).to be
       end
     end
   end
