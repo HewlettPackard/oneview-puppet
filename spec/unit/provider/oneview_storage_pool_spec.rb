@@ -78,6 +78,16 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
+    it 'should be able to edit the state of the resource' do
+      allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
+      expect(provider.manage).to be
+    end
+
+    it 'should be able to get all reachable pools' do
+      allow(resource_type).to receive(:reachable).and_return(true)
+      expect(provider.reachable).to be
+    end
+
     it 'should delete the resource' do
       allow_any_instance_of(resource_type).to receive(:remove).and_return([])
       expect(provider.destroy).to be

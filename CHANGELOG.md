@@ -26,6 +26,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Sas logical interconnect
 - Sas logical interconnect group
 - Server hardware
+- Storage pool
 - Storage system
 - Switch
 - Switch type
