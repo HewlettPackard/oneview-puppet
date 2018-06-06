@@ -18,95 +18,93 @@
 oneview_volume_template{'volume_template_1':
     ensure => 'present',
     data   => {
-      'name'   => 'ONEVIEW_PUPPET_TEST',
-      'description'  => 'Test volume template for puppet',
+      'name'             => 'ONEVIEW_PUPPET_TEST',
+      'description'      => 'Test volume template for puppet',
       'rootTemplateUri'  => '/rest/storage-volume-templates/cacb36c7-42d2-430f-9fc9-a8d90065d80e',
-      'properties'  => {
-          'name'  => {
-              'title'  => 'Volume name',
+      'properties'       => {
+          'name'         => {
+              'title'        => 'Volume name',
               'description'  => 'A volume name',
-              'minLength'  => 1,
-              'maxLength'  => 20,
-              'type'  => 'string',
-              'required'  => true,
-              'meta'  => {
+              'minLength'    => 1,
+              'maxLength'    => 20,
+              'type'         => 'string',
+              'required'     => true,
+              'meta'         => {
                   'locked'  => false
               }
           },
-          'description'  => {
-              'title'  => 'Description',
-              'default'   => '',
+          'description'      => {
+              'title'        => 'Description',
+              'default'      => '',
               'description'  => 'A description for the volume',
-              'type'  => 'string',
-              'minLength'  => 1,
-              'maxLength'  => 2000,
-              'meta'  => {
+              'type'         => 'string',
+              'minLength'    => 1,
+              'maxLength'    => 2000,
+              'meta'         => {
                   'locked'  => false
               }
           },
-          'storagePool'  => {
-              'title'  => 'Storage pool',
+          'storagePool'      => {
+              'title'        => 'Storage pool',
               'description'  => 'URI of the storage pool that the volume should be added to',
-              'type'  => 'string',
-              'format'  => 'x-uri-reference',
-              'default'  => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
-              'required'  => true,
-              'meta'  => {
-                  'locked'  => false,
+              'type'         => 'string',
+              'format'       => 'x-uri-reference',
+              'default'      => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
+              'required'     => true,
+              'meta'         => {
+                  'locked'      => false,
                   'createOnly'  => true,
-                  'semanticType'  => 'device-storage-pool'
+                  'semanticType'=> 'device-storage-pool'
                   }
           },
-          'snapshotPool'  => {
-              'type'  => 'string',
-              'title'  => 'Snapshot pool',
+          'snapshotPool'     => {
+              'type'         => 'string',
+              'title'        => 'Snapshot pool',
               'description'  => '',
-              'format'  => 'x-uri-reference',
-              'default'  => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
-              'meta'  => {
-              	'locked'  => true,
-              	'semanticType'  => 'device-snapshot-storage-pool'
+              'format'       => 'x-uri-reference',
+              'default'      => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
+              'meta'         => {
+                  'locked'        => true,
+                  'semanticType'  => 'device-snapshot-storage-pool'
               }
           },
-          'size'  => {
-              'title'  => 'Capacity',
+          'size'             => {
+              'title'        => 'Capacity',
               'description'  => 'Capacity of the volume in bytes',
-              'type'  => 'integer',
-              'minimum'  => 268435456,
-              'maximum'  => 17592186044416,
-              'default'  => 1073741824,
-              'required'  => true,
-              'meta'  => {
-                  'locked'  => false,
+              'type'         => 'integer',
+              'minimum'      => 268435456,
+              'maximum'      => 17592186044416,
+              'default'      => 1073741824,
+              'required'     => true,
+              'meta'         => {
+                  'locked'        => false,
                   'semanticType'  => 'capacity'
               }
           },
-         
-          'provisioningType'  => {
-              'title'  => 'Provisioning type',
+          'provisioningType' => {
+              'title'        => 'Provisioning type',
               'description'  => 'The provisioning type for the volume',
-              'type'  => 'string',
-              'enum'  => [
+              'type'         => 'string',
+              'enum'         => [
                   'Thin',
                   'Full'
               ],
-              'default'  => 'Full',
-              'meta'  => {
-                  'locked'  => false,
+              'default'      => 'Full',
+              'meta'         => {
+                  'locked'      => false,
                   'createOnly'  => true
               }
           },
-          'isShareable'  => {
-              'title'  => 'Is shareable',
+          'isShareable'      => {
+              'title'        => 'Is shareable',
               'description'  => 'The shareability of the volume',
-              'type'  => 'boolean',
-              'default'  => false,
-              'meta'  => {
-                  'locked'  => false
+              'type'         => 'boolean',
+              'default'      => false,
+              'meta'         => {
+                  'locked'   => false
               }
           }
       }
-      
     }
 }
 
