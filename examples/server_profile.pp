@@ -44,9 +44,9 @@ oneview_server_profile{'Server Profile Get Available Targets':
 oneview_server_profile{'Server Profile Get Available Networks':
   ensure => 'get_available_networks',
   data   => {
-     query_parameters  => {
-       enclosureGroupUri      => '/rest/enclosure-groups/c0a48dee-0730-4e1c-aa15-13820ff83ef5',
-       serverHardwareTypeUri  => '/rest/server-hardware-types/CEA8BEEA-D855-4E7B-9F43-A83DE6753B48'
+    query_parameters  => {
+      enclosureGroupUri     => '/rest/enclosure-groups/c0a48dee-0730-4e1c-aa15-13820ff83ef5',
+      serverHardwareTypeUri => '/rest/server-hardware-types/CEA8BEEA-D855-4E7B-9F43-A83DE6753B48'
 #      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
     }
   }
