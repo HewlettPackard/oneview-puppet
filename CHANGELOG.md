@@ -24,9 +24,12 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Network set
 - SAS interconnect
 - SAS interconnect type
-- Sas logical interconnect
-- Sas logical interconnect group
+- SAS logical interconnect
+- SAS logical interconnect group
+- SAS logical JBOD
+- SAS logical JBOD attachment
 - Server hardware
+- Server profile
 - Storage system
 - Switch
 - Switch type

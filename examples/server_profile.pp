@@ -33,21 +33,50 @@
 # }
 
 oneview_server_profile{'Server Profile Get Available Targets':
-  ensure => 'get_available_targets'
+  ensure => 'get_available_targets',
+  data   => {
+    query_parameters  => {
+      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+    }
+  }
+}
+
+oneview_server_profile{'Server Profile Get Available Networks':
+  ensure => 'get_available_networks',
+  data   => {
+    query_parameters  => {
+      enclosureGroupUri     => '/rest/enclosure-groups/c0a48dee-0730-4e1c-aa15-13820ff83ef5',
+      serverHardwareTypeUri => '/rest/server-hardware-types/CEA8BEEA-D855-4E7B-9F43-A83DE6753B48'
+#      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+    }
+  }
+}
+
+oneview_server_profile{'Server Profile Get Available Servers':
+  ensure => 'get_available_servers',
+  data   => {
+      query_parameters  => {
+        scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+      }
+    }
 }
 
 oneview_server_profile{'Server Profile Create':
   ensure => 'present',
   data   =>
   {
+    type              => 'ServerProfileV8',
     name              => 'Test Server Profile',
-    serverHardwareUri => '172.18.6.6',
+    serverHardwareUri => '/rest/server-hardware/30373737-3237-4D32-3230-313530314752',
   }
 }
 
 # Optional filters
 oneview_server_profile{'Server Profile Found':
-  ensure  => 'found',
+  ensure => 'found',
+  data   => {
+    name             => 'Test Server Profile'
+  }
 }
 
 # This ensure method is only available for Synergy Hardware
