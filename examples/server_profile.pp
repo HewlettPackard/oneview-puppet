@@ -54,11 +54,11 @@ oneview_server_profile{'Server Profile Get Available Networks':
 
 oneview_server_profile{'Server Profile Get Available Servers':
   ensure => 'get_available_servers',
-#  data   => {
-#  #    query_parameters  => {
-#  #      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
-#  #    }
-#  #  }
+  data   => {
+      query_parameters  => {
+        scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+      }
+    }
 }
 
 oneview_server_profile{'Server Profile Create':
