@@ -26,8 +26,19 @@ Puppet::Type.newtype(:oneview_volume_template) do
       provider.found
     end
 
+    # Available only for API300 and below.
     newvalue(:get_connectable_volume_templates) do
       provider.get_connectable_volume_templates
+    end
+
+    # Available from API500 and above
+    newvalue(:get_reachable_volume_templates) do
+      provider.get_reachable_volume_templates
+    end
+
+    # Available from API500 and above
+    newvalue(:get_compatible_systems) do
+      provider.get_compatible_systems
     end
     # :nocov:
   end
