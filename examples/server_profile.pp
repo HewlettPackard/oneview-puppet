@@ -33,21 +33,30 @@
 # }
 
 oneview_server_profile{'Server Profile Get Available Targets':
-  ensure => 'get_available_targets'
+  ensure => 'get_available_targets',
+  data   => {
+    query_parameters  => {
+      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+    }
+  }
 }
 
 oneview_server_profile{'Server Profile Create':
   ensure => 'present',
   data   =>
   {
+    type              => 'ServerProfileV8',
     name              => 'Test Server Profile',
-    serverHardwareUri => '172.18.6.6',
+    serverHardwareUri => '/rest/server-hardware/30373737-3237-4D32-3230-313530314752',
   }
 }
 
 # Optional filters
 oneview_server_profile{'Server Profile Found':
-  ensure  => 'found',
+  ensure => 'found',
+  data   => {
+    name             => 'Test Server Profile'
+  }
 }
 
 # This ensure method is only available for Synergy Hardware
