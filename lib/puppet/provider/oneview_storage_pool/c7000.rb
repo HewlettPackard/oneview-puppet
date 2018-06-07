@@ -36,6 +36,17 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
     super(:add)
   end
 
+  def manage
+    is_managed = @data.delete('isManaged')
+    get_single_resource_instance.manage(is_managed)
+    true
+  end
+
+  def reachable
+    pretty @resource_type.reachable(@client)
+    true
+  end
+
   def destroy
     super(:remove)
   end

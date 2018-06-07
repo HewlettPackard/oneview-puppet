@@ -20,6 +20,14 @@ Puppet::Type.newtype(:oneview_storage_pool) do
   ensurable do
     defaultvalues
 
+    newvalue(:manage) do
+      provider.manage
+    end
+
+    newvalue(:reachable) do
+      provider.reachable
+    end
+
     # :nocov:
     # Get methods
     newvalue(:found) do

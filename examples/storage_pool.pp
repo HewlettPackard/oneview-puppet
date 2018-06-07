@@ -18,6 +18,7 @@
   # against an already existing storage pool but with different configs, it will try to
   # drop the existing storage pool to create the new one with the wanted specifications.
 
+# Method not available from API500 and above
 oneview_storage_pool{'storage_pool_1':
     ensure => 'present',
     data   => {
@@ -36,14 +37,25 @@ oneview_storage_pool{'storage_pool_2':
     # }
 }
 
+# Method available from API500 and above
 oneview_storage_pool{'storage_pool_4':
-    ensure => 'present',
+    ensure => 'manage',
     data   => {
-      poolName         => 'CPG-SSD-AO',
-      storageSystemUri => 'ThreePAR7200-9055'
-      # storageSystemUri => '/rest/storage-systems/TXQ1000307'
+      name             => 'cpg_growth-warning-100GiB',
+      isManaged        => true,
+      storageSystemUri => '/rest/storage-systems/TXQ1000307'
     }
 }
+
+# Method available from API500 and above
+oneview_storage_pool{'storage_pool_5':
+    ensure => 'reachable',
+    data   => {
+      uri     => '/rest/storage-pools/C2ECD708-4F97-4DC2-925A-A8D90065D7D2',
+    }
+}
+
+# Method not available from API500 and above
 oneview_storage_pool{'storage_pool_3':
     ensure  => 'absent',
     require => Oneview_storage_pool['storage_pool_2'],
