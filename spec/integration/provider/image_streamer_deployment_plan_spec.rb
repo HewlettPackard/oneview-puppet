@@ -28,8 +28,8 @@ describe provider_class, integration: true do
             'name'           => 'Demo Deployment Plan',
             'description'    => 'Description of this Deployment Plan',
             'hpProvided'     => false,
-            'oeBuildPlanURI' => 'Build_Plan_4',
-            'goldenImageURI' => 'GoldenImage'
+            'oeBuildPlanURI' => '/rest/build-plans/cc1bd266-d50b-4a87-a913-5b0c4b2e4157',
+            'goldenImageURI' => '/rest/golden-images/f9937b11-da28-49cf-8db2-d3100860031a'
           }
     )
   end
@@ -78,6 +78,14 @@ describe provider_class, integration: true do
 
     it 'exists? should find a deployment plan' do
       expect(provider.exists?).to be
+    end
+
+    it 'should run get_used_by' do
+      expect(provider.get_used_by).to be
+    end
+
+    it 'should run get_osdp' do
+      expect(provider.get_osdp).to be
     end
 
     it 'should run destroy' do
