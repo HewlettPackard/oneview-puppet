@@ -19,14 +19,20 @@
 image_streamer_os_volume{'os_volume_1':
     ensure => 'found',
     data   => {
-      name        => 'OSVolume-6'
+      name        => 'OSVolume-42'
     }
 }
 #
 image_streamer_os_volume{'os_volume_2':
     ensure  => 'get_details_archive',
-    require => Image_streamer_os_volume['os_volume_1'],
     data    => {
-      name     => 'OSVolume-6'
+      name     => 'OSVolume-42'
+    }
+}
+
+image_streamer_os_volume{'os_volume_storage':
+    ensure  => 'get_os_volumes_storage',
+    data    => {
+      name     => 'OSVolume-42'
     }
 }

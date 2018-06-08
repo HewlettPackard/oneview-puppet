@@ -28,6 +28,11 @@ Puppet::Type.type(:image_streamer_os_volume).provide :image_streamer, parent: Pu
     true
   end
 
+  def get_os_volumes_storage
+    pretty get_single_resource_instance.get_os_volumes_storage
+    true
+  end
+
   def self.resource_name
     'OSVolume'
   end
