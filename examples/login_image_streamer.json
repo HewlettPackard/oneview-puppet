@@ -1,7 +1,7 @@
 {
-  "url": "https://imagestreamer.example.com",
-  "token": "NzA3OTg2NjM2NTk21xd-TkijbSwOjm2AvXDAL4LPG49D9K8u",
-  "ssl_enabled": "true",
-  "api_version": 300,
+  "url": "https://192.168.1.217",
+  "token": "LTE2OTM3OTAwMjk1saGsCaIrWhMq2BDbG27rwzdy_bL4k_8y",
+  "ssl_enabled": "false",
+  "api_version": 600,
   "log_level": "info"
 }

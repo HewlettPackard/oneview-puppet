@@ -22,8 +22,18 @@ image_streamer_golden_image{'golden_image_1':
     name         => 'Golden_Image_1',
     description  => 'Golden Image created from the deployed OS Volume',
     imageCapture => true,
-    osVolumeURI  => 'OSVolume-1',
-    buildPlanUri => 'Build Plan Name'
+    osVolumeURI  => 'OSVolume-42',
+    buildPlanUri => 'HPE - Foundation 1.0 - capture OS Volume as is-2017-03-24'
+  }
+}
+
+image_streamer_golden_image{'golden_image_6':
+  ensure  => 'download',
+  require => Image_streamer_golden_image['golden_image_1'],
+  data    => {
+    name                       => 'Golden_Image_1',
+    golden_image_download_path => 'golden_image.zip',  # can be either an absolute or relative path
+    force                      => false    # does not overwrite the file when it already exists
   }
 }
 
@@ -60,16 +70,6 @@ image_streamer_golden_image{'golden_image_5':
     name                 => 'Golden_Image_2',
     details_archive_path => 'log_archive.zip',  # can be either an absolute or relative path
     force                => false  # does not overwrite the file when it already exists
-  }
-}
-
-image_streamer_golden_image{'golden_image_6':
-  ensure  => 'download',
-  require => Image_streamer_golden_image['golden_image_5'],
-  data    => {
-    name                       => 'Golden_Image_2',
-    golden_image_download_path => 'golden_image_downloaded.zip',  # can be either an absolute or relative path
-    force                      => false    # does not overwrite the file when it already exists
   }
 }
 
