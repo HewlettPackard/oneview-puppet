@@ -39,6 +39,9 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Switch type
 - Uplink set
 
+### Image Streamer support
+- Deployment Plan
+
 # v2.2.3
 ### Version highlights:
 1. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
