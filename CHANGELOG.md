@@ -1,6 +1,7 @@
 # v2.3.0 (UnReleased)
 ### Version highlights:
 1. Added full support to OneView Rest API version 500 and 600 for the hardware variants C7000 and Synergy to the already existing features.
+2. Added support to the Image Streamer REST API version 500 and 600 for OS provisioning through OneView.
 
 ### Notes
 This release extends the full support for the Synergy and C7000 APIs to all the resources previously supported.
@@ -38,6 +39,9 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Switch
 - Switch type
 - Uplink set
+
+### Image Streamer support
+- OS volume
 
 # v2.2.3
 ### Version highlights:

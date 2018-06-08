@@ -63,5 +63,10 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect_any_instance_of(resource_type).to receive(:get_details_archive).and_return(['details of archive'])
       expect(provider.get_details_archive).to be
     end
+
+    it 'should retrieve the details of the storage' do
+      expect_any_instance_of(resource_type).to receive(:get_os_volumes_storage).and_return(['details of storage'])
+      expect(provider.get_os_volumes_storage).to be
+    end
   end
 end

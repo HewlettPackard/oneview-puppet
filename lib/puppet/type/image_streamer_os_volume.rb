@@ -30,7 +30,6 @@ Puppet::Type.newtype(:image_streamer_os_volume) do
     newvalue(:get_os_volumes_storage) do
       provider.get_os_volumes_storage
     end
-
   end
   # :nocov:
 
