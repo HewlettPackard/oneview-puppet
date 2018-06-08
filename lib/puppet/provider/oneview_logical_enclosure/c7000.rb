@@ -31,6 +31,11 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
     !@resource_type.find_by(@client, @data).empty?
   end
 
+  def reapply_configuration
+    Puppet.notice "\n\n-- Start reconfiguration"
+    get_single_resource_instance.reconfigure
+  end
+
   def get_script
     Puppet.notice "\n\n-- Start of the configuration script :"
     pretty get_single_resource_instance.get_script

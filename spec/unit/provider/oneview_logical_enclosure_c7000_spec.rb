@@ -71,6 +71,11 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
+    it 'reconfigure the resource' do
+      allow_any_instance_of(resource_type).to receive(:reconfigure).and_return(true)
+      expect(provider.reapply_configuration).to be
+    end
+
     it 'deletes the resource' do
       expect_any_instance_of(resource_type).to receive(:delete).and_return([])
       provider.exists?

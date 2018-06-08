@@ -25,13 +25,21 @@
 # }
 
 oneview_logical_enclosure{'logical_enc1':
+    ensure => 'reapply_configuration',
+    data   => {
+      name                      =>  'Puppet_Test_Enclosure',
+    }
+}
+
+
+oneview_logical_enclosure{'logical_enc2':
     ensure => 'get_script',
     data   => {
       name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
-oneview_logical_enclosure{'logical_enc2':
+oneview_logical_enclosure{'logical_enc3':
     ensure => 'set_script',
     data   => {
       name   =>  'Puppet_Test_Enclosure',
@@ -39,21 +47,21 @@ oneview_logical_enclosure{'logical_enc2':
     }
 }
 
-oneview_logical_enclosure{'logical_enc3':
+oneview_logical_enclosure{'logical_enc4':
     ensure => 'get_script',
     data   => {
       name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
-oneview_logical_enclosure{'logical_enc4':
+oneview_logical_enclosure{'logical_enc5':
     ensure => 'updated_from_group',
     data   => {
       name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
-oneview_logical_enclosure{'logical_enc5':
+oneview_logical_enclosure{'logical_enc6':
     ensure => 'generate_support_dump',
     data   => {
       name =>  'Puppet_Test_Enclosure',
