@@ -17,6 +17,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Interconnect
 - Interconnect link topology
 - Interconnect type
+- Logical enclosure
 - Logical interconnect
 - Logical switch
 - Logical switch group
