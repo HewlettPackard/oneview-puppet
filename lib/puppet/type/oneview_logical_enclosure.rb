@@ -31,8 +31,8 @@ Puppet::Type.newtype(:oneview_logical_enclosure) do
     end
 
     # Set methods
-    newvalue(:reapplay_configuration) do
-      provider.reapplay_configuration
+    newvalue(:reapply_configuration) do
+      provider.reapply_configuration
     end
 
     newvalue(:set_script) do

@@ -53,8 +53,8 @@ describe provider_class, integration: true do
       expect(provider.updated_from_group).to be
     end
 
-    it 'should successfuly run reapplay_configuration' do
-      expect(provider.reapplay_configuration).to be
+    it 'should successfuly run reapply_configuration' do
+      expect(provider.reapply_configuration).to be
     end
   end
 

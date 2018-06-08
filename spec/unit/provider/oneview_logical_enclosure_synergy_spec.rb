@@ -73,7 +73,7 @@ describe provider_class, unit: true, if: api_version >= 300 do
 
     it 'reconfigure the resource' do
       allow_any_instance_of(resource_type).to receive(:reconfigure).and_return(true)
-      expect(provider.reapplay_configuration).to be
+      expect(provider.reapply_configuration).to be
     end
 
     it 'deletes the resource' do

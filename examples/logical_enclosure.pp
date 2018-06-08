@@ -26,7 +26,7 @@
 
 
 oneview_logical_enclosure{'logical_enc1':
-    ensure => 'reapplay_configuration',
+    ensure => 'reapply_configuration',
     data   => {
       name                      =>  'Puppet_Test_Enclosure',
     }
