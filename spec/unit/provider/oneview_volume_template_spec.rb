@@ -76,5 +76,15 @@ describe provider_class, unit: true do
       allow_any_instance_of(resource_type).to receive(:get_connectable_volume_templates).and_return(true)
       expect(provider.get_connectable_volume_templates).to be
     end
+
+    it 'should be able to get reachable volume templates' do
+      allow(resource_type).to receive(:get_reachable_volume_templates).and_return('True')
+      expect(provider.get_reachable_volume_templates).to be
+    end
+
+    it 'should be able to get compatible systems' do
+      allow_any_instance_of(resource_type).to receive(:get_compatible_systems).and_return(true)
+      expect(provider.get_compatible_systems).to be
+    end
   end
 end

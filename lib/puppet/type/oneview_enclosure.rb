@@ -54,6 +54,18 @@ Puppet::Type.newtype(:oneview_enclosure) do
     newvalue(:set_refresh_state) do
       provider.set_refresh_state
     end
+
+    newvalue(:create_csr) do
+      provider.create_csr
+    end
+
+    newvalue(:get_csr) do
+      provider.get_csr
+    end
+
+    newvalue(:import_csr) do
+      provider.import_csr
+    end
     # :nocov:
   end
 

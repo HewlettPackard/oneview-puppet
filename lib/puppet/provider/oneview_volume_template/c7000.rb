@@ -29,4 +29,16 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
     pretty get_single_resource_instance.get_connectable_volume_templates(query_parameters)
     true
   end
+
+  def get_reachable_volume_templates
+    query_parameters = @data.delete('query_parameters') || {}
+    svt = OneviewSDK.resource_named('VolumeTemplate', api_version, resource_variant)
+    pretty svt.get_reachable_volume_templates(client, query_parameters)
+    true
+  end
+
+  def get_compatible_systems
+    pretty get_single_resource_instance.get_compatible_systems
+    true
+  end
 end
