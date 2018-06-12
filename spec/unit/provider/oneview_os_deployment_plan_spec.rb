@@ -47,13 +47,13 @@ describe provider_class, unit: true, if: api_version >= 300 do
       provider.exists?
     end
 
-    # it 'should be an instance of the provider synergy' do
-    #  expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_os_deployment_plan).provider(:synergy)
-    # end
+    it 'should be an instance of the provider synergy' do
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_os_deployment_plan).provider(:synergy)
+    end
 
-    # it 'should be able to run self.instances' do
-    #  expect(instance).to be
-    # end
+    it 'should be able to run self.instances' do
+      expect(instance).to be
+    end
 
     it 'should find the resource' do
       allow(resource_type)
