@@ -24,7 +24,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Logical switch group
 - Managed san
 - Network set
-- OS deployment plans
+- OS deployment plan
 - SAS interconnect
 - SAS interconnect type
 - SAS logical interconnect
