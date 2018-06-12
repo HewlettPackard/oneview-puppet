@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2018 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -25,6 +25,10 @@ Puppet::Type.newtype(:image_streamer_os_volume) do
 
     newvalue(:get_details_archive) do
       provider.get_details_archive
+    end
+
+    newvalue(:get_os_volumes_storage) do
+      provider.get_os_volumes_storage
     end
   end
   # :nocov:

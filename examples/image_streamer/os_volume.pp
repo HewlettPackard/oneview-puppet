@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2018 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -17,16 +17,22 @@
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
 
 image_streamer_os_volume{'os_volume_1':
-    ensure => 'found',
-    data   => {
-      name        => 'OSVolume-6'
-    }
+  ensure => 'found',
+  data   => {
+    name => 'OSVolume-42'
+  }
 }
-#
+
 image_streamer_os_volume{'os_volume_2':
-    ensure  => 'get_details_archive',
-    require => Image_streamer_os_volume['os_volume_1'],
-    data    => {
-      name     => 'OSVolume-6'
-    }
+  ensure => 'get_details_archive',
+  data   => {
+    name => 'OSVolume-42'
+  }
+}
+
+image_streamer_os_volume{'os_volume_storage':
+  ensure => 'get_os_volumes_storage',
+  data   => {
+    name => 'OSVolume-42'
+  }
 }

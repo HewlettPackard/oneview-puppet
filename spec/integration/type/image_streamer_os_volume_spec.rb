@@ -8,7 +8,7 @@ def os_volume_config
     ensure: 'found',
     data:
         {
-          'name' => 'volume-6'
+          'name' => 'volume-42'
         }
   }
 end

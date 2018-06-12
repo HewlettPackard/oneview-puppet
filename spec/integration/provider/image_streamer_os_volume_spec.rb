@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2018 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ describe provider_class, integration: true do
         ensure: 'found',
         data:
             {
-              'name' => 'OSVolume-6'
+              'name' => 'OSVolume-42'
             }
       )
     end
@@ -81,6 +81,10 @@ describe provider_class, integration: true do
 
     it 'should retrieve the details of the archived volume' do
       expect(provider.get_details_archive).to be
+    end
+
+    it 'should retrieve the details of os volume storage' do
+      expect(provider.get_os_volumes_storage).to be
     end
   end
 end

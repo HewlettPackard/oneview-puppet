@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2018 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -25,6 +25,11 @@ Puppet::Type.type(:image_streamer_os_volume).provide :image_streamer, parent: Pu
 
   def get_details_archive
     pretty get_single_resource_instance.get_details_archive
+    true
+  end
+
+  def get_os_volumes_storage
+    pretty get_single_resource_instance.get_os_volumes_storage
     true
   end
 
