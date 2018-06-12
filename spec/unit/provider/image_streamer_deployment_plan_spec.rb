@@ -84,5 +84,15 @@ describe provider_class, unit: true, if: api_version >= 300 do
     it 'should be able to find the resource' do
       expect(provider.found).to be
     end
+
+    it 'should call get_used_by' do
+      expect_any_instance_of(resource_type).to receive(:get_used_by).and_return(['used by'])
+      expect(provider.get_used_by).to be
+    end
+
+    it 'should call get_osdp' do
+      expect_any_instance_of(resource_type).to receive(:get_osdp).and_return(['osdp'])
+      expect(provider.get_osdp).to be
+    end
   end
 end

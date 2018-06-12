@@ -22,8 +22,8 @@ image_streamer_deployment_plan{'deployment_plan_1':
       name           => 'Demo Deployment Plan',
       description    => 'Description of this Deployment Plan',
       hpProvided     => false,
-      oeBuildPlanURI => 'Build Plan MK',
-      goldenImageURI => 'GoldenImageMK'
+      oeBuildPlanURI => '/rest/build-plans/cc1bd266-d50b-4a87-a913-5b0c4b2e4157',
+      goldenImageURI => '/rest/golden-images/f9937b11-da28-49cf-8db2-d3100860031a'
     }
 }
 
@@ -45,7 +45,23 @@ image_streamer_deployment_plan{'deployment_plan_3':
     }
 }
 
-image_streamer_deployment_plan{'deployment_plan_4':
+image_streamer_deployment_plan{'deployment_paln_4':
+    ensure  => 'get_used_by',
+    require => Image_streamer_deployment_plan['deployment_plan_3'],
+    data    => {
+      name     => 'Demo Deployment Plan Renamed'
+    }
+}
+
+image_streamer_deployment_plan{'deployment_paln_5':
+    ensure  => 'get_osdp',
+    require => Image_streamer_deployment_plan['deployment_plan_3'],
+    data    => {
+      name     => 'Demo Deployment Plan Renamed'
+    }
+}
+
+image_streamer_deployment_plan{'deployment_plan_6':
     ensure  => 'absent',
     require => Image_streamer_deployment_plan['deployment_plan_3'],
     data    => {

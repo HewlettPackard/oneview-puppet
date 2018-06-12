@@ -22,4 +22,14 @@ Puppet::Type.type(:image_streamer_deployment_plan).provide :image_streamer, pare
   confine feature: :oneview
 
   mk_resource_methods
+
+  def get_used_by
+    pretty get_single_resource_instance.get_used_by
+    true
+  end
+
+  def get_osdp
+    pretty get_single_resource_instance.get_osdp
+    true
+  end
 end

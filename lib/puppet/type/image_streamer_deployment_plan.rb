@@ -24,6 +24,14 @@ Puppet::Type.newtype(:image_streamer_deployment_plan) do
     newvalue(:found) do
       provider.found
     end
+
+    newvalue(:get_used_by) do
+      provider.get_used_by
+    end
+
+    newvalue(:get_osdp) do
+      provider.get_osdp
+    end
   end
   # :nocov:
 
