@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-oneview_os_deployment_plan{'OS Deployment Plan Get All':
+oneview_os_deployment_plan{'OS Deployment Plan Get':
   ensure => 'found'
 }
 
