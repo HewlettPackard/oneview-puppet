@@ -42,6 +42,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 
 ### Image Streamer support
 - Deployment Plan
+- Golden Image
 - OS build plan
 
 # v2.2.3
