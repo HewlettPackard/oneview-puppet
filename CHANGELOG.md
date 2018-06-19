@@ -34,6 +34,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - SAS logical JBOD attachment
 - Server hardware
 - Server profile
+- Server profile template
 - Storage pool
 - Storage system
 - Storage volume template

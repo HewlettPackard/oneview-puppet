@@ -15,8 +15,8 @@
 ################################################################################
 
 # This example requires:
-# - Enclosure Groups 'EG' and 'EG2'
-# - Server Hardware Type 'BL460c Gen8 1'
+# - Enclosure Groups 'e10_encl_group' and 'e11-encl-group'
+# - Server Hardware Type 'BL460c Gen9 1'
 
 # You can either declare the name or the uri of the following parameters that require Uri:
 oneview_server_profile_template{'Server Profile Template Create':
@@ -24,8 +24,8 @@ oneview_server_profile_template{'Server Profile Template Create':
   data   =>
     {
       name                  => 'New SPT',
-      enclosureGroupUri     => 'EG',
-      serverHardwareTypeUri => 'BL460c Gen8 1',
+      enclosureGroupUri     => 'e10_encl_group',
+      serverHardwareTypeUri => 'BL460c Gen9 1',
       # connections =>
       # [
       #   {
@@ -56,7 +56,7 @@ oneview_server_profile_template{'Server Profile Template Edit':
   data    =>
     {
       name     => 'New SPT',
-      new_name => 'Edited SPT'
+      new_name => 'Update SPT'
     }
 }
 
@@ -66,14 +66,18 @@ oneview_server_profile_template{'Server Profile Template Create #2':
   data    =>
     {
       name                  => 'New SPT #2',
-      enclosureGroupUri     => 'EG',
-      serverHardwareTypeUri => 'BL460c Gen8 1'
+      enclosureGroupUri     => 'e10_encl_group',
+      serverHardwareTypeUri => 'BL460c Gen9 1'
     }
 }
 
 oneview_server_profile_template{'Server Profile Template Get All':
   ensure  => 'found',
-  require => Oneview_server_profile_template['Server Profile Template Create #2']
+  require => Oneview_server_profile_template['Server Profile Template Create #2'],
+  data    =>
+    {
+      name => 'New SPT #2'
+    }
 }
 
 oneview_server_profile_template{'Server Profile Template Destroy':
@@ -81,7 +85,7 @@ oneview_server_profile_template{'Server Profile Template Destroy':
   require => Oneview_server_profile_template['Server Profile Template Get All'],
   data    =>
     {
-      name => 'Edited SPT',
+      name => 'Update SPT',
     }
 }
 
@@ -103,8 +107,20 @@ oneview_server_profile_template{'Get Transformation':
     {
       name            => 'New SPT #2',
       queryParameters => {
-        enclosureGroupUri     => 'EG2',
-        serverHardwareTypeUri => 'BL460c Gen8 1'
+        enclosureGroupUri     => 'e11-encl-group',
+        serverHardwareTypeUri => 'BL460c Gen9 1'
+      }
+    }
+}
+oneview_server_profile_template{'Get Available Networks':
+  ensure  => 'get_available_networks',
+  require => Oneview_server_profile_template['Server Profile Template Get All'],
+  data    =>
+    {
+      name            => 'New SPT #2',
+      queryParameters => {
+        enclosureGroupUri     => 'e11-encl-group',
+        serverHardwareTypeUri => 'BL460c Gen9 1'
       }
     }
 }
