@@ -43,10 +43,11 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Uplink set
 
 ### Image Streamer support
-- Deployment Plan
-- Golden Image
+- Deployment plan
+- Golden image
 - OS build plan
 - OS volume
+- Plan script
 
 # v2.2.3
 ### Version highlights:
