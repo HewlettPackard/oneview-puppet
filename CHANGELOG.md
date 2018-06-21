@@ -2,12 +2,21 @@
 ### Version highlights:
 1. Added full support to OneView Rest API version 500 and 600 for the hardware variants C7000 and Synergy to the already existing features.
 2. Added support to the Image Streamer REST API version 500 and 600 for OS provisioning through OneView
+3. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
+4. Added [TESTING.md](TESTING.md) file to explain the testing strategy in the module.
+5. Solved security issues regarding Rubocop by updating the gem dependency to use the latest version currently available (0.51.0).
+
+#### Bug fixes & Enhancements:
+- [#123](https://github.com/HewlettPackard/oneview-puppet/issues/123) Remove rest call from tests
+- [#165](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
+- [#172](https://github.com/HewlettPackard/oneview-puppet/issues/172) Unit tests updated for ruby version 2.4.0 and above.
+- [#207](https://github.com/HewlettPackard/oneview-puppet/issues/207) Server Profile Template update not working
+
+##### Security specific issues:
+- [#169](https://github.com/HewlettPackard/oneview-puppet/issues/169) Update rubocop to latest version
 
 ### Notes
 This release extends the full support for the Synergy and C7000 APIs to all the resources previously supported.
-
-#### Bug fixes & Enhancements:
-- [#172](https://github.com/HewlettPackard/oneview-puppet/issues/172) Unit tests updated for ruby version 2.4.0 and above.
 
 ### Oneview Features supported
 - Connection template
@@ -47,20 +56,6 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Golden Image
 - OS build plan
 - OS volume
-
-# v2.2.3
-### Version highlights:
-1. Added new common method `load_resource`, which should improve efficiency when loading resources of different resource types
-2. Added [TESTING.md](TESTING.md) file to explain the testing strategy in the module.
-3. Solved security issues regarding Rubocop by updating the gem dependency to use the latest version currently available (0.51.0).
-
-#### Bug fixes & Enhancements:
-- [#123](https://github.com/HewlettPackard/oneview-puppet/issues/123) Remove rest call from tests
-- [#165](https://github.com/HewlettPackard/oneview-puppet/issues/165) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
-
-##### Security specific issues:
-- [#169](https://github.com/HewlettPackard/oneview-puppet/issues/169) Update rubocop to latest version
-
 
 # v2.2.2 (2017-07-07)
 ### Version highlights:
