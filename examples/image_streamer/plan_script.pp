@@ -53,6 +53,14 @@ image_streamer_plan_script{'plan_script_4':
 }
 
 image_streamer_plan_script{'plan_script_5':
+    ensure  => 'retrieve_read_only',
+    require => Image_streamer_plan_script['plan_script_3'],
+    data    => {
+      name     => 'Plan Script Puppet Renamed'
+    }
+}
+
+image_streamer_plan_script{'plan_script_6':
     ensure  => 'absent',
     require => Image_streamer_plan_script['plan_script_4'],
     data    => {

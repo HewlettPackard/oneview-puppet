@@ -28,6 +28,10 @@ Puppet::Type.newtype(:image_streamer_plan_script) do
     newvalue(:retrieve_differences) do
       provider.retrieve_differences
     end
+
+    newvalue(:retrieve_read_only) do
+      provider.retrieve_read_only
+    end
   end
   # :nocov:
 

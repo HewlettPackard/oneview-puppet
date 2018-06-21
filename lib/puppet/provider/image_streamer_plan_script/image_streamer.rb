@@ -27,4 +27,9 @@ Puppet::Type.type(:image_streamer_plan_script).provide :image_streamer, parent: 
     pretty get_single_resource_instance.retrieve_differences
     true
   end
+
+  def retrieve_read_only
+    pretty get_single_resource_instance.retrieve_read_only
+    true
+  end
 end

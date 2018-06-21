@@ -81,6 +81,10 @@ describe provider_class, integration: true do
       expect(provider.retrieve_differences).to be
     end
 
+    it 'should retrieves the read only artifact' do
+      expect(provider.retrieve_read_only).to be
+    end
+
     it 'should run destroy' do
       expect(provider.destroy).to be
     end
