@@ -67,6 +67,11 @@ describe provider_class, unit: true, if: api_version >= 300 do
       expect(provider.retrieve_differences).to be
     end
 
+    it 'should retrieve readonly artifacts' do
+      allow_any_instance_of(resource_type).to receive(:retrieve_read_only).and_return(['artifacts fake response'])
+      expect(provider.retrieve_read_only).to be
+    end
+
     it 'should delete the resource' do
       allow_any_instance_of(resource_type).to receive(:delete).and_return([])
       expect(provider.destroy).to be
