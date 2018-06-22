@@ -50,6 +50,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Switch
 - Switch type
 - Uplink set
+- Volume
 
 ### Image Streamer support
 - Deployment plan
