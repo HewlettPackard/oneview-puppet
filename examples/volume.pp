@@ -23,14 +23,14 @@
 oneview_volume{'volume_1':
     ensure => 'present',
     data   => {
-      properties         => {
-            provisioningType  => 'Thin',
-            size    => 1073741824,
-            name              => 'Oneview_Puppet_TEST_VOLUME_1',
-            storagePool    => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
-            isShareable       => false
+      properties  => {
+            provisioningType => 'Thin',
+            size             => 1073741824,
+            name             => 'Oneview_Puppet_TEST_VOLUME_1',
+            storagePool      => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
+            isShareable      => false
       },
-      templateUri           => '/rest/storage-volume-templates/33c731e6-cc0f-4c47-bf9c-a8f6004f6076',
+      templateUri => '/rest/storage-volume-templates/33c731e6-cc0f-4c47-bf9c-a8f6004f6076',
     }
 }
 
