@@ -93,7 +93,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get the attachable volumes' do
-      allow(resource_type).to receive(:get_attachable_volumes).with(anything).and_return('Test')
+      allow(resource_type).to receive(:get_attachable_volumes).with(anything, nil).and_return('Test')
       expect(provider.get_attachable_volumes).to be
     end
 
