@@ -30,6 +30,7 @@ This release extends the full support for the Synergy and C7000 APIs to all the 
 - Interconnect type
 - Logical enclosure
 - Logical interconnect
+- Logical interconnect group
 - Logical switch
 - Logical switch group
 - Managed san
