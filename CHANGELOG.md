@@ -1,4 +1,4 @@
-# v2.3.0 (UnReleased)
+# v2.3.0 (2018-06-26)
 ### Version highlights:
 1. Added full support to OneView Rest API version 500 and 600 for the hardware variants C7000 and Synergy to the already existing features.
 2. Added support to the Image Streamer REST API version 500 and 600 for OS provisioning through OneView
