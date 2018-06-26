@@ -23,17 +23,14 @@
 oneview_volume{'volume_1':
     ensure => 'present',
     data   => {
-      name                   => 'Oneview_Puppet_TEST_VOLUME_1',
-      description            => 'Test volume with common creation: Storage System + Storage Pool',
-      provisioningParameters => {
-            provisionType     => 'Full',
-            shareable         => true,
-            requestedCapacity => 1024 * 1024 * 1024,
-            storagePoolUri    => 'FST_CPG1',
-            # storagePoolUri    => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D',
+      properties  => {
+            provisioningType => 'Thin',
+            size             => 1073741824,
+            name             => 'Oneview_Puppet_TEST_VOLUME_1',
+            storagePool      => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
+            isShareable      => false
       },
-      snapshotPoolUri        => 'FST_CPG1'
-      # snapshotPoolUri        => '/rest/storage-pools/A42704CB-CB12-447A-B779-6A77ECEEA77D'
+      templateUri => '/rest/storage-volume-templates/33c731e6-cc0f-4c47-bf9c-a8f6004f6076',
     }
 }
 
@@ -68,10 +65,15 @@ oneview_volume{'volume_4':
     #   provisionType                   => 'Full',
     # }
 }
-#
+
 oneview_volume{'volume_5':
     ensure  => 'get_attachable_volumes',
-    require => Oneview_volume['volume_4']
+    require => Oneview_volume['volume_4'],
+    data    => {
+      query_parameters  => {
+        connections    => "[{'networkUri':'/rest/fc-networks/90bd0f63-3aab-49e2-a45f-a52500b46616','proxyName':'20:19:50:EB:1A:0F:0E:B6','initiatorName':'10:00:62:01:F8:70:00:0E'}]"
+      }
+    }
 }
 
 oneview_volume{'volume_6':
@@ -80,13 +82,12 @@ oneview_volume{'volume_6':
 }
 
 
-# # This method does not work on sdk
-# oneview_volume{'volume_7':
-#     ensure => 'repair',
-#     data   => {
-#       name                   => 'Oneview_Puppet_TEST_VOLUME_1',
-#     }
-# }
+oneview_volume{'volume_7':
+    ensure => 'repair',
+    data   => {
+      name                   => 'Oneview_Puppet_TEST_VOLUME_1',
+    }
+}
 
 oneview_volume{'volume_8':
     ensure  => 'delete_snapshot',
