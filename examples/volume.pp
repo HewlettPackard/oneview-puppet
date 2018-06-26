@@ -82,13 +82,12 @@ oneview_volume{'volume_6':
 }
 
 
-# # This method does not work on sdk
-# oneview_volume{'volume_7':
-#     ensure => 'repair',
-#     data   => {
-#       name                   => 'Oneview_Puppet_TEST_VOLUME_1',
-#     }
-# }
+oneview_volume{'volume_7':
+    ensure => 'repair',
+    data   => {
+      name                   => 'Oneview_Puppet_TEST_VOLUME_1',
+    }
+}
 
 oneview_volume{'volume_8':
     ensure  => 'delete_snapshot',
