@@ -37,7 +37,7 @@ end
 # Broken-down blocks
 def exception_to_be_treated_within_provider(key)
   exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri providerUri
-                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris)
+                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris enclosureUris)
   true if exception_list.include?(key)
 end
 
@@ -81,7 +81,6 @@ def special_resources_assign(key)
   when 'associatedUplinkSetUri' then 'UplinkSet'
   when 'parentTaskUri', 'associatedTaskUri' then 'Task'
   when 'nativeNetworkUri' then 'EthernetNetwork'
-  when 'enclosureUris' then 'Enclosure'
   when 'osDeploymentPlanUri' then 'OSDeploymentPlan'
   # Image Streamer resources
   when 'oeBuildPlanURI' then 'BuildPlan'
