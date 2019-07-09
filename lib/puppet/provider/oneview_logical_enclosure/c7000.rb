@@ -23,12 +23,28 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
+  def initialize(*args)
+    super(*args)
+    @enclosure_uris = {}
+  end
 
   def exists?
     super
     @patch = @data.delete('patch')
+    @enclosure_uris = @data.delete('enclosureUris')
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
+    @data['enclosureUris'] = parse_enclosure_uris if @enclosure_uris
     !@resource_type.find_by(@client, @data).empty?
+  end
+
+  def create
+    new_name = @data.delete('new_name')
+    le = resource_type.new(@client, @data)
+    @data['new_name'] = new_name if new_name
+    return true if resource_update
+    le.create
+    @property_hash[:data] = le.data
+    @property_hash[:ensure] = :present
   end
 
   def reapply_configuration
@@ -58,5 +74,17 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
     dump = @data.delete('dump')
     raise 'The "dump" field is required inside data in order to use this ensurable' unless dump
     get_single_resource_instance.support_dump(dump)
+  end
+
+# Helpers
+  def parse_enclosure_uris
+    list = []
+    @enclosure_uris.each do |enslosure_uri|
+      next if enslosure_uri.to_s[0..6].include?('/rest/')
+      net = OneviewSDK.resource_named(:Enclosures, login[:api_version], login[:hardware_variant]).find_by(@client, name: enslosure_uri)
+      raise("The resource #{enslosure_uri} does not exist.") unless net.first
+      list.push(net.first['uri'])
+    end
+    list
   end
 end
