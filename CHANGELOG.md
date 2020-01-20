@@ -1,3 +1,13 @@
+# v2.4.0 (Unreleased)
+### Notes
+- This release supports OneView Rest API versions 800/1000/1200 minimally where we can use OneView v4.10/v4.20/v5.0 with this SDK. No new fields are added/deleted to support OneView Rest API 800/1000/1200. Complete support will be done in next releases.
+
+### Oneview Features supported
+- Enclosure group
+- FC network
+- FCoE network
+- Network set
+
 # v2.3.0 (2018-06-26)
 ### Version highlights:
 1. Added full support to OneView Rest API version 500 and 600 for the hardware variants C7000 and Synergy to the already existing features.
