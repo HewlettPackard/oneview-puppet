@@ -99,13 +99,13 @@ describe provider_class, unit: true do
     it 'should be able to get the certificate signing request' do
       allow_any_instance_of(resource_type).to receive(:get_csr_request).with(resource['data']['bay_number']).and_return('Test')
       provider.exists?
-      expect(provider.get_csr_request).to be
+      expect(provider.get_csr).to be
     end
 
     it 'should be able to import the certificate signing request' do
       allow_any_instance_of(resource_type).to receive(:import_certificate).with(resource['data']['bay_number']).and_return('Test')
       provider.exists?
-      expect(provider.import_certificate).to be
+      expect(provider.import_csr).to be
     end
 
     it 'should be able to work specifying a name instead of an uri' do
