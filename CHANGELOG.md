@@ -7,6 +7,8 @@
 - FC network
 - FCoE network
 - Network set
+- Server hardware type
+- Uplink set
 
 # v2.3.0 (2018-06-26)
 ### Version highlights:
