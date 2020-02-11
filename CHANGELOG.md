@@ -3,6 +3,9 @@
 - This release supports OneView Rest API versions 800/1000/1200 minimally where we can use OneView v4.10/v4.20/v5.0 with this SDK. No new fields are added/deleted to support OneView Rest API 800/1000/1200. Complete support will be done in next releases.
 
 ### Oneview Features supported
+- Connection template
+- Ethernet network
+- Enclosure
 - Enclosure group
 - FC network
 - FCoE network
