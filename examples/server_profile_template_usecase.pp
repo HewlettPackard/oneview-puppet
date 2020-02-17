@@ -14,9 +14,17 @@
 # limitations under the License.
 ################################################################################
 
-# This example requires:
-# - Enclosure Groups 'e10_encl_group' and 'e11-encl-group'
-# - Server Hardware Type 'BL460c Gen9 1'
+/*   Infrastructure Provisioning without Image Stramear
+	Be able to provision compute (with server settings), networking, and storage.
+	Create a server profile template with the following options:
+		Network connections
+    Firmware
+		Boot mode
+		Boot settings
+    iLo settings
+    Local Storage/SAN Storage
+		Create a server profile from a server profile template and assign to hardware
+*/
 
 # You can either declare the name or the uri of the following parameters that require Uri:
 oneview_server_profile_template{'Server Profile Template Create':
@@ -33,12 +41,12 @@ oneview_server_profile_template{'Server Profile Template Create':
         [
          {
             id => 3,
-            networkUri => '/rest/fc-networks/429006d8-24e2-4c52-8e08-58a1ea1cb985',
+            networkUri => 'FC01',
             functionType => 'FibreChannel'
           },
           {
              id => 4,
-             networkUri => '/rest/fc-networks/7884fa5e-1b5a-4f56-b52c-459884bccaea',
+             networkUri => 'FC02',
              functionType => 'FibreChannel'
           }
         ]
@@ -201,3 +209,15 @@ oneview_server_profile_template{'Server Profile Template Create':
 
     }
 }
+# The server profile name is optional; a default name will be provided
+/*
+oneview_server_profile_template{'Server Profile Create':
+  ensure  => 'set_new_profile',
+  require => Oneview_server_profile_template['Server Profile Template Create'],
+  data    =>
+    {
+      name                  => 'SPT-puppet-demo',
+      serverProfileName     => 'My SP'
+    }
+}
+*/

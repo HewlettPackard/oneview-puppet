@@ -24,7 +24,7 @@ Puppet::Type.type(:oneview_server_profile_template).provide :c7000, parent: Pupp
   def exists?
     prepare_environment
     empty_data_check
-    connections_parse if @data['connections']
+    connections_parse if @data['connectionSettings']
     !@resource_type.find_by(@client, @data).empty?
   end
 
