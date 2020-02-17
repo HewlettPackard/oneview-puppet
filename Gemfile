@@ -5,6 +5,7 @@ gem 'coveralls', '0.8.21', require: false
 gem 'facter', '>= 1.7.0'
 gem 'metadata-json-lint'
 gem 'oneview-sdk', '~> 5.6.0'
+gem 'pdk'
 gem 'pry'
 gem 'puppet', '>= 4.1'
 gem 'puppet-lint', '>= 0.3.2'
