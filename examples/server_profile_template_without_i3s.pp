@@ -14,8 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-/*   Server Profile Template without Image Streamer.
-	Create a server profile template with the following options:
+/* Server Profile Template without Image Streamer.
+	 Create a server profile template with the following options:
 		Network connections
     Firmware
 		Boot mode
@@ -32,178 +32,177 @@ oneview_server_profile_template{'Server Profile Template Create':
       name                  => 'SPT-puppet-demo',
       enclosureGroupUri     => 'SYN03_EC',
       serverHardwareTypeUri => 'SY 480 Gen9 3',
-      connectionSettings =>
+      connectionSettings    =>
       {
-        manageConnections  => true,
-        connections =>
+        manageConnections => true,
+        connections       =>
         [
-         {
-            id => 3,
-            networkUri => 'FC01',
+        {
+            id           => 3,
+            networkUri   => 'FC01',
             functionType => 'FibreChannel'
-          },
-          {
-             id => 4,
-             networkUri => 'FC02',
-             functionType => 'FibreChannel'
-          }
+        },
+        {
+            id           => 4,
+            networkUri   => 'FC02',
+            functionType => 'FibreChannel'
+        }
         ]
       },
-      firmware =>
+      firmware              =>
       {
         firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
         manageFirmware      => true
       },
-      boot =>
+      boot                  =>
       {
-        manageBoot => true,
-        order =>
+        manageBoot        => true,
+        order             =>
         [
-         'HardDisk'
+        'HardDisk'
         ],
         complianceControl => 'Checked'
       },
-      bootMode =>
+      bootMode              =>
       {
-        manageMode => true,
-        mode => 'UEFIOptimized',
-        pxeBootPolicy => 'Auto',
+        manageMode        => true,
+        mode              => 'UEFIOptimized',
+        pxeBootPolicy     => 'Auto',
         complianceControl => 'Checked'
       },
-      bios =>
+      bios                  =>
       {
-        manageBios => true,
-        complianceControl => 'Checked',
+        manageBios         => true,
+        complianceControl  => 'Checked',
         overriddenSettings =>
         [
-          { id => 'UsbControl',
+          { id    => 'UsbControl',
             value => 'UsbEnabled'
           },
-          { id => 'PowerRegulator',
+          { id    => 'PowerRegulator',
             value => 'StaticHighPerf'
           },
-          { id => 'CollabPowerControl',
+          { id    => 'CollabPowerControl',
             value => 'Disabled'
           },
-          { id => 'EnergyPerfBias',
+          { id    => 'EnergyPerfBias',
             value => 'MaxPerf'
           },
-          { id => 'MinProcIdlePkgState',
+          { id    => 'MinProcIdlePkgState',
             value =>'NoState'
           },
-          { id => 'NumaGroupSizeOpt',
+          { id    => 'NumaGroupSizeOpt',
             value => 'Clustered'
           },
-          { id => 'MinProcIdlePower',
+          { id    => 'MinProcIdlePower',
             value => 'NoCStates'
           }
         ]
       },
-      managementProcessor =>
+      managementProcessor   =>
       {
         complianceControl => 'Checked',
-        manageMp => true,
-        mpSettings =>
+        manageMp          => true,
+        mpSettings        =>
         [
           {
             settingType => 'LocalAccounts',
-            args =>
+            args        =>
             {
               localAccounts =>
               [
                 {
-                  userName => 'user1',
-                  displayName => 'localuser',
-                  password => 'localuser',
-                  userConfigPriv => false,
-                  remoteConsolePriv => true,
-                  virtualMediaPriv => true,
+                  userName                 => 'user1',
+                  displayName              => 'localuser',
+                  password                 => 'localuser',
+                  userConfigPriv           => false,
+                  remoteConsolePriv        => true,
+                  virtualMediaPriv         => true,
                   virtualPowerAndResetPriv => true,
-                  iLOConfigPriv => true
+                  iLOConfigPriv            => true
                 }
               ]
             }
           }
         ],
       },
-      localStorage =>
+      localStorage          =>
       {
         complianceControl => 'Checked',
-        controllers =>
+        controllers       =>
         [
           {
-            deviceSlot => 'Embedded',
-            mode => 'RAID',
-            initialize => false,
+            deviceSlot    => 'Embedded',
+            mode          => 'RAID',
+            initialize    => false,
             logicalDrives =>
             [
-             {
-               name => 'Operating System',
-               raidLevel => 'RAID1',
-               bootable => true,
-               numPhysicalDrives => 2,
-               driveTechnology => '',
-               sasLogicalJBODId => '',
-             }
+            {
+            name              => 'Operating System',
+            raidLevel         => 'RAID1',
+            bootable          => true,
+            numPhysicalDrives => 2,
+            driveTechnology   => '',
+            sasLogicalJBODId  => '',
+            }
             ]
           }
         ]
       },
-      sanStorage =>
+      sanStorage            =>
       {
         complianceControl => 'Checked',
-        manageSanStorage => true,
-        hostOSType => 'VMware (ESXi)',
+        manageSanStorage  => true,
+        hostOSType        => 'VMware (ESXi)',
         volumeAttachments =>
         [
           {
-            id => 1,
+            id                             => 1,
             associatedTemplateAttachmentId => 'c9b33747-7f2e-485b-8840-7334a824510f',
-            lun => '',
-            lunType => 'Auto',
-            storagePaths =>
+            lun                            => '',
+            lunType                        => 'Auto',
+            storagePaths                   =>
             [
               {
-                connectionId => 4,
-                isEnabled => true,
+                connectionId   => 4,
+                isEnabled      => true,
                 targetSelector => 'Auto'
               },
               {
-                connectionId => 3,
-                isEnabled => true,
+                connectionId   => 3,
+                isEnabled      => true,
                 targetSelector => 'Auto'
               }
             ],
-            volumeUri => '/rest/storage-volumes/16ADC014-7799-4814-9962-A93C0143BC68',
-            volume => {},
-            volumeStorageSystemUri => '/rest/storage-systems/MXN6122CVA',
-            bootVolumePriority => 'NotBootable'
+            volumeUri                      => '/rest/storage-volumes/16ADC014-7799-4814-9962-A93C0143BC68',
+            volume                         => {},
+            volumeStorageSystemUri         => '/rest/storage-systems/MXN6122CVA',
+            bootVolumePriority             => 'NotBootable'
           },
           {
-            id => 2,
+            id                             => 2,
             associatedTemplateAttachmentId => '4e620feb-742e-4ba1-bb01-2b7625c74c08',
-            lun => '',
-            lunType => 'Auto',
-            storagePaths =>
+            lun                            => '',
+            lunType                        => 'Auto',
+            storagePaths                   =>
             [
               {
-                connectionId => 3,
-                isEnabled => true,
+                connectionId   => 3,
+                isEnabled      => true,
                 targetSelector => 'Auto'
               },
               {
-                connectionId => 4,
-                isEnabled => true,
+                connectionId   => 4,
+                isEnabled      => true,
                 targetSelector => 'Auto'
               }
             ],
-            volumeUri => '/rest/storage-volumes/B9981C13-EED1-4F21-B95F-A93D00D23E3F',
-            volume => {},
-            volumeStorageSystemUri => '/rest/storage-systems/MXN6122CVA',
-            bootVolumePriority => 'NotBootable'
+            volumeUri                      => '/rest/storage-volumes/B9981C13-EED1-4F21-B95F-A93D00D23E3F',
+            volume                         => {},
+            volumeStorageSystemUri         => '/rest/storage-systems/MXN6122CVA',
+            bootVolumePriority             => 'NotBootable'
           }
-         ]
+          ]
       }
-
     }
 }
