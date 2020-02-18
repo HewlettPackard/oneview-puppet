@@ -14,15 +14,14 @@
 # limitations under the License.
 ################################################################################
 
-/* Server Profile Template without Image Streamer.
-	 Create a server profile template with the following options:
-		Network connections
-    Firmware
-		Boot mode
-		Boot settings
-    iLo settings
-    Local Storage/SAN Storage
-*/
+# Server Profile Template without Image Streamer.
+# Create a server profile template with the following options:
+#		Network connections
+#   Firmware
+#		Boot mode
+# 	Boot settings
+#   iLo settings
+#   Local Storage/SAN Storage
 
 # You can either declare the name or the uri of the following parameters that require Uri:
 oneview_server_profile_template{'Server Profile Template Create':
