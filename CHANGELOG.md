@@ -9,7 +9,10 @@
 - Enclosure group
 - FC network
 - FCoE network
+- Logical interconnect
+- Logical interconnect group
 - Network set
+- SAS logical interconnect
 - Server hardware type
 - Uplink set
 
