@@ -10,6 +10,7 @@
 - FC network
 - FCoE network
 - Network set
+- Server hardware
 - Server hardware type
 - Uplink set
 
