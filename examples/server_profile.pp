@@ -65,7 +65,7 @@ oneview_server_profile{'Server Profile Create':
   ensure => 'present',
   data   =>
   {
-    type              => 'ServerProfileV9',
+    type              => 'ServerProfileV11',
     name              => 'Test Server Profile',
     serverHardwareUri => '/rest/server-hardware/30303837-3931-584D-5131-303030323038',
   }
