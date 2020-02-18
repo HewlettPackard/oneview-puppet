@@ -107,7 +107,7 @@ oneview_server_hardware{'server_hardware_10':
 oneview_server_hardware{'server_hardware_11':
     ensure => 'get_utilization',
     data   => {
-      name    => '0000A66101, bay 3',
+      name            => '0000A66101, bay 3',
       queryParameters => {
         fields => ['AmbientTemperature']
       }
@@ -124,7 +124,7 @@ oneview_server_hardware{'server_hardware_12':
 oneview_server_hardware{'server_hardware_13':
     ensure => 'set_power_state',
     data   => {
-      name    => '0000A66101, bay 3',
+      name        => '0000A66101, bay 3',
       power_state => 'on',
     },
 }
@@ -134,8 +134,8 @@ oneview_server_hardware{'server_hardware_13':
 oneview_server_hardware{'server_hardware_14':
     ensure => 'set_refresh_state',
     data   => {
-      name    => '0000A66101, bay 3',
-      state    => 'RefreshPending'
+      name  => '0000A66101, bay 3',
+      state => 'RefreshPending'
     },
 }
 
