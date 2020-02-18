@@ -114,27 +114,28 @@ end
 # Returns the connection uri based on its name and functionType (Ethernet, FC, Network Set)
 # FCoE to be added (no need so far)
 def connections_parse
-  Puppet.info "Performing connections_parse method using the following data: \n#{JSON.pretty_generate(@data)}."
-  @data.each do |key, value|
-    next if !(@data[key].include?('manageConnections'))
-    Puppet.info "Print->connectionSettings: #{@data[key]}"
-    data = @data[key]
-    data.each do |key,value|
-      next if !(key.include?('connections'))
-      value.each do |key,value|
-        next if key['networkUri'].to_s[0..6].include?('/rest/')
-        type = case key['functionType']
-               when 'Ethernet' then 'EthernetNetwork'
-               when 'FibreChannel' then 'FCNetwork'
-               when 'Set'
-                 key['functionType'] = 'Ethernet'
-                 'NetworkSet'
-               end
-        net = objectfromstring(type).find_by(@client, name: key['networkUri'])
-        raise("The network #{key['networkUri']} does not exist in the Appliance.") unless net.first
-        key['networkUri'] = net.first['uri']
-      end
+  @data.each_key do |key|
+    next unless @data[key].include?('manageConnections')
+    @data[key].each do |conn, value|
+      next unless conn.include?('connections')
+      network_parse(value)
     end
+  end
+end
+
+def network_parse(connections)
+  connections.each do |network|
+    next if network['networkUri'].to_s[0..6].include?('/rest/')
+    type = case network['functionType']
+           when 'Ethernet' then 'EthernetNetwork'
+           when 'FibreChannel' then 'FCNetwork'
+           when 'Set'
+             network['functionType'] = 'Ethernet'
+             'NetworkSet'
+           end
+    net = objectfromstring(type).find_by(@client, name: network['networkUri'])
+    raise("The network #{network['networkUri']} does not exist in the Appliance.") unless net.first
+    network['networkUri'] = net.first['uri']
   end
 end
 

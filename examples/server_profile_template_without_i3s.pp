@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-/*   Infrastructure Provisioning without Image Stramear
-	Be able to provision compute (with server settings), networking, and storage.
+/*   Server Profile Template without Image Streamer.
 	Create a server profile template with the following options:
 		Network connections
     Firmware
@@ -23,7 +22,6 @@
 		Boot settings
     iLo settings
     Local Storage/SAN Storage
-		Create a server profile from a server profile template and assign to hardware
 */
 
 # You can either declare the name or the uri of the following parameters that require Uri:
@@ -209,15 +207,3 @@ oneview_server_profile_template{'Server Profile Template Create':
 
     }
 }
-# The server profile name is optional; a default name will be provided
-/*
-oneview_server_profile_template{'Server Profile Create':
-  ensure  => 'set_new_profile',
-  require => Oneview_server_profile_template['Server Profile Template Create'],
-  data    =>
-    {
-      name                  => 'SPT-puppet-demo',
-      serverProfileName     => 'My SP'
-    }
-}
-*/
