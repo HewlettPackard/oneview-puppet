@@ -74,6 +74,30 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
+    it 'should be able to create the resource with connections' do
+      ethernet = OneviewSDK::EthernetNetwork.new(@client, name: 'Eth01')
+      resource['data']['connectionSettings'] = {
+        'manageConnections'   => true,
+        'connections'         =>
+        [
+          {
+            'id'              => 3,
+            'networkUri'      => 'Eth01',
+            'functionType'    => 'Ethernet'
+          }
+        ]
+      }
+      item = allow_any_instance_of(resource_type).to receive(:create).and_return(resource_type.new(@client, resource['data']))
+      expect(connections_parse).to be
+      allow(resource_type).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect(provider.create).to be
+      expect(item['uri']).to be
+      expect(item['name']).to eq('SPT')
+      expect(item['connectionSettings']['connections']).not_to be_empty
+      expect(item['connectionSettings']['connections'].first['networkUri']).to eq(ethernet['uri'])
+    end
+
     it 'should create when resource does not exist' do
       allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
