@@ -13,6 +13,7 @@
 - Logical interconnect group
 - Network set
 - SAS logical interconnect
+- Server hardware
 - Server hardware type
 - Server profile
 - Uplink set
