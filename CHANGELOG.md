@@ -14,6 +14,7 @@
 - Network set
 - SAS logical interconnect
 - Server hardware type
+- Server profile template
 - Server profile
 - Uplink set
 
