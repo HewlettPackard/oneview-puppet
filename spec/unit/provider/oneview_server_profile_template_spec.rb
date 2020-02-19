@@ -73,7 +73,7 @@ describe provider_class, unit: true do
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
     end
-    
+
     it 'should create when resource does not exist' do
       allow(resource_type).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
