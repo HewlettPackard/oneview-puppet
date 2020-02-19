@@ -14,6 +14,7 @@
 - Network set
 - SAS logical interconnect
 - Server hardware type
+- Server profile
 - Uplink set
 
 # v2.3.0 (2018-06-26)
