@@ -29,7 +29,7 @@ def uri_recursive_hash(data)
     hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri- or -value is nil-
     next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include?('Uri') || key.to_s == 'uri' || key.to_s.end_with?('URI')) ||
-            value.nil? || %w(null nil).include?(value.to_s) || exception_to_be_treated_within_provider(key) # && key != "enclosureUris"
+            value.nil? || %w(null nil).include?(value.to_s) || exception_to_be_treated_within_provider(key)
     data[key] = get_uri(key)
   end
 end
