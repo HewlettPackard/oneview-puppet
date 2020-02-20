@@ -26,6 +26,7 @@
 #     }
 # }
 
+
 #Reapply configuration of Logical Enclosure
 oneview_logical_enclosure{'logical_enc1':
     ensure => 'reapply_configuration',
