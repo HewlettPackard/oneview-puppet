@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ oneview_server_profile{'Server Profile Get Available Targets':
   ensure => 'get_available_targets',
   data   => {
     query_parameters  => {
-      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+      scopesUri        => '/rest/scopes/aa42a1c2-114e-49ef-b725-4cee9f284d74'
     }
   }
 }
@@ -45,8 +45,8 @@ oneview_server_profile{'Server Profile Get Available Networks':
   ensure => 'get_available_networks',
   data   => {
     query_parameters  => {
-      enclosureGroupUri     => '/rest/enclosure-groups/c0a48dee-0730-4e1c-aa15-13820ff83ef5',
-      serverHardwareTypeUri => '/rest/server-hardware-types/CEA8BEEA-D855-4E7B-9F43-A83DE6753B48'
+      enclosureGroupUri     => '/rest/enclosure-groups/3956d043-22a7-44f1-8a16-e6c6bd7c35a2',
+      serverHardwareTypeUri => '/rest/server-hardware-types/5FED8002-0CD7-4246-9809-B2235985F903'
 #      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
     }
   }
@@ -56,7 +56,7 @@ oneview_server_profile{'Server Profile Get Available Servers':
   ensure => 'get_available_servers',
   data   => {
       query_parameters  => {
-        scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+        scopesUri        => '/rest/scopes/aa42a1c2-114e-49ef-b725-4cee9f284d74'
       }
     }
 }
@@ -65,9 +65,9 @@ oneview_server_profile{'Server Profile Create':
   ensure => 'present',
   data   =>
   {
-    type              => 'ServerProfileV8',
+    type              => 'ServerProfileV11',
     name              => 'Test Server Profile',
-    serverHardwareUri => '/rest/server-hardware/30373737-3237-4D32-3230-313530314752',
+    serverHardwareUri => '/rest/server-hardware/30303837-3931-584D-5131-303030323038',
   }
 }
 

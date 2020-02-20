@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -63,35 +63,35 @@ oneview_server_hardware{'server_hardware_4':
 oneview_server_hardware{'server_hardware_5':
     ensure => 'get_ilo_sso_url',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
 oneview_server_hardware{'server_hardware_6':
     ensure => 'get_java_remote_sso_url',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
 oneview_server_hardware{'server_hardware_7':
     ensure => 'get_remote_console_url',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
 oneview_server_hardware{'server_hardware_8':
     ensure => 'get_environmental_configuration',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
 oneview_server_hardware{'server_hardware_9':
     ensure => 'get_firmware_inventory',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
@@ -99,7 +99,7 @@ oneview_server_hardware{'server_hardware_9':
 oneview_server_hardware{'server_hardware_10':
     ensure => 'get_physical_server_hardware',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
@@ -107,7 +107,7 @@ oneview_server_hardware{'server_hardware_10':
 oneview_server_hardware{'server_hardware_11':
     ensure => 'get_utilization',
     data   => {
-      hostname        => '172.18.6.14',
+      name            => '0000A66101, bay 3',
       queryParameters => {
         fields => ['AmbientTemperature']
       }
@@ -117,14 +117,14 @@ oneview_server_hardware{'server_hardware_11':
 oneview_server_hardware{'server_hardware_12':
     ensure => 'update_ilo_firmware',
     data   => {
-      hostname        => '172.18.6.14',
+      name    => '0000A66101, bay 3',
     },
 }
 
 oneview_server_hardware{'server_hardware_13':
     ensure => 'set_power_state',
     data   => {
-      hostname    => '172.18.6.14',
+      name        => '0000A66101, bay 3',
       power_state => 'on',
     },
 }
@@ -134,8 +134,8 @@ oneview_server_hardware{'server_hardware_13':
 oneview_server_hardware{'server_hardware_14':
     ensure => 'set_refresh_state',
     data   => {
-      hostname => '172.18.6.14',
-      state    => 'RefreshPending'
+      name  => '0000A66101, bay 3',
+      state => 'RefreshPending'
     },
 }
 
