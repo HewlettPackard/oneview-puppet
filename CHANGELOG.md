@@ -9,6 +9,8 @@
 - Enclosure group
 - FC network
 - FCoE network
+- Interconnect
+- Interconnect Link Topology
 - Logical interconnect
 - Logical interconnect group
 - Network set
