@@ -33,7 +33,19 @@ describe provider_class, unit: true do
               'name'                  => 'SPT',
               'enclosureGroupUri'     => '/rest/',
               'serverHardwareTypeUri' => '/rest/',
-              'description'           => 'description'
+              'description'           => 'description',
+              'connectionSettings'    =>
+              {
+                'manageConnections'   => true,
+                'connections'         =>
+                [
+                  {
+                    'id'              => 3,
+                    'networkUri'      => '/rest/',
+                    'functionType'    => 'Ethernet'
+                  }
+                ]
+              }
             },
         provider: 'c7000'
       )
