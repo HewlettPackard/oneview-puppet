@@ -53,7 +53,6 @@ def get_uri(key)
   raise "'#{@value}' has not been found in the Appliance." if ov_resource.empty?
   # replaces the parameter name by its uri
   ov_resource.first.data['uri']
-  
 end
 
 # Check for special/exceptions to the uri default search
