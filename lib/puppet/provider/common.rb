@@ -114,18 +114,28 @@ end
 # Returns the connection uri based on its name and functionType (Ethernet, FC, Network Set)
 # FCoE to be added (no need so far)
 def connections_parse
-  @data['connections'].each do |conn|
-    next if conn['networkUri'].to_s[0..6].include?('/rest/')
-    type = case conn['functionType']
+  @data.each_key do |key|
+    next unless @data[key].include?('manageConnections')
+    @data[key].each do |conn, value|
+      next unless conn.include?('connections')
+      network_parse(value)
+    end
+  end
+end
+
+def network_parse(connections)
+  connections.each do |network|
+    next if network['networkUri'].to_s[0..6].include?('/rest/')
+    type = case network['functionType']
            when 'Ethernet' then 'EthernetNetwork'
            when 'FibreChannel' then 'FCNetwork'
            when 'Set'
-             conn['functionType'] = 'Ethernet'
+             network['functionType'] = 'Ethernet'
              'NetworkSet'
            end
-    net = objectfromstring(type).find_by(@client, name: conn['networkUri'])
-    raise("The network #{conn['networkUri']} does not exist in the Appliance.") unless net.first
-    conn['networkUri'] = net.first['uri']
+    net = objectfromstring(type).find_by(@client, name: network['networkUri'])
+    raise("The network #{network['networkUri']} does not exist in the Appliance.") unless net.first
+    network['networkUri'] = net.first['uri']
   end
 end
 

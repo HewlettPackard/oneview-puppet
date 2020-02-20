@@ -33,7 +33,19 @@ describe provider_class, unit: true do
               'name'                  => 'SPT',
               'enclosureGroupUri'     => '/rest/',
               'serverHardwareTypeUri' => '/rest/',
-              'description'           => 'description'
+              'description'           => 'description',
+              'connectionSettings'    =>
+              {
+                'manageConnections'   => true,
+                'connections'         =>
+                [
+                  {
+                    'id'              => 3,
+                    'networkUri'      => '/rest/',
+                    'functionType'    => 'Ethernet'
+                  }
+                ]
+              }
             },
         provider: 'c7000'
       )
@@ -134,7 +146,7 @@ describe provider_class, unit: true do
       expect(provider.get_transformation).to be
     end
 
-    it 'should be able to get a server profile template with available networks', if: api_version >= 600 do
+    it 'should be able to get a server profile template with available networks', if: api_version >= 300 do
       resource['data']['queryParameters'] = {
         'enclosureGroupUri'     => 'NameInterconn40GB',
         'serverHardwareTypeUri' => 'SY 480 Gen9 1'

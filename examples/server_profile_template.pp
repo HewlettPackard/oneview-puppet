@@ -26,18 +26,178 @@ oneview_server_profile_template{'Server Profile Template Create':
       name                  => 'New SPT',
       enclosureGroupUri     => 'e10_encl_group',
       serverHardwareTypeUri => 'BL460c Gen9 1',
-      # connections =>
-      # [
-      #   {
-      #     networkUri => 'Ethernet 1',
-      #     functionType => 'Ethernet'
-      #   }
-      # ]
-      # firmware =>
-      # {
-      #   firmwareBaselineUri => 'FW Baseline Name',
-      #   manageFirmware      => true
-      # }
+      connectionSettings    =>
+      {
+        manageConnections => true,
+        connections       =>
+        [
+        {
+            id           => 3,
+            networkUri   => 'FC01',
+            functionType => 'FibreChannel'
+        },
+        {
+            id           => 4,
+            networkUri   => 'FC02',
+            functionType => 'FibreChannel'
+        }
+        ]
+      },
+      firmware              =>
+      {
+        firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
+        manageFirmware      => true
+      },
+      boot                  =>
+      {
+        manageBoot        => true,
+        order             =>
+        [
+        'HardDisk'
+        ],
+        complianceControl => 'Checked'
+      },
+      bootMode              =>
+      {
+        manageMode        => true,
+        mode              => 'UEFIOptimized',
+        pxeBootPolicy     => 'Auto',
+        complianceControl => 'Checked'
+      },
+      bios                  =>
+      {
+        manageBios         => true,
+        complianceControl  => 'Checked',
+        overriddenSettings =>
+        [
+          { id    => 'UsbControl',
+            value => 'UsbEnabled'
+          },
+          { id    => 'PowerRegulator',
+            value => 'StaticHighPerf'
+          },
+          { id    => 'CollabPowerControl',
+            value => 'Disabled'
+          },
+          { id    => 'EnergyPerfBias',
+            value => 'MaxPerf'
+          },
+          { id    => 'MinProcIdlePkgState',
+            value =>'NoState'
+          },
+          { id    => 'NumaGroupSizeOpt',
+            value => 'Clustered'
+          },
+          { id    => 'MinProcIdlePower',
+            value => 'NoCStates'
+          }
+        ]
+      },
+      managementProcessor   =>
+      {
+        complianceControl => 'Checked',
+        manageMp          => true,
+        mpSettings        =>
+        [
+          {
+            settingType => 'LocalAccounts',
+            args        =>
+            {
+              localAccounts =>
+              [
+                {
+                  userName                 => 'user1',
+                  displayName              => 'localuser',
+                  password                 => 'localuser',
+                  userConfigPriv           => false,
+                  remoteConsolePriv        => true,
+                  virtualMediaPriv         => true,
+                  virtualPowerAndResetPriv => true,
+                  iLOConfigPriv            => true
+                }
+              ]
+            }
+          }
+        ],
+      },
+      localStorage          =>
+      {
+        complianceControl => 'Checked',
+        controllers       =>
+        [
+          {
+            deviceSlot    => 'Embedded',
+            mode          => 'RAID',
+            initialize    => false,
+            logicalDrives =>
+            [
+            {
+            name              => 'Operating System',
+            raidLevel         => 'RAID1',
+            bootable          => true,
+            numPhysicalDrives => 2,
+            driveTechnology   => '',
+            sasLogicalJBODId  => '',
+            }
+            ]
+          }
+        ]
+      },
+      sanStorage            =>
+      {
+        complianceControl => 'Checked',
+        manageSanStorage  => true,
+        hostOSType        => 'VMware (ESXi)',
+        volumeAttachments =>
+        [
+          {
+            id                             => 1,
+            associatedTemplateAttachmentId => 'c9b33747-7f2e-485b-8840-7334a824510f',
+            lun                            => '',
+            lunType                        => 'Auto',
+            storagePaths                   =>
+            [
+              {
+                connectionId   => 4,
+                isEnabled      => true,
+                targetSelector => 'Auto'
+              },
+              {
+                connectionId   => 3,
+                isEnabled      => true,
+                targetSelector => 'Auto'
+              }
+            ],
+            volumeUri                      => '/rest/storage-volumes/16ADC014-7799-4814-9962-A93C0143BC68',
+            volume                         => {},
+            volumeStorageSystemUri         => '/rest/storage-systems/MXN6122CVA',
+            bootVolumePriority             => 'NotBootable'
+          },
+          {
+            id                             => 2,
+            associatedTemplateAttachmentId => '4e620feb-742e-4ba1-bb01-2b7625c74c08',
+            lun                            => '',
+            lunType                        => 'Auto',
+            storagePaths                   =>
+            [
+              {
+                connectionId   => 3,
+                isEnabled      => true,
+                targetSelector => 'Auto'
+              },
+              {
+                connectionId   => 4,
+                isEnabled      => true,
+                targetSelector => 'Auto'
+              }
+            ],
+            volumeUri                      => '/rest/storage-volumes/B9981C13-EED1-4F21-B95F-A93D00D23E3F',
+            volume                         => {},
+            volumeStorageSystemUri         => '/rest/storage-systems/MXN6122CVA',
+            bootVolumePriority             => 'NotBootable'
+          }
+          ]
+      }
     }
 }
 
