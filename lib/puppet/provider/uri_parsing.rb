@@ -43,9 +43,6 @@ end
 
 # Gets the Uri for the resource
 def get_uri(key)
-  if key == "enclosureUris"
-  	return @value #ov_resource.first['uri']
-  end
   ov_class = get_class(special_resources_check(key))
   ov_resource = ov_class.find_by(@client, name: @value)
   if sas_resources_check(ov_resource, ov_class)
