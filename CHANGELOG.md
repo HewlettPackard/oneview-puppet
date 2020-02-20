@@ -9,6 +9,7 @@
 - Enclosure group
 - FC network
 - FCoE network
+- Logical enclosure
 - Network set
 - Server hardware type
 - Uplink set
