@@ -29,7 +29,7 @@ def uri_recursive_hash(data)
     hash_array_check(data[key])
     # next if -the uri is already declared- or -the parameter name does not require a uri- or -value is nil-
     next if value.to_s[0..6].include?('/rest/') || !(key.to_s.include?('Uri') || key.to_s == 'uri' || key.to_s.end_with?('URI')) ||
-            value.nil? || %w(null nil).include?(value.to_s) || exception_to_be_treated_within_provider(key)
+            value.nil? || %w(null nil).include?(value.to_s) || exception_to_be_treated_within_provider(key) # && key != "enclosureUris"
     data[key] = get_uri(key)
   end
 end
@@ -37,12 +37,15 @@ end
 # Broken-down blocks
 def exception_to_be_treated_within_provider(key)
   exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri providerUri
-                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris)
+                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris enclosureUris)
   true if exception_list.include?(key)
 end
 
 # Gets the Uri for the resource
 def get_uri(key)
+  if key == "enclosureUris"
+  	return @value #ov_resource.first['uri']
+  end
   ov_class = get_class(special_resources_check(key))
   ov_resource = ov_class.find_by(@client, name: @value)
   if sas_resources_check(ov_resource, ov_class)
@@ -53,6 +56,7 @@ def get_uri(key)
   raise "'#{@value}' has not been found in the Appliance." if ov_resource.empty?
   # replaces the parameter name by its uri
   ov_resource.first.data['uri']
+  
 end
 
 # Check for special/exceptions to the uri default search

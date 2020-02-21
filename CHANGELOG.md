@@ -9,6 +9,7 @@
 - Enclosure group
 - FC network
 - FCoE network
+- Logical enclosure
 - Logical interconnect
 - Logical interconnect group
 - Network set
