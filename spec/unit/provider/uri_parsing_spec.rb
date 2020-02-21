@@ -303,6 +303,11 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'firmwareBaselineUri' => '/rest/firmware-drivers/fake-id'
     end
 
+    it 'should replace ParentTask name by uri when key is parentTaskUri' do
+      data = { 'parentTaskUri' => name }
+      expect(uri_validation(data)).to eq 'parentTaskUri' => '/rest/tasks/fake-id'
+    end
+
     it 'should replace FirmwareDriver name by uri when key is sspUri' do
       data = { 'sspUri' => name }
       expect(uri_validation(data)).to eq 'sspUri' => '/rest/firmware-drivers/fake-id'
