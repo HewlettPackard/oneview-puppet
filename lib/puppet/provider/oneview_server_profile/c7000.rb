@@ -36,7 +36,7 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
 
   # Gets the connection uris if those exist and remove 'query_parameters' from @data
   def data_parse
-    connections_parse if @data['connections']
+    connections_parse if @data['connectionSettings']
     @query ||= @data.delete('query_parameters')
   end
 
