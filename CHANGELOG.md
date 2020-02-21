@@ -14,7 +14,8 @@
 - FC network
 - FCoE network
 - Interconnect
-- Interconnect Link Topology
+- Interconnect link topology
+- Interconnect type
 - Logical interconnect
 - Logical interconnect group
 - Network set
