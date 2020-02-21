@@ -233,6 +233,12 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'networkUris' => names_list
     end
 
+    # Remove this test case once the array handling is done
+    it 'should do nothing when key is networkUris' do
+      data = { 'enclosureUris' => names_list }
+      expect(uri_validation(data)).to eq 'enclosureUris' => names_list
+    end
+
     it 'should do nothing when key is networkUri' do
       data = { 'networkUri' => name }
       expect(uri_validation(data)).to eq 'networkUri' => name
