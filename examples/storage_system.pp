@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@
 oneview_storage_system{'storage_system_1':
     ensure => 'present',
     data   => {
-      managedDomain => 'TestDomain',
+      family        => 'StoreServ',
+      hostname      => '172.18.11.11',
       credentials   => {
-        ip_hostname => '172.18.11.12',
         username    => 'dcs',
         password    => 'dcs',
       }
@@ -36,11 +36,12 @@ oneview_storage_system{'storage_system_2':
     ensure  => 'present',
     require => Oneview_storage_system['storage_system_1'],
     data    => {
-      credentials => {
-        ip_hostname => '172.18.11.12',
-        username    => 'dcs',
+      family        => 'StoreServ',
+      hostname      => '172.18.11.11',
+      deviceSpecificAttributes => {
+              managedDomain => 'TestDomain'
       },
-      description => 'Standard Description for Sample Purposes',
+      description => 'Standard Description for Sample Purposes'
     }
 }
 
@@ -52,30 +53,18 @@ oneview_storage_system{'storage_system_4':
     ensure  => 'get_storage_pools',
     require => Oneview_storage_system['storage_system_3'],
     data    => {
-      credentials => {
-        ip_hostname  => '172.18.11.12',
-      }
-    }
-}
-
-oneview_storage_system{'storage_system_5':
-    ensure  => 'get_managed_ports',
-    require => Oneview_storage_system['storage_system_4'],
-    data    => {
-      credentials => {
-        ip_hostname  => '172.18.11.12',
-      }
+      hostname   => "172.18.11.11"
     }
 }
 
 oneview_storage_system{'storage_system_6':
     ensure  => 'get_host_types',
 }
+
 oneview_storage_system{'storage_system_7':
     ensure => 'absent',
     data   => {
-      credentials => {
-        ip_hostname  => '172.18.11.12',
-      }
+      hostname   => "172.18.11.11"
+
     }
 }
