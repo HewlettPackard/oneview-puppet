@@ -330,6 +330,15 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'dependentResourceUri' => '/rest/logical-interconnects/fake-id'
     end
 
+    it 'should replace SASLogicalInterconnect name by uri when key is dependentResourceUri' do
+      uri = '/rest/sas-logical-interconnects/fake-id'
+      log_interc = OneviewSDK::API300::Synergy::SASLogicalInterconnect.new(@client, 'name' => name, 'uri' => uri)
+      allow(OneviewSDK::API300::Synergy::SASLogicalInterconnect).to receive(:find_by).with(anything, name: name).and_return([log_interc])
+
+      data = { 'dependentResourceUri' => name }
+      expect(uri_validation(data)).to eq 'dependentResourceUri' => '/rest/sas-logical-interconnects/fake-id'
+    end
+
     it 'should replace StoragePool name by uri when key is snapshotPoolUri' do
       data = { 'snapshotPoolUri' => name }
       expect(uri_validation(data)).to eq 'snapshotPoolUri' => '/rest/storage-pools/fake-id'
