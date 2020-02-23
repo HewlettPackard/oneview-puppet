@@ -37,7 +37,7 @@ end
 # Broken-down blocks
 def exception_to_be_treated_within_provider(key)
   exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri providerUri
-                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris)
+                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris enclosureUris)
   true if exception_list.include?(key)
 end
 
