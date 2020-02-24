@@ -356,14 +356,6 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'associatedUplinkSetUri' => '/rest/uplink-sets/fake-id'
     end
 
-    it 'should replace Task name by uri when key is associatedTaskUri' do
-      associated_task = OneviewSDK::API300::C7000::Task.new(@client, 'name' => name, 'uri' => '/rest/tasks/fake-id')
-      allow(OneviewSDK::API300::C7000::Task).to receive(:find_by).with(anything, name: name).and_return([associated_task])
-
-      data = { 'associatedTaskUri' => name }
-      expect(uri_validation(data)).to eq 'associatedTaskUri' => '/rest/tasks/fake-id'
-    end
-
     it 'should replace EthernetNetwork name by uri when key is nativeNetworkUri' do
       eth_network = OneviewSDK::API300::C7000::EthernetNetwork.new(@client, 'name' => name, 'uri' => '/rest/ethernet-networks/fake-id')
       allow(OneviewSDK::API300::C7000::EthernetNetwork).to receive(:find_by).with(anything, name: name).and_return([eth_network])
