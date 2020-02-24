@@ -364,7 +364,6 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'nativeNetworkUri' => '/rest/ethernet-networks/fake-id'
     end
 
-     
     it 'should replace Enclosure name by uri when key is enclosureUris' do
       enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
       allow(OneviewSDK::API300::C7000::Enclosure).to receive(:find_by).with(anything, name: name).and_return([enclosure])
