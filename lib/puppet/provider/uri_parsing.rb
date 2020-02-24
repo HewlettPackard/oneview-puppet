@@ -59,7 +59,7 @@ end
 def special_resources_check(key)
   special_resources = %w(resourceUri actualNetworkUri expectedNetworkUri uri firmwareBaselineUri actualNetworkSanUri dependentResourceUri
                          sspUri associatedUplinkSetUri associatedTaskUri parentTaskUri snapshotPoolUri volumeStoragePoolUri
-                         volumeStorageSystemUri baselineUri mountUri nativeNetworkUri oeBuildPlanURI osVolumeURI
+                         volumeStorageSystemUri baselineUri mountUri nativeNetworkUri enclosureUris oeBuildPlanURI osVolumeURI
                          osDeploymentPlanUri)
   return key unless special_resources.include?(key)
   # Assigns the correct key to be used with find_by, and adds 'Uri' to the end of the key
