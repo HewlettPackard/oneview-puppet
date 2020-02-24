@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -27,10 +27,10 @@ oneview_volume{'volume_1':
             provisioningType => 'Thin',
             size             => 1073741824,
             name             => 'Oneview_Puppet_TEST_VOLUME_1',
-            storagePool      => '/rest/storage-pools/97BC0F4F-3706-496E-B7A1-A8D90065D7E0',
+            storagePool      => '/rest/storage-pools/547F8659-BD66-4775-9943-A93C0143AC70',
             isShareable      => false
       },
-      templateUri => '/rest/storage-volume-templates/33c731e6-cc0f-4c47-bf9c-a8f6004f6076',
+      templateUri => '/rest/storage-volume-templates/b8c4489e-4a19-4bfe-857c-aab8006478a7',
     }
 }
 
@@ -61,9 +61,9 @@ oneview_volume{'volume_3':
 oneview_volume{'volume_4':
     ensure  => 'found',
     require => Oneview_volume['volume_3'],
-    # data   => {
+    #data   => {
     #   provisionType                   => 'Full',
-    # }
+    #}
 }
 
 oneview_volume{'volume_5':
