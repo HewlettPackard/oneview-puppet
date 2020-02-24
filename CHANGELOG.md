@@ -2,6 +2,10 @@
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 minimally where we can use OneView v4.10/v4.20/v5.0 with this SDK. No new fields are added/deleted to support OneView Rest API 800/1000/1200. Complete support will be done in next releases.
 
+### Bug fixes & Enhancements:
+- [#215](https://github.com/HewlettPackard/oneview-puppet/issues/215) Creating a Server Profile based on a Template does not autofill its blank attributes with the template's
+- [#218](https://github.com/HewlettPackard/oneview-puppet/issues/218) Not able to pass connection names in the SPT creation as the networkUri is not parsing in the connectionSettings
+
 ### Oneview Features supported
 - Connection template
 - Ethernet network
@@ -9,6 +13,9 @@
 - Enclosure group
 - FC network
 - FCoE network
+- Interconnect
+- Interconnect link topology
+- Interconnect type
 - Logical enclosure
 - Logical interconnect
 - Logical interconnect group
