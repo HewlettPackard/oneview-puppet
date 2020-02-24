@@ -368,7 +368,7 @@ describe 'uri_parsing', unit: true do
       enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
       allow(OneviewSDK::API300::C7000::Enclosure).to receive(:find_by).with(anything, name: name).and_return([enclosure])
 
-      data = { 'enclosureUris' => name }
+      data = { 'enclosureUris' => '/rest/enclosures/fake-id' }
       expect(uri_validation(data)).to eq 'enclosureUris' => '/rest/enclosures/fake-id'
     end
   end
