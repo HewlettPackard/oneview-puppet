@@ -82,7 +82,7 @@ def special_resources_assign(key)
   when 'parentTaskUri', 'associatedTaskUri' then 'Task'
   when 'nativeNetworkUri' then 'EthernetNetwork'
 # Uncomment this line, once array handling is done for enclosureUris
-#  when 'enclosureUris' then 'Enclosure'
+  when 'enclosureUris' then 'Enclosure'
   when 'osDeploymentPlanUri' then 'OSDeploymentPlan'
   # Image Streamer resources
   when 'oeBuildPlanURI' then 'BuildPlan'
