@@ -364,14 +364,14 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'nativeNetworkUri' => '/rest/ethernet-networks/fake-id'
     end
 
-    # Use this test case when enclosureUris is handled as Array.
-    # it 'should replace Enclosure name by uri when key is enclosureUris' do
-    #  enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
-    #  allow(OneviewSDK::API300::C7000::Enclosure).to receive(:find_by).with(anything, name: name).and_return([enclosure])
+     Use this test case when enclosureUris is handled as Array.
+    it 'should replace Enclosure name by uri when key is enclosureUris' do
+      enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
+      allow(OneviewSDK::API300::C7000::Enclosure).to receive(:find_by).with(anything, name: name).and_return([enclosure])
 
-    #  data = { 'enclosureUris' => name }
-    #  expect(uri_validation(data)).to eq 'enclosureUris' => '/rest/enclosures/fake-id'
-    # end
+      data = { 'enclosureUris' => name }
+      expect(uri_validation(data)).to eq 'enclosureUris' => '/rest/enclosures/fake-id'
+     end
   end
 
   describe 'given the OneView Synergy special resources managed by uri_parsing' do
