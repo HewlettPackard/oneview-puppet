@@ -17,6 +17,7 @@
 - Server hardware type
 - Server profile
 - Server profile template
+- Storage pool
 - Uplink set
 
 # v2.3.0 (2018-06-26)
