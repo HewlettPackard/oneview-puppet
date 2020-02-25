@@ -364,6 +364,14 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'nativeNetworkUri' => '/rest/ethernet-networks/fake-id'
     end
 
+    it 'should replace SAS Interconnect name by uri when key is abcUris' do
+      sas_li = OneviewSDK::API300::Synergy::SASInterconnect.new(@client, 'name' => name, 'uri' => '/rest/sasi-interconnect/id')
+      allow(OneviewSDK::API300::Synergy::SASInterconnect).to receive(:find_by).with(anything, name: name).and_return([sas_li])
+
+      data = { 'abcUris' => name }
+      expect(uri_validation(data)).to eq 'abcUris' => '/rest/sas-interconnect/id'
+    end
+
     # Use this test case when enclosureUris is handled as Array.
     # it 'should replace Enclosure name by uri when key is enclosureUris' do
     #  enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
