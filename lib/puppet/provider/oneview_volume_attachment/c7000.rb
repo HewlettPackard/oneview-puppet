@@ -43,7 +43,12 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
   end
 
   def get_extra_unmanaged_volumes
-    extra_unmanaged_volumes = @resource_type.get_extra_unmanaged_volumes(@client)['members']
+    puts "##############################################################################"
+    Puppet.notice "\n\nUnmanaged volumes inside  ...:\n\n"
+    extra_unmanaged_volumes = @resource_type.get_extra_unmanaged_volumes(@client)
+    Puppet.notice "\n\nUnmanaged volumes inside  ...:\n\n"
+    #extra_unmanaged_volumes = @resource_type.get_extra_unmanaged_volumes(@client)['members']
+    Puppet.notice "\n\nUnmanaged volumes inside  ...after:\n\n"
     raise "\n\nNo Unmanaged volumes were found on the appliance.\n\n" if extra_unmanaged_volumes.empty?
     Puppet.notice "\n\nUnmanaged volumes:\n\n"
     extra_unmanaged_volumes.each do |unmanaged_volume|
