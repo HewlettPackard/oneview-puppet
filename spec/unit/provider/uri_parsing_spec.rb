@@ -365,6 +365,7 @@ describe 'uri_parsing', unit: true do
     end
 
     it 'should replace SAS Interconnect name by uri when key is SASInterconnectUri' do
+      let(:resource_variant) { 'Synergy' }
       sas_li = OneviewSDK::API300::Synergy::SASInterconnect.new(@client, 'name' => name, 'uri' => '/rest/sasi-interconnect/id')
       allow(OneviewSDK::API300::Synergy::SASInterconnect).to receive(:find_by).with(anything, name: name).and_return([sas_li])
 
