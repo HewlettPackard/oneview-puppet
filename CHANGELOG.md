@@ -16,6 +16,7 @@
 - Interconnect
 - Interconnect link topology
 - Interconnect type
+- Logical enclosure
 - Logical interconnect
 - Logical interconnect group
 - Network set
