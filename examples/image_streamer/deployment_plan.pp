@@ -22,8 +22,8 @@ image_streamer_deployment_plan{'deployment_plan_1':
       name           => 'Demo Deployment Plan',
       description    => 'Description of this Deployment Plan',
       hpProvided     => false,
-      oeBuildPlanURI => '/rest/build-plans/cc1bd266-d50b-4a87-a913-5b0c4b2e4157',
-      goldenImageURI => '/rest/golden-images/f9937b11-da28-49cf-8db2-d3100860031a'
+      oeBuildPlanURI => '/rest/build-plans/6ea78541-93c7-48da-b7b3-205390ea49d8',
+      goldenImageURI => '/rest/golden-images/81585f7d-c14b-4bec-8163-5cd3d308ae7a'
     }
 }
 
