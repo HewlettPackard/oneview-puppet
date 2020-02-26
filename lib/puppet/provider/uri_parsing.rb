@@ -36,6 +36,7 @@ end
 
 # Broken-down blocks
 def exception_to_be_treated_within_provider(key)
+  # TODO: Remove the enclosureUris from this list once the issue(#194) is fixed.
   exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri providerUri
                       permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris enclosureUris)
   true if exception_list.include?(key)
@@ -81,7 +82,7 @@ def special_resources_assign(key)
   when 'associatedUplinkSetUri' then 'UplinkSet'
   when 'parentTaskUri', 'associatedTaskUri' then 'Task'
   when 'nativeNetworkUri' then 'EthernetNetwork'
-  # Uncomment this line, once array handling is done for enclosureUris
+  # TODO: Uncomment this line, once array handling is done for enclosureUris for issue #194
   # when 'enclosureUris' then 'Enclosure'
   when 'osDeploymentPlanUri' then 'OSDeploymentPlan'
   # Image Streamer resources
