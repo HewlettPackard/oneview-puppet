@@ -30,9 +30,9 @@ $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
 $network_names = [ 'Test Puppet Network' ]
 
 oneview_logical_interconnect_group{'Test Puppet LIG':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_ethernet_network['Test Puppet Network'],
-  data   => {
+  data    => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
     interconnectBaySet => 3,
@@ -95,9 +95,9 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
 }
 
 oneview_sas_logical_interconnect_group{'Test Puppet SAS LIG':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_logical_interconnect_group['Test Puppet LIG'],
-  data   => {
+  data    => {
     name          => 'Test Puppet SAS LIG',
     interconnects =>
     [
@@ -114,151 +114,149 @@ oneview_sas_logical_interconnect_group{'Test Puppet SAS LIG':
 }
 
 oneview_enclosure_group{'Test Enclosure Group':
-    ensure => 'present',
-    require => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG'],
-    data   => {
-      name                        => 'Test Enclosure Group',
-      stackingMode                => 'Enclosure',
-      interconnectBayMappingCount => '8',
-      enclosureCount              => '3',
-      interconnectBayMappings     =>
-      [
-       {
-         interconnectBay             => '1',
-         logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
-         enclosureIndex              => '1'
-       },
-       {
-         interconnectBay             => '4',
-         logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
-         enclosureIndex              => '1'
-       },
-       {
-         interconnectBay             => '1',
-         logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
-         enclosureIndex              => '2'
-       },
-       {
-         interconnectBay             => '4',
-         logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
-         enclosureIndex              => '2'
-       },
-       {
-         interconnectBay             => '1',
-         logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
-         enclosureIndex              => '3'
-       },
-       {
-         interconnectBay             => '4',
-         logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
-         enclosureIndex              => '3'
-       },
-       {
-         interconnectBay             => '3',
-         logicalInterconnectGroupUri => Oneview_logical_interconnect_group['Test Puppet LIG']['data']['name']
-       },
-       {
-         interconnectBay             => '6',
-         logicalInterconnectGroupUri => Oneview_logical_interconnect_group['Test Puppet LIG']['data']['name']
-       },
-     ]
-    }
+  ensure  => 'present',
+  require => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG'],
+  data    => {
+    name                        => 'Test Enclosure Group',
+    stackingMode                => 'Enclosure',
+    interconnectBayMappingCount => '8',
+    enclosureCount              => '3',
+    interconnectBayMappings     =>
+    [
+      {
+        interconnectBay             => '1',
+        logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
+        enclosureIndex              => '1'
+      },
+      {
+        interconnectBay             => '4',
+        logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
+        enclosureIndex              => '1'
+      },
+      {
+        interconnectBay             => '1',
+        logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
+        enclosureIndex              => '2'
+      },
+      {
+        interconnectBay             => '4',
+        logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
+        enclosureIndex              => '2'
+      },
+      {
+        interconnectBay             => '1',
+        logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
+        enclosureIndex              => '3'
+      },
+      {
+        interconnectBay             => '4',
+        logicalInterconnectGroupUri => Oneview_sas_logical_interconnect_group['Test Puppet SAS LIG']['data']['name'],
+        enclosureIndex              => '3'
+      },
+      {
+        interconnectBay             => '3',
+        logicalInterconnectGroupUri => Oneview_logical_interconnect_group['Test Puppet LIG']['data']['name']
+      },
+      {
+        interconnectBay             => '6',
+        logicalInterconnectGroupUri => Oneview_logical_interconnect_group['Test Puppet LIG']['data']['name']
+      },
+    ]
+  }
 }
 
 oneview_logical_enclosure{'Test LE':
-     ensure  => 'present',
-     require => Oneview_enclosure_group['Test Enclosure Group'],
-     data    => {
-       name                      =>  'Test LE',
-       enclosureUris             =>  ['/rest/enclosures/0000000000A66101', '/rest/enclosures/0000000000A66102', '/rest/enclosures/0000000000A66103'],
-       enclosureGroupUri         =>  Oneview_enclosure_group['Test Enclosure Group']['data']['name'],
-       firmwareBaselineUri       =>  'null',
-       forceInstallFirmware      =>  'false',
-     }
+  ensure  => 'present',
+  require => Oneview_enclosure_group['Test Enclosure Group'],
+  data    => {
+    name                 => 'Test LE',
+    enclosureUris        => ['/rest/enclosures/0000000000A66101', '/rest/enclosures/0000000000A66102', '/rest/enclosures/0000000000A66103'],
+    enclosureGroupUri    => Oneview_enclosure_group['Test Enclosure Group']['data']['name'],
+    firmwareBaselineUri  => 'null',
+    forceInstallFirmware => 'false',
+  }
 }
 
 oneview_server_profile_template{'Test SPT':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_logical_enclosure['Test LE'],
-  data   =>
+  data    => {
+    name                  => 'Test SPT',
+    enclosureGroupUri     => Oneview_enclosure_group['Test Enclosure Group']['data']['name'],
+    serverHardwareTypeUri => 'SY 480 Gen9 1',
+    connectionSettings    =>
     {
-      name                  => 'Test SPT',
-      enclosureGroupUri     => Oneview_enclosure_group['Test Enclosure Group']['data']['name'],
-      serverHardwareTypeUri => 'SY 480 Gen9 1',
-      connectionSettings    =>
+      manageConnections => true,
+      connections       =>
+      [
       {
-        manageConnections => true,
-        connections       =>
-        [
-        {
-            id            => 1,
-            networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
-            functionType  => 'Ethernet',
-            portId        => 'Mezz 3:1-a',
-            requestedMbps => '2000'
-        }
-        ]
-      },
-      firmware              =>
-      {
-        firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
-        manageFirmware      => true
-      },
-      boot                  =>
-      {
-        manageBoot        => true,
-        order             =>
-        [
-        'CD',
-        'USB',
-        'HardDisk',
-        'PXE'
-        ],
-        complianceControl => 'Checked'
-      },
-      bootMode              =>
-      {
-        manageMode => true,
-        mode       => 'BIOS',
-        secureBoot => 'Disabled'
-      },
-      bios                  =>
-      {
-        manageBios         => true
-      },
-      localStorage          =>
-      {
-        complianceControl => 'Checked',
-        controllers       =>
-        [
-          {
-            deviceSlot    => 'Mezz 1',
-            mode          => 'HBA',
-            initialize    => false
-          }
-        ],
-        sasLogicalJBODs =>
-        [
-          {
-            id                => '1',
-            deviceSlot        => 'Mezz 1',
-            name              => 'DATA',
-            numPhysicalDrives => '1',
-            driveMinSizeGB    => '500',
-            driveMaxSizeGB    => '500',
-            driveTechnology   => 'SasHdd',
-            eraseData         => false
-          }
-        ]
+          id            => 1,
+          networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-a',
+          requestedMbps => '2000'
       }
+      ]
+    },
+    firmware              =>
+    {
+      firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
+      manageFirmware      => true
+    },
+    boot                  =>
+    {
+      manageBoot        => true,
+      order             =>
+      [
+      'CD',
+      'USB',
+      'HardDisk',
+      'PXE'
+      ],
+      complianceControl => 'Checked'
+    },
+    bootMode              =>
+    {
+      manageMode => true,
+      mode       => 'BIOS',
+      secureBoot => 'Disabled'
+    },
+    bios                  =>
+    {
+      manageBios         => true
+    },
+    localStorage          =>
+    {
+      complianceControl => 'Checked',
+      controllers       =>
+      [
+        {
+          deviceSlot => 'Mezz 1',
+          mode       => 'HBA',
+          initialize => false
+        }
+      ],
+      sasLogicalJBODs   =>
+      [
+        {
+          id                => '1',
+          deviceSlot        => 'Mezz 1',
+          name              => 'DATA',
+          numPhysicalDrives => '1',
+          driveMinSizeGB    => '500',
+          driveMaxSizeGB    => '500',
+          driveTechnology   => 'SasHdd',
+          eraseData         => false
+        }
+      ]
     }
+  }
 }
 
 oneview_server_profile_template{'Test Server Profile Create from Profile Template':
   ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Test SPT'],
-  data    =>
-    {
-      name => 'Test SPT'
-    }
+  data    => {
+    name => 'Test SPT'
+  }
 }

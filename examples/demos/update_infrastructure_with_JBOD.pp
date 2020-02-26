@@ -29,9 +29,9 @@ $interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
 $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
 $network_names = [ 'Test Puppet Network', 'Test Puppet Network #2']
 oneview_logical_interconnect_group{'Test Puppet LIG':
-  ensure => 'present',
+  ensure  => 'present',
   require => Oneview_ethernet_network['Test Puppet Network'],
-  data   => {
+  data    => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
     interconnectBaySet => 3,
@@ -97,9 +97,9 @@ oneview_logical_interconnect{'Test Logical Interconnect Compliance':
   ensure  => 'set_compliance',
   require => Oneview_logical_interconnect_group['Test Puppet LIG'],
   data    =>
-    {
-      name => 'Test LE-Test Puppet LIG'
-    }
+  {
+    name => 'Test LE-Test Puppet LIG'
+  }
 }
 
 
@@ -107,91 +107,91 @@ oneview_server_profile_template{'Test Server Profile Template Update':
   ensure  => 'present',
   require => Oneview_logical_interconnect['Test Logical Interconnect Compliance'],
   data    =>
+  {
+    name                  => 'Test SPT',
+    enclosureGroupUri     => 'Test Enclosure Group',
+    serverHardwareTypeUri => 'SY 480 Gen9 1',
+    connectionSettings    =>
     {
-      name                  => 'Test SPT',
-      enclosureGroupUri     => 'Test Enclosure Group',
-      serverHardwareTypeUri => 'SY 480 Gen9 1',
-      connectionSettings    =>
+      manageConnections => true,
+      connections       =>
+      [
       {
-        manageConnections => true,
-        connections       =>
-        [
-        {
-            id            => 1,
-            networkUri    => 'Test Puppet Network',
-            functionType  => 'Ethernet',
-            portId        => 'Mezz 3:1-a',
-            requestedMbps => '2000'
-        },
-        {
-            id            => 2,
-            networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
-            functionType  => 'Ethernet',
-            portId        => 'Mezz 3:2-a',
-            requestedMbps => '2000'
-        }
-        ]
+          id            => 1,
+          networkUri    => 'Test Puppet Network',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-a',
+          requestedMbps => '2000'
       },
-      firmware              =>
       {
-        firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
-        manageFirmware      => true
-      },
-      boot                  =>
-      {
-        manageBoot        => true,
-        order             =>
-        [
-        'CD',
-        'USB',
-        'HardDisk',
-        'PXE'
-        ],
-        complianceControl => 'Checked'
-      },
-      bootMode              =>
-      {
-        manageMode => true,
-        mode       => 'BIOS',
-        secureBoot => 'Disabled'
-      },
-      bios                  =>
-      {
-        manageBios         => true
-      },
-      localStorage          =>
-      {
-        complianceControl => 'Checked',
-        controllers       =>
-        [
-          {
-            deviceSlot    => 'Mezz 1',
-            mode          => 'HBA',
-            initialize    => false
-          }
-        ],
-        sasLogicalJBODs =>
-        [
-          {
-            id                => '1',
-            deviceSlot        => 'Mezz 1',
-            name              => 'DATA',
-            numPhysicalDrives => '1',
-            driveMinSizeGB    => '500',
-            driveMaxSizeGB    => '500',
-            driveTechnology   => 'SasHdd',
-            eraseData         => false
-          }
-        ]
+          id            => 2,
+          networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:2-a',
+          requestedMbps => '2000'
       }
+      ]
+    },
+    firmware              =>
+    {
+      firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
+      manageFirmware      => true
+    },
+    boot                  =>
+    {
+      manageBoot        => true,
+      order             =>
+      [
+      'CD',
+      'USB',
+      'HardDisk',
+      'PXE'
+      ],
+      complianceControl => 'Checked'
+    },
+    bootMode              =>
+    {
+      manageMode => true,
+      mode       => 'BIOS',
+      secureBoot => 'Disabled'
+    },
+    bios                  =>
+    {
+      manageBios         => true
+    },
+    localStorage          =>
+    {
+      complianceControl => 'Checked',
+      controllers       =>
+      [
+        {
+          deviceSlot => 'Mezz 1',
+          mode       => 'HBA',
+          initialize => false
+        }
+      ],
+      sasLogicalJBODs   =>
+      [
+        {
+          id                => '1',
+          deviceSlot        => 'Mezz 1',
+          name              => 'DATA',
+          numPhysicalDrives => '1',
+          driveMinSizeGB    => '500',
+          driveMaxSizeGB    => '500',
+          driveTechnology   => 'SasHdd',
+          eraseData         => false
+        }
+      ]
     }
+  }
 }
 
 oneview_server_profile{'Server Profile update from Template':
   ensure  => 'update_from_template',
   require => Oneview_server_profile_template['Test Server Profile Template Update'],
   data    =>
-    {
-      name => 'Server_Profile_created_from_Test SPT'
-    }
+  {
+    name => 'Server_Profile_created_from_Test SPT'
+  }
 }
