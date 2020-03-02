@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ image_streamer_deployment_plan{'deployment_plan_1':
       name           => 'Demo Deployment Plan',
       description    => 'Description of this Deployment Plan',
       hpProvided     => false,
-      oeBuildPlanURI => '/rest/build-plans/cc1bd266-d50b-4a87-a913-5b0c4b2e4157',
-      goldenImageURI => '/rest/golden-images/f9937b11-da28-49cf-8db2-d3100860031a'
+      oeBuildPlanURI => '/rest/build-plans/ca9fd133-7ab6-4154-a213-952f10bdc260',
+      goldenImageURI => '/rest/golden-images/f86f9fbc-e353-42b1-a4a6-764696ba94a5'
     }
 }
 
