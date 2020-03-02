@@ -25,6 +25,7 @@
 - Server hardware type
 - Server profile
 - Server profile template
+- Storage pool
 - Storage system
 - Uplink set
 
