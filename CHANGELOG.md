@@ -16,6 +16,7 @@
 - Interconnect
 - Interconnect link topology
 - Interconnect type
+- Logical enclosure
 - Logical interconnect
 - Logical interconnect group
 - Network set
@@ -24,8 +25,13 @@
 - Server hardware type
 - Server profile
 - Server profile template
+- Storage pool
+- Storage system
 - Storage volume template
 - Uplink set
+
+### Image Streamer support
+- Deployment plan
 
 # v2.3.0 (2018-06-26)
 ### Version highlights:
