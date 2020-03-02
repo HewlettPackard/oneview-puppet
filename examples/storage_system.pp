@@ -65,6 +65,5 @@ oneview_storage_system{'storage_system_7':
     ensure => 'absent',
     data   => {
       hostname   => '172.18.11.11'
-
     }
 }
