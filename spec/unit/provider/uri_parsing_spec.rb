@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -233,6 +233,12 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'networkUris' => names_list
     end
 
+    # Remove this test case once the array handling is done
+    it 'should do nothing when key is enclosureUris' do
+      data = { 'enclosureUris' => names_list }
+      expect(uri_validation(data)).to eq 'enclosureUris' => names_list
+    end
+
     it 'should do nothing when key is networkUri' do
       data = { 'networkUri' => name }
       expect(uri_validation(data)).to eq 'networkUri' => name
@@ -358,13 +364,14 @@ describe 'uri_parsing', unit: true do
       expect(uri_validation(data)).to eq 'nativeNetworkUri' => '/rest/ethernet-networks/fake-id'
     end
 
-    it 'should replace Enclosure name by uri when key is enclosureUris' do
-      enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
-      allow(OneviewSDK::API300::C7000::Enclosure).to receive(:find_by).with(anything, name: name).and_return([enclosure])
+    # TODOD: Use this test case when enclosureUris is handled as Array for issue #194.
+    # it 'should replace Enclosure name by uri when key is enclosureUris' do
+    #  enclosure = OneviewSDK::API300::C7000::Enclosure.new(@client, 'name' => name, 'uri' => '/rest/enclosures/fake-id')
+    #  allow(OneviewSDK::API300::C7000::Enclosure).to receive(:find_by).with(anything, name: name).and_return([enclosure])
 
-      data = { 'enclosureUris' => name }
-      expect(uri_validation(data)).to eq 'enclosureUris' => '/rest/enclosures/fake-id'
-    end
+    #  data = { 'enclosureUris' => name }
+    #  expect(uri_validation(data)).to eq 'enclosureUris' => '/rest/enclosures/fake-id'
+    # end
   end
 
   describe 'given the OneView Synergy special resources managed by uri_parsing' do
