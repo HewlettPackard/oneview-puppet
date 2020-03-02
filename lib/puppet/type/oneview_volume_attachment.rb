@@ -25,7 +25,6 @@ Puppet::Type.newtype(:oneview_volume_attachment) do
     end
 
     newvalue(:get_extra_unmanaged_volumes) do
-      puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
       provider.get_extra_unmanaged_volumes
     end
 

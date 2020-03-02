@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -43,13 +43,9 @@ Puppet::Type.type(:oneview_volume_attachment).provide :c7000, parent: Puppet::On
   end
 
   def get_extra_unmanaged_volumes
-    puts "##############################################################################"
-    Puppet.notice "\n\nUnmanaged volumes inside  ...:\n\n"
-    extra_unmanaged_volumes = @resource_type.get_extra_unmanaged_volumes(@client)
-    Puppet.notice "\n\nUnmanaged volumes inside  ...:\n\n"
-    #extra_unmanaged_volumes = @resource_type.get_extra_unmanaged_volumes(@client)['members']
-    Puppet.notice "\n\nUnmanaged volumes inside  ...after:\n\n"
-    raise "\n\nNo Unmanaged volumes were found on the appliance.\n\n" if extra_unmanaged_volumes.empty?
+    unmanaged_volumes_out = @resource_type.get_extra_unmanaged_volumes(@client)
+    raise "\n\nNo Unmanaged volumes were found on the appliance.\n\n" if unmanaged_volumes_out.empty?
+    extra_unmanaged_volumes = unmanaged_volumes_out['members']
     Puppet.notice "\n\nUnmanaged volumes:\n\n"
     extra_unmanaged_volumes.each do |unmanaged_volume|
       Puppet.notice "\n- #{unmanaged_volume['ownerUri']}\n"

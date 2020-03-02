@@ -23,7 +23,7 @@
 oneview_volume_attachment{'volume_attachment_3':
     ensure => 'found',
     data   => {
-      name                   => 'test11, test_attachment',
+      name                   => 'Server Profile Attachment Demo, volume-attachment-demo',
     }
 }
 
@@ -31,16 +31,16 @@ oneview_volume_attachment{'volume_attachment_3':
 oneview_volume_attachment{'volume_attachment_4':
     ensure  => 'get_extra_unmanaged_volumes',
     require => Oneview_volume_attachment['volume_attachment_3'],
-    data    => {
-#      name       => 'test11, test_attachment',
-    }
+    # data    => {
+    #   name       => 'ONEVIEW_PUPPET_TEST VA1',
+    # }
 }
 
 # This requires the name of the server profile from which to remove the Volume Attachments
 oneview_volume_attachment{'volume_attachment_5':
     ensure => 'remove_extra_unmanaged_volume',
     data   => {
-      name       => 'test11',
+      name       => 'OneViewSDK Test ServerProfile1',
     }
 }
 
@@ -49,6 +49,6 @@ oneview_volume_attachment{'volume_attachment_5':
 oneview_volume_attachment{'volume_attachment_6':
     ensure => 'get_paths',
     data   => {
-      name       => 'test11, test_attachment',
+      name       => 'ONEVIEW_PUPPET_TEST VA1',
     }
 }

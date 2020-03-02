@@ -25,6 +25,7 @@
 - Server profile
 - Server profile template
 - Uplink set
+- Volume attachment
 
 # v2.3.0 (2018-06-26)
 ### Version highlights:
