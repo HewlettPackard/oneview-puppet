@@ -27,6 +27,7 @@
 - Server profile template
 - Storage pool
 - Storage system
+- Storage volume template
 - Uplink set
 
 ### Image Streamer support
