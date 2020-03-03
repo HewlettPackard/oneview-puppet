@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -23,27 +23,27 @@ oneview_storage_pool{'storage_pool_1':
     ensure => 'present',
     data   => {
       poolName         => 'CPG-SSD-AO',
-      storageSystemUri => 'ThreePAR7200-9055'
+      storageSystemUri => 'ThreePAR-2'
       # storageSystemUri => '/rest/storage-systems/TXQ1000307'
     }
 }
 
 oneview_storage_pool{'storage_pool_2':
-    ensure => 'found',
-    # require => Oneview_storage_pool['storage_pool_1'],
-    # This resource accepts a data hash to filter out results or no data hash to display all
-    # data   => {
-    #   poolName                   => 'CPG-SSD-AO',
-    # }
+    ensure  => 'found',
+    require => Oneview_storage_pool['storage_pool_1'],
+    #This resource accepts a data hash to filter out results or no data hash to display all
+    data    => {
+      poolName                   => 'CPG-SSD-AO',
+    }
 }
 
 # Method available from API500 and above
 oneview_storage_pool{'storage_pool_4':
     ensure => 'manage',
     data   => {
-      name             => 'cpg_growth-warning-100GiB',
+      name             => 'cpg-growth-limit-1TiB',
       isManaged        => true,
-      storageSystemUri => '/rest/storage-systems/TXQ1000307'
+      storageSystemUri => '/rest/storage-systems/TXQ1010307'
     }
 }
 
@@ -51,7 +51,8 @@ oneview_storage_pool{'storage_pool_4':
 oneview_storage_pool{'storage_pool_5':
     ensure => 'reachable',
     data   => {
-      uri     => '/rest/storage-pools/C2ECD708-4F97-4DC2-925A-A8D90065D7D2',
+      uri              => '/rest/storage-pools/85DEFE8C-939C-4E40-B886-AB6B00DBCB05',
+      storageSystemUri => '/rest/storage-systems/TXQ1010307'
     }
 }
 
@@ -60,6 +61,7 @@ oneview_storage_pool{'storage_pool_3':
     ensure  => 'absent',
     require => Oneview_storage_pool['storage_pool_2'],
     data    => {
-      poolName         => 'CPG-SSD-AO',
+      poolName         => 'cpg-growth-limit-1TiB',
+      storageSystemUri => '/rest/storage-systems/TXQ1010307'
     }
 }
