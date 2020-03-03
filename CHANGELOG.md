@@ -30,6 +30,7 @@
 - Storage volume template
 - Uplink set
 - Volume
+- Volume attachment
 
 ### Image Streamer support
 - Deployment plan
