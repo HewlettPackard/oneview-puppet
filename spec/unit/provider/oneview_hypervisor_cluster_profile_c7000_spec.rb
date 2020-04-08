@@ -46,8 +46,9 @@ describe provider_class, unit: true do
             }
           },
       provider: 'c7000'
-      )
-    end
+    )
+  end
+  
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }

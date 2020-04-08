@@ -25,25 +25,26 @@ describe provider_class, integration: true do
     Puppet::Type.type(:oneview_hypervisor_cluster_profile).new(
       name: 'hcp1',
       ensure: 'present',
-        data   => {
-            type                           => HypervisorClusterProfileV3,
-            name                           => Cluster5,
-            hypervisorManagerUri           => /rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603,
-            path                           => DC2,
-            hypervisorType                 => Vmware,
-            hypervisorHostProfileTemplate  => 
+      data: 
+          {
+            'type' => 'HypervisorClusterProfileV3',
+            'name' => 'Cluster5',
+            'hypervisorManagerUri' => '/rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603',
+            'path' => 'DC2',
+            'hypervisorType' => 'Vmware',
+            'hypervisorHostProfileTemplate' => 
             {
-              serverProfileTemplateUri     => /rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba,
-              deploymentPlan   => {
-               deploymentPlanUri            => /rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf,
-               serverPassword               => dcs
+              'serverProfileTemplateUri' => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
+              'deploymentPlan' => 
+              {
+                'deploymentPlanUri' => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+                'serverPassword' => 'dcs'
               },
-              hostprefix                    => Test-Cluster-host
+            'hostprefix' => 'Test-Cluster-host'
             }
-        },
-        provider: 'synergy'
+          }
     )
-  end
+end
 
   let(:provider) { resource.provider }
 

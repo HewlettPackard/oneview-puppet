@@ -4,23 +4,26 @@ type_class = Puppet::Type.type(:oneview_hypervisor_cluster_profile)
 
 def hcp_config
   {
-    name:                           'test_hcp',
-    data   => {
-        type                           => HypervisorClusterProfileV3,
-        name                           => Cluster5,
-        hypervisorManagerUri           => /rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603,
-        path                           => DC2,
-        hypervisorType                 => Vmware,
-        hypervisorHostProfileTemplate  => 
+    name: 'hcp1',
+    ensure: 'present',
+    data: 
         {
-          serverProfileTemplateUri     => /rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba,
-          deploymentPlan   => {
-           deploymentPlanUri            => /rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf,
-           serverPassword               => dcs
-          },
-          hostprefix                    => Test-Cluster-host
-        }
-    }
+          'type' => 'HypervisorClusterProfileV3',
+          'name' => 'Cluster5',
+          'hypervisorManagerUri' => '/rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603',
+          'path' => 'DC2',
+          'hypervisorType' => 'Vmware',
+          'hypervisorHostProfileTemplate' => 
+           {
+             'serverProfileTemplateUri' => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
+             'deploymentPlan' => 
+              {
+                'deploymentPlanUri' => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+                'serverPassword' => 'dcs'
+              },
+              'hostprefix' => 'Test-Cluster-host'
+            }
+          }
   }
 end
 
