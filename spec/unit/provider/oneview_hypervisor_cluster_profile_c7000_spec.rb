@@ -18,7 +18,7 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_cluster_profile).provider(:c7000)
 api_version = login[:api_version] || 800
-resource_type = OneviewSDK.resource_named(:Hypervisor Cluster Profile, api_version, :C7000)
+resource_type = OneviewSDK.resource_named(:HypervisorClusterProfile, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -27,27 +27,27 @@ describe provider_class, unit: true do
     Puppet::Type.type(:oneview_hypervisor_cluster_profile).new(
       name: 'hcp1',
       ensure: 'present',
-      data   => 
+      data:
           {
-            'type'                           => 'HypervisorClusterProfileV3',
-            'name'                           => 'Cluster5',
-            'hypervisorManagerUri'           => '/rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603',
-            'path'                           => 'DC2',
-            'hypervisorType'                 => 'Vmware',
-            'hypervisorHostProfileTemplate'  => 
+            'type' => 'HypervisorClusterProfileV3',
+            'name' => 'Cluster5',
+            'hypervisorManagerUri' => '/rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603',
+            'path' => 'DC2',
+            'hypervisorType' => 'Vmware',
+            'hypervisorHostProfileTemplate' =>
+            {
+              'serverProfileTemplateUri' => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
+              'deploymentPlan' =>
               {
-                'serverProfileTemplateUri'    => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
-                'deploymentPlan'   => {
-                'deploymentPlanUri'            => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-                'serverPassword'             => 'dcs'
+                'deploymentPlanUri' => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+                'serverPassword' => 'dcs'
               },
-                'hostprefix'                    => 'Test-Cluster-host'
-              }
+              'hostprefix' => 'Test-Cluster-host'
+            }
           },
-      'provider': 'c7000'
-    )
-  end
-
+      provider: 'c7000'
+      )
+    end
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }

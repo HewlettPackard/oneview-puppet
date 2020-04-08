@@ -16,7 +16,6 @@
 
 Puppet::Type.newtype(:oneview_hypervisor_cluster_profile) do
   desc "Oneview's Hypervisor Cluster Profile"
-  
   ensurable do
     defaultvalues
     # :nocov:
@@ -24,10 +23,8 @@ Puppet::Type.newtype(:oneview_hypervisor_cluster_profile) do
     newvalue(:found) do
       provider.found
     end
-
-      # :nocov:
   end
-  
+
   newparam(:name, namevar: true) do
     desc 'Hypervisor Cluster Profile name'
   end
