@@ -14,10 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-Puppet::Type.type(:oneview_hypervisor_manager).provide :synergy, parent: :c7000 do
-    desc 'Provider for OneView Hypervisor Manager using the Synergy variant of the OneView API'
-  
-    confine feature: :oneview
-    confine true: login[:hardware_variant] == 'Synergy'
-  end
-  
+Puppet::Type.type(:oneview_hypervisor_manager).provide :synergy, parent: :synergy do
+  desc 'Provider for OneView Hypervisor Manager using the Synergy variant of the OneView API'
+  confine feature: :oneview
+  confine true: login[:hardware_variant] == 'Synergy'
+end

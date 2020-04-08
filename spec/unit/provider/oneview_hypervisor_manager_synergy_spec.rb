@@ -17,8 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_manager).provider(:synergy)
-api_version = login[:api_version] || 200
-resource_type = OneviewSDK.resource_named(:Hypervisor Manager, api_version, :Synergy)
+api_version = login[:api_version] || 800
+resource_type = OneviewSDK.resource_named(:HypervisorManager, api_version, :Synergy)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -28,11 +28,11 @@ describe provider_class, unit: true do
       name: 'hm',
       ensure: 'present',
       data:
-        {
-            'name'       => '172.18.1.13',
-            'username'   => 'dcs',
-            'password'   => 'dcs',
-        },
+          {
+            'name' => '172.18.1.13',
+            'username' => 'dcs',
+            'password' => 'dcs',
+          },
       provider: 'synergy'
     )
   end

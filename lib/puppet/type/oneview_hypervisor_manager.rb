@@ -15,28 +15,25 @@
 ################################################################################
 
 Puppet::Type.newtype(:oneview_hypervisor_manager) do
-    desc "Oneview's Hypervisor Manager"
-  
+  desc "Oneview's Hypervisor Manager"
+  # :nocov:
+  # Get methods
+  ensurable do
+    defaultvalues
+    newvalue(:found) do
+      provider.found
+    end
     # :nocov:
-    # Get methods
-    ensurable do
-      defaultvalues
-  
-      newvalue(:found) do
-        provider.found
-      end
-      # :nocov:
-    end
-  
-    newparam(:name, namevar: true) do
-      desc 'Hypervisor Manager name'
-    end
-  
-    newproperty(:data) do
-      desc 'Hypervisor Manager data hash containing all specifications'
-      validate do |value|
-        raise 'Inserted value for data is not valid' unless value.class == Hash
-      end
-    end
   end
   
+  newparam(:name, namevar: true) do
+    desc 'Hypervisor Manager name'
+  end
+  
+  newproperty(:data) do
+    desc 'Hypervisor Manager data hash containing all specifications'
+    validate do |value|
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+    end
+  end
+end

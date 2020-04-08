@@ -25,9 +25,9 @@ describe provider_class, integration: true do
       ensure: 'present',
       data:
           {
-            'name'       => ''172.18.1.13'',
-            'username'   => 'dcs',
-            'password'   => 'dcs'
+            'name' => '172.18.1.13',
+            'username'=> 'dcs',
+            'password' => 'dcs'
           }
       provider: 'synergy'
     )
