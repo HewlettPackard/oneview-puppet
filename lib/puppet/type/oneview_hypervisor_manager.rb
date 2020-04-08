@@ -25,11 +25,9 @@ Puppet::Type.newtype(:oneview_hypervisor_manager) do
     end
     # :nocov:
   end
-  
   newparam(:name, namevar: true) do
     desc 'Hypervisor Manager name'
   end
-  
   newproperty(:data) do
     desc 'Hypervisor Manager data hash containing all specifications'
     validate do |value|

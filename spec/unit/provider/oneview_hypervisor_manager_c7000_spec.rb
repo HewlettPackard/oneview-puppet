@@ -31,7 +31,7 @@ describe provider_class, unit: true do
           {
             'name' => '172.18.1.13',
             'username' => 'dcs',
-            'password' => 'dcs',
+            'password' => 'dcs'
           },
       provider: 'c7000'
     )
