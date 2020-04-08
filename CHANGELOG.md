@@ -1,3 +1,10 @@
+# v2.5.0 (unreleased)
+### Notes
+1. Added support to the Hypervisor Resources REST API version 800,1000 and 1200.
+
+### Oneview Features supported
+- Hypervisor Cluster Profile
+
 # v2.4.0 (2020-03-03)
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 minimally where we can use OneView v4.10/v4.20/v5.0 with this SDK. No new fields are added/deleted to support OneView Rest API 800/1000/1200. Complete support will be done in next releases.
