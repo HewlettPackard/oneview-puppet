@@ -14,16 +14,16 @@ def hcp_config
           'path' => 'DC2',
           'hypervisorType' => 'Vmware',
           'hypervisorHostProfileTemplate' => 
-           {
-             'serverProfileTemplateUri' => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
-             'deploymentPlan' => 
-              {
-                'deploymentPlanUri' => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-                'serverPassword' => 'dcs'
-              },
-              'hostprefix' => 'Test-Cluster-host'
-            }
-          }
+          {
+            'serverProfileTemplateUri' => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
+            'deploymentPlan' =>
+            {
+              'deploymentPlanUri' => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+              'serverPassword' => 'dcs'
+            },
+            'hostprefix' => 'Test-Cluster-host'
+           }
+        }
   }
 end
 
