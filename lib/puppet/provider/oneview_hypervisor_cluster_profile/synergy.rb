@@ -20,4 +20,3 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :synergy, parent:
     confine feature: :oneview
     confine true: login[:hardware_variant] == 'Synergy'
   end
-  

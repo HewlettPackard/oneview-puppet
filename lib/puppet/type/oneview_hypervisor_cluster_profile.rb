@@ -15,28 +15,27 @@
 ################################################################################
 
 Puppet::Type.newtype(:oneview_hypervisor_cluster_profile) do
-    desc "Oneview's Hypervisor Cluster Profile"
+  desc "Oneview's Hypervisor Cluster Profile"
   
+  ensurable do
+    defaultvalues
     # :nocov:
-    # Get methods
-    ensurable do
-      defaultvalues
-  
-      newvalue(:found) do
-        provider.found
-      end
+    # Get Methods
+    newvalue(:found) do
+      provider.found
+    end
+
       # :nocov:
-    end
-  
-    newparam(:name, namevar: true) do
-      desc 'Hypervisor Cluster Profile name'
-    end
-  
-    newproperty(:data) do
-      desc 'Hypervisor Cluster Profile data hash containing all specifications'
-      validate do |value|
-        raise 'Inserted value for data is not valid' unless value.class == Hash
-      end
-    end
   end
   
+  newparam(:name, namevar: true) do
+    desc 'Hypervisor Cluster Profile name'
+  end
+
+  newproperty(:data) do
+    desc 'Hypervisor Cluster Profile data hash containing all specifications'
+    validate do |value|
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+    end
+  end
+end
