@@ -78,7 +78,7 @@ describe provider_class, integration: true do
         ensure: 'present',
         data:
             {
-              'type' => 'HypervisorClusterProfileV3',
+              'type' => 'HypervisorClusterProfileV3'
             }
       )
     end
