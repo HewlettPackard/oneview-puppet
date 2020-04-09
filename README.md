@@ -87,10 +87,6 @@ You can assign attributes for your appliances using three methods:
 
 :exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
 
-:lock: Tip: If you have Docker installed you can use the Dockerfile provided to build an image. Example scripts are also provided in the [docker](docker) folder for building and running using environment variables for OneView parameters (and proxies if required).
-
-Once the authentication is prepared and the manifests containing the resources are written, you can use ``` puppet apply <manifest>``` to run your manifests and execute the desired changes to the system.
-
 ### Synergy Image Streamer authentication
 
 The attributes required for authenticating with your HPE Synergy Image Streamer appliance are:
@@ -118,6 +114,52 @@ You can assign attributes for your appliances using three methods:
 3. Directly declare the authentication attributes mentioned previously as environment variables. The module will automatically use those values.
 
 :exclamation: **NOTE:** All information stored on the login file or json files should be in clear text. To avoid security issues HPE recommends verifying the access permissions for those files.
+
+### Running Examples with Docker
+If you'd rather run the examples in a Docker container, you can use the Dockerfile at the top level of this repo.
+All you need is Docker and git (optional).
+
+1. Clone this repo and cd into it:
+   ```bash
+   $ git clone https://github.com/HewlettPackard/oneview-puppet.git
+   $ cd oneview-puppet
+   ```
+
+   Note: You can navigate to the repo url and download the repo as a zip file if you don't want to use git
+
+2. Build the docker image: `$ docker build -t puppet-oneview .`
+
+3. Create volume in Docker to mount: `$ docker volume create puppet-oneview-volume .`
+
+4. Now you can run any of the example manifests in this directory:
+```bash
+   # Run the container, passing in your credentials to OneView and specifying which example recipe to run.
+   # Replace "pwd" with the path of the manifest you'd like to run
+   # Replace "fc_network" with the name of the manifest you'd like to run
+   
+   $ docker run -it \
+     -v $(pwd)/:/ puppet-oneview-volume
+     -e ONEVIEW_URL='https://ov.example.com' \
+     -e ONEVIEW_USER='Administrator' \
+     -e ONEVIEW_PASSWORD='secret123' \
+     -e ONEVIEW_SSL_ENABLED=true, \
+     -e ONEVIEW_LOG_LEVEL='info' \
+     -e ONEVIEW_API_VERSION=800 \
+     puppet-oneview puppet apply fc_network.pp --debug --trace
+   ```
+   To run an Image Streamer example manifests:
+   ```bash
+   # Note that we need an additional (I3S_URL) environment variable set
+   # (Replace "plan_script" with the name of the recipe you'd like to run)
+    $ docker run -it \
+     -v $(pwd)/:/ puppet-oneview-volume
+     -e IMAGE_STREAMER_URL= 'https://imagestreamer.example.com' \
+     -e IMAGE_STREAMER_API_VERSION=600 \
+     -e IMAGE_STREAMER_LOG_LEVEL='info' \
+     -e IMAGE_STREAMER_SSL_ENABLED=true \
+     puppet-oneview puppet apply image_streamer/deployment_plan.pp --debug --trace
+   ```
+That's it! If you'd like to modify a manifest, simply modify the manifest file, then re-build the image and run it.
 
 ### Types and Providers
 
