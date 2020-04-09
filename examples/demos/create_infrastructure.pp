@@ -290,7 +290,7 @@ oneview_server_hardware_type{'Server Hardware Type':
 oneview_server_profile{'Server Profile update from Template':
   ensure  => 'update_from_template',
   require => Oneview_server_profile_template['Test SPT']
-  data   =>
+  data    =>
   {
     name                  => 'Server profile with Hardware - PUPPET DEMO',
     serverHardwareUri     => 'F2-CN7515049D, bay 8',

@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+
 oneview_server_profile{'server_profile_present':
   ensure  => 'present',
   data    =>
