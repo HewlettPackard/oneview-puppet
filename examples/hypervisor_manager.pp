@@ -17,8 +17,8 @@
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
 oneview_hypervisor_manager{'hm1':
     ensure => 'present',
-    data => {
-      name => '172.18.1.13',
+    data   => {
+      name     => '172.18.1.13',
       username => 'dcs',
       password => 'dcs'
     }
@@ -27,27 +27,27 @@ oneview_hypervisor_manager{'hm1':
 oneview_hypervisor_manager{'hm2':
     ensure  => 'present',
     require => oneview_hypervisor_manager['hm1'],
-    data => {
-      name => '172.18.1.13',
+    data    => {
+      name     => '172.18.1.13',
       new_name => '172.18.1.14'
     }
 }
 
 oneview_hypervisor_manager{'hm3':
-    ensure => 'found',
+    ensure  => 'found',
     require => oneview_hypervisor_manager['hm2'],
-    data => {
-      name => '172.18.1.13',
+    data    => {
+      name     => '172.18.1.13',
       username => 'dcs',
       password => 'dcs'
     }
 }
 
 oneview_hypervisor_manager{'hm4':
-    ensure => 'absent',
+    ensure  => 'absent',
     require => oneview_hypervisor_manager['hm3'],
-    data => {
-      name => '172.18.1.13',
+    data    => {
+      name     => '172.18.1.13',
       username => 'dcs',
       password => 'dcs'
     }
