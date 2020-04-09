@@ -122,7 +122,7 @@ All you need is Docker and git (optional).
 1. Clone this repo and cd into it:
    ```bash
    $ git clone https://github.com/HewlettPackard/oneview-puppet.git
-   $ cd oneview-puppet/examples
+   $ cd oneview-puppet
    ```
 
    Note: You can navigate to the repo url and download the repo as a zip file if you don't want to use git
