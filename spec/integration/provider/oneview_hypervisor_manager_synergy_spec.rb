@@ -26,7 +26,7 @@ describe provider_class, integration: true do
       data:
           {
             'name' => '172.18.1.13',
-            'username'=> 'dcs',
+            'username' => 'dcs',
             'password' => 'dcs'
           },
       provider: 'synergy'
