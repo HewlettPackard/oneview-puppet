@@ -21,7 +21,6 @@ oneview_hypervisor_manager{'hm1':
       name => '172.18.1.13',
       username => 'dcs',
       password => 'dcs'
-      
     }
 }
 
