@@ -24,6 +24,6 @@ Puppet::Type.type(:oneview_hypervisor_manager).provide :c7000, parent: Puppet::O
   mk_resource_methods
 
   def self.resource_name
-    'Hypervisor Manager'
+    'HypervisorManager'
   end
 end

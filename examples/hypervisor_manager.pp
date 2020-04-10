@@ -18,7 +18,7 @@
 oneview_hypervisor_manager{'hm1':
     ensure => 'present',
     data   => {
-      name     => '172.18.1.13',
+      name     => '172.18.13.11',
       username => 'dcs',
       password => 'dcs'
     }
@@ -26,7 +26,7 @@ oneview_hypervisor_manager{'hm1':
 
 oneview_hypervisor_manager{'hm2':
     ensure  => 'present',
-    require => oneview_hypervisor_manager['hm1'],
+    require => Oneview_hypervisor_manager['hm1'],
     data    => {
       name     => '172.18.1.13',
       new_name => '172.18.1.14'
@@ -35,7 +35,7 @@ oneview_hypervisor_manager{'hm2':
 
 oneview_hypervisor_manager{'hm3':
     ensure  => 'found',
-    require => oneview_hypervisor_manager['hm2'],
+    require => Oneview_hypervisor_manager['hm2'],
     data    => {
       name     => '172.18.1.13',
       username => 'dcs',
@@ -45,7 +45,7 @@ oneview_hypervisor_manager{'hm3':
 
 oneview_hypervisor_manager{'hm4':
     ensure  => 'absent',
-    require => oneview_hypervisor_manager['hm3'],
+    require => Oneview_hypervisor_manager['hm3'],
     data    => {
       name     => '172.18.1.13',
       username => 'dcs',
