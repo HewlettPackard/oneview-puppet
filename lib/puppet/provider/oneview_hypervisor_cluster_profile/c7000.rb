@@ -25,6 +25,6 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   mk_resource_methods
 
   def self.resource_name
-    'Hypervisor Cluster Profile'
+    'HypervisorClusterProfile'
   end
 end
