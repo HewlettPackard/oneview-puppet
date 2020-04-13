@@ -19,18 +19,18 @@
 oneview_hypervisor_cluster_profile{'hcp1':
     ensure => 'present',
     data   => {
-      type                           => 'HypervisorClusterProfileV3',
-      name                           => 'Cluster5',
-      hypervisorManagerUri           => '/rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603',
-      path                           => 'DC2',
-      hypervisorType                 => 'Vmware',
-      hypervisorHostProfileTemplate  => {
-      serverProfileTemplateUri    => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
-      deploymentPlan   => {
-        deploymentPlanUri         => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-        serverPassword            => 'dcs'
+      type                          => 'HypervisorClusterProfileV3',
+      name                          => 'Cluster5',
+      hypervisorManagerUri          => '/rest/hypervisor-managers/befc6bd9-0366-4fd9-a3fc-c92ab0df3603',
+      path                          => 'DC2',
+      hypervisorType                => 'Vmware',
+      hypervisorHostProfileTemplate => {
+      serverProfileTemplateUri => '/rest/server-profile-templates/c865a62c-8fd8-414c-8c16-3f7ca75ab2ba',
+      deploymentPlan           => {
+        deploymentPlanUri => '/rest/os-deployment-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+        serverPassword    => 'dcs'
       },
-      hostprefix                  => 'Test-Cluster-host'
+      hostprefix               => 'Test-Cluster-host'
       }
     }
 }
@@ -47,7 +47,7 @@ oneview_hypervisor_cluster_profile{'hcp2':
 oneview_hypervisor_cluster_profile{'hcp3':
     ensure  => 'found',
     require => Oneview_hypervisor_cluster_profile['hc2'],
-    data   => {
+    data    => {
       name => 'Cluster7'
     }
 }
@@ -55,7 +55,7 @@ oneview_hypervisor_cluster_profile{'hcp3':
 oneview_hypervisor_cluster_profile{'hcp4':
     ensure  => 'absent',
     require => Oneview_hypervisor_cluster_profile['fc3'],
-    data   => {
+    data    => {
       name => 'Cluster7'
     }
 }
