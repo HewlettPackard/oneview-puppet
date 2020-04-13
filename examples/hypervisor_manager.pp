@@ -15,40 +15,39 @@
 ################################################################################
 
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
-oneview_hypervisor_manager{'hm1':
+oneview_hypervisor_manager{'hm Create':
     ensure => 'present',
     data   => {
-      name     => '172.18.13.11',
-      username => 'dcs',
-      password => 'dcs'
+      name        => '172.18.13.11',
+      username    => 'dcs',
+      password    => 'dcs',
+      displayName => 'Test Puppet Hypervisor Manager'
     }
 }
 
-oneview_hypervisor_manager{'hm2':
+oneview_hypervisor_manager{'hm Update':
     ensure  => 'present',
-    require => Oneview_hypervisor_manager['hm1'],
+    require => Oneview_hypervisor_manager['hm Create'],
     data    => {
-      name     => '172.18.1.13',
-      new_name => '172.18.1.14'
+      name        => '172.18.13.11',
+      username    => 'dcs',
+      password    => 'dcs',
+      displayName => 'Test HM'
     }
 }
 
-oneview_hypervisor_manager{'hm3':
+oneview_hypervisor_manager{'hm Found':
     ensure  => 'found',
-    require => Oneview_hypervisor_manager['hm2'],
+    require => Oneview_hypervisor_manager['hm Update'],
     data    => {
-      name     => '172.18.1.13',
-      username => 'dcs',
-      password => 'dcs'
+      name     => '172.18.13.11'
     }
 }
 
-oneview_hypervisor_manager{'hm4':
+oneview_hypervisor_manager{'hm Delete':
     ensure  => 'absent',
-    require => Oneview_hypervisor_manager['hm3'],
+    require => Oneview_hypervisor_manager['hm Found'],
     data    => {
-      name     => '172.18.1.13',
-      username => 'dcs',
-      password => 'dcs'
+      name     => '172.18.13.11'
     }
 }

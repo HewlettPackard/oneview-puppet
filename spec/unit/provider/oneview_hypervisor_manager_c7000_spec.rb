@@ -27,9 +27,10 @@ describe provider_class, unit: true do
       ensure: 'present',
       data:
           {
-            'name' => '172.18.13.11',
-            'username' => 'dcs',
-            'password' => 'dcs'
+            'name'       => '172.18.13.11',
+            'username'   => 'dcs',
+            'password'   => 'dcs',
+            'displayName' => 'Test HM'
           },
       provider: 'c7000'
     )
