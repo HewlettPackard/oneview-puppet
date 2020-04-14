@@ -26,7 +26,7 @@ oneview_hypervisor_cluster_profile{'hcp1 Create':
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-      serverProfileTemplateUri    => '/rest/server-profile-templates/278cadfb-2e86-4a05-8932-972553518259',
+      serverProfileTemplateUri => '/rest/server-profile-templates/278cadfb-2e86-4a05-8932-972553518259',
       hostprefix               => 'Test-Cluster-host'
       }
     }
