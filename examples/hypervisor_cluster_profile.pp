@@ -20,35 +20,35 @@
 oneview_hypervisor_cluster_profile{'hcp1 Create':
     ensure => 'present',
     data   => {
-      type                           => 'HypervisorClusterProfileV3',
-      name                           => 'Cluster5',
-      hypervisorManagerUri           => '/rest/hypervisor-managers/1ded903a-ac66-41cf-ba57-1b9ded9359b6',
-      path                           => 'DC2',
-      hypervisorType                 => 'Vmware',
-      hypervisorHostProfileTemplate  => {
+      type                          => 'HypervisorClusterProfileV3',
+      name                          => 'Cluster5',
+      hypervisorManagerUri          => '/rest/hypervisor-managers/1ded903a-ac66-41cf-ba57-1b9ded9359b6',
+      path                          => 'DC2',
+      hypervisorType                => 'Vmware',
+      hypervisorHostProfileTemplate => {
       serverProfileTemplateUri    => '/rest/server-profile-templates/278cadfb-2e86-4a05-8932-972553518259',
-      hostprefix                  => 'Test-Cluster-host'
+      hostprefix               => 'Test-Cluster-host'
       }
     }
 }
 
 # This creates Hypervisor Cluster Profile using Server Profile Template without OSDeploymentPlans
 oneview_hypervisor_cluster_profile{'hcp2 Create':
-    ensure => 'present',
+    ensure  => 'present',
     require => Oneview_hypervisor_cluster_profile['hcp1 Create'],
-    data   => {
-      type                           => 'HypervisorClusterProfileV3',
-      name                           => 'Cluster10',
-      hypervisorManagerUri           => '/rest/hypervisor-managers/1ded903a-ac66-41cf-ba57-1b9ded9359b6',
-      path                           => 'DC2',
-      hypervisorType                 => 'Vmware',
-      hypervisorHostProfileTemplate  => {
-      serverProfileTemplateUri    => '/rest/server-profile-templates/278abdfb-2e86-4865-893276532647',
-      deploymentPlan              => {
-         deploymnetPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-         serverpassword    => 'dcs'
-      }
-      hostprefix                  => 'Test-Cluster-host'
+    data    => {
+      type                          => 'HypervisorClusterProfileV3',
+      name                          => 'Cluster10',
+      hypervisorManagerUri          => '/rest/hypervisor-managers/1ded903a-ac66-41cf-ba57-1b9ded9359b6',
+      path                          => 'DC2',
+      hypervisorType                => 'Vmware',
+      hypervisorHostProfileTemplate => {
+        serverProfileTemplateUri => '/rest/server-profile-templates/278abdfb-2e86-4865-893276532647',
+        deploymentPlan           => {
+          deploymnetPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+          serverpassword    => 'dcs'
+        }
+        hostprefix               => 'Test-Cluster-host'
       }
     }
 }
