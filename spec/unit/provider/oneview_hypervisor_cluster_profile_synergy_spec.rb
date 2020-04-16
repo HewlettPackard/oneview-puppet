@@ -17,11 +17,11 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_cluster_profile).provider(:synergy)
-api_version = login[:api_version] || 800
+api_version = 800
 resource_type = OneviewSDK.resource_named(:HypervisorClusterProfile, api_version, :Synergy)
 
 describe provider_class, unit: true do
-  include_context 'shared context'
+  include_context 'shared context Hypervisor Cluster Profile'
 
   let(:resource) do
     Puppet::Type.type(:oneview_hypervisor_cluster_profile).new(
