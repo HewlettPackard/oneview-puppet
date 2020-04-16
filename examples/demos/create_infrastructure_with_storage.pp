@@ -39,12 +39,12 @@ oneview_ethernet_network{'Test Puppet Network':
 }
 
 oneview_storage_system{'storage_system_1':
-    ensure  => 'present',
-    data    => {
-      family                   => 'StoreServ',
-      hostname                 => '172.18.11.11',
-      username                 => 'dcs',
-      password                 => 'dcs'
+    ensure => 'present',
+    data   => {
+      family   => 'StoreServ',
+      hostname => '172.18.11.11',
+      username => 'dcs',
+      password => 'dcs'
     }
 }
 
@@ -61,9 +61,9 @@ oneview_storage_pool{'Storage Pool':
 
 # Creates Storage Volume in OneView
 oneview_volume{'Volume':
-    ensure => 'present',
+    ensure  => 'present',
     require => Oneview_storage_pool['Storage Pool'],
-    data   => {
+    data    => {
       properties  => {
             provisioningType => 'Thin',
             size             => 1073741824,
@@ -236,8 +236,8 @@ oneview_server_profile_template{'Test Puppet SPT':
     },
     boot                  =>
     {
-      manageBoot        => true,
-      order             =>
+      manageBoot => true,
+      order      =>
       [
       'CD',
       'USB',
@@ -263,8 +263,8 @@ oneview_server_profile{'Server Profile Create':
   ensure => 'present',
   data   =>
   {
-    name                     => 'Server Profile Test',
-    serverHardwareUri        => '/rest/server-hardware/30303437-3034-4D32-3230-313030304752',
+    name              => 'Server Profile Test',
+    serverHardwareUri => '/rest/server-hardware/30303437-3034-4D32-3230-313030304752',
   }
 }
 
