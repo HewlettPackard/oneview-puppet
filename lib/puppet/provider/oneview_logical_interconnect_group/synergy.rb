@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -15,17 +15,8 @@
 ################################################################################
 
 Puppet::Type.type(:oneview_logical_interconnect_group).provide :synergy, parent: :c7000 do
-  desc 'Provider for OneView Fiber Channel Networks using the Synergy variant of the OneView API'
+  desc 'Provider for OneView Logical Interconnect Group using the Synergy variant of the OneView API'
 
   confine feature: :oneview
   confine true: login[:hardware_variant] == 'Synergy'
-
-  def parse_interconnects
-    lig = OneviewSDK.resource_named(:LogicalInterconnectGroup, login[:api_version], 'Synergy').new(@client, {})
-    @interconnects.each do |item|
-      item['enclosure_index'] ||= 1
-      lig.add_interconnect(item['bay'].to_i, item['type'], item['logical_downlink'], item['enclosure_index'])
-    end
-    lig['interconnectMapTemplate']
-  end
 end
