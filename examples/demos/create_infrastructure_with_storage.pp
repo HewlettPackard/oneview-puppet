@@ -38,7 +38,7 @@ oneview_ethernet_network{'Test Puppet Network':
   }
 }
 
-oneview_storage_system{'storage_system_1':
+oneview_storage_system{'Test Puppet Storage System':
     ensure => 'present',
     data   => {
       family   => 'StoreServ',
@@ -49,9 +49,9 @@ oneview_storage_system{'storage_system_1':
 }
 
 # Creates Storage System in OneView
-oneview_storage_pool{'Storage Pool':
+oneview_storage_pool{'Test Puppet Storage Pool':
   ensure  => 'present',
-  require => Oneview_storage_system['storage_system_1'],
+  require => Oneview_storage_system['Test Puppet Storage System'],
   data    =>
   {
     poolName         => 'CPG-SSD-AO',
@@ -60,14 +60,14 @@ oneview_storage_pool{'Storage Pool':
 }
 
 # Creates Storage Volume in OneView
-oneview_volume{'Volume':
+oneview_volume{'Test Puppet Storage Volume':
     ensure  => 'present',
-    require => Oneview_storage_pool['Storage Pool'],
+    require => Oneview_storage_pool['Test Puppet Storage Pool'],
     data    => {
       properties  => {
             provisioningType => 'Thin',
             size             => 1073741824,
-            name             => 'Oneview_Puppet_TEST_VOLUME_1',
+            name             => 'Test Puppet Storage Volume',
             storagePool      => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
             snapshotPool     => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
             isShareable      => false
@@ -79,7 +79,7 @@ $interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
 $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
 $network_names = [ 'Test Puppet Network' ]
 
-# Creates LIG with uplinkSets, Redundancy, Boot settings in Synergy
+# Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
 oneview_logical_interconnect_group{'Test Puppet LIG':
   ensure  => 'present',
   require => Oneview_ethernet_network['Test Puppet Network'],
@@ -145,12 +145,12 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
   }
 }
 
-# Creates EnclosureGroup using LIG created above
+# Creates EnclosureGroup using Logical Interconnect Group created above
 oneview_enclosure_group{'Test Puppet Enclosure Group':
   ensure  => 'present',
   require => Oneview_logical_interconnect_group['Test Puppet LIG'],
   data    => {
-    name                        => 'Test Enclosure Group',
+    name                        => 'Test Puppet Enclosure Group',
     stackingMode                => 'Enclosure',
     interconnectBayMappingCount => '8',
     enclosureCount              => '3',
@@ -191,11 +191,11 @@ oneview_enclosure_group{'Test Puppet Enclosure Group':
 }
 
 # Creates Logical Enclosure
-oneview_logical_enclosure{'Test LE':
+oneview_logical_enclosure{'Test Puppet LE':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
   data    => {
-    name                 => 'Test LE',
+    name                 => 'Test Puppet LE',
     enclosureUris        => ['/rest/enclosures/0000000000A66101', '/rest/enclosures/0000000000A66102', '/rest/enclosures/0000000000A66103'],
     enclosureGroupUri    => Oneview_enclosure_group['Test Puppet Enclosure Group']['data']['name'],
     firmwareBaselineUri  => 'null',
@@ -204,7 +204,7 @@ oneview_logical_enclosure{'Test LE':
 }
 
 # Power off the Server Hardware after the Server Profile has been applied
-oneview_server_hardware{'Server Hardware Power Off':
+oneview_server_hardware{'Test Server Hardware Power Off':
     ensure => 'set_power_state',
     data   => {
       hostname    => '0000A66101, bay 5',
@@ -217,7 +217,7 @@ oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
   data    => {
-    name                  => 'Test SPT',
+    name                  => 'Test Puppet SPT',
     enclosureGroupUri     => Oneview_enclosure_group['Test Puppet Enclosure Group']['data']['name'],
     serverHardwareTypeUri => 'SY 480 Gen9 1',
     connectionSettings    =>
@@ -259,27 +259,27 @@ oneview_server_profile_template{'Test Puppet SPT':
 }
 
 # Creates ServerProfile
-oneview_server_profile{'Server Profile Create':
+oneview_server_profile{'Test Server Profile Create':
   ensure => 'present',
   data   =>
   {
-    name              => 'Server Profile Test',
+    name              => 'Test Server Profile Create',
     serverHardwareUri => '/rest/server-hardware/30303437-3034-4D32-3230-313030304752',
   }
 }
 
-# Creates ServerProfile from ServerProfiletemplate created above
+# Creates ServerProfile from ServerProfileTemplate created above
 oneview_server_profile_template{'Test Server Profile Create from Profile Template':
   ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Test Puppet SPT'],
   data    => {
-    name              => 'Test SPT',
-    serverProfileName => 'Test Puppet Server Profile'
+    name              => 'Test Puppet SPT',
+    serverProfileName => 'Test Puppet Server Profile Create from Profile Template'
   }
 }
 
 # Power on the Server Hardware after the Server Profile has been applied
-oneview_server_hardware{'Server Hardware Power On':
+oneview_server_hardware{'Test Server Hardware Power On':
     ensure => 'set_power_state',
     data   => {
       hostname    => '0000A66101, bay 5',
