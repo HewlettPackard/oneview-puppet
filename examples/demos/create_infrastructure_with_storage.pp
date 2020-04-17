@@ -16,10 +16,10 @@
 
 # This example works for api_variant "Synergy"
 # Create FC Network
-oneview_fc_network{'Test Puppet FC Network':
+oneview_fc_network{'Test Puppet FC Network Create1':
   ensure => 'present',
   data   => {
-    name                    => 'Test Puppet FC Network',
+    name                    => 'Test Puppet FC Network Create1',
     connectionTemplateUri   => nil,
     autoLoginRedistribution => true,
     fabricType              => 'FabricAttach'
@@ -38,6 +38,19 @@ oneview_ethernet_network{'Test Puppet Network':
   }
 }
 
+# Create another Ethernet Network
+oneview_ethernet_network{'Test Puppet Network Create1':
+  ensure => 'present',
+  data   => {
+    name           => 'Test Puppet Network Create2',
+    vlanId         => '1000',
+    purpose        => 'General',
+    smartLink      => true,
+    privateNetwork => false
+  }
+}
+
+# Creates Storage System in OneView
 oneview_storage_system{'Test Puppet Storage System':
     ensure => 'present',
     data   => {
@@ -48,7 +61,7 @@ oneview_storage_system{'Test Puppet Storage System':
     }
 }
 
-# Creates Storage System in OneView
+# Creates Storage Pool in OneView
 oneview_storage_pool{'Test Puppet Storage Pool':
   ensure  => 'present',
   require => Oneview_storage_system['Test Puppet Storage System'],
@@ -59,25 +72,9 @@ oneview_storage_pool{'Test Puppet Storage Pool':
   }
 }
 
-# Creates Storage Volume in OneView
-oneview_volume{'Test Puppet Storage Volume':
-    ensure  => 'present',
-    require => Oneview_storage_pool['Test Puppet Storage Pool'],
-    data    => {
-      properties  => {
-            provisioningType => 'Thin',
-            size             => 1073741824,
-            name             => 'Test Puppet Storage Volume',
-            storagePool      => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
-            snapshotPool     => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
-            isShareable      => false
-      }
-    }
-}
-
 $interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
 $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
-$network_names = [ 'Test Puppet Network' ]
+$network_names = [ 'Test Puppet Network', 'Test Puppet Network Create1' ]
 
 # Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
 oneview_logical_interconnect_group{'Test Puppet LIG':
@@ -212,7 +209,7 @@ oneview_server_hardware{'Test Server Hardware Power Off':
     },
 }
 
-# Creates ServerProfileTemplate with Hardware and boot settings
+# Creates ServerProfileTemplate with Storage, Hardware and boot settings
 oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
@@ -230,6 +227,13 @@ oneview_server_profile_template{'Test Puppet SPT':
           networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
           functionType  => 'Ethernet',
           portId        => 'Mezz 3:1-a',
+          requestedMbps => '2000'
+      },
+      {
+          id            => 2,
+          networkUri    => Oneview_ethernet_network['Test Puppet Network Create1']['data']['name'],
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-b',
           requestedMbps => '2000'
       }
       ]
@@ -254,6 +258,42 @@ oneview_server_profile_template{'Test Puppet SPT':
     bios                  =>
     {
       manageBios         => true
+    },
+    sanStorage            =>
+    {
+      manageSanStorage  => true,
+      hostOSType        => 'VMware (ESXi)',
+      volumeAttachments =>
+      [
+        {
+          id           => 1,
+          lun          => '',
+          lunType      => 'Auto',
+          storagePaths =>
+          [
+            {
+              connectionId   => 1,
+              isEnabled      => true,
+              targetSelector => 'Auto'
+            },
+            {
+              connectionId   => 2,
+              isEnabled      => true,
+              targetSelector => 'Auto'
+            }
+          ],
+          volume       => {
+            properties => {
+                provisioningType => 'Thin',
+                size             => 1073741824,
+                name             => 'Test Puppet Storage Volume',
+                storagePool      => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
+                snapshotPool     => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
+                isShareable      => false
+            }
+          },
+        }
+        ]
     }
   }
 }
