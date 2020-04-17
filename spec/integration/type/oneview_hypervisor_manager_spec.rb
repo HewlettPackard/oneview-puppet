@@ -5,13 +5,13 @@ type_class = Puppet::Type.type(:oneview_hypervisor_manager)
 def hm_config
   {
     name: 'test_hm',
-    ensure: 'present'
+    ensure: 'present',
     data:
-      {
+        {
         name     => '172.18.13.11',
         username => 'dcs',
         password => 'dcs'
-      }
+        }
   }
 end
 
