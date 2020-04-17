@@ -191,7 +191,7 @@ This resource provides the following ensurable methods for managing Fibre Channe
 * `absent` - Deletes a Hypervisor Manager.
 * `found` - Searches for `oneview_hypervisor_manager` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 
-Example file: [hypervisor_manager.pp](examples/hypervisor_manager.pp
+Example file: [hypervisor_manager.pp](examples/hypervisor_manager.pp)
 
 #### oneview_interconnect
 
