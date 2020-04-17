@@ -1,9 +1,12 @@
 # v2.5.0 (unreleased)
 ### Notes
-1. Added support to the Hypervisor Resources REST API version 800,1000 and 1200.
+1. Added support to REST API version 800,1000 and 1200 for  Hypervisor Cluster Profile .
 
 ### Oneview Features supported
 - Hypervisor Cluster Profile
+
+### Bug fixes & Enhancements:
+- [#236](https://github.com/HewlettPackard/oneview-puppet/issues/236) Dockerfile is failing because of incorrect Ruby version.
 
 # v2.4.0 (2020-03-03)
 ### Notes
