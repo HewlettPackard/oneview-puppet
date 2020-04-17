@@ -13,7 +13,7 @@
 9. [Oneview_fcoe_network](#oneview_fcoe_network)
 10. [Oneview_firmware_bundle](#oneview_firmware_bundle)
 11. [Oneview_firmware_driver](#oneview_firmware_driver)
-12. [Oneview_hypervisor_cluster_profile] (#oneview_hypervisor_cluster_profile)
+12. [Oneview_hypervisor_cluster_profile](#oneview_hypervisor_cluster_profile)
 13. [Oneview_interconnect](#oneview_interconnect)
 14. [Oneview_logical_downlink](#oneview_logical_downlink)
 15. [Oneview_logical_enclosure](#oneview_logical_enclosure)
