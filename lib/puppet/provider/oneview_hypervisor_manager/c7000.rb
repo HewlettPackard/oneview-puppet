@@ -23,6 +23,10 @@ Puppet::Type.type(:oneview_hypervisor_manager).provide :c7000, parent: Puppet::O
 
   mk_resource_methods
 
+  def self.api_version
+    800
+  end
+
   def self.resource_name
     'HypervisorManager'
   end

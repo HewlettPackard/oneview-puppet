@@ -17,6 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_manager).provider(:synergy)
+api_version = 800
+resource_type = OneviewSDK.resource_named(:HypervisorManager, api_version, :Synergy)
 
 describe provider_class, unit: true do
   include_context 'shared context Hypervisor Manager'
@@ -39,12 +41,11 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { OneviewSDK::API800::C7000::HypervisorManager.new(@client, resource['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
   context 'given the Creation parameters' do
     before(:each) do
-      hypervisor_manager_type = OneviewSDK::API800::C7000::HypervisorManager
-      allow(hypervisor_manager_type).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
@@ -53,31 +54,27 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      hypervisor_manager_type = OneviewSDK::API800::C7000::HypervisorManager
-      allow(hypervisor_manager_type).to receive(:find_by).and_return([])
-      allow_any_instance_of(hypervisor_manager_type).to receive(:create).and_return(test)
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
 
     it 'deletes the resource' do
-      hypervisor_manager_type = OneviewSDK::API800::C7000::HypervisorManager
       resource['data']['uri'] = '/rest/fake'
-      allow(hypervisor_manager_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(hypervisor_manager_type).to receive(:delete).and_return([])
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
 
     it 'should be able to run through self.instances' do
-      hypervisor_manager_type = OneviewSDK::API800::C7000::HypervisorManager
-      allow(hypervisor_manager_type).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([test])
       expect(instance).to be
     end
 
     it 'finds the resource' do
-      hypervisor_manager_type = OneviewSDK::API800::C7000::HypervisorManager
-      allow(hypervisor_manager_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       expect(provider.found).to be
     end

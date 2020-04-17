@@ -1,6 +1,6 @@
 # v2.5.0 (unreleased)
 ### Notes
-1. Added full support to OneView Rest API version 800,1000 and 1200 for the hardware variants C7000 and Synergy to the already existing features.
+1. Added full support to OneView Rest API version 800,1000 and 1200 for the hardware variants C7000 and Synergy for Hypervisor Resources.
 
 ### Oneview Features supported
 - Hypervisor Manager
