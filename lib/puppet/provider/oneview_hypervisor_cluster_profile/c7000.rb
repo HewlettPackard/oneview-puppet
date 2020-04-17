@@ -27,7 +27,7 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   def self.api_version
     800
   end
-
+  
   def self.resource_name
     'HypervisorClusterProfile'
   end
