@@ -42,7 +42,7 @@ oneview_ethernet_network{'Test Puppet Network':
 oneview_ethernet_network{'Test Puppet Network Create1':
   ensure => 'present',
   data   => {
-    name           => 'Test Puppet Network Create2',
+    name           => 'Test Puppet Network Create1',
     vlanId         => '1000',
     purpose        => 'General',
     smartLink      => true,
