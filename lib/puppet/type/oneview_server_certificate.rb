@@ -26,8 +26,8 @@ Puppet::Type.newtype(:oneview_server_certificate) do
     newvalue(:import) do
       provider.import
     end
-    newvalue(:update) do
-      provider.update
+    newvalue(:retrieve) do
+      provider.retrieve
     end
     newvalue(:remove) do
       provider.remove

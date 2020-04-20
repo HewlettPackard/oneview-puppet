@@ -26,38 +26,41 @@ Puppet::Type.type(:oneview_server_certificate).provide :c7000, parent: Puppet::O
   mk_resource_methods
 
   def get_certificate
-    server_certificate = OneviewSDK.resource_named('ServerCertificate', api_version)
+    @data['aliasName'] = @data.delete('aliasName')
+    @data['remoteIp'] = @data.delete('remoteIp')
+    server_certificate = @resource_type.new(@client, @data)
     server_certificate.get_certificate
+    true
+  end
+
+  def retrieve
+    @data['aliasName'] = @data.delete('aliasName')
+    server_certificate = @resource_type.new(@client, @data)
+    server_certificate.retrieve!
+    true
+  end
+
+  def parse_data
+    @data['aliasName'] = @data.delete('aliasName')
+    @data['remoteIp'] = @data.delete('remoteIp')
+    server_certificate = @resource_type.new(@client, @data)
+    @options = server_certificate.get_certificate
+    @data['type'] = @options.delete('type')
+    @data['certificateDetails'] = [
+      'type' => @options['certificateDetails'][0]['type'],
+      'base64Data' => @options['certificateDetails'][0]['base64Data']
+    ]
   end
 
   def import
-    storage_system_ip = @data.delete('storage_system_ip')
-    server_certificate = OneviewSDK.resource_named('ServerCertificate', storage_system_ip)
-    @options = server_certificate.get_certificate
-    @data[:type] = @options.delete('type')
-    @data[:base64Data] = @options.delete('base64Data')
-    @data[:certificateDetails] = [
-      'type' => @options['certificateDetails'][0]['type'],
-      'base64Data' => @options['certificateDetails'][0]['base64Data']
-    ]
-    server_certificate.import
-  end
-
-  def update
-    server_certificate = OneviewSDK.resource_named('ServerCertificate', api_version)
-    @options = server_certificate.get_certificate
-    @data[:type] = @options.delete('type')
-    @data[:base64Data] = @options.delete('base64Data')
-    @data[:certificateDetails] = [
-      'type' => @options['certificateDetails'][0]['type'],
-      'base64Data' => @options['certificateDetails'][0]['base64Data']
-    ]
-    server_certificate.update
+    server_certificate = @resource_type.new(@client)
+    parse_data
+    server_certificate.import unless @data['remoteIp']
   end
 
   def remove
-    storage_system_ip = @data.delete('alias')
-    server_certificate = OneviewSDK.resource_named('ServerCertificate', storage_system_ip)
+    @data['aliasName'] = @data.delete('aliasName')
+    server_certificate = @resource_type.new(@client, @data)
     server_certificate.remove
   end
 
