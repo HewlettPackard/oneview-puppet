@@ -15,32 +15,32 @@
 ################################################################################
 
 Puppet::Type.newtype(:oneview_server_certificate) do
-    desc 'Server Certificate'
-    # :nocov:
-    # Get methods
-    ensurable do
-      defaultvalues
-      newvalue(:get_certificate) do
-        provider.get_certificate
-      end
-      newvalue(:import) do
-        provider.import
-      end
-      newvalue(:update) do
-        provider.update
-      end
-      newvalue(:remove) do
-        provider.remove
-      end
+  desc 'Server Certificate'
+  # :nocov:
+  # Get methods
+  ensurable do
+    defaultvalues
+    newvalue(:get_certificate) do
+      provider.get_certificate
+    end
+    newvalue(:import) do
+      provider.import
+    end
+    newvalue(:update) do
+      provider.update
+    end
+    newvalue(:remove) do
+      provider.remove
+    end
       # :nocov:
-    end
-    newparam(:name, namevar: true) do
-      desc 'Server Certificate'
-    end
-    newproperty(:data) do
-      desc 'server certificate data hash containing all specifications'
-      validate do |value|
-        raise 'Inserted value for data is not valid' unless value.class == Hash
-      end
+  end
+  newparam(:name, namevar: true) do
+    desc 'Server Certificate'
+  end
+  newproperty(:data) do
+    desc 'server certificate data hash containing all specifications'
+    validate do |value|
+      raise 'Inserted value for data is not valid' unless value.class == Hash
     end
   end
+end
