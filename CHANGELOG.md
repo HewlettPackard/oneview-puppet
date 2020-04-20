@@ -1,3 +1,36 @@
+# v2.5.0 (unreleased
+- This release supports OneView Rest API versions 800/1000/1200 minimally for Server Certificate.
+
+### Oneview Features supported
+- Connection template
+- Ethernet network
+- Enclosure
+- Enclosure group
+- FC network
+- FCoE network
+- Interconnect
+- Interconnect link topology
+- Interconnect type
+- Logical enclosure
+- Logical interconnect
+- Logical interconnect group
+- Network set
+- SAS logical interconnect
+- Server Certificate
+- Server hardware
+- Server hardware type
+- Server profile
+- Server profile template
+- Storage pool
+- Storage system
+- Storage volume template
+- Uplink set
+- Volume
+- Volume attachment
+
+### Bug fixes & Enhancements:
+- [#236](https://github.com/HewlettPackard/oneview-puppet/issues/236) Dockerfile is failing because of incorrect Ruby version.
+
 # v2.4.0 (2020-03-03)
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 minimally where we can use OneView v4.10/v4.20/v5.0 with this SDK. No new fields are added/deleted to support OneView Rest API 800/1000/1200. Complete support will be done in next releases.

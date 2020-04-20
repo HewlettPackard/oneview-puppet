@@ -28,6 +28,7 @@
 24. [Oneview_sas_interconnect](#oneview_sas_interconnect)
 25. [Oneview_sas_logical_interconnect](#oneview_sas_logical_interconnect)
 26. [Oneview_sas_logical_interconnect_group](#oneview_sas_logical_interconnect_group)
+27. [Oneview_server_certificate](#oneview_server_certificate)
 27. [Oneview_server_hardware](#oneview_server_hardware)
 28. [Oneview_server_hardware_type](#oneview_server_hardware_type)
 29. [Oneview_server_profile_template](#oneview_server_profile_template)
@@ -405,6 +406,17 @@ This resource provides the following ensurable methods for managing SAS Logical 
 :warning: This resource type is only supported by the **Synergy** hardware variant.
 
 Example file: [sas_logical_interconnect_group.pp](examples/sas_logical_interconnect_group.pp)
+
+#### Oneview_server_certificate
+
+This resource provides the following ensurable methods for managing Server Certificates on the HPE OneView appliance:
+
+* `get_certificate` - Gets certificate from RemoteIp.
+* `import` - Imports certificates.
+* `remove` - Deletes the specified Certificate.
+* `retrieve` - retrieves SSL Certificate from appliance.
+
+Example file: [server_certificate.pp](examples/server_certificate.pp)
 
 #### oneview_server_hardware
 
