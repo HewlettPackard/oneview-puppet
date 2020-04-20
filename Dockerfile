@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-FROM ruby:2.2.0
+FROM ruby:2.4
 
 # Install dependencies
 RUN apt-get -qqy update && \
@@ -23,10 +22,9 @@ RUN apt-get -qqy update && \
 	make \
 	vim  \
 	mlocate && \
-	updatedb  
+	updatedb
 
-
-RUN gem install --no-ri --no-rdoc bundler
+RUN gem install --no-document bundler
 
 RUN mkdir /puppet
 WORKDIR /puppet
@@ -34,6 +32,10 @@ RUN echo `pwd` > ./pwd
 COPY . /puppet
 
 RUN bundle
+RUN puppet module install hewlettpackard-oneview
 
-#Point puppet rubylib to our code
-ENV RUBYLIB=/puppet/lib
+# Clean and remove not required packages
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get autoremove -y && \
+    apt-get clean -y && \
+    rm -rf /var/cache/apt/archives/* /var/cache/apt/lists/* /tmp/* /root/cache/.
