@@ -21,7 +21,7 @@ api_version = 600
 resource_type = OneviewSDK.resource_named(:ServerCertificate, api_version, :Synergy)
 
 describe provider_class, unit: true do
-  include_context 'shared context Oneview API 800'
+  include_context 'shared context Oneview API 600'
 
   let(:resource) do
     Puppet::Type.type(:oneview_server_certificate).new(
