@@ -32,7 +32,7 @@ Puppet::Type.newtype(:oneview_server_certificate) do
     newvalue(:remove) do
       provider.remove
     end
-      # :nocov:
+    # :nocov:
   end
   newparam(:name, namevar: true) do
     desc 'Server Certificate'
