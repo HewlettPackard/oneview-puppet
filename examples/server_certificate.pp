@@ -44,10 +44,10 @@ oneview_server_certificate{'sc1 Retrieve Certificates':
 
 # Replaces the existing certificate with a new  certificate for the alias name provided as part of {aliasName}
 oneview_server_certificate{'Update Certificates from RemoteIP':
-    ensure => 'present',
+    ensure => 'create_or_update',
     data   => {
-      remoteIp  => '172.18.13.11',
-      aliasName => '172.18.13.11'
+      remoteIp  => $remoteip,
+      aliasName => $aliasname
     }
 }
 
@@ -56,6 +56,6 @@ oneview_server_certificate{'Removes Certificates from RemoteIP':
     ensure  => 'remove',
     require => Oneview_server_certificate['Update Certificates from RemoteIP'],
     data    => {
-      aliasName => $aliasname,
+      aliasName => $aliasname
     }
 }

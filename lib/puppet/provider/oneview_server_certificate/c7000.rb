@@ -55,6 +55,20 @@ Puppet::Type.type(:oneview_server_certificate).provide :c7000, parent: Puppet::O
     server_certificate.import
   end
 
+  def create_or_update
+    server_certificate = @resource_type.new(@client)
+    aliasName = @data['aliasName']
+    @response = get_certificate
+    server_certificate.data['certificateDetails'] = []
+    server_certificate.data['certificateDetails'][0] = {
+      'type' => @response['certificateDetails'][0]['type'],
+      'base64Data' => @response['certificateDetails'][0]['base64Data']
+    }
+    server_certificate.data['uri'] = "/rest/certificates/servers/"+ aliasName
+    server_certificate.update
+    true
+  end
+
   def remove
     server_certificate = @resource_type.new(@client)
     server_certificate.data['aliasName'] = @data.delete('aliasName')
