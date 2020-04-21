@@ -65,26 +65,27 @@ describe provider_class, unit: true do
       expect(provider.retrieve).to be
     end
 
-    it 'should be able to parse data' do
+    it 'should be able to remove certificates' do
+      resource['data']['remoteIp'] = '172.18.13.11'
+      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
+      expect(provider.remove).to be
+    end
+
+    it 'should be able to import certificates' do
       resource['data']['remoteIp'] = '172.18.13.11'
       expected_output = {
         'aliasName' => '172.18.13.11',
         'remoteIp' => '172.18.13.11',
         'type' => 'CertificateInfoV2',
         'certificateDetails' =>
-        [{
-          'type' => 'CertificateDetailV2',
-          'base64Data' => 'some certificate data'
-        }]
+         [{
+           'type' => 'CertificateDetailV2',
+           'base64Data' => 'some certificate data'
+         }]
       }
       allow_any_instance_of(resource_type).to receive(:get_certificate).and_return(expected_output)
-      expect(provider.parse_data).to be
-    end
-
-    it 'should be able to remove certificates' do
-      resource['data']['remoteIp'] = '172.18.13.11'
-      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
-      expect(provider.remove).to be
+      allow_any_instance_of(resource_type).to receive(:import).and_return(test)
+      expect(provider.import).to be
     end
   end
 end

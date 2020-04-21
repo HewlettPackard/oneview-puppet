@@ -14,29 +14,31 @@
 # limitations under the License.
 ################################################################################
 
-# Retrieves the certificate having the certificate alias name specified as part of {aliasName}
-oneview_server_certificate{'sc1 Retrieve Certificates':
-    ensure => 'retrieve',
-    data   => {
-      aliasName => '172.18.13.11'
-    }
-}
-
-# Retrieves the web server certificate
-oneview_server_certificate{'Get Certificates from RemoteIP':
-    ensure => 'get_certificate',
-    data   => {
-      remoteIp  => '172.18.13.11',
-      aliasName => '172.18.13.11'
-    }
-}
+$aliasname = '172.18.13.11'
+$remoteip = '172.18.13.11'
 
 # Imports the given Server certificate into the appliance
 oneview_server_certificate{'Import Certificates from RemoteIP':
     ensure => 'import',
     data   => {
-      remoteIp  => '172.18.13.11',
-      aliasName => '172.18.13.11'
+      remoteIp  => $remoteip,
+      aliasName => $aliasname
+    }
+}
+
+# Retrieves the web server certificate
+oneview_server_certificate{'Get Certificates from RemoteIP':
+    ensure  => 'get_certificate',
+    require => Oneview_server_certificate['Import Certificates from RemoteIP'],
+    data    => {
+      remoteIp  => $remoteip
+    }
+}
+
+oneview_server_certificate{'sc1 Retrieve Certificates':
+    ensure => 'retrieve',
+    data   => {
+      aliasName => $aliasname
     }
 }
 
@@ -51,9 +53,9 @@ oneview_server_certificate{'Update Certificates from RemoteIP':
 
 # Removes the SSL certificate having alias name specified as part of {aliasName}
 oneview_server_certificate{'Removes Certificates from RemoteIP':
-    ensure => 'remove',
-    data   => {
-      remoteIp  => '172.18.13.11',
-      aliasName => '172.18.13.11'
+    ensure  => 'remove',
+    require => Oneview_server_certificate['Update Certificates from RemoteIP'],
+    data    => {
+      aliasName => $aliasname,
     }
 }

@@ -25,42 +25,39 @@ Puppet::Type.type(:oneview_server_certificate).provide :c7000, parent: Puppet::O
 
   mk_resource_methods
 
+  def exists?
+    prepare_environment
+    empty_data_check([nil, :get_certificate, :retrieve, :remove, :import, :create_or_update])
+  end
+
   def get_certificate
-    @data['aliasName'] = @data.delete('aliasName')
-    @data['remoteIp'] = @data.delete('remoteIp')
-    server_certificate = @resource_type.new(@client, @data)
+    server_certificate = @resource_type.new(@client)
+    server_certificate.data['remoteIp'] = @data.delete('remoteIp')
     server_certificate.get_certificate
-    true
   end
 
   def retrieve
-    @data['aliasName'] = @data.delete('aliasName')
-    server_certificate = @resource_type.new(@client, @data)
+    server_certificate = @resource_type.new(@client)
+    server_certificate.data['aliasName'] = @data.delete('aliasName')
     server_certificate.retrieve!
     true
   end
 
-  def parse_data
-    @data['aliasName'] = @data.delete('aliasName')
-    @data['remoteIp'] = @data.delete('remoteIp')
-    server_certificate = @resource_type.new(@client, @data)
-    @options = server_certificate.get_certificate
-    @data['type'] = @options.delete('type')
-    @data['certificateDetails'] = [
-      'type' => @options['certificateDetails'][0]['type'],
-      'base64Data' => @options['certificateDetails'][0]['base64Data']
-    ]
-  end
-
   def import
     server_certificate = @resource_type.new(@client)
-    parse_data
-    server_certificate.import unless @data['remoteIp']
+    @options = get_certificate
+    server_certificate.data['type'] = 'CertificateInfoV2'
+    server_certificate.data['certificateDetails'] = []
+    server_certificate.data['certificateDetails'][0] = {
+      'type' => @options['certificateDetails'][0]['type'],
+      'base64Data' => @options['certificateDetails'][0]['base64Data']
+    }
+    server_certificate.import
   end
 
   def remove
-    @data['aliasName'] = @data.delete('aliasName')
-    server_certificate = @resource_type.new(@client, @data)
+    server_certificate = @resource_type.new(@client)
+    server_certificate.data['aliasName'] = @data.delete('aliasName')
     server_certificate.remove
   end
 

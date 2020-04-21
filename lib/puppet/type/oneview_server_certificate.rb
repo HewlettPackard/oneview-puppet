@@ -20,14 +20,17 @@ Puppet::Type.newtype(:oneview_server_certificate) do
   # Get methods
   ensurable do
     defaultvalues
+    newvalue(:retrieve) do
+      provider.retrieve
+    end
+    newvalue(:create_or_update) do
+      provider.create_or_update
+    end
     newvalue(:get_certificate) do
       provider.get_certificate
     end
     newvalue(:import) do
       provider.import
-    end
-    newvalue(:retrieve) do
-      provider.retrieve
     end
     newvalue(:remove) do
       provider.remove
