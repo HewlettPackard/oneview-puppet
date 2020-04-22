@@ -87,5 +87,20 @@ describe provider_class, unit: true do
       allow_any_instance_of(resource_type).to receive(:import).and_return(test)
       expect(provider.import).to be
     end
+
+    it 'should be able to update certificates' do
+      resource['data']['remoteIp'] = '172.18.13.11'
+      expected_output = {
+        'type' => 'CertificateInfoV2',
+        'certificateDetails' =>
+         [{
+           'type' => 'CertificateDetailV2',
+           'base64Data' => 'some certificate data'
+         }]
+      }
+      allow_any_instance_of(resource_type).to receive(:get_certificate).and_return(expected_output)
+      allow_any_instance_of(resource_type).to receive(:update).and_return(test)
+      expect(provider.create_or_update).to be
+    end
   end
 end
