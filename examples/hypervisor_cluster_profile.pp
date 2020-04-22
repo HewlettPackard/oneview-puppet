@@ -16,7 +16,7 @@
 
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
 
-# This created Hypervisor ClusterProfile if we use ServerProfileTemplate with OS DeploymentPlan
+# This created Hypervisor ClusterProfile if we use ServerProfileTemplate without OS DeploymentPlan
 oneview_hypervisor_cluster_profile{'hcp1 Create':
     ensure => 'present',
     data   => {
@@ -32,7 +32,7 @@ oneview_hypervisor_cluster_profile{'hcp1 Create':
     }
 }
 
-# This creates Hypervisor Cluster Profile using Server Profile Template without OSDeploymentPlans
+# This creates Hypervisor Cluster Profile using Server Profile Template with OSDeploymentPlan
 oneview_hypervisor_cluster_profile{'hcp2 Create':
     ensure  => 'present',
     require => Oneview_hypervisor_cluster_profile['hcp1 Create'],
