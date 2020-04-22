@@ -35,7 +35,7 @@ oneview_server_certificate{'Get Certificates from RemoteIP':
     }
 }
 
-oneview_server_certificate{'sc1 Retrieve Certificates':
+oneview_server_certificate{'sc1 Retrieve Server Certificates':
     ensure => 'retrieve',
     data   => {
       aliasName => $aliasname
