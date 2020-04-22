@@ -2,31 +2,7 @@
 - This release supports OneView Rest API versions 800/1000/1200 minimally for Server Certificate.
 
 ### Oneview Features supported
-- Connection template
-- Ethernet network
-- Enclosure
-- Enclosure group
-- FC network
-- FCoE network
-- Interconnect
-- Interconnect link topology
-- Interconnect type
-- Logical enclosure
-- Logical interconnect
-- Logical interconnect group
-- Network set
-- SAS logical interconnect
 - Server Certificate
-- Server hardware
-- Server hardware type
-- Server profile
-- Server profile template
-- Storage pool
-- Storage system
-- Storage volume template
-- Uplink set
-- Volume
-- Volume attachment
 
 ### Bug fixes & Enhancements:
 - [#236](https://github.com/HewlettPackard/oneview-puppet/issues/236) Dockerfile is failing because of incorrect Ruby version.
