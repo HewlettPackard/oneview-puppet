@@ -153,6 +153,17 @@
 |<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | GET      | :heavy_minus_sign:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |
 |<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | PUT      | :heavy_minus_sign:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |
 |<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | DELETE   | :heavy_minus_sign:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |
+|     **Server Certificate**                                                                                                   |
+|<sub>/rest/certificates/https/remote/{address}</sub>                                     | GET       | :heavy_minus_sign:   | :heavy_minus_sign:   | :heavy_minus_sign:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
+:white_check_mark:   |
+|<sub>/rest/certificates/servers</sub>                                                    | POST      | :heavy_minus_sign:   | :heavy_minus_sign:   | :heavy_minus_sign:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
+:white_check_mark:   |
+|<sub>/rest/certificates/servers/{aliasName}</sub>                                        | GET       | :heavy_minus_sign:   | :heavy_minus_sign:   | :heavy_minus_sign:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
+:white_check_mark:   |
+|<sub>/rest/certificates/servers/{aliasName}</sub>                                        | PUT       | :heavy_minus_sign:   | :heavy_minus_sign:   | :heavy_minus_sign:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
+:white_check_mark:   |
+|<sub>/rest/certificates/servers/{aliasName}</sub>                                        | DELETE    | :heavy_minus_sign:   | :heavy_minus_sign:   | :heavy_minus_sign:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
+:white_check_mark:   |
 |     **Server Hardware**                                                                                                                          |
 |<sub>/rest/server-hardware</sub>                                                         | GET      | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
 |<sub>/rest/server-hardware</sub>                                                         | POST     | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |:white_check_mark:   |:white_check_mark:   |:white_check_mark:   |
