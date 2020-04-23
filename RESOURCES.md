@@ -29,18 +29,19 @@
 25. [Oneview_sas_interconnect](#oneview_sas_interconnect)
 26. [Oneview_sas_logical_interconnect](#oneview_sas_logical_interconnect)
 27. [Oneview_sas_logical_interconnect_group](#oneview_sas_logical_interconnect_group)
-28. [Oneview_server_hardware](#oneview_server_hardware)
-29. [Oneview_server_hardware_type](#oneview_server_hardware_type)
-30. [Oneview_server_profile_template](#oneview_server_profile_template)
-31. [Oneview_server_profile](#oneview_server_profile)
-32. [Oneview_storage_pool](#oneview_storage_pool)
-33. [Oneview_storage_system](#oneview_storage_system)
-34. [Oneview_switch](#oneview_switch)
-35. [Oneview_unmanaged_device](#oneview_unmanaged_device)
-36. [Oneview_uplink_set](#oneview_uplink_set)
-37. [Oneview_volume](#oneview_volume)
-38. [Oneview_volume_attachment](#oneview_volume_attachment)
-39. [Oneview_volume_template](#oneview_volume_template)
+28. [Oneview_server_certificate](#oneview_server_certificate)
+29. [Oneview_server_hardware](#oneview_server_hardware)
+30. [Oneview_server_hardware_type](#oneview_server_hardware_type)
+31. [Oneview_server_profile_template](#oneview_server_profile_template)
+32. [Oneview_server_profile](#oneview_server_profile)
+33. [Oneview_storage_pool](#oneview_storage_pool)
+34. [Oneview_storage_system](#oneview_storage_system)
+35. [Oneview_switch](#oneview_switch)
+36. [Oneview_unmanaged_device](#oneview_unmanaged_device)
+37. [Oneview_uplink_set](#oneview_uplink_set)
+38. [Oneview_volume](#oneview_volume)
+39. [Oneview_volume_attachment](#oneview_volume_attachment)
+40. [Oneview_volume_template](#oneview_volume_template)
 
 ## HPE Image Streamer resources
 
@@ -416,6 +417,17 @@ This resource provides the following ensurable methods for managing SAS Logical 
 :warning: This resource type is only supported by the **Synergy** hardware variant.
 
 Example file: [sas_logical_interconnect_group.pp](examples/sas_logical_interconnect_group.pp)
+
+#### Oneview_server_certificate
+
+This resource provides the following ensurable methods for managing Server Certificates on the HPE OneView appliance:
+
+* `get_certificate` - Gets certificate from RemoteIp.
+* `import` - Imports certificates.
+* `remove` - Deletes the specified Certificate.
+* `retrieve` - retrieves SSL Certificate from appliance.
+
+Example file: [server_certificate.pp](examples/server_certificate.pp)
 
 #### oneview_server_hardware
 

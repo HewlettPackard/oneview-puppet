@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -36,6 +36,14 @@ RSpec.shared_context 'shared context Image Streamer', a: :b do
     api_version = 300
     options = { url: 'https://oneview.example.com', token: 'fake_token', api_version: api_version }
     @client = OneviewSDK::ImageStreamer::Client.new(options)
+  end
+end
+
+RSpec.shared_context 'shared context Oneview API 600', a: :b do
+  before :each do
+    api_version = 600
+    options = { url: 'https://oneview.example.com', user: 'Administrator', password: 'secret123', api_version: api_version }
+    @client = OneviewSDK::Client.new(options)
   end
 end
 
