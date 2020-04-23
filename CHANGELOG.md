@@ -1,5 +1,5 @@
-# v2.5.0 (unreleased
-- This release supports OneView Rest API versions 800/1000/1200 minimally for Server Certificate.
+# v2.5.0 (unreleased)
+- This release supports OneView Rest API versions 600/800/1000/1200 for below resources.
 
 ### Oneview Features supported
 - Server Certificate
