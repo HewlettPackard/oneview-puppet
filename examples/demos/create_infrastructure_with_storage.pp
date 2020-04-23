@@ -15,16 +15,6 @@
 ################################################################################
 
 # This example works for api_variant "Synergy"
-# Create FC Network
-oneview_fc_network{'Test Puppet FC Network Create1':
-  ensure => 'present',
-  data   => {
-    name                    => 'Test Puppet FC Network Create1',
-    connectionTemplateUri   => nil,
-    autoLoginRedistribution => true,
-    fabricType              => 'FabricAttach'
-    }
-}
 
 # Create Ethernet Network
 oneview_ethernet_network{'Test Puppet Network':
@@ -79,7 +69,7 @@ $network_names = [ 'Test Puppet Network', 'Test Puppet Network Create1' ]
 # Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
 oneview_logical_interconnect_group{'Test Puppet LIG':
   ensure  => 'present',
-  require => Oneview_ethernet_network['Test Puppet Network'],
+  require => Oneview_ethernet_network['Test Puppet Network Create1'],
   data    => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
@@ -304,7 +294,7 @@ oneview_server_profile{'Test Server Profile Create':
   data   =>
   {
     name              => 'Test Server Profile Create',
-    serverHardwareUri => '/rest/server-hardware/30303437-3034-4D32-3230-313030304752',
+    serverHardwareUri => '0000A66102, bay 5',
   }
 }
 
