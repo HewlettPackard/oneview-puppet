@@ -14,7 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-# This example works for api_variant "Synergy"
+# This example works for api_variant "Synergy".
+# This example works with either resource uri or resource name.
 
 # Create Ethernet Network
 oneview_ethernet_network{'Test Puppet Network':
@@ -279,8 +280,8 @@ oneview_server_profile_template{'Test Puppet SPT':
                 provisioningType => 'Thin',
                 size             => 1073741824,
                 name             => 'Test Puppet Storage Volume',
-                storagePool      => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
-                snapshotPool     => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
+                storagePool      => 'CPG-SSD-AO',
+                snapshotPool     => 'CPG-SSD-AO',
                 isShareable      => false
             }
           },
