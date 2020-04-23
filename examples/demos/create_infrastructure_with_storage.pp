@@ -18,6 +18,7 @@
 # This example works with either resource uri or resource name.
 
 # Create Ethernet Network
+# If you already have Ethernet Network, then you can skip this step
 oneview_ethernet_network{'Test Puppet Network':
   ensure => 'present',
   data   => {
@@ -30,6 +31,7 @@ oneview_ethernet_network{'Test Puppet Network':
 }
 
 # Create another Ethernet Network
+# If you already have Ethernet Network, then you can skip this step
 oneview_ethernet_network{'Test Puppet Network Create1':
   ensure => 'present',
   data   => {
@@ -193,7 +195,7 @@ oneview_logical_enclosure{'Test Puppet LE':
   }
 }
 
-# Power off the Server Hardware after the Server Profile has been applied
+# Powering off the Server Hardware to apply ServerProfile
 oneview_server_hardware{'Test Server Hardware Power Off':
     ensure => 'set_power_state',
     data   => {
@@ -288,16 +290,6 @@ oneview_server_profile_template{'Test Puppet SPT':
         }
         ]
     }
-  }
-}
-
-# Creates ServerProfile
-oneview_server_profile{'Test Server Profile Create':
-  ensure => 'present',
-  data   =>
-  {
-    name              => 'Test Server Profile Create',
-    serverHardwareUri => '0000A66102, bay 5',
   }
 }
 
