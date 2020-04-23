@@ -193,6 +193,32 @@ oneview_logical_enclosure{'Test Puppet LE':
   }
 }
 
+$file_path = 'examples/image_streamer/files/artifact-bundle-dev.zip'
+
+image_streamer_artifact_bundle{'artifact_bundle_present':
+  ensure => 'present',
+  data   => {
+    name                 => 'Artifact_Bundle_Example',
+    artifact_bundle_path => $file_path
+  }
+}
+
+image_streamer_artifact_bundle{'artifact_bundle_extracted':
+  ensure  => 'extract',
+  require => Image_streamer_artifact_bundle['artifact_bundle_present'],
+  data    => {
+    name  => 'Artifact_Bundle_Example'
+  }
+}
+
+image_streamer_deployment_plan{'deployment_plan_found':
+  ensure  => 'found',
+  require => Image_streamer_artifact_bundle['artifact_bundle_extracted'],
+  data    => {
+    name     => 'HPE - Developer 1.0 - Deployment Test (UEFI)'
+  }
+}
+
 # Power off the Server Hardware after the Server Profile has been applied
 oneview_server_hardware{'Test Server Hardware Power Off':
     ensure => 'set_power_state',
@@ -211,7 +237,7 @@ oneview_server_profile_template{'Test Puppet SPT':
     enclosureGroupUri     => Oneview_enclosure_group['Test Puppet Enclosure Group']['data']['name'],
     serverHardwareTypeUri => 'SY 480 Gen9 1',
     osDeploymentSettings  => {
-      osDeploymentPlanUri => 'Bootstrap_DCOS',
+      osDeploymentPlanUri => 'HPE - Developer 1.0 - Deployment Test (UEFI)',
     },
     connectionSettings    =>
     {
