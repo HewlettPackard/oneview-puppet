@@ -51,6 +51,7 @@ oneview_ethernet_network{'Test Puppet Network Create1':
 }
 
 # Creates Storage System in OneView
+# If you already have Storage System, then you can skip this step
 oneview_storage_system{'Test Puppet Storage System':
     ensure => 'present',
     data   => {
@@ -62,6 +63,7 @@ oneview_storage_system{'Test Puppet Storage System':
 }
 
 # Creates Storage Pool in OneView
+# If you already have Storage Pool, then you can skip this step
 oneview_storage_pool{'Test Puppet Storage Pool':
   ensure  => 'present',
   require => Oneview_storage_system['Test Puppet Storage System'],
