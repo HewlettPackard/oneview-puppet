@@ -1,4 +1,10 @@
-# v2.4.1 (unreleased)
+# v2.5.0 (unreleased)
+### Notes
+- This release supports OneView Rest API versions 800/1000/1200 for below resources.
+
+### Oneview Features supported
+- Hypervisor Manager
+
 ### Bug fixes & Enhancements:
 - [#236](https://github.com/HewlettPackard/oneview-puppet/issues/236) Dockerfile is failing because of incorrect Ruby version.
 
