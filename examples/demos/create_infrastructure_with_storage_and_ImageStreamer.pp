@@ -14,17 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-# This example works for api_variant "Synergy"
-# Create FC Network
-oneview_fc_network{'Test Puppet FC Network Create1':
-  ensure => 'present',
-  data   => {
-    name                    => 'Test Puppet FC Network Create1',
-    connectionTemplateUri   => nil,
-    autoLoginRedistribution => true,
-    fabricType              => 'FabricAttach'
-    }
-}
+# This example works for api_variant "Synergy".
+# This example works with either resource uri or resource name.
 
 # Create Ethernet Network
 oneview_ethernet_network{'Test Puppet Network':
@@ -42,7 +33,7 @@ oneview_ethernet_network{'Test Puppet Network':
 oneview_ethernet_network{'Test Puppet Network Create1':
   ensure => 'present',
   data   => {
-    name           => 'Test Puppet Network Create2',
+    name           => 'Test Puppet Network Create1',
     vlanId         => '1000',
     purpose        => 'General',
     smartLink      => true,
@@ -51,6 +42,7 @@ oneview_ethernet_network{'Test Puppet Network Create1':
 }
 
 # Creates Storage System in OneView
+# If you already have Storage System, then you can skip this step
 oneview_storage_system{'Test Puppet Storage System':
     ensure => 'present',
     data   => {
@@ -62,6 +54,7 @@ oneview_storage_system{'Test Puppet Storage System':
 }
 
 # Creates Storage Pool in OneView
+# If you already have Storage Pool, then you can skip this step
 oneview_storage_pool{'Test Puppet Storage Pool':
   ensure  => 'present',
   require => Oneview_storage_system['Test Puppet Storage System'],
@@ -79,7 +72,7 @@ $network_names = [ 'Test Puppet Network', 'Test Puppet Network Create1' ]
 # Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
 oneview_logical_interconnect_group{'Test Puppet LIG':
   ensure  => 'present',
-  require => Oneview_ethernet_network['Test Puppet Network'],
+  require => Oneview_ethernet_network['Test Puppet Network Create1'],
   data    => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
@@ -290,8 +283,8 @@ oneview_server_profile_template{'Test Puppet SPT':
                 provisioningType => 'Thin',
                 size             => 1073741824,
                 name             => 'Test Puppet Storage Volume',
-                storagePool      => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
-                snapshotPool     => '/rest/storage-pools/C6190E80-7246-42BF-92B8-AB9E00CFF1C6',
+                storagePool      => 'CPG-SSD-AO',
+                snapshotPool     => 'CPG-SSD-AO',
                 isShareable      => false
             }
           },
@@ -307,7 +300,7 @@ oneview_server_profile{'Test Server Profile Create':
   data   =>
   {
     name              => 'Test Server Profile Create',
-    serverHardwareUri => '/rest/server-hardware/30303437-3034-4D32-3230-313030304752',
+    serverHardwareUri => '0000A66102, bay 5',
   }
 }
 
