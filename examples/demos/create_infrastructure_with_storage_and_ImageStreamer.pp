@@ -62,7 +62,7 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
                                 { bay             => 6,
                                   port            => 82,
                                   enclosure_index => 2 }],
-        networkUris         => [ 'test1' ]
+        networkUris         => [ 'deploy' ]
       },
       {
         name                => 'management',
@@ -189,7 +189,7 @@ oneview_server_hardware{'Test Server Hardware Power Off':
 }
 
 # Creates ServerProfileTemplate with osDeploymentPlan, Hardware and boot settings.
-# You must have managementNetwork ready with subnet and deployemntNetwork prior execution of this step.
+# You must have managementNetwork ready with subnet and deploymentNetwork prior execution of this step.
 oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
@@ -279,7 +279,7 @@ oneview_server_profile_template{'Test Puppet SPT':
       },
       {
           id            => 2,
-          networkUri    => 'test1',
+          networkUri    => 'deploy',
           name          => 'DeploymentNetworkA',
           functionType  => 'Ethernet',
           portId        => 'Mezz 3:1-a',
@@ -291,7 +291,7 @@ oneview_server_profile_template{'Test Puppet SPT':
       },
       {
           id            => 3,
-          networkUri    => 'test1',
+          networkUri    => 'deploy',
           name          => 'DeploymentNetworkB',
           functionType  => 'Ethernet',
           portId        => 'Mezz 3:2-a',
