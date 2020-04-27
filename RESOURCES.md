@@ -13,35 +13,36 @@
 9. [Oneview_fcoe_network](#oneview_fcoe_network)
 10. [Oneview_firmware_bundle](#oneview_firmware_bundle)
 11. [Oneview_firmware_driver](#oneview_firmware_driver)
-12. [Oneview_hypervisor_manager](#oneview_hypervisor_manager)
-13. [Oneview_interconnect](#oneview_interconnect)
-14. [Oneview_logical_downlink](#oneview_logical_downlink)
-15. [Oneview_logical_enclosure](#oneview_logical_enclosure)
-16. [Oneview_logical_interconnect_group](#oneview_logical_interconnect_group)
-17. [Oneview_logical_interconnect](#oneview_logical_interconnect)
-18. [Oneview_logical_switch](#oneview_logical_switch)
-19. [Oneview_logical_switch_group](#oneview_logical_switch_group)
-20. [Oneview_managed_san](#oneview_managed_san)
-21. [Oneview_network_set](#oneview_network_set)
-22. [Oneview_power_device](#oneview_power_device)
-23. [Oneview_rack](#oneview_rack)
-24. [Oneview_san_manager](#oneview_san_manager)
-25. [Oneview_sas_interconnect](#oneview_sas_interconnect)
-26. [Oneview_sas_logical_interconnect](#oneview_sas_logical_interconnect)
-27. [Oneview_sas_logical_interconnect_group](#oneview_sas_logical_interconnect_group)
-28. [Oneview_server_certificate](#oneview_server_certificate)
-29. [Oneview_server_hardware](#oneview_server_hardware)
-30. [Oneview_server_hardware_type](#oneview_server_hardware_type)
-31. [Oneview_server_profile_template](#oneview_server_profile_template)
-32. [Oneview_server_profile](#oneview_server_profile)
-33. [Oneview_storage_pool](#oneview_storage_pool)
-34. [Oneview_storage_system](#oneview_storage_system)
-35. [Oneview_switch](#oneview_switch)
-36. [Oneview_unmanaged_device](#oneview_unmanaged_device)
-37. [Oneview_uplink_set](#oneview_uplink_set)
-38. [Oneview_volume](#oneview_volume)
-39. [Oneview_volume_attachment](#oneview_volume_attachment)
-40. [Oneview_volume_template](#oneview_volume_template)
+12. [Oneview_hypervisor_cluster_profile](#oneview_hypervisor_cluster_profile)
+13. [Oneview_hypervisor_manager](#oneview_hypervisor_manager)
+14. [Oneview_interconnect](#oneview_interconnect)
+15. [Oneview_logical_downlink](#oneview_logical_downlink)
+16. [Oneview_logical_enclosure](#oneview_logical_enclosure)
+17. [Oneview_logical_interconnect_group](#oneview_logical_interconnect_group)
+18. [Oneview_logical_interconnect](#oneview_logical_interconnect)
+19. [Oneview_logical_switch](#oneview_logical_switch)
+20. [Oneview_logical_switch_group](#oneview_logical_switch_group)
+21. [Oneview_managed_san](#oneview_managed_san)
+22. [Oneview_network_set](#oneview_network_set)
+23. [Oneview_power_device](#oneview_power_device)
+24. [Oneview_rack](#oneview_rack)
+25. [Oneview_san_manager](#oneview_san_manager)
+26. [Oneview_sas_interconnect](#oneview_sas_interconnect)
+27. [Oneview_sas_logical_interconnect](#oneview_sas_logical_interconnect)
+28. [Oneview_sas_logical_interconnect_group](#oneview_sas_logical_interconnect_group)
+29. [Oneview_server_certificate](#oneview_server_certificate)
+30. [Oneview_server_hardware](#oneview_server_hardware)
+31. [Oneview_server_hardware_type](#oneview_server_hardware_type)
+32. [Oneview_server_profile_template](#oneview_server_profile_template)
+33. [Oneview_server_profile](#oneview_server_profile)
+34. [Oneview_storage_pool](#oneview_storage_pool)
+35. [Oneview_storage_system](#oneview_storage_system)
+36. [Oneview_switch](#oneview_switch)
+37. [Oneview_unmanaged_device](#oneview_unmanaged_device)
+38. [Oneview_uplink_set](#oneview_uplink_set)
+39. [Oneview_volume](#oneview_volume)
+40. [Oneview_volume_attachment](#oneview_volume_attachment)
+41. [Oneview_volume_template](#oneview_volume_template)
 
 ## HPE Image Streamer resources
 
@@ -183,6 +184,16 @@ The firmware driver resource manager provides the following ensurable methods ma
 * `found` - Searches for `oneview_firmware_driver` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
 
 Example file: [firmware_driver.pp](examples/firmware_driver.pp)
+
+### oneview_hypervisor_cluster_profile
+
+This resource provides the following ensurable methods for managing hypervisor cluster profiles on the HPE OneView appliance:
+
+* `present` - Creates or updates a Hypervisor Cluster Profile.
+* `absent` - Deletes a Hypervisor Cluster Profile.
+* `found` - Searches for `oneview_hypervisor_cluster_profile` resources on the appliance (with or without specific filters) and prints the name and uri of matches to the standard output.
+
+Example file: [hypervisor_cluster_profile.pp](examples/hypervisor_cluster_profile.pp)
 
 #### oneview_hypervisor_manager
 
