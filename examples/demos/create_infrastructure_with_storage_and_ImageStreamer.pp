@@ -17,6 +17,7 @@
 # This example works for api_variant "Synergy".
 # This example works for either resourcename or name except for enclosureUri and subnetUri
 # This example works if you already have an OsDeploymentPlan.
+# This example provisions Infrastructure with OS on Synergy with Image Streamer.
 
 # Creates an Ethernet Network with Subnet Settings.
 # If you already has Ethernet Network ready with Subnet Settings, you can skip this step.
@@ -189,7 +190,8 @@ oneview_server_hardware{'Test Server Hardware Power Off':
 }
 
 # Creates ServerProfileTemplate with osDeploymentPlan, Hardware and boot settings.
-# You must have managementNetwork ready with subnet and deploymentNetwork prior execution of this step.
+# You must have deploymentNetwork ready with subnet and managementNetwork prior to execution of this step.(for the below step I used Deployment network,
+# 6 Management network, 1 OS deployment plan
 oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
