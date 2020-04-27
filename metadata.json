@@ -33,7 +33,7 @@
   "dependencies": [],
   "requirements": [
     {"name":"puppet","version_requirement":">= 4.1.0"},
-    {"name": "ruby","version_requirement": ">=2.2.3"},
+    {"name": "ruby","version_requirement": ">=2.3.1"},
     {"name": "oneview-sdk-ruby","version_requirement": ">=5.11.0"}
   ],
   "tags": [ "oneview", "hpe", "hewlett packard enterprise", "i3s", "image streamer", "bare-metal provisioning" ],
