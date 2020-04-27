@@ -1,7 +1,7 @@
 # v2.5.0 (unreleased)
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 for Hypervisor resources.
-- Added support to the Server Certificate REST API version 600/800/1000/1200 through OneView.
+- Added support to Server Certificate REST API version 600/800/1000/1200 through OneView.
 
 ### Oneview Features supported
 - Hypervisor Cluster Profile
