@@ -1,4 +1,4 @@
-# v2.5.0 (unreleased)
+# v2.5.0 (2020-04-27)
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 for Hypervisor resources.
 - Added support to Server Certificate REST API version 600/800/1000/1200 through OneView.
