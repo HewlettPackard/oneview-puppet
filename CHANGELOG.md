@@ -2,6 +2,10 @@
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 for Hypervisor resources.
 - Added support to Server Certificate REST API version 600/800/1000/1200 through OneView.
+- Added usecases for the following scenarios
+  1. Infrastructure provisioning with OS on Synergy with Image Streamer.
+  2. Infrastructure provisioning on Synergy with compute (with server settings), networking, and storage.
+  3. Create and update infrastructure provisioning on Synergy with JBODS.
 
 ### Oneview Features supported
 - Hypervisor Cluster Profile
