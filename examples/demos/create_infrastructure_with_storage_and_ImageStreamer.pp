@@ -14,10 +14,9 @@
 # limitations under the License.
 ################################################################################
 
-# This example works for api_variant "Synergy".
-# This example works for either resourcename or name except for enclosureUri and subnetUri
+# This example works with either resourcename or Uri except for enclosureUri and subnetUri
 # This example works if you already have an OsDeploymentPlan.
-# This example provisions Infrastructure with OS on Synergy with Image Streamer.
+# This example is used to provision an Infrastructure with OS on Synergy with Image Streamer.
 
 # Creates an Ethernet Network with Subnet Settings.
 # If you already has Ethernet Network ready with Subnet Settings, you can skip this step.
@@ -167,7 +166,7 @@ oneview_enclosure_group{'Test Puppet Enclosure Group':
   }
 }
 
-# Creates Logical Enclosure
+# Creates Logical Enclosure.
 oneview_logical_enclosure{'Test Puppet LE':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
@@ -180,7 +179,7 @@ oneview_logical_enclosure{'Test Puppet LE':
   }
 }
 
-# Power off the Server Hardware to apply ServerProfile
+# Power off the Server Hardware to apply ServerProfile.
 oneview_server_hardware{'Test Server Hardware Power Off':
     ensure => 'set_power_state',
     data   => {
@@ -191,7 +190,7 @@ oneview_server_hardware{'Test Server Hardware Power Off':
 
 # Creates ServerProfileTemplate with osDeploymentPlan, Hardware and boot settings.
 # You must have deploymentNetwork ready with subnet and managementNetwork prior to execution of this step.(for the below step I used Deployment network,
-# 6 Management network, 1 OS deployment plan
+# 6 Management network, 1 OS deployment plan)
 oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
@@ -326,7 +325,7 @@ oneview_server_profile_template{'Test Puppet SPT':
   }
 }
 
-# Creates ServerProfile from ServerProfileTemplate created above
+# Creates ServerProfile from ServerProfileTemplate created above.
 oneview_server_profile_template{'Test Server Profile Create from Profile Template':
   ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Test Puppet SPT'],
@@ -336,7 +335,7 @@ oneview_server_profile_template{'Test Server Profile Create from Profile Templat
   }
 }
 
-# Power on the Server Hardware after the Server Profile has been applied
+# Power on the Server Hardware after the Server Profile has been applied.
 oneview_server_hardware{'Test Server Hardware Power On':
     ensure => 'set_power_state',
     data   => {
