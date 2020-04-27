@@ -14,66 +14,29 @@
 # limitations under the License.
 ################################################################################
 
-# This example works for api_variant "Synergy".
-# This example works with either resource uri or resource name.
+# This example works with either resourcename or Uri except for enclosureUri and subnetUri
+# This example works if you already have an OsDeploymentPlan.
+# This example is used to provision an Infrastructure with OS on Synergy with Image Streamer.
 
-# Create Ethernet Network
-oneview_ethernet_network{'Test Puppet Network':
+# Creates an Ethernet Network with Subnet Settings.
+# If you already has Ethernet Network ready with Subnet Settings, you can skip this step.
+oneview_ethernet_network{'deploy':
   ensure => 'present',
   data   => {
-    name           => 'Test Puppet Network',
-    vlanId         => '1045',
-    purpose        => 'General',
-    smartLink      => true,
-    privateNetwork => false
-  }
-}
-
-# Create another Ethernet Network
-oneview_ethernet_network{'Test Puppet Network Create1':
-  ensure => 'present',
-  data   => {
-    name           => 'Test Puppet Network Create1',
-    vlanId         => '1000',
-    purpose        => 'General',
-    smartLink      => true,
-    privateNetwork => false
-  }
-}
-
-# Creates Storage System in OneView
-# If you already have Storage System, then you can skip this step
-oneview_storage_system{'Test Puppet Storage System':
-    ensure => 'present',
-    data   => {
-      family   => 'StoreServ',
-      hostname => '172.18.11.11',
-      username => 'dcs',
-      password => 'dcs'
-    }
-}
-
-# Creates Storage Pool in OneView
-# If you already have Storage Pool, then you can skip this step
-oneview_storage_pool{'Test Puppet Storage Pool':
-  ensure  => 'present',
-  require => Oneview_storage_system['Test Puppet Storage System'],
-  data    =>
-  {
-    poolName         => 'CPG-SSD-AO',
-    storageSystemUri => 'ThreePAR-1'
+    name      => 'deploy',
+    vlanId    => '101',
+    purpose   => 'General',
+    smartLink => true
   }
 }
 
 $interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
 $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
-$network_names = [ 'Test Puppet Network', 'Test Puppet Network Create1' ]
 
-# Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
+# Creates Logical Interconnect Group with osDeploymentSettings,upLinkSets
 oneview_logical_interconnect_group{'Test Puppet LIG':
-  ensure  => 'present',
-  require => Oneview_ethernet_network['Test Puppet Network Create1'],
-  data    => {
+  ensure => 'present',
+  data   => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
     interconnectBaySet => 3,
@@ -82,22 +45,39 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
     uplinkSets         =>
     [
       {
-        name                => 'TUNNEL_ETH_UP_01',
-        ethernetNetworkType => 'Tagged',
+        name                => 'deploy',
+        ethernetNetworkType => 'ImageStreamer',
         networkType         => 'Ethernet',
         lacpTimer           => 'Short',
         mode                => 'Auto',
         uplink_ports        => [{ bay             => 3,
-                                  port            => 'Q1',
-                                  type            => $interconnect_type_1,
+                                  port            => 87,
                                   enclosure_index => 1 },
                                 { bay             => 6,
-                                  port            => 'Q1',
-                                  type            => $interconnect_type_1,
-                                  enclosure_index => 2 }
-        ],
-        networkUris         => $network_names
-      }
+                                  port            => 87,
+                                  enclosure_index => 2 },
+                                { bay             => 3,
+                                  port            => 82,
+                                  enclosure_index => 1 },
+                                { bay             => 6,
+                                  port            => 82,
+                                  enclosure_index => 2 }],
+        networkUris         => [ 'deploy' ]
+      },
+      {
+        name                => 'management',
+        ethernetNetworkType => 'Untagged',
+        networkType         => 'Ethernet',
+        lacpTimer           => 'Short',
+        mode                => 'Auto',
+        uplink_ports        => [{ bay             => 3,
+                                  port            => 62,
+                                  enclosure_index => 1 },
+                                { bay             => 6,
+                                  port            => 62,
+                                  enclosure_index => 2 }],
+        networkUris         => [ 'mgmt' ]
+      },
     ],
     interconnects      =>
     [
@@ -135,7 +115,7 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
   }
 }
 
-# Creates EnclosureGroup using Logical Interconnect Group created above
+# Creates EnclosureGroup with osDeploymentSettings using Logical Interconnect Group created above
 oneview_enclosure_group{'Test Puppet Enclosure Group':
   ensure  => 'present',
   require => Oneview_logical_interconnect_group['Test Puppet LIG'],
@@ -144,6 +124,12 @@ oneview_enclosure_group{'Test Puppet Enclosure Group':
     stackingMode                => 'Enclosure',
     interconnectBayMappingCount => '8',
     enclosureCount              => '3',
+    osDeploymentSettings        => {
+      manageOSDeployment     => true,
+      deploymentModeSettings => {
+        deploymentMode       => 'Internal'
+      }
+    },
     interconnectBayMappings     =>
     [
       {
@@ -180,7 +166,7 @@ oneview_enclosure_group{'Test Puppet Enclosure Group':
   }
 }
 
-# Creates Logical Enclosure
+# Creates Logical Enclosure.
 oneview_logical_enclosure{'Test Puppet LE':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
@@ -193,7 +179,7 @@ oneview_logical_enclosure{'Test Puppet LE':
   }
 }
 
-# Power off the Server Hardware after the Server Profile has been applied
+# Power off the Server Hardware to apply ServerProfile.
 oneview_server_hardware{'Test Server Hardware Power Off':
     ensure => 'set_power_state',
     data   => {
@@ -202,7 +188,9 @@ oneview_server_hardware{'Test Server Hardware Power Off':
     },
 }
 
-# Creates ServerProfileTemplate with Storage, Hardware, ImageStreamer and boot settings
+# Creates ServerProfileTemplate with osDeploymentPlan, Hardware and boot settings.
+# You must have deploymentNetwork ready with subnet and managementNetwork prior to execution of this step.(for the below step I used Deployment network,
+# 6 Management network, 1 OS deployment plan)
 oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
   require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
@@ -211,7 +199,7 @@ oneview_server_profile_template{'Test Puppet SPT':
     enclosureGroupUri     => Oneview_enclosure_group['Test Puppet Enclosure Group']['data']['name'],
     serverHardwareTypeUri => 'SY 480 Gen9 1',
     osDeploymentSettings  => {
-      osDeploymentPlanUri => 'HPE - Developer 1.0 - Deployment Test (UEFI)',
+      osDeploymentPlanUri => 'Basic Deployment Plan'
     },
     connectionSettings    =>
     {
@@ -220,17 +208,99 @@ oneview_server_profile_template{'Test Puppet SPT':
       [
       {
           id            => 1,
-          networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
+          networkUri    => 'mgmt',
+          name          => 'c1',
           functionType  => 'Ethernet',
-          portId        => 'Mezz 3:1-a',
-          requestedMbps => '2000'
+          portId        => 'Mezz 3:1-c',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'NotBootable'
+          }
       },
       {
           id            => 2,
-          networkUri    => Oneview_ethernet_network['Test Puppet Network Create1']['data']['name'],
+          networkUri    => 'mgmt1',
+          name          => 'c2',
           functionType  => 'Ethernet',
-          portId        => 'Mezz 3:1-b',
-          requestedMbps => '2000'
+          portId        => 'Mezz 3:1-d',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'NotBootable'
+          }
+      },
+      {
+          id            => 3,
+          networkUri    => 'mgmt2',
+          name          => 'c3',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-e',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'NotBootable'
+          }
+      },
+      {
+          id            => 4,
+          networkUri    => 'mgmt3',
+          name          => 'c4',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-f',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'NotBootable'
+          }
+      },
+      {
+          id            => 5,
+          networkUri    => 'mgmt4',
+          name          => 'c5',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-g',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'NotBootable'
+          }
+      },
+      {
+          id            => 6,
+          networkUri    => 'mgmt5',
+          name          => 'c6',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-h',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'NotBootable'
+          }
+      },
+      {
+          id            => 7,
+          networkUri    => 'deploy',
+          name          => 'DeploymentNetworkA',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:1-a',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'Primary'
+          }
+      },
+      {
+          id            => 8,
+          networkUri    => 'deploy',
+          name          => 'DeploymentNetworkB',
+          functionType  => 'Ethernet',
+          portId        => 'Mezz 3:2-a',
+          requestedMbps => '2000',
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority    => 'Secondary',
+          }
       }
       ]
     },
@@ -239,72 +309,23 @@ oneview_server_profile_template{'Test Puppet SPT':
       manageBoot => true,
       order      =>
       [
-      'CD',
-      'USB',
-      'HardDisk',
-      'PXE'
+      'HardDisk'
       ]
     },
     bootMode              =>
     {
-      manageMode => true,
-      mode       => 'BIOS',
-      secureBoot => 'Disabled'
+      manageMode    => true,
+      mode          => 'UEFIOptimized',
+      pxeBootPolicy => 'Auto'
     },
     bios                  =>
     {
       manageBios         => true
-    },
-    sanStorage            =>
-    {
-      manageSanStorage  => true,
-      hostOSType        => 'VMware (ESXi)',
-      volumeAttachments =>
-      [
-        {
-          id           => 1,
-          lun          => '',
-          lunType      => 'Auto',
-          storagePaths =>
-          [
-            {
-              connectionId   => 1,
-              isEnabled      => true,
-              targetSelector => 'Auto'
-            },
-            {
-              connectionId   => 2,
-              isEnabled      => true,
-              targetSelector => 'Auto'
-            }
-          ],
-          volume       => {
-            properties => {
-                provisioningType => 'Thin',
-                size             => 1073741824,
-                name             => 'Test Puppet Storage Volume',
-                storagePool      => 'CPG-SSD-AO',
-                snapshotPool     => 'CPG-SSD-AO',
-                isShareable      => false
-            }
-          },
-        }
-        ]
     }
   }
 }
 
-# Creates ServerProfile
-oneview_server_profile{'Test Server Profile Create':
-  ensure => 'present',
-  data   =>
-  {
-    name              => 'Test Server Profile Create',
-    serverHardwareUri => '0000A66102, bay 5',
-  }
-}
-
-# Creates ServerProfile from ServerProfileTemplate created above
+# Creates ServerProfile from ServerProfileTemplate created above.
 oneview_server_profile_template{'Test Server Profile Create from Profile Template':
   ensure  => 'set_new_profile',
   require => Oneview_server_profile_template['Test Puppet SPT'],
@@ -314,7 +335,7 @@ oneview_server_profile_template{'Test Server Profile Create from Profile Templat
   }
 }
 
-# Power on the Server Hardware after the Server Profile has been applied
+# Power on the Server Hardware after the Server Profile has been applied.
 oneview_server_hardware{'Test Server Hardware Power On':
     ensure => 'set_power_state',
     data   => {
