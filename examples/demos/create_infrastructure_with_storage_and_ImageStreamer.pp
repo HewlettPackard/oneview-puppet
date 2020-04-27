@@ -278,7 +278,7 @@ oneview_server_profile_template{'Test Puppet SPT':
           }
       },
       {
-          id            => 2,
+          id            => 7,
           networkUri    => 'deploy',
           name          => 'DeploymentNetworkA',
           functionType  => 'Ethernet',
@@ -290,7 +290,7 @@ oneview_server_profile_template{'Test Puppet SPT':
           }
       },
       {
-          id            => 3,
+          id            => 8,
           networkUri    => 'deploy',
           name          => 'DeploymentNetworkB',
           functionType  => 'Ethernet',
