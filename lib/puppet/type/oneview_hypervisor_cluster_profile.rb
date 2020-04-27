@@ -13,29 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-FROM ruby:2.4
 
-# Install dependencies
-RUN apt-get -qqy update && \
-	apt-get -qqy install \
-	curl \
-	make \
-	vim  \
-	mlocate && \
-	updatedb
+Puppet::Type.newtype(:oneview_hypervisor_cluster_profile) do
+  desc "Oneview's Hypervisor Cluster Profile"
+  ensurable do
+    defaultvalues
+    # :nocov:
+    # Get Methods
+    newvalue(:found) do
+      provider.found
+    end
+  end
 
-RUN gem install --no-document bundler
+  newparam(:name, namevar: true) do
+    desc 'Hypervisor Cluster Profile name'
+  end
 
-RUN mkdir /puppet
-WORKDIR /puppet
-RUN echo `pwd` > ./pwd
-COPY . /puppet
-
-RUN bundle
-RUN puppet module install hewlettpackard-oneview
-
-# Clean and remove not required packages
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get autoremove -y && \
-    apt-get clean -y && \
-    rm -rf /var/cache/apt/archives/* /var/cache/apt/lists/* /tmp/* /root/cache/.
+  newproperty(:data) do
+    desc 'Hypervisor Cluster Profile data hash containing all specifications'
+    validate do |value|
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+    end
+  end
+end

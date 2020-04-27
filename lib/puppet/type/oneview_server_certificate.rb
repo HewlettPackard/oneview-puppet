@@ -13,29 +13,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-FROM ruby:2.4
 
-# Install dependencies
-RUN apt-get -qqy update && \
-	apt-get -qqy install \
-	curl \
-	make \
-	vim  \
-	mlocate && \
-	updatedb
-
-RUN gem install --no-document bundler
-
-RUN mkdir /puppet
-WORKDIR /puppet
-RUN echo `pwd` > ./pwd
-COPY . /puppet
-
-RUN bundle
-RUN puppet module install hewlettpackard-oneview
-
-# Clean and remove not required packages
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get autoremove -y && \
-    apt-get clean -y && \
-    rm -rf /var/cache/apt/archives/* /var/cache/apt/lists/* /tmp/* /root/cache/.
+Puppet::Type.newtype(:oneview_server_certificate) do
+  desc 'Server Certificate'
+  # :nocov:
+  # Get methods
+  ensurable do
+    defaultvalues
+    newvalue(:retrieve) do
+      provider.retrieve
+    end
+    newvalue(:create_or_update) do
+      provider.create_or_update
+    end
+    newvalue(:get_certificate) do
+      provider.get_certificate
+    end
+    newvalue(:import) do
+      provider.import
+    end
+    newvalue(:remove) do
+      provider.remove
+    end
+    # :nocov:
+  end
+  newparam(:name, namevar: true) do
+    desc 'Server Certificate'
+  end
+  newproperty(:data) do
+    desc 'server certificate data hash containing all specifications'
+    validate do |value|
+      raise 'Inserted value for data is not valid' unless value.class == Hash
+    end
+  end
+end

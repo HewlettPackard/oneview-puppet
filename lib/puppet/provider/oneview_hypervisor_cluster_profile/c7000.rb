@@ -13,29 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-FROM ruby:2.4
 
-# Install dependencies
-RUN apt-get -qqy update && \
-	apt-get -qqy install \
-	curl \
-	make \
-	vim  \
-	mlocate && \
-	updatedb
+require_relative '../oneview_resource'
 
-RUN gem install --no-document bundler
+Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: Puppet::OneviewResource do
+  desc 'Provider for OneView Hypervisor Cluster Profile using the C7000 variant of the OneView API'
 
-RUN mkdir /puppet
-WORKDIR /puppet
-RUN echo `pwd` > ./pwd
-COPY . /puppet
+  confine feature: :oneview
+  confine true: login[:hardware_variant] == 'C7000'
 
-RUN bundle
-RUN puppet module install hewlettpackard-oneview
+  mk_resource_methods
 
-# Clean and remove not required packages
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get autoremove -y && \
-    apt-get clean -y && \
-    rm -rf /var/cache/apt/archives/* /var/cache/apt/lists/* /tmp/* /root/cache/.
+  def self.api_version
+    800
+  end
+
+  def self.resource_name
+    'HypervisorClusterProfile'
+  end
+end
