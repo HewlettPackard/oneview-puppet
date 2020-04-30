@@ -17,7 +17,7 @@
 # This example works for api_variant "Synergy".
 # This example works with either resource uri or resource name.
 
-# Create FC Network
+# Creates FC Network
 # If you already have FC Network, then you can skip this step
 oneview_fc_network{'Test Puppet Network':
     ensure => 'present',
