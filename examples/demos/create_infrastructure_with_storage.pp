@@ -17,35 +17,35 @@
 # This example works for api_variant "Synergy".
 # This example works with either resource uri or resource name.
 
-# Create Ethernet Network
-# If you already have Ethernet Network, then you can skip this step
-oneview_ethernet_network{'Test Puppet Network':
-  ensure => 'present',
-  data   => {
-    name           => 'Test Puppet Network',
-    vlanId         => '1045',
-    purpose        => 'General',
-    smartLink      => true,
-    privateNetwork => false
-  }
+# Create FC Network
+# If you already have FC Network, then you can skip this step
+oneview_fc_network{'Test Puppet Network':
+    ensure => 'present',
+    data   => {
+      name                    => 'Test Puppet Network',
+      connectionTemplateUri   => nil,
+      autoLoginRedistribution => true,
+      fabricType              => 'FabricAttach',
+    }
 }
 
-# Create another Ethernet Network
-# If you already have Ethernet Network, then you can skip this step
-oneview_ethernet_network{'Test Puppet Network Create1':
-  ensure => 'present',
-  data   => {
-    name           => 'Test Puppet Network Create1',
-    vlanId         => '1000',
-    purpose        => 'General',
-    smartLink      => true,
-    privateNetwork => false
-  }
+# Create another FC Network
+# If you already have FC Network, then you can skip this step
+oneview_fc_network{'Test Puppet Network Create1':
+    ensure => 'present',
+    data   => {
+      name                    => 'Test Puppet Network Create1',
+      connectionTemplateUri   => nil,
+      autoLoginRedistribution => true,
+      fabricType              => 'FabricAttach',
+    }
 }
 
 # Creates Storage System in OneView
-# If you already have Storage System, then you can skip this step
-oneview_storage_system{'Test Puppet Storage System':
+# If you already have Storage System having ports configured with FC Networks,
+# then you can skip this step
+
+oneview_storage_system{'storage_system_1':
     ensure => 'present',
     data   => {
       family   => 'StoreServ',
@@ -55,26 +55,12 @@ oneview_storage_system{'Test Puppet Storage System':
     }
 }
 
-# Creates Storage Pool in OneView
-# If you already have Storage Pool, then you can skip this step
-oneview_storage_pool{'Test Puppet Storage Pool':
-  ensure  => 'present',
-  require => Oneview_storage_system['Test Puppet Storage System'],
-  data    =>
-  {
-    poolName         => 'CPG-SSD-AO',
-    storageSystemUri => 'ThreePAR-1'
-  }
-}
-
 $interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
 $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
-$network_names = [ 'Test Puppet Network', 'Test Puppet Network Create1' ]
 
 # Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
 oneview_logical_interconnect_group{'Test Puppet LIG':
   ensure  => 'present',
-  require => Oneview_ethernet_network['Test Puppet Network Create1'],
   data    => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
@@ -84,21 +70,24 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
     uplinkSets         =>
     [
       {
-        name                => 'TUNNEL_ETH_UP_01',
-        ethernetNetworkType => 'Tagged',
-        networkType         => 'Ethernet',
-        lacpTimer           => 'Short',
-        mode                => 'Auto',
+        name                => 'FC01',
+        networkType         => 'FibreChannel',
         uplink_ports        => [{ bay             => 3,
-                                  port            => 'Q1',
+                                  port            => 'Q1:1',
                                   type            => $interconnect_type_1,
-                                  enclosure_index => 1 },
-                                { bay             => 6,
-                                  port            => 'Q1',
-                                  type            => $interconnect_type_1,
-                                  enclosure_index => 2 }
+                                  enclosure_index => 1 }
         ],
-        networkUris         => $network_names
+        networkUris         => [ 'Test Puppet Network' ]
+      },
+      {
+        name                => 'FC02',
+        networkType         => 'FibreChannel',
+        uplink_ports        => [{ bay             => 3,
+                                  port            => 'Q1:2',
+                                  type            => $interconnect_type_1,
+                                  enclosure_index => 1 }
+        ],
+        networkUris         => [ 'Test Puppet Network Create1' ]
       }
     ],
     interconnects      =>
@@ -207,11 +196,10 @@ oneview_server_hardware{'Test Server Hardware Power Off':
 # Creates ServerProfileTemplate with Storage, Hardware and boot settings
 oneview_server_profile_template{'Test Puppet SPT':
   ensure  => 'present',
-  require => Oneview_enclosure_group['Test Puppet Enclosure Group'],
   data    => {
     name                  => 'Test Puppet SPT',
     enclosureGroupUri     => Oneview_enclosure_group['Test Puppet Enclosure Group']['data']['name'],
-    serverHardwareTypeUri => 'SY 480 Gen9 1',
+    serverHardwareTypeUri => 'SY 480 Gen9 2',
     connectionSettings    =>
     {
       manageConnections => true,
@@ -219,16 +207,16 @@ oneview_server_profile_template{'Test Puppet SPT':
       [
       {
           id            => 1,
-          networkUri    => Oneview_ethernet_network['Test Puppet Network']['data']['name'],
-          functionType  => 'Ethernet',
-          portId        => 'Mezz 3:1-a',
+          networkUri    => 'Test Puppet Network',
+          functionType  => 'FibreChannel',
+          portId        => 'Mezz 3:1',
           requestedMbps => '2000'
       },
       {
           id            => 2,
-          networkUri    => Oneview_ethernet_network['Test Puppet Network Create1']['data']['name'],
-          functionType  => 'Ethernet',
-          portId        => 'Mezz 3:1-b',
+          networkUri    => 'Test Puppet Network Create1',
+          functionType  => 'FibreChannel',
+          portId        => 'Mezz 3:2',
           requestedMbps => '2000'
       }
       ]
@@ -282,10 +270,10 @@ oneview_server_profile_template{'Test Puppet SPT':
                 provisioningType => 'Thin',
                 size             => 1073741824,
                 name             => 'Test Puppet Storage Volume',
-                storagePool      => 'CPG-SSD-AO',
-                snapshotPool     => 'CPG-SSD-AO',
+                storagePool      => '/rest/storage-pools/547F8659-BD66-4775-9943-A93C0143AC70',
                 isShareable      => false
-            }
+            },
+            templateUri => '/rest/storage-volume-templates/3be39ea9-a481-4c9a-aed4-aa3f00c21dfb'
           },
         }
         ]
