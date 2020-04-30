@@ -7,6 +7,9 @@
   "source": "https://github.com/HewlettPackard/oneview-puppet",
   "project_page": "https://github.com/HewlettPackard/oneview-puppet",
   "issues_url": "https://github.com/HewlettPackard/oneview-puppet/issues",
+  "dependencies": [
+
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "windows"
@@ -30,12 +33,29 @@
       "operatingsystem": "centos"
     }
   ],
-  "dependencies": [],
   "requirements": [
-    {"name":"puppet","version_requirement":">= 4.1.0"},
-    {"name": "ruby","version_requirement": ">=2.3.1"},
-    {"name": "oneview-sdk-ruby","version_requirement": ">=5.11.0"}
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "ruby",
+      "version_requirement": ">=2.3.1"
+    },
+    {
+      "name": "oneview-sdk-ruby",
+      "version_requirement": ">=5.11.0"
+    }
   ],
-  "tags": [ "oneview", "hpe", "hewlett packard enterprise", "i3s", "image streamer", "bare-metal provisioning" ],
-  "data_provider": null
+  "tags": [
+    "oneview",
+    "hpe",
+    "hewlett packard enterprise",
+    "i3s",
+    "image streamer",
+    "bare-metal provisioning"
+  ],
+  "pdk-version": "1.17.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#1.17.0",
+  "template-ref": "tags/1.17.0-0-gd3a4319"
 }
