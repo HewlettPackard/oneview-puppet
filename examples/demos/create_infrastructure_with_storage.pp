@@ -60,8 +60,8 @@ $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
 
 # Creates Logical Interconnect Group with uplinkSets, Redundancy, Boot settings in Synergy
 oneview_logical_interconnect_group{'Test Puppet LIG':
-  ensure  => 'present',
-  data    => {
+  ensure => 'present',
+  data   => {
     name               => 'Test Puppet LIG',
     redundancyType     => 'HighlyAvailable',
     interconnectBaySet => 3,
@@ -70,24 +70,26 @@ oneview_logical_interconnect_group{'Test Puppet LIG':
     uplinkSets         =>
     [
       {
-        name                => 'FC01',
-        networkType         => 'FibreChannel',
-        uplink_ports        => [{ bay             => 3,
-                                  port            => 'Q1:1',
-                                  type            => $interconnect_type_1,
-                                  enclosure_index => 1 }
+        name         => 'FC01',
+        networkType  => 'FibreChannel',
+        uplink_ports => [{
+          bay             => 3,
+          port            => 'Q1:1',
+          type            => $interconnect_type_1,
+          enclosure_index => 1 }
         ],
-        networkUris         => [ 'Test Puppet Network' ]
+        networkUris  => [ 'Test Puppet Network' ]
       },
       {
-        name                => 'FC02',
-        networkType         => 'FibreChannel',
-        uplink_ports        => [{ bay             => 3,
-                                  port            => 'Q1:2',
-                                  type            => $interconnect_type_1,
-                                  enclosure_index => 1 }
+        name         => 'FC02',
+        networkType  => 'FibreChannel',
+        uplink_ports => [{
+          bay             => 3,
+          port            => 'Q1:2',
+          type            => $interconnect_type_1,
+          enclosure_index => 1 }
         ],
-        networkUris         => [ 'Test Puppet Network Create1' ]
+        networkUris  => [ 'Test Puppet Network Create1' ]
       }
     ],
     interconnects      =>
@@ -195,8 +197,8 @@ oneview_server_hardware{'Test Server Hardware Power Off':
 
 # Creates ServerProfileTemplate with Storage, Hardware and boot settings
 oneview_server_profile_template{'Test Puppet SPT':
-  ensure  => 'present',
-  data    => {
+  ensure => 'present',
+  data   => {
     name                  => 'Test Puppet SPT',
     enclosureGroupUri     => Oneview_enclosure_group['Test Puppet Enclosure Group']['data']['name'],
     serverHardwareTypeUri => 'SY 480 Gen9 2',
@@ -266,12 +268,12 @@ oneview_server_profile_template{'Test Puppet SPT':
             }
           ],
           volume       => {
-            properties => {
-                provisioningType => 'Thin',
-                size             => 1073741824,
-                name             => 'Test Puppet Storage Volume',
-                storagePool      => '/rest/storage-pools/547F8659-BD66-4775-9943-A93C0143AC70',
-                isShareable      => false
+            properties  => {
+              provisioningType => 'Thin',
+              size             => 1073741824,
+              name             => 'Test Puppet Storage Volume',
+              storagePool      => '/rest/storage-pools/547F8659-BD66-4775-9943-A93C0143AC70',
+              isShareable      => false
             },
             templateUri => '/rest/storage-volume-templates/3be39ea9-a481-4c9a-aed4-aa3f00c21dfb'
           },
