@@ -1,3 +1,8 @@
+# v2.6.0
+
+### Bug fixes & Enhancements:
+- [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
+
 # v2.5.0 (2020-04-27)
 ### Notes
 - This release supports OneView Rest API versions 800/1000/1200 for Hypervisor resources.
