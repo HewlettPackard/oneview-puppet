@@ -209,14 +209,14 @@ oneview_server_profile_template{'Test Puppet SPT':
       [
       {
           id            => 1,
-          networkUri    => 'Test Puppet Network',
+          networkUri    => 'Oneview_fc_network['Test Puppet Network Create']['data']['name']',
           functionType  => 'FibreChannel',
           portId        => 'Mezz 3:1',
           requestedMbps => '2000'
       },
       {
           id            => 2,
-          networkUri    => 'Test Puppet Network Create1',
+          networkUri    => 'Oneview_fc_network['Test Puppet Network Create1']['data']['name']',
           functionType  => 'FibreChannel',
           portId        => 'Mezz 3:2',
           requestedMbps => '2000'
