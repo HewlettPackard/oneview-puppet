@@ -1,4 +1,4 @@
-# v2.6.0
+# v2.5.1
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
