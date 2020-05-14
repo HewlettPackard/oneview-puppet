@@ -129,16 +129,14 @@ All you need is Docker and git (optional).
 
 2. Build the docker image: `$ docker build -t puppet-oneview .`
 
-3. Create volume in Docker to mount: `$ docker volume create puppet-oneview-volume .`
-
-4. Now you can run any of the example manifests in this directory:
+3. Now you can run any of the example manifests in this directory:
 ```bash
-   # Run the container, passing in your credentials to OneView and specifying which example recipe to run.
+   # Run the container, passing in your credentials to OneView and specifying which example to run.
    # Replace "pwd" with the path of the manifest you'd like to run
    # Replace "fc_network" with the name of the manifest you'd like to run
    
-   $ docker run -it \
-     -v $(pwd)/:/ puppet-oneview-volume
+   $ docker run -it --rm \
+     -v $(pwd)/:/puppet
      -e ONEVIEW_URL='https://ov.example.com' \
      -e ONEVIEW_USER='Administrator' \
      -e ONEVIEW_PASSWORD='secret123' \
@@ -151,15 +149,15 @@ All you need is Docker and git (optional).
    ```bash
    # Note that we need an additional (I3S_URL) environment variable set
    # (Replace "plan_script" with the name of the recipe you'd like to run)
-    $ docker run -it \
-     -v $(pwd)/:/ puppet-oneview-volume
+    $ docker run -it --rm \
+     -v $(pwd)/:/puppet
      -e IMAGE_STREAMER_URL= 'https://imagestreamer.example.com' \
      -e IMAGE_STREAMER_API_VERSION=600 \
      -e IMAGE_STREAMER_LOG_LEVEL='info' \
      -e IMAGE_STREAMER_SSL_ENABLED=true \
      puppet-oneview puppet apply image_streamer/deployment_plan.pp --debug --trace
    ```
-That's it! If you'd like to modify a manifest, simply modify the manifest file, then re-build the image and run it.
+That's it! If you'd like to modify a manifest, simply modify the manifest file, then re-run the image.
 
 ### Types and Providers
 
