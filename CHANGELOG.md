@@ -1,4 +1,10 @@
-# v2.5.1
+# v2.6.0 (unreleased)
+### Notes
+- This release extends support of the SDK to OneView REST API version 1600 (OneView v5.20).
+
+### Oneview Features supported
+- Server Hardware
+- Server Hardware Type
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
