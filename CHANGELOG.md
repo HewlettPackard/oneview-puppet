@@ -5,6 +5,8 @@
 ### Oneview Features supported
 - Server Hardware
 - Server Hardware Type
+- Server Profile
+- Server Profile Template
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
