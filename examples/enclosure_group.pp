@@ -56,6 +56,7 @@ oneview_enclosure_group{'Enclosure Group Update':
     }
 }
 
+# The method #set_script is available for C7000 variant only.
 oneview_enclosure_group{'Enclosure Group Set Script':
     ensure  => 'set_script',
     require => Oneview_enclosure_group['Enclosure Group Update'],
@@ -65,6 +66,7 @@ oneview_enclosure_group{'Enclosure Group Set Script':
     }
 }
 
+# The method #get_script is available for C7000 variant only.
 oneview_enclosure_group{'Enclosure Group Get Script':
     ensure  => 'get_script',
     require => Oneview_enclosure_group['Enclosure Group Set Script'],
