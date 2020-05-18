@@ -29,3 +29,6 @@
 /spec/default_facts.yml
 /hiera.yaml
 /data/
+examples/login*
+docker/*.sh
+docker/tests/
