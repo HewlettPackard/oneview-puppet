@@ -106,7 +106,7 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
 
   # Method to allow using a name instead of uri for networks inside the UplinkSet
   def set_network(uplink_set, network_type, network_uris)
-    net_type = network_type == 'Ethernet' ? :EthernetNetwork : FCNetwork
+    net_type = network_type == 'Ethernet' ? :EthernetNetwork : :FCNetwork
     net_class = OneviewSDK.resource_named(net_type, login[:api_version], login[:hardware_variant])
     network_uris.each do |network_uri|
       next if network_uri.to_s[0..6].include?('/rest/')
