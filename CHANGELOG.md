@@ -1,9 +1,9 @@
 # v2.6.0 (unreleased)
 ### Notes
-- This release supports OneView Rest API versions 800/1000/1200/1600 minimally where we can use OneView v4.10/v4.20/v5.0/v5.2 with this SDK.
+- This release extends support of the SDK to OneView REST API version 1600 (OneView v5.20).
 
 ### Oneview Features supported
-- Enclosure
+- Encloure
 
 # v2.5.1
 
