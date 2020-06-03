@@ -81,7 +81,8 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
       name              => 'Encl2-my enclosure logical interconnect group',
       snmpConfiguration =>
       {
-        enabled => true
+        enabled       => true,
+        readCommunity => 'public
       }
     }
 }
