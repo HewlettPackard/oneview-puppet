@@ -5,6 +5,11 @@
 ### Oneview Features supported
 - Server Hardware
 - Server Hardware Type
+- Storage pool
+- Storage system
+- Storage volume template
+- Volume
+- Volume attachment
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
