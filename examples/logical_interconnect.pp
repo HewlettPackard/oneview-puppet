@@ -82,7 +82,7 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
       snmpConfiguration =>
       {
         enabled       => true,
-        readCommunity => 'public
+        readCommunity => 'public'
       }
     }
 }
@@ -123,6 +123,7 @@ oneview_logical_interconnect{'Logical Interconnect Set Firmware':
       {
         command => 'Stage',
         sspUri  => 'fake_firmware.iso',
+        # sspUri  => '/rest/firmware-drivers/fake_firmware',
         force   => false
       }
     }
