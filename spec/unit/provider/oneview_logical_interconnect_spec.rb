@@ -35,7 +35,8 @@ describe provider_class, unit: true do
             'internalNetworks' => ['NET'],
             'snmpConfiguration' =>
             {
-              'enabled' => true
+              'enabled'       => true,
+              'readCommunity' => 'public'
             },
             'portMonitor' =>
             {
