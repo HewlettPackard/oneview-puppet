@@ -6,6 +6,9 @@
 - Server Hardware
 - Server Hardware Type
 
+### Image Streamer support
+- Deployment plan
+
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
 - [#254](https://github.com/HewlettPackard/oneview-puppet/issues/254)Make oneview-puppet module compatible with PDK
