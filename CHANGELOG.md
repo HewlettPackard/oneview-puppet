@@ -5,8 +5,10 @@
 ### Oneview Features supported
 - Connection Template
 - Enclosure Group
+- Enclosure
 - FC Network
 - FCOE Network
+- Hypervisor Cluster Profile
 - Hypervisor Manager
 - Interconnect
 - Logical Enclosure
