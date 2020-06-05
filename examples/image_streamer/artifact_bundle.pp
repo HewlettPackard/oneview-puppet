@@ -82,9 +82,9 @@ image_streamer_artifact_bundle{'artifact_bundle_7':
 
 # WARN: If there are any artifacts existing, they will be removed before the extract operation
 image_streamer_artifact_bundle{'artifact_bundle_8':
-  ensure => 'extract_backup',
+  ensure  => 'extract_backup',
   require => Image_streamer_artifact_bundle['artifact_bundle_6'],
-  data   => {
+  data    => {
     deploymentGroupUri => 'OSDS'
   }
 }
