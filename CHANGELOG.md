@@ -3,13 +3,21 @@
 - This release extends support of the SDK to OneView REST API version 1600 (OneView v5.20).
 
 ### Oneview Features supported
+- Logical Enclosure
 - Server Hardware
 - Server Hardware Type
+- Server Profile
+- Server Profile Template
 - Storage pool
 - Storage system
 - Storage volume template
 - Volume
 - Volume attachment
+
+
+### Image Streamer support
+- Deployment plan
+
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
