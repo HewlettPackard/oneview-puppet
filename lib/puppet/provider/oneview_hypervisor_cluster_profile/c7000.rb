@@ -31,4 +31,15 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   def self.resource_name
     'HypervisorClusterProfile'
   end
+
+  def destroy
+    force = @data.delete('force') || false
+    soft_delete = @data.delete('soft_delete') || false
+    hypervisor_cluster_profile = get_single_resource_instance
+    if api_version >= 1600
+      hypervisor_cluster_profile.delete(soft_delete, force)
+    else
+      hypervisor_cluster_profile.delete
+    end
+  end
 end

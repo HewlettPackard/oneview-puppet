@@ -6,6 +6,7 @@
 - Connection Template
 - FC Network
 - FCOE Network
+- Hypervisor Cluster Profile
 - Hypervisor Manager
 - Interconnect
 - Logical Enclosure
