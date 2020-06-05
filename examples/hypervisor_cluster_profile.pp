@@ -46,8 +46,8 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
         serverProfileTemplateUri => '/rest/server-profile-templates/278abdfb-2e86-4865-893276532647',
         deploymentPlan           => {
           deploymnetPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-          serverpassword    => 'dcs'
-        }
+          serverPassword    => 'dcs'
+        },
         hostprefix               => 'Test-Cluster-host'
       }
     }
@@ -70,10 +70,14 @@ oneview_hypervisor_cluster_profile{'hcp4 Found':
     }
 }
 
+# In API1600, delete method accepts 2 arguments - soft_delete(boolean) and force(boolean)
+# NOTE: Till API1200, delete method don't accept any arguments
 oneview_hypervisor_cluster_profile{'hcp5 Delete':
     ensure  => 'absent',
     require => Oneview_hypervisor_cluster_profile['hcp4 Found'],
     data    => {
-      name => 'Cluster6'
+      name => 'Cluster6',
+      soft_delete => true,
+      force => true
     }
 }
