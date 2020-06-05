@@ -3,7 +3,7 @@
 - This release extends support of the SDK to OneView REST API version 1600 (OneView v5.20).
 
 ### Oneview Features supported
-- Encloure Group
+- Enclosure Group
 - Server Hardware
 - Server Hardware Type
 
