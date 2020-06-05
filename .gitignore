@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -14,12 +14,37 @@
 # limitations under the License.
 ################################################################################
 
-Gemfile.lock
-spec/fixtures/
+.git/
+.*.sw[op]
+.metadata
+.yardoc
+.yardwarns
+*.iml
+/.bundle/
+/.idea/
+/.vagrant/
+/coverage/
+/bin/
+/doc/
+/Gemfile.local
+/Gemfile.lock
+/junit/
+/log/
+/pkg/
+/spec/fixtures/manifests/
+/spec/fixtures/modules/
+/tmp/
+/vendor/
+/convert_report.txt
+/update_report.txt
+.DS_Store
+.project
+.envrc
+/inventory.yaml
+.vscode
+/spec/default_facts.yml
+/hiera.yaml
+/data/
 examples/login*
 docker/*.sh
 docker/tests/
-coverage/
-pkg/
-.yardoc/
-doc/
