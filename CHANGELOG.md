@@ -7,6 +7,7 @@
 - FC Network
 - FCOE Network
 - Hypervisor Manager
+- Interconnect
 - Logical Enclosure
 - Logical Interconnect
 - Logical Interconnect Group
