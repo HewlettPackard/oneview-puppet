@@ -3,12 +3,13 @@
 - This release extends support of the SDK to OneView REST API version 1600 (OneView v5.20).
 
 ### Oneview Features supported
-- Encloure
-
-# v2.5.1
+- Enclosure
+- Server Hardware
+- Server Hardware Type
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
+- [#254](https://github.com/HewlettPackard/oneview-puppet/issues/254)Make oneview-puppet module compatible with PDK
 
 # v2.5.0 (2020-04-27)
 ### Notes
