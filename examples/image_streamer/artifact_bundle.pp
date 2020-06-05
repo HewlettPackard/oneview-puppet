@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -81,13 +81,13 @@ image_streamer_artifact_bundle{'artifact_bundle_7':
 }
 
 # WARN: If there are any artifacts existing, they will be removed before the extract operation
-# image_streamer_artifact_bundle{'artifact_bundle_8':
-#   ensure => 'extract_backup',
-#   require => Image_streamer_artifact_bundle['artifact_bundle_6'],
-#   data   => {
-#     deploymentGroupUri => 'OSDS'
-#   }
-# }
+image_streamer_artifact_bundle{'artifact_bundle_8':
+  ensure  => 'extract_backup',
+  require => Image_streamer_artifact_bundle['artifact_bundle_6'],
+  data    => {
+    deploymentGroupUri => 'OSDS'
+  }
+}
 
 image_streamer_artifact_bundle{'artifact_bundle_9':
   ensure  => 'create_backup',
