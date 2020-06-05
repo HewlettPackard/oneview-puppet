@@ -52,6 +52,7 @@ oneview_server_profile{'Server Profile Get Available Networks':
   }
 }
 
+# The method #get_available_server is available till API 1200.
 oneview_server_profile{'Server Profile Get Available Servers':
   ensure => 'get_available_servers',
   data   => {
