@@ -4,13 +4,17 @@
 
 ### Oneview Features supported
 - Connection Template
+- FC Network
+- FCOE Network
 - Hypervisor Manager
 - Logical Enclosure
+- Network Set
 - Server Certificate
 - Server Hardware
 - Server Hardware Type
 - Server Profile
 - Server Profile Template
+- Uplink Set
 
 ### Image Streamer support
 - Deployment plan
