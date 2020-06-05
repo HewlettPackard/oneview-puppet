@@ -4,11 +4,18 @@
 
 ### Oneview Features supported
 - Enclosure Group
+- Logical Enclosure
 - Server Hardware
 - Server Hardware Type
+- Server Profile
+- Server Profile Template
+
+### Image Streamer support
+- Deployment plan
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
+- [#254](https://github.com/HewlettPackard/oneview-puppet/issues/254)Make oneview-puppet module compatible with PDK
 
 # v2.5.0 (2020-04-27)
 ### Notes
