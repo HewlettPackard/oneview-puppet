@@ -4,6 +4,7 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure
 - FC Network
 - FCOE Network
 - Hypervisor Cluster Profile
