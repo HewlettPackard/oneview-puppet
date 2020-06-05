@@ -8,6 +8,7 @@
 - FCOE Network
 - Hypervisor Manager
 - Logical Enclosure
+- Logical Interconnect Group
 - Network Set
 - Server Certificate
 - Server Hardware
