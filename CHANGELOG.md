@@ -4,6 +4,7 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure Group
 - Enclosure
 - FC Network
 - FCOE Network
