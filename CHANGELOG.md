@@ -4,7 +4,9 @@
 
 ### Oneview Features supported
 - Connection Template
+- Hypervisor Manager
 - Logical Enclosure
+- Server Certificate
 - Server Hardware
 - Server Hardware Type
 - Server Profile
