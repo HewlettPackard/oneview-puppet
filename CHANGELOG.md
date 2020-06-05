@@ -4,7 +4,9 @@
 
 ### Oneview Features supported
 - Enclosure
+- Hypervisor Manager
 - Logical Enclosure
+- Server Certificate
 - Server Hardware
 - Server Hardware Type
 - Server Profile
