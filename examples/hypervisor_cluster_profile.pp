@@ -76,8 +76,8 @@ oneview_hypervisor_cluster_profile{'hcp5 Delete':
     ensure  => 'absent',
     require => Oneview_hypervisor_cluster_profile['hcp4 Found'],
     data    => {
-      name => 'Cluster6',
+      name        => 'Cluster6',
       soft_delete => true,
-      force => true
+      force       => true
     }
 }
