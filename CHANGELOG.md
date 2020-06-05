@@ -29,8 +29,8 @@
 - Volume attachment
 
 ### Image Streamer support
-- Deployment plan
 - Artifact Bundle
+- Deployment plan
 
 ### Bug fixes & Enhancements:
 - [#245](https://github.com/HewlettPackard/oneview-puppet/issues/245)LIG is not getting created with uplinkset of networkType FCNetwork
