@@ -130,7 +130,8 @@ All you need is Docker and git (optional).
 2. You can build docker image locally or pull the docker image from Docker Hub.
    * Build the docker image locally: `$ docker build -t puppet-oneview .`
    * Pull docker image from Docker Hub:
-   The hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:<tag> docker image contains an installation of oneview-puppet installation you can use by just pulling down the Docker Image:
+   
+   The `hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:<tag>`  docker image contains an installation of oneview-puppet installation you can use by just pulling down the Docker Image:
 
    The Docker Store image tag consist of two sections: <sdk_version-OV_version>
 
