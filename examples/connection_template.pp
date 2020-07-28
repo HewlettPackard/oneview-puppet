@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ oneview_connection_template{'Connection Template Edit':
   ensure => 'present',
   data   =>
   {
-    name     => 'name1304244267-1467656930023',
+    name     => 'name-861263217-1595424571976',
     new_name => 'Edited CT'
   }
 }
