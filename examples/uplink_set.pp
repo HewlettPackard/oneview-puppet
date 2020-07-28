@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ oneview_uplink_set{'uplink_set_1':
       description                    => 'nil',
       name                           => 'Puppet Uplink Set',
       networkUris                    => [
-        'Puppet Test EthNetwork', 'OneViewSDK_Bulk_Network_28'
+        'Ethernet 1', 'Ethernet 2'
       ],
-      logicalInterconnectUri         => 'Encl1-Test Oneview'
+      logicalInterconnectUri         => 'LE-LIG'
     },
 }
 
@@ -52,9 +52,9 @@ oneview_uplink_set{'uplink_set_2':
       name                           => 'Puppet Uplink Set',
       new_name                       => 'Puppet Uplink Set Updated',
       networkUris                    => [
-        'Puppet Test EthNetwork'
+        'Ethernet 1'
       ],
-      logicalInterconnectUri         => 'Encl1-Test Oneview'
+      logicalInterconnectUri         => 'LE-LIG'
     },
 }
 
