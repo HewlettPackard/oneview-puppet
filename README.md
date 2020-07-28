@@ -128,7 +128,9 @@ All you need is Docker and git (optional).
    Note: You can navigate to the repo url and download the repo as a zip file if you don't want to use git
 
 2. You can build docker image locally or pull the docker image from Docker Hub.
+      #### Build docker image locally
    * Build the docker image locally: `$ docker build -t puppet-oneview .`
+   #### Using Docker Hub Image
    * Pull docker image from Docker Hub:
    
    The `hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:<tag>`  docker image contains an installation of oneview-puppet installation you can use by just pulling down the Docker Image:
@@ -170,8 +172,6 @@ All you need is Docker and git (optional).
      -e IMAGE_STREAMER_SSL_ENABLED=true \
      puppet-oneview puppet apply image_streamer/deployment_plan.pp --debug --trace
    ```
-
-#### Using Docker Hub Image
 
 That's it! If you'd like to modify a manifest, simply modify the manifest file, then re-run the image.
 
