@@ -15,8 +15,8 @@
 <br />
 
 ## HPE OneView
-| Endpoints                                                                       | Verb     | V200 | V300 | V500 |V600 |V800 | V1000 | V1200 | V1600 |
-| --------------------------------------------------------------------------------------- | -------- | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
+| Endpoints                                                                       | Verb     | V200 | V300 | V500 |V600 |V800 | V1000 | V1200 | V1600 | V1800 |
+| --------------------------------------------------------------------------------------- | -------- | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
 |     **Connection Templates**                                                                                                                      |
 |<sub>/rest/connection-templates</sub>                                                    |GET       | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |
 |<sub>/rest/connection-templates/defaultConnectionTemplate</sub>                          |GET       | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   | :white_check_mark:   |
