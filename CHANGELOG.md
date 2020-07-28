@@ -5,6 +5,9 @@
 ### Oneview Features supported
 - Storage Pool
 - Storage System
+- Storage Volume Template
+- Volume
+- Volume Attachment
 
 # v2.6.0(2020-06-08)
 ### Notes
