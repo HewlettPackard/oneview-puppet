@@ -28,12 +28,12 @@ oneview_enclosure_group{'Enclosure Group Create':
       interconnectBayMappingCount => '8',
       interconnectBayMappings     => [
         {
-           interconnectBay             => '3',
-           logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
+          interconnectBay             => '3',
+          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
         },
         {
-           interconnectBay             => '6',
-           logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
+          interconnectBay             => '6',
+          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
         }
       ]
     }
