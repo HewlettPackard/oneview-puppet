@@ -4,6 +4,7 @@
 
 ### Oneview Features supported
 - Connection Template
+- Interconnect
 - Network Set
 - Storage Pool
 - Storage System
