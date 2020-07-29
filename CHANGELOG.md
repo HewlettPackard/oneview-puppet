@@ -5,6 +5,8 @@
 ### Oneview Features supported
 - Connection Template
 - Network Set
+- Server Profile
+- Server Profile Template
 - Storage Pool
 - Storage System
 - Uplink Set
