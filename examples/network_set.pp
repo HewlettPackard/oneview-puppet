@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -19,10 +19,6 @@
 # Optional filters for specific network sets
 oneview_network_set{'Network Set Get Without Ethernet':
   ensure => 'get_without_ethernet',
-  # data   =>
-  # {
-  #   name => 'Network Set 1'
-  # }
 }
 
 oneview_network_set{'Network Set Create':
@@ -38,11 +34,6 @@ oneview_network_set{'Network Set Create':
 oneview_network_set{'Network Set Get All':
   ensure  => 'found',
   require => Oneview_network_set['Network Set Create'],
-  # data   =>
-  # {
-  #   name        => 'Test Network Set',
-  #   networkUris => ['BulkEthernetNetwork_1', 'Prod_401']
-  # }
 }
 
 oneview_network_set{'Network Set Edit':
