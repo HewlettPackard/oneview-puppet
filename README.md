@@ -141,9 +141,16 @@ All you need is Docker and git (optional).
    # Download and store a local copy of hpe-oneview-sdk-for-puppet and
    # use it as a Docker image.
    $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.6.0-OV5.2
-   # Run docker commands and this will in turn create
-   # a sh session where you can create files, issue commands and execute the tests
-   $ docker run -it hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.6.0-OV5.2 /bin/sh
+   # Run docker container with below commands.
+   $docker run -it --rm \
+     -v $(pwd)/:/puppet
+     -e ONEVIEW_URL='https://ov.example.com' \
+     -e ONEVIEW_USER='Administrator' \
+     -e ONEVIEW_PASSWORD='secret123' \
+     -e ONEVIEW_SSL_ENABLED=true, \
+     -e ONEVIEW_LOG_LEVEL='info' \
+     -e ONEVIEW_API_VERSION=800 \
+     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.6.0-OV5.2 puppet apply fc_network.pp --debug --trace
    ```
 
 
