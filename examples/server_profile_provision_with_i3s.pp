@@ -57,48 +57,49 @@ oneview_server_profile{'Server Profile Creation':
     },
     connectionSettings    => {
       connections           => [
-      {
-        id            => 1,
-        name          => 'connection1',
-        functionType  => 'Ethernet',
-        networkUri    => $network_1,
-        requestedMbps => 2500,
-        requestedVFs  => 'Auto',
-        boot          => {
-          priority            => 'NotBootable',
-        }
-      },
-      {
-        id            => 2,
-        name          => 'connection2',
-        functionType  => 'Ethernet',
-        networkUri    => $network_2,
-        requestedMbps => 2500,
-        requestedVFs  => 'Auto',
-        boot          => {
-          priority            => 'Primary',
-          ethernetBootType    => 'iSCSI',
-          iscsi               => {
-            initiatorNameSource => 'ProfileInitiatorName'
+        {
+          id            => 1,
+          name          => 'connection1',
+          functionType  => 'Ethernet',
+          networkUri    => $network_1,
+          requestedMbps => 2500,
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority            => 'NotBootable',
+          }
+        },
+        {
+          id            => 2,
+          name          => 'connection2',
+          functionType  => 'Ethernet',
+          networkUri    => $network_2,
+          requestedMbps => 2500,
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority            => 'Primary',
+            ethernetBootType    => 'iSCSI',
+            iscsi               => {
+              initiatorNameSource => 'ProfileInitiatorName'
+            }
+          }
+        },
+        {
+          id            => 3,
+          name          => 'connection3',
+          functionType  => 'Ethernet',
+          networkUri    => $network_2,
+          requestedMbps => 2500,
+          requestedVFs  => 'Auto',
+          boot          => {
+            priority            => 'Secondary',
+            ethernetBootType    => 'iSCSI',
+            iscsi               => {
+              initiatorNameSource => 'ProfileInitiatorName'
+            }
           }
         }
-      },
-      {
-        id            => 3,
-        name          => 'connection3',
-        functionType  => 'Ethernet',
-        networkUri    => $network_2,
-        requestedMbps => 2500,
-        requestedVFs  => 'Auto',
-        boot          => {
-          priority            => 'Secondary',
-          ethernetBootType    => 'iSCSI',
-          iscsi               => {
-            initiatorNameSource => 'ProfileInitiatorName'
-          }
-        }
-      }
-    ]
+      ]
+    }
   }
 }
 

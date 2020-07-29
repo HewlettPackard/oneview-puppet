@@ -71,7 +71,7 @@ oneview_server_profile{'Server Profile Create':
     serverHardwareUri => '/rest/server-hardware/30303437-3034-4D32-3230-313030304752',
   }
 }
- 
+
 # Optional filters
 oneview_server_profile{'Server Profile Found':
   ensure => 'found',
