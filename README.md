@@ -128,7 +128,7 @@ All you need is Docker and git (optional).
    Note: You can navigate to the repo url and download the repo as a zip file if you don't want to use git
 
 2. You can build docker image locally or pull the docker image from Docker Hub.
-      #### Build docker image locally
+   #### Build docker image locally
    * Build the docker image locally: `$ docker build -t puppet-oneview .`
    #### Using Docker Hub Image
    * Pull docker image from Docker Hub:
@@ -141,6 +141,9 @@ All you need is Docker and git (optional).
    # Download and store a local copy of hpe-oneview-sdk-for-puppet and
    # use it as a Docker image.
    $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.6.0-OV5.2
+   # Run docker commands and this will in turn create
+   # a sh session where you can create files, issue commands and execute the tests
+   $ docker run -it hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.6.0-OV5.2 /bin/sh
    ```
 
 
