@@ -76,9 +76,9 @@ oneview_server_profile{'Server Profile Creation':
           requestedMbps => 2500,
           requestedVFs  => 'Auto',
           boot          => {
-            priority            => 'Primary',
-            ethernetBootType    => 'iSCSI',
-            iscsi               => {
+            priority         => 'Primary',
+            ethernetBootType => 'iSCSI',
+            iscsi            => {
               initiatorNameSource => 'ProfileInitiatorName'
             }
           }
@@ -91,9 +91,9 @@ oneview_server_profile{'Server Profile Creation':
           requestedMbps => 2500,
           requestedVFs  => 'Auto',
           boot          => {
-            priority            => 'Secondary',
-            ethernetBootType    => 'iSCSI',
-            iscsi               => {
+            priority         => 'Secondary',
+            ethernetBootType => 'iSCSI',
+            iscsi            => {
               initiatorNameSource => 'ProfileInitiatorName'
             }
           }

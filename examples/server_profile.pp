@@ -47,7 +47,7 @@ oneview_server_profile{'Server Profile Get Available Networks':
     query_parameters  => {
       enclosureGroupUri     => '/rest/enclosure-groups/2ca75192-1403-486e-87e1-3163d64e93db',
       serverHardwareTypeUri => '/rest/server-hardware-types/B73A3E43-867E-4684-B32F-CEC38322996E'
-      scopesUri        => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+      scopesUri             => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
     }
   }
 }
