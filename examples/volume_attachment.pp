@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ oneview_volume_attachment{'volume_attachment_5':
     }
 }
 
+# This method unavailable from v500 and above
 # get_paths requires the volume attachment name and accepts the path id to filter out,
   # or displays all paths within the volume attachment
 oneview_volume_attachment{'volume_attachment_6':
