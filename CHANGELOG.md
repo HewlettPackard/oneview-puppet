@@ -5,6 +5,8 @@
 ### Oneview Features supported
 - Connection Template
 - Network Set
+- Server Hardware
+- Server Hardware Type
 - Server Profile
 - Server Profile Template
 - Storage Pool

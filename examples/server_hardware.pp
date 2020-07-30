@@ -129,9 +129,24 @@ oneview_server_hardware{'server_hardware_13':
     },
 }
 
+oneview_server_hardware{'server_hardware_14':
+    ensure => 'get_local_storage',
+    data   => {
+      name    => '0000A66101, bay 3',
+    },
+}
+
+# This example works only for server hardware having local_storageV2 schema
+oneview_server_hardware{'server_hardware_15':
+    ensure => 'get_local_storagev2',
+    data   => {
+      name    => '0000A66101, bay 3',
+    },
+}
+
 # NOTE: This resource requires a state of 'RefreshPending'
 # NOTE: This resource accepts an optional field 'options' for refreshing the server hardware
-oneview_server_hardware{'server_hardware_14':
+oneview_server_hardware{'server_hardware_16':
     ensure => 'set_refresh_state',
     data   => {
       name  => '0000A66101, bay 3',
@@ -139,7 +154,7 @@ oneview_server_hardware{'server_hardware_14':
     },
 }
 
-oneview_server_hardware{'server_hardware_15':
+oneview_server_hardware{'server_hardware_17':
     ensure => 'absent',
     data   => {
       hostname        => '172.18.6.14',
