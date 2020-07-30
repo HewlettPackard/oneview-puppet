@@ -121,6 +121,16 @@ describe provider_class, unit: true do
       expect(provider.get_bios).to be
     end
 
+    it 'should return the local storage' do
+      expect_any_instance_of(resource_type).to receive(:get_local_storage).and_return('Fake Get Local Storage')
+      expect(provider.get_local_storage).to be
+    end
+
+    it 'should return the local storagev2' do
+      expect_any_instance_of(resource_type).to receive(:get_local_storagev2).and_return('Fake Get Local StorageV2')
+      expect(provider.get_local_storagev2).to be
+    end
+
     it 'should return the ilo sso url' do
       expect_any_instance_of(resource_type).to receive(:get_ilo_sso_url).and_return('Fake get_ilo_sso_url')
       expect(provider.get_ilo_sso_url).to be
