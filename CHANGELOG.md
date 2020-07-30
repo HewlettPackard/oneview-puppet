@@ -4,6 +4,8 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure
+- Enclosure Group
 - Hypervisor Manager
 - Network Set
 - Server Certificate
