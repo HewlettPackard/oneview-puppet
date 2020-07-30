@@ -6,8 +6,10 @@
 - Connection Template
 - Enclosure
 - Enclosure Group
-- Interconnect
 - Hypervisor Manager
+- Interconnect
+- Logical Enclosure
+- Logical Interconnect Group
 - Network Set
 - Server Certificate
 - Storage Pool
