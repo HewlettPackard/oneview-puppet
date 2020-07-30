@@ -4,14 +4,24 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure
+- Enclosure Group
+- Hypervisor Manager
+- Interconnect
+- Logical Enclosure
+- Logical Interconnect Group
 - Network Set
+- Server Certificate
 - Server Hardware
 - Server Hardware Type
 - Server Profile
 - Server Profile Template
 - Storage Pool
 - Storage System
+- Storage Volume Template
 - Uplink Set
+- Volume
+- Volume Attachment
 
 # v2.6.0(2020-06-08)
 ### Notes
