@@ -6,6 +6,7 @@
 - Connection Template
 - Enclosure
 - Enclosure Group
+- Interconnect
 - Hypervisor Manager
 - Network Set
 - Server Certificate
