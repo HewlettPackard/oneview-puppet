@@ -7,6 +7,7 @@
 - Enclosure
 - Enclosure Group
 - Interconnect
+- Hypervisor Cluster Profile
 - Hypervisor Manager
 - Network Set
 - Server Certificate

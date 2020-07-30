@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_cluster_profile).provider(:c7000)
-api_version = 800
+api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:HypervisorClusterProfile, api_version, :C7000)
 
 describe provider_class, unit: true do
