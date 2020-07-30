@@ -24,18 +24,18 @@ oneview_enclosure_group{'Enclosure Group Create':
     data   => {
       name                        => 'Enclosure Group',
       stackingMode                => 'Enclosure',
+      enclosureCount              => '3',
       interconnectBayMappingCount => '8',
-      # interconnectBayMappings     =>
-      # [
-      #   {
-      #     interconnectBay             => '1',
-      #     logicalInterconnectGroupUri => nil
-      #   },
-      # ... up to 8
-      #     interconnectBay             => '8',
-      #     logicalInterconnectGroupUri => nil
-      #   }
-      # ]
+      interconnectBayMappings     => [
+        {
+          interconnectBay             => '3',
+          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
+        },
+        {
+          interconnectBay             => '6',
+          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
+        }
+      ]
     }
 }
 
