@@ -6,7 +6,9 @@
 - Connection Template
 - Enclosure
 - Enclosure Group
+- Hypervisor Manager
 - Network Set
+- Server Certificate
 - Storage Pool
 - Storage System
 - Storage Volume Template
