@@ -29,6 +29,14 @@ Puppet::Type.newtype(:oneview_server_hardware) do
       provider.get_bios
     end
 
+    newvalue(:get_local_storage) do
+      provider.get_local_storage
+    end
+
+    newvalue(:get_local_storagev2) do
+      provider.get_local_storagev2
+    end
+
     newvalue(:get_ilo_sso_url) do
       provider.get_ilo_sso_url
     end

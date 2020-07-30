@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
 ################################################################################
 
 # This example requires:
+# - FC networks 'FC01' and 'FC02'
+# - Storage system should be added and a volume should be created
 # - Enclosure Groups 'e10_encl_group' and 'e11-encl-group'
 # - Server Hardware Type 'BL460c Gen9 1'
+# - Firmware bundle 'HPE Synergy Custom SPP 201912 2019 12 19' (make 'manageFirmware' as false if firmware is not available)
 
 # You can either declare the name or the uri of the following parameters that require Uri:
 oneview_server_profile_template{'Server Profile Template Create':
@@ -285,7 +288,7 @@ oneview_server_profile_template{'Get Available Networks':
     }
 }
 
-# This task will only work once the Server Profile above is deleted
+# This task will work only after deleting the above created Server Profile
 # oneview_server_profile_template{'Server Profile Template Destroy #2':
 #   ensure  => 'absent',
 #   require => Oneview_server_profile_template['Server Profile Create'],

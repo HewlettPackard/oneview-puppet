@@ -12,6 +12,10 @@
 - Logical Interconnect Group
 - Network Set
 - Server Certificate
+- Server Hardware
+- Server Hardware Type
+- Server Profile
+- Server Profile Template
 - Storage Pool
 - Storage System
 - Storage Volume Template
