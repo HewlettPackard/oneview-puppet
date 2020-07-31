@@ -48,7 +48,7 @@ oneview_ethernet_network{'Ethernet Network Default Bandwidth':
     name => 'Puppet network'
   }
 }
- 
+
 oneview_ethernet_network{'Ethernet Network Update':
   ensure  => 'present',
   require => Oneview_ethernet_network['Ethernet Network Default Bandwidth'],
@@ -102,7 +102,7 @@ oneview_ethernet_network{'Bulk Create':
       }
     }
 }
- 
+
 oneview_ethernet_network{'Bulk Delete 1':
     ensure  => 'absent',
     require => Oneview_ethernet_network['Bulk Create'],
@@ -110,6 +110,7 @@ oneview_ethernet_network{'Bulk Delete 1':
       name => 'Puppet_26'
     }
 }
+
 oneview_ethernet_network{'Bulk Delete 2':
     ensure  => 'absent',
     require => Oneview_ethernet_network['Bulk Delete 1'],
