@@ -58,6 +58,16 @@ Puppet::Type.type(:oneview_server_hardware).provide :c7000, parent: Puppet::Onev
     true
   end
 
+  def get_local_storage
+    pretty get_single_resource_instance.get_local_storage
+    true
+  end
+
+  def get_local_storagev2
+    pretty get_single_resource_instance.get_local_storagev2
+    true
+  end
+
   def get_ilo_sso_url
     pretty get_single_resource_instance.get_ilo_sso_url
     true
