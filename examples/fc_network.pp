@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -52,5 +52,17 @@ oneview_fc_network{'fc4':
       name                    => 'Updated OneViewSDK Test FC Network',
       autoLoginRedistribution => true,
       fabricType              => 'FabricAttach',
+    }
+}
+
+# Bulk delete FC Networks
+oneview_fc_network{'Bulk Delete':
+    ensure => 'present',
+    data   => {
+      networkUris    =>
+      [
+        '/rest/fc-networks/5f3fdfcf-0a51-4976-a979-4a19ea3519c3',
+        '/rest/fc-networks/87057f6d-cdbe-4726-aac5-4f39df694fa8'
+      ]
     }
 }

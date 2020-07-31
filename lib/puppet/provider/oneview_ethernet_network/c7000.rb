@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -25,16 +25,29 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
   mk_resource_methods
 
   def exists?
-    super
-    @bandwidth = @data.delete('bandwidth') unless @data['vlanIdRange']
-    @resource_type.find_by(@client, @data).any?
+    if resource['data']['networkUris'] || resource['data']['vlanIdRange']
+      exists_bulk_method
+    else
+      super
+      @bandwidth = @data.delete('bandwidth')
+      @resource_type.find_by(@client, @data).any?
+    end
+  end
+
+  # This method will bypass exists method for bulk_create and bulk_delete methods
+  def exists_bulk_method(states = [nil, :found]) 
+    prepare_environment
+    @item = @resource_type.new(@client, @data)
+    return true if empty_data_check(states)
+    true
+    @property_hash[:ensure] == :present
   end
 
   def create
     # Checks if there is a connection template update
     update_connection_template if @bandwidth
-    # Checks if the operation is an update, bulk create or neither
-    return true if bulk_create_check || resource_update
+    # Checks if the operation is an update, bulk create, bulk_delete
+    return true if bulk_delete_check || bulk_create_check || resource_update
     @resource_type.new(@client, @data).create
   end
 
@@ -74,6 +87,15 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
       Puppet.warning 'Deprecation warning! Bulk creation cannot be correctly maintained with idempotency,
        so it will be discontinued in future releases. Adopt the single resource style creation in the future.'
       @resource_type.bulk_create(@client, bulk_parse(@data))
+    else
+      false
+    end
+  end
+
+  # Bulk deletes networks if there is @data['networkUris']
+  def bulk_delete_check
+    if @data['networkUris']
+      @resource_type.bulk_delete(@client, @data)
     else
       false
     end
