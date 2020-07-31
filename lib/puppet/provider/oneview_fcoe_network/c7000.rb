@@ -37,11 +37,10 @@ Puppet::Type.type(:oneview_fcoe_network).provide :c7000, parent: Puppet::Oneview
   end
 
   # This method will bypass exists method for bulk_delete method
-  def exists_bulk_method(states = [nil, :found]) 
+  def exists_bulk_method(states = [nil, :found])
     prepare_environment
     @item = @resource_type.new(@client, @data)
     return true if empty_data_check(states)
-    true
     @property_hash[:ensure] == :present
   end
 
