@@ -102,7 +102,6 @@ describe provider_class, unit: true do
 
   let(:provider) { resource.provider }
 
-
   context 'given the Creation parameters' do
     before(:each) do
       provider.exists?
@@ -114,4 +113,3 @@ describe provider_class, unit: true do
     end
   end
 end
-
