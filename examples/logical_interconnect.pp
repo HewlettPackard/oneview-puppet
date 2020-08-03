@@ -87,6 +87,27 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
     }
 }
 
+oneview_logical_interconnect{'Logical Interconnect IGMP Get':
+  ensure => 'get_igmp_settings',
+  data   =>
+    {
+      name  =>  'Encl2-my enclosure logical interconnect group'
+    }
+}
+
+oneview_logical_interconnect{'Logical Interconnect IGMP Set':
+  ensure => 'set_igmp_settings',
+  data   =>
+    {
+      name          => 'LE-LIG',
+      igmpSettings  =>
+      {  
+        consistencyChecking => 'MinimumMatch',
+        igmpIdleTimeoutInterval  =>  210
+      }
+    }
+}
+
 oneview_logical_interconnect{'Logical Interconnect Compliance':
   ensure => 'set_compliance',
   data   =>

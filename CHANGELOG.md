@@ -9,6 +9,7 @@
 - Hypervisor Manager
 - Interconnect
 - Logical Enclosure
+- Logical Interconnect
 - Logical Interconnect Group
 - Network Set
 - Server Certificate

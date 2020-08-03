@@ -121,6 +121,11 @@ describe provider_class, unit: true do
       expect(provider.get_snmp_configuration).to be
     end
 
+    it 'should be able to get the igmp settings' do
+      allow_any_instance_of(resource_type).to receive(:get_igmp_settings).and_return('Test')
+      expect(provider.get_igmp_settings).to be
+    end
+
     it 'should be able to add an internal network' do
       test_network = OneviewSDK::EthernetNetwork.new(@client, name: 'NET')
       allow(OneviewSDK::EthernetNetwork).to receive(:find_by).with(anything, name: 'NET').and_return([test_network])
@@ -137,6 +142,11 @@ describe provider_class, unit: true do
     it 'should be able to update the snmp configuration' do
       expect_any_instance_of(resource_type).to receive(:update_snmp_configuration).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_snmp_configuration).to be
+    end
+
+    it 'should be able to update the igmp settings' do
+      expect_any_instance_of(resource_type).to receive(:update_igmp_settings).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_igmp_settings).to be
     end
 
     it 'should be able to update the port monitor' do
