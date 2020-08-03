@@ -152,9 +152,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_API_VERSION=800 \
      hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.6.0-OV5.2 puppet apply fc_network.pp --debug --trace
    ```
-
-
-3. Now you can run any of the example manifests in this directory:
+    Now you can run any of the example manifests in this directory:
 ```bash
    # Run the container, passing in your credentials to OneView and specifying which example to run.
    # Replace "pwd" with the path of the manifest you'd like to run
