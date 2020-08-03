@@ -74,8 +74,11 @@ describe provider_class, unit: true do
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
+      resource['data']['force'] = true
+      resource['data']['softDelete'] = false
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
+      allow_any_instance_of(resource_type).to receive(:delete).with(resource['data']['softDelete'],
+                                                                    resource['data']['force']).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
