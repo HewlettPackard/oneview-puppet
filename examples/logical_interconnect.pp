@@ -101,7 +101,7 @@ oneview_logical_interconnect{'Logical Interconnect IGMP Set':
     {
       name          => 'LE-LIG',
       igmpSettings  =>
-      {  
+      {
         consistencyChecking => 'MinimumMatch',
         igmpIdleTimeoutInterval  =>  210
       }

@@ -106,7 +106,6 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     true
   end
 
-
   def set_telemetry_configuration
     resource = set_info('Telemetry Configuration', 'telemetryConfiguration', @telemetry_configuration)
     resource.update_telemetry_configuration
