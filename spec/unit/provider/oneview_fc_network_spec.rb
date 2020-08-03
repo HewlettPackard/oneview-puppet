@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_fc_network).provider(:c7000)
-api_version = 1800
+api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:FCNetwork, api_version, :C7000)
 
 describe provider_class, unit: true do
@@ -82,6 +82,8 @@ describe provider_class, unit: true do
     end
 
     it 'bulk deletes the resource' do
+      options = { url: 'https://oneview.example.com', user: 'Administrator', password: 'secret123', api_version: 1800 }
+      @client = OneviewSDK::Client.new(options)
       resource['data']['uri'] = '/rest/fc-networks/bulk-delete'
       resource['data']['networkUris'] = ['/rest/fc-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89426']
       resource_type.new(@client, resource['data'])
