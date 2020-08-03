@@ -80,14 +80,39 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.found).to be
     end
+  end
+end
+
+api_version = 1800
+resource_type = OneviewSDK.resource_named(:FCNetwork, api_version, :C7000)
+
+describe provider_class, unit: true do
+  include_context 'shared context'
+
+  let(:resource) do
+    Puppet::Type.type(:oneview_fc_network).new(
+      ensure: 'present',
+      data:
+          {
+            'networkUris' => ['/rest/fake/1']
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+
+  context 'given the Creation parameters' do
+    before(:each) do
+      provider.exists?
+    end
 
     it 'bulk deletes the resource' do
-      resource_type1800 = OneviewSDK.resource_named(:FCNetwork, 1800, :C7000)
-      resource['data']['uri'] = '/rest/fc-networks/bulk-delete'
-      resource['data']['networkUris'] = ['/rest/fc-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89426']
-      resource_type1800.new(@client, resource['data'])
-      expect_any_instance_of(resource_type1800).to receive(:create).and_return({})
+#      resource_type.new(@client, resource['data'])
+      expect_any_instance_of(resource_type).to receive(:create).and_return({})
       expect(provider.create).to be
     end
   end
 end
+
