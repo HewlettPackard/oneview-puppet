@@ -6,6 +6,7 @@
 - Connection Template
 - Enclosure
 - Enclosure Group
+- Hypervisor Cluster Profile
 - Hypervisor Manager
 - Interconnect
 - Logical Enclosure

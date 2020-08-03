@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_cluster_profile).provider(:c7000)
-api_version = 800
+api_version = 1800
 resource_type = OneviewSDK.resource_named(:HypervisorClusterProfile, api_version, :C7000)
 
 describe provider_class, unit: true do
@@ -73,8 +73,11 @@ describe provider_class, unit: true do
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
+      resource['data']['force'] = true
+      resource['data']['softDelete'] = false
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
+      allow_any_instance_of(resource_type).to receive(:delete).with(resource['data']['softDelete'],
+                                                                    resource['data']['force']).and_return([])
       provider.exists?
       expect(provider.destroy).to be
     end
