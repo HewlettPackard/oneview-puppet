@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # You may not use this file except in compliance with the License.
@@ -133,5 +133,14 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.reset_default_bandwidth).to be
     end
+
+    it 'bulk deletes the resource' do
+      resource['data']['uri'] = '/rest/ethernet-networks/bulk-delete'
+      resource['data']['networkUris'] = {'/rest/ethernet-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89426',
+                                         '/rest/ethernet-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89476'}
+      test = resource_type.new(@client, resource['data'])
+      expect_any_instance_of(resource_type).to receive(:create).and_return({})
+      expect(provider.create).to be
+    end
   end
 end
