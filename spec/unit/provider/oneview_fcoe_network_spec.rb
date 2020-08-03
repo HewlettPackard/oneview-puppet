@@ -78,8 +78,8 @@ describe provider_class, unit: true do
 
     it 'bulk deletes the resource' do
       resource['data']['uri'] = '/rest/fcoe-networks/bulk-delete'
-      resource['data']['networkUris'] = {'/rest/fcoe-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89426',
-                                         '/rest/fcoe-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89476'}
+      resource['data']['networkUris'] = ['/rest/fcoe-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89426',
+                                         '/rest/fcoe-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89476']
       test = resource_type.new(@client, resource['data'])
       expect_any_instance_of(resource_type).to receive(:create).and_return({})
       expect(provider.create).to be
