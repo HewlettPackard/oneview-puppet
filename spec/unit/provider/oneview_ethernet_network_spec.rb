@@ -135,12 +135,11 @@ describe provider_class, unit: true do
     end
 
     it 'bulk deletes the resource' do
-      options = { url: 'https://oneview.example.com', user: 'Administrator', password: 'secret123', api_version: 1800 }
-      @client = OneviewSDK::Client.new(options)
+      resource_type_1800 = OneviewSDK.resource_named(:EthernetNetwork, 1800, :C7000)
       resource['data']['uri'] = '/rest/ethernet-networks/bulk-delete'
       resource['data']['networkUris'] = ['/rest/ethernet-networks/eca5f86a-2936-44c7-b3e1-8b1e01c89426']
-      resource_type.new(@client, resource['data'])
-      expect_any_instance_of(resource_type).to receive(:create).and_return({})
+      resource_type_1800.new(@client, resource['data'])
+      expect_any_instance_of(resource_type_1800).to receive(:create).and_return({})
       expect(provider.create).to be
     end
   end
