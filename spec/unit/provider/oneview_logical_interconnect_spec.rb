@@ -33,6 +33,10 @@ describe provider_class, unit: true do
           {
             'name' => 'Encl2-my enclosure logical interconnect group',
             'internalNetworks' => ['NET'],
+	    'igmpSettings' => 
+            {
+	      'igmpIdleTimeoutInterval' => 210
+	    },
             'snmpConfiguration' =>
             {
               'enabled' => true,
