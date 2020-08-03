@@ -90,6 +90,16 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     true
   end
 
+  def get_igmp_settings
+    get_info('IGMP Settings', 'igmpSettings')
+  end
+
+  def set_igmp_settings
+    resource = set_info('IGMP Settings', 'igmpSettings', @igmp_settings)
+    resource.update_igmp_settings
+    true
+  end
+
   def set_ethernet_settings
     resource = set_info('Ethernet Settings', 'ethernetSettings', @ethernet_settings)
     resource.update_ethernet_settings
@@ -146,6 +156,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
 
   def variable_assignments
     @ethernet_settings = @data.delete('ethernetSettings')
+    @igmp_settings = @data.delete('igmpSettings')
     @port_monitor = @data.delete('portMonitor')
     @snmp_configuration = @data.delete('snmpConfiguration')
     @qos_configuration = @data.delete('qosConfiguration')
