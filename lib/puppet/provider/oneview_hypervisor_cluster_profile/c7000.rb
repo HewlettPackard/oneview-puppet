@@ -25,7 +25,7 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   mk_resource_methods
 
   def self.api_version
-    login[:api_version] || 800
+    1800
   end
 
   def self.resource_name
