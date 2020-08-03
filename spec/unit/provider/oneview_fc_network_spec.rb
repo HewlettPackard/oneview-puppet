@@ -109,7 +109,6 @@ describe provider_class, unit: true do
     end
 
     it 'bulk deletes the resource' do
-#      resource_type.new(@client, resource['data'])
       expect_any_instance_of(resource_type).to receive(:create).and_return({})
       expect(provider.create).to be
     end
