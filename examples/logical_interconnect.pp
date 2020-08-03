@@ -99,11 +99,11 @@ oneview_logical_interconnect{'Logical Interconnect IGMP Set':
   ensure => 'set_igmp_settings',
   data   =>
     {
-      name          => 'LE-LIG',
-      igmpSettings  =>
+      name         => 'LE-LIG',
+      igmpSettings =>
       {
-        consistencyChecking => 'MinimumMatch',
-        igmpIdleTimeoutInterval  =>  210
+        consistencyChecking     => 'MinimumMatch',
+        igmpIdleTimeoutInterval =>  210
       }
     }
 }
