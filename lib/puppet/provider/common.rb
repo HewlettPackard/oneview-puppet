@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -121,6 +121,14 @@ def connections_parse
       network_parse(value)
     end
   end
+end
+
+# This method will bypass exists method for bulk_delete method
+def exists_bulk_method(states = [nil, :found])
+  prepare_environment
+  @item = @resource_type.new(@client, @data)
+  return true if empty_data_check(states)
+  @property_hash[:ensure] == :present
 end
 
 def network_parse(connections)

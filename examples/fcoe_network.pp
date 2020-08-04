@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -47,4 +47,16 @@ oneview_fcoe_network{'FCoE Delete':
   data    => {
     name => 'New FCoE Network Name'
   }
+}
+
+# Bulk delete FCoE Networks
+oneview_fcoe_network{'Bulk Delete':
+    ensure => 'present',
+    data   => {
+      networkUris    =>
+      [
+        '/rest/fcoe-networks/2701a5a8-ffa6-4ce2-bfde-8644e1d83b35',
+        '/rest/fcoe-networks/6308d537-7925-427e-a64f-41ca441111c5'
+      ]
+    }
 }

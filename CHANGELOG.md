@@ -6,6 +6,9 @@
 - Connection Template
 - Enclosure
 - Enclosure Group
+- Ethernet Network
+- FC Network
+- FCOE Network
 - Hypervisor Cluster Profile
 - Hypervisor Manager
 - Interconnect

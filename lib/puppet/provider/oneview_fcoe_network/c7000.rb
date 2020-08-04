@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -26,5 +26,28 @@ Puppet::Type.type(:oneview_fcoe_network).provide :c7000, parent: Puppet::Oneview
 
   def self.resource_name
     'FCoENetwork'
+  end
+
+  def exists?
+    if resource['data']['networkUris']
+      exists_bulk_method
+    else
+      super
+    end
+  end
+
+  def create
+    # Checks if the operation is an update or bulk_delete
+    return true if bulk_delete_check || resource_update
+    @resource_type.new(@client, @data).create
+  end
+
+  # Bulk deletes networks if there is @data['networkUris']
+  def bulk_delete_check
+    if @data['networkUris']
+      @resource_type.bulk_delete(@client, @data)
+    else
+      false
+    end
   end
 end
