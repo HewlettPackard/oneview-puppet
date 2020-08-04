@@ -33,6 +33,14 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.set_ethernet_settings
     end
 
+    newvalue(:get_igmp_settings) do
+      provider.get_igmp_settings
+    end
+
+    newvalue(:set_igmp_settings) do
+      provider.set_igmp_settings
+    end
+
     newvalue(:set_qos_aggregated_configuration) do
       provider.set_qos_aggregated_configuration
     end

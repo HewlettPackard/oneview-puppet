@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_hypervisor_manager).provider(:synergy)
-api_version = 800
+api_version = 1800
 resource_type = OneviewSDK.resource_named(:HypervisorManager, api_version, :Synergy)
 
 describe provider_class, unit: true do

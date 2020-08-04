@@ -78,6 +78,14 @@ describe provider_class, integration: true do
     expect(provider.get_qos_aggregated_configuration).to be
   end
 
+  it 'should get the igmp settings from the logical interconnect' do
+    expect(provider.get_igmp_settings).to be
+  end
+
+  it 'should update the igmp settings' do
+    expect(provider.set_igmp_settings).to be
+  end
+
   it 'should get the logical interconnect compliant' do
     expect(provider.set_compliance).to be
   end

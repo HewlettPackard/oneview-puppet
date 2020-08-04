@@ -273,6 +273,7 @@ This resource provides the following ensurable methods for managing logical inte
 * `get_internal_vlans` - Gets the internal VLAN IDs for the provisioned networks on a logical interconnect.
 * `get_qos_aggregated_configuration` - Gets the QoS aggregated configuration for the logical interconnect.
 * `get_ethernet_settings` - Gets the Ethernet interconnect settings for the logical interconnect.
+* `get_igmp_settings` - Gets Igmp settings of a logical interconnect.
 * `set_configuration` - Asynchronously applies or re-applies the logical interconnect configuration to all managed interconnects.
 * `set_compliance` - Gets the configuration script of the specified logical enclosure.
 * `set_telemetry_configuration` - Updates the telemetry configuration of a logical interconnect. Changes to the telemetry configuration are asynchronously applied to all managed interconnects.
@@ -282,6 +283,7 @@ This resource provides the following ensurable methods for managing logical inte
 * `set_firmware` - Installs firmware to a logical interconnect. The three operations that are supported for the firmware update are Stage (uploads firmware to the interconnect), Activate (installs firmware on the interconnect) and Update (which does a Stage and Activate, sequentially).
 * `set_internal_networks` - Updates internal networks on the logical interconnect.
 * `set_ethernet_settings` - Updates the Ethernet interconnect settings for the logical interconnect.
+* `set_igmp_settings` - Updates Igmp settings for the logical interconnect.
 
 :exclamation: **NOTE:** This resource does not have an `absent` ensurable. The deletion of these resources is managed by other resources.
 
