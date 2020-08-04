@@ -82,34 +82,3 @@ describe provider_class, unit: true do
     end
   end
 end
-
-api_version = 1800
-resource_type = OneviewSDK.resource_named(:FCNetwork, api_version, :C7000)
-
-describe provider_class, unit: true do
-  include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_fc_network).new(
-      ensure: 'present',
-      data:
-          {
-            'networkUris' => ['/rest/fake/1']
-          },
-      provider: 'c7000'
-    )
-  end
-
-  let(:provider) { resource.provider }
-
-  context 'given the Creation parameters' do
-    before(:each) do
-      provider.exists?
-    end
-
-    it 'bulk deletes the resource' do
-      expect_any_instance_of(resource_type).to receive(:create).and_return({})
-      expect(provider.create).to be
-    end
-  end
-end
