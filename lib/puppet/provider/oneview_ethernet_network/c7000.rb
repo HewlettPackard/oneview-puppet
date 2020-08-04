@@ -34,14 +34,6 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
     end
   end
 
-  # This method will bypass exists method for bulk_create and bulk_delete methods
-  def exists_bulk_method(states = [nil, :found])
-    prepare_environment
-    @item = @resource_type.new(@client, @data)
-    return true if empty_data_check(states)
-    @property_hash[:ensure] == :present
-  end
-
   def create
     # Checks if there is a connection template update
     update_connection_template if @bandwidth
