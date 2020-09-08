@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -127,7 +127,12 @@ module Puppet
     end
 
     def self.api_version
-      login[:api_version] || 200
+      @client ||= client
+      api_ver = login[:api_version]
+      if api_ver && api_ver < OneviewSDK::DEFAULT_API_VERSION
+	 raise "The minimum API version supported is #{OneviewSDK::DEFAULT_API_VERSION}"
+      end
+      api_ver || @client.max_api_version
     end
 
     def api_version
