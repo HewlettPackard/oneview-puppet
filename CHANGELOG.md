@@ -1,3 +1,10 @@
+# v2.8.0(Unreleased)
+### Notes
+- This release extends support of the SDK to Oneview REST API version 2000 (OneView v5.40).
+
+### Oneview Features supported
+- Storage System
+
 # v2.7.0(2020-08-04)
 ### Notes
 - This release extends support of the SDK to OneView REST API version 1800 (OneView v5.30).
