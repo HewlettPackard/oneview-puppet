@@ -127,7 +127,12 @@ module Puppet
     end
 
     def self.api_version
-      login[:api_version] || 200
+      @client ||= client
+      api_ver = login[:api_version]
+      if api_ver && api_ver < OneviewSDK::DEFAULT_API_VERSION
+        raise "The minimum API version supported is #{OneviewSDK::DEFAULT_API_VERSION}"
+      end
+      api_ver || @client.max_api_version
     end
 
     def api_version

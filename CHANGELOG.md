@@ -5,6 +5,9 @@
 ### Oneview Features supported
 - Storage System
 
+#### Bug fixes & Enhancements:
+- Enhanced the method to set the default API version to appliance's max API version if the API version is not given.
+
 # v2.7.0(2020-08-04)
 ### Notes
 - This release extends support of the SDK to OneView REST API version 1800 (OneView v5.30).
