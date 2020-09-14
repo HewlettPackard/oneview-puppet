@@ -85,8 +85,11 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
   end
 
   def set_compliance
-    Puppet.notice('Setting Logical Interconnect compliance...')
-    get_single_resource_instance.compliance
+    resource = get_single_resource_instance
+    if resource.data['consistencyStatus'] == 'NOT_CONSISTENT'
+      Puppet.notice('Setting Logical Interconnect compliance...')
+      resource.compliance
+    end
     true
   end
 

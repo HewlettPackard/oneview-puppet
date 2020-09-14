@@ -51,7 +51,12 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
   end
 
   def updated_from_group
-    get_single_resource_instance.update_from_group
+    resource = get_single_resource_instance
+    if resource.data['state'] == 'Inconsistent'
+      Puppet.notice('Update from Group...')
+      resource.update_from_group
+    end
+    true
   end
 
   def generate_support_dump
