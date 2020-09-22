@@ -2,11 +2,15 @@
 ### Notes
 - This release extends support of the SDK to Oneview REST API version 2000 (OneView v5.40).
 
-### Oneview Features supported
-- Storage System
-
 #### Bug fixes & Enhancements:
 - Enhanced the method to set the default API version to appliance's max API version if the API version is not given.
+
+### Oneview Features supported
+- Interconnects
+- Interconnect Types
+- Logical Enclosure
+- Logical Interconnects
+- Logical Interconnect Groups
 
 # v2.7.0(2020-08-04)
 ### Notes
