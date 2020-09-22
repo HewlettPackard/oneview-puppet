@@ -11,6 +11,7 @@
 - Logical Enclosure
 - Logical Interconnects
 - Logical Interconnect Groups
+- Storage System
 
 # v2.7.0(2020-08-04)
 ### Notes
