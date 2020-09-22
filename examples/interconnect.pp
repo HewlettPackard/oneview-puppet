@@ -33,7 +33,7 @@ oneview_interconnect{'Interconnect Found All':
 oneview_interconnect{'Interconnect Get Specific Statistics':
   ensure => 'get_statistics',
   data   => {
-    name  => 'Encl1, interconnect 2',
+    name       => 'Encl1, interconnect 2',
     statistics =>
     {
       portName => 'X1'
