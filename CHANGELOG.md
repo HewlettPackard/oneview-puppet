@@ -11,7 +11,11 @@
 - FC Network
 - FCOE Network
 - Network Set
+- Storage Pool
 - Storage System
+- Storage Volume Template
+- Volume
+- Volume Attachment
 
 # v2.7.0(2020-08-04)
 ### Notes
