@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-# This example needs two Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
+# NOTE: This example needs two Ethernet Networks named 'Ethernet 1' and 'Ethernet 2'
 
 # Optional filters for specific network sets
 oneview_network_set{'Network Set Get Without Ethernet':
