@@ -17,6 +17,7 @@
 - Storage Pool
 - Storage System
 - Storage Volume Template
+- Uplink Set
 - Volume
 - Volume Attachment
 
