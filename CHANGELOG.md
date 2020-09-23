@@ -10,7 +10,10 @@
 - Ethernet Network
 - FC Network
 - FCOE Network
+- Hypervisor Cluster Profile
+- Hypervisor Manager
 - Network Set
+- Server Certificate
 - Storage Pool
 - Storage System
 - Storage Volume Template
