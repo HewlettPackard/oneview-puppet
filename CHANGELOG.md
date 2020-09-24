@@ -14,6 +14,7 @@
 - FCOE Network
 - Hypervisor Cluster Profile
 - Hypervisor Manager
+- Logical Interconnects
 - Network Set
 - Server Certificate
 - Server Hardware
