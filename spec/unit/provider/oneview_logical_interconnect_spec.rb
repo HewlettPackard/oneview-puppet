@@ -83,7 +83,7 @@ describe provider_class, unit: true do
       resource['data']['logical_interconnect_uris'] = ['uris']
       allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(test)
       expect(provider.bulk_inconsistency_validation_check).to be
-    end  
+    end
 
     it 'return false when the resource does not exists' do
       allow(resource_type).to receive(:find_by).and_return([])
