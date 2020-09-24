@@ -45,6 +45,14 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     raise('This resource relies on others to be destroyed.')
   end
 
+  def bulk_inconsistency_validation_check
+    inconsistency_validation = @resource_type.new(@client)
+    inconsistency_validation.data['uri'] = 'dummy'
+    inconsistency_validation.data['logicalInterconnectUris'] = @data['logical_interconnect_uris']
+    response = inconsistency_validation.bulk_inconsistency_validate
+    pretty response.data['logicalInterconnectsReport']
+  end
+
   # GET ENDPOINTS =======================================
 
   def get_telemetry_configuration

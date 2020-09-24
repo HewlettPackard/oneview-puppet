@@ -133,6 +133,15 @@ oneview_logical_interconnect{'Logical Interconnect Set Configuration':
   }
 }
 
+oneview_logical_interconnect{'Bulk Inconsistency Validation':
+  ensure => 'bulk_inconsistency_validation_check',
+  data   => {
+    logical_interconnect_uris => [
+      "/rest/logical-interconnects/1d2be484-6d4c-46f4-8f6a-8a34080030a6",
+    ]
+  }
+}
+
 # Both the firmware driver identifier and a command need to be specified
 # The firmrware driver identifier can be either its name or uri, as follows:
 oneview_logical_interconnect{'Logical Interconnect Set Firmware':
