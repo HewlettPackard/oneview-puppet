@@ -9,7 +9,6 @@
 - Interconnects
 - Interconnect Types
 - Logical Enclosure
-- Logical Interconnects
 - Logical Interconnect Groups
 - Storage System
 
