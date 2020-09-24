@@ -56,9 +56,9 @@ oneview_enclosure{'Enclosure Update_2':
 }
 
 oneview_enclosure{'Enclosure Found':
-    ensure => 'found',
+    ensure  => 'found',
     require => Oneview_enclosure['Enclosure Update'],
-    data   => {
+    data    => {
         name            => $enc_name,
 #         licensingIntent => 'OneView'
     }
