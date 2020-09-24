@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+#
+# NOTE: Create a logical interconnect group for single enclosure as a pre-requisite
+
+# Variable declaration
+$eg_name = 'Enclosure Group'
 
 oneview_enclosure_group{'Enclosure Group Get All':
     ensure  => 'found'
@@ -22,18 +27,18 @@ oneview_enclosure_group{'Enclosure Group Get All':
 oneview_enclosure_group{'Enclosure Group Create':
     ensure => 'present',
     data   => {
-      name                        => 'Enclosure Group',
+      name                        => $eg_name,
       stackingMode                => 'Enclosure',
-      enclosureCount              => '3',
-      interconnectBayMappingCount => '8',
+      enclosureCount              => '1',
+      interconnectBayMappingCount => '2',
       interconnectBayMappings     => [
         {
           interconnectBay             => '3',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
+          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
         },
         {
           interconnectBay             => '6',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/19b9ca02-975a-45d1-a8ec-37bd5bd70ea2'
+          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
         }
       ]
     }
@@ -43,7 +48,7 @@ oneview_enclosure_group{'Enclosure Group Found':
     ensure  => 'found',
     require => Oneview_enclosure_group['Enclosure Group Create'],
     data    => {
-      name  => 'Enclosure Group',
+      name  => $eg_name,
     }
 }
 
@@ -51,8 +56,17 @@ oneview_enclosure_group{'Enclosure Group Update':
     ensure  => 'present',
     require => Oneview_enclosure_group['Enclosure Group Found'],
     data    => {
-      name     => 'Enclosure Group',
+      name     => $eg_name,
       new_name => 'New Enclosure Group Name'
+    }
+}
+
+oneview_enclosure_group{'Enclosure Group Update_2':
+    ensure  => 'present',
+    require => Oneview_enclosure_group['Enclosure Group Found'],
+    data    => {
+      name     => 'New Enclosure Group Name',
+      new_name => $eg_name
     }
 }
 
@@ -61,7 +75,7 @@ oneview_enclosure_group{'Enclosure Group Set Script':
     ensure  => 'set_script',
     require => Oneview_enclosure_group['Enclosure Group Update'],
     data    => {
-      name   => 'New Enclosure Group Name',
+      name   => $eg_name,
       script => 'This is a script example'
     }
 }
@@ -71,14 +85,14 @@ oneview_enclosure_group{'Enclosure Group Get Script':
     ensure  => 'get_script',
     require => Oneview_enclosure_group['Enclosure Group Set Script'],
     data    => {
-      name => 'New Enclosure Group Name'
+      name => $eg_name
     }
 }
 
 oneview_enclosure_group{'Enclosure Group Delete':
-    ensure  => 'absent',
-    require => Oneview_enclosure_group['Enclosure Group Get Script'],
-    data    => {
-      name => 'New Enclosure Group Name'
+    ensure => 'absent',
+#    require => Oneview_enclosure_group['Enclosure Group Get Script'],
+    data   => {
+      name => $eg_name
     }
 }
