@@ -19,8 +19,10 @@ require_relative '../../support/fake_response'
 require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
-api_version = 2000
+api_version = login[:api_version] || 200
+api = 2000
 resource_type = OneviewSDK.resource_named(:LogicalInterconnect, api_version, :C7000)
+resource_type1 = OneviewSDK.resource_named(:LogicalInterconnect, api, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -63,8 +65,23 @@ describe provider_class, unit: true do
   end
 
   let(:provider) { resource.provider }
-  let(:test) { resource_type.new(@client, resource['data']) }
+  let(:test1) { resource_type1.new(@client, resource['data']) }
   let(:instance) { provider.class.instances.first }
+
+  context 'given the min parameters' do
+    before(:each) do
+      allow_any_instance_of(resource_type1).to receive(:retrieve!).and_return(true)
+      allow(resource_type1).to receive(:find_by).with(anything, resource['data']).and_return([test1])
+      provider.exists?
+    end
+
+    it 'should be able to do bulk validation' do
+      resource['data']['logical_interconnect_uris'] = ['uris']
+      allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(test1)
+      expect(provider.bulk_inconsistency_validation_check).to be
+    end
+  end
+
 
   context 'given the min parameters' do
     before(:each) do
@@ -77,12 +94,6 @@ describe provider_class, unit: true do
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_logical_interconnect)
                                                         .provider(:c7000)
-    end
-
-    it 'should be able to do bulk validation' do
-      resource['data']['logical_interconnect_uris'] = ['uris']
-      allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(test)
-      expect(provider.bulk_inconsistency_validation_check).to be
     end
 
     it 'return false when the resource does not exists' do
