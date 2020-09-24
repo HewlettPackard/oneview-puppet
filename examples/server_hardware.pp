@@ -16,7 +16,11 @@
 
 # NOTE: Other than the 'found' method, all methods require a name/id for a server hardware to be specified
 
+# Variable declaration
+$sh_name = '0000A66101, bay 3'
+
 # NOTE: Updating the name of the resource is not supported for this resource
+# This example works only for C7000
 oneview_server_hardware{'server_hardware_1':
     ensure => 'present',
     data   => {
@@ -31,16 +35,18 @@ oneview_server_hardware{'server_hardware_2':
     ensure => 'found',
 }
 
+# This example works only for C7000
 oneview_server_hardware{'server_hardware_3':
     ensure => 'present',
     data   => {
       hostname => '172.18.6.14',
       op       => 'add',
       path     => '/scopeUris/-',
-      value    => '/rest/scopes/eec90be8-e810-4aef-b976-57c2c2cce030'
+      value    => '/rest/scopes/5438f376-b61f-45b1-8c11-052a48a474ad'
     },
 }
 
+# This works only for C7000
 oneview_server_hardware{'server_hardware_4':
     ensure => 'add_multiple_servers',
     data   => {
@@ -53,45 +59,47 @@ oneview_server_hardware{'server_hardware_4':
 }
 
 # NOTE: This is a function specific for GEN9 Servers
-# oneview_server_hardware{'server_hardware_3':
-#     ensure => 'get_bios',
-#     data   => {
-#       hostname        => '172.18.6.14',
-#     },
-# }
+# hostname should be provided for C7000
+oneview_server_hardware{'server_hardware_30':
+    ensure => 'get_bios',
+    data   => {
+      name    => $sh_name,
+#      hostname        => '172.18.6.14',
+    },
+}
 
 oneview_server_hardware{'server_hardware_5':
     ensure => 'get_ilo_sso_url',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
 oneview_server_hardware{'server_hardware_6':
     ensure => 'get_java_remote_sso_url',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
 oneview_server_hardware{'server_hardware_7':
     ensure => 'get_remote_console_url',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
 oneview_server_hardware{'server_hardware_8':
     ensure => 'get_environmental_configuration',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
 oneview_server_hardware{'server_hardware_9':
     ensure => 'get_firmware_inventory',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
@@ -99,7 +107,7 @@ oneview_server_hardware{'server_hardware_9':
 oneview_server_hardware{'server_hardware_10':
     ensure => 'get_physical_server_hardware',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
@@ -107,7 +115,7 @@ oneview_server_hardware{'server_hardware_10':
 oneview_server_hardware{'server_hardware_11':
     ensure => 'get_utilization',
     data   => {
-      name            => '0000A66101, bay 3',
+      name            => $sh_name,
       queryParameters => {
         fields => ['AmbientTemperature']
       }
@@ -117,14 +125,14 @@ oneview_server_hardware{'server_hardware_11':
 oneview_server_hardware{'server_hardware_12':
     ensure => 'update_ilo_firmware',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
 oneview_server_hardware{'server_hardware_13':
     ensure => 'set_power_state',
     data   => {
-      name        => '0000A66101, bay 3',
+      name        => $sh_name,
       power_state => 'on',
     },
 }
@@ -132,7 +140,7 @@ oneview_server_hardware{'server_hardware_13':
 oneview_server_hardware{'server_hardware_14':
     ensure => 'get_local_storage',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
@@ -140,7 +148,7 @@ oneview_server_hardware{'server_hardware_14':
 oneview_server_hardware{'server_hardware_15':
     ensure => 'get_local_storagev2',
     data   => {
-      name    => '0000A66101, bay 3',
+      name    => $sh_name
     },
 }
 
@@ -149,11 +157,12 @@ oneview_server_hardware{'server_hardware_15':
 oneview_server_hardware{'server_hardware_16':
     ensure => 'set_refresh_state',
     data   => {
-      name  => '0000A66101, bay 3',
+      name  => $sh_name,
       state => 'RefreshPending'
     },
 }
 
+# Delete operation works only for C7000
 oneview_server_hardware{'server_hardware_17':
     ensure => 'absent',
     data   => {

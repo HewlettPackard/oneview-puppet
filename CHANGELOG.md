@@ -7,6 +7,8 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure
+- Enclosure Group
 - Ethernet Network
 - FC Network
 - FCOE Network
@@ -14,6 +16,8 @@
 - Hypervisor Manager
 - Network Set
 - Server Certificate
+- Server Hardware
+- Server Hardware Type
 - Storage Pool
 - Storage System
 - Storage Volume Template
