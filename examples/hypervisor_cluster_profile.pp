@@ -15,6 +15,7 @@
 ################################################################################
 
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
+# NOTE: As a pre-requisite, create a Server Profile Template and add a hypervisor manager.
 
 # This created Hypervisor ClusterProfile if we use ServerProfileTemplate without OS DeploymentPlan
 oneview_hypervisor_cluster_profile{'hcp1 Create':

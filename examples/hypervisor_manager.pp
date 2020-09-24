@@ -15,6 +15,7 @@
 ################################################################################
 
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
+# NOTE: Server Certificate for '172.18.13.11' should be added as a pre-requisite
 oneview_hypervisor_manager{'hm Create':
     ensure => 'present',
     data   => {
