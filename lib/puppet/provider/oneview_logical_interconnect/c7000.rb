@@ -51,7 +51,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
 
   def bulk_inconsistency_validation_check
     inconsistency_validation = @resource_type.new(@client)
-    inconsistency_validation.data['uri'] = 'dummy'
+    inconsistency_validation.data['uri'] = @data['logical_interconnect_uris'].first
     inconsistency_validation.data['logicalInterconnectUris'] = @data['logical_interconnect_uris']
     response = inconsistency_validation.bulk_inconsistency_validate
     pretty response.data['logicalInterconnectsReport']

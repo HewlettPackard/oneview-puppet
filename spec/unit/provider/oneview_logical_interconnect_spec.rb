@@ -198,7 +198,7 @@ describe provider_class, unit: true do
 end
 
 describe provider_class, unit: true do
-  include_context 'shared context Oneview API 2000'
+  include_context 'shared context'
 
   let(:resource) do
     Puppet::Type.type(:oneview_logical_interconnect).new(
