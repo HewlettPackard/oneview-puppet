@@ -25,8 +25,8 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
       provider.found
     end
 
-    newvalue(:bulk_inconsistency_validation_check) do
-      provider.bulk_inconsistency_validation_check
+    newvalue(:bulk_inconsistency_validate) do
+      provider.bulk_inconsistency_validate
     end
 
     newvalue(:get_ethernet_settings) do
