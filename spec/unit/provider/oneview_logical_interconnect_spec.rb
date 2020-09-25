@@ -18,7 +18,7 @@ require 'spec_helper'
 require_relative '../../support/fake_response'
 
 provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
-api_version = 300
+api_version = 2000
 resource_type = OneviewSDK.resource_named(:LogicalInterconnect, api_version, :C7000)
 
 describe provider_class, unit: true do
@@ -198,7 +198,7 @@ describe provider_class, unit: true do
 end
 
 describe provider_class, unit: true do
-  include_context 'shared context'
+  include_context 'shared context LI API2000'
 
   let(:resource) do
     Puppet::Type.type(:oneview_logical_interconnect).new(
@@ -253,7 +253,8 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to do bulk validation' do
-      resource['data']['logical_interconnect_uris'] = ['uris']
+      resource['data']['uri'] = '/rest/fake'
+      resource['data']['logical_interconnect_uris'] = ['/rest/fake']
       allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(expected_output)
       expect(provider.bulk_inconsistency_validation_check).to be
     end
