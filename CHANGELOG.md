@@ -1,4 +1,4 @@
-# v2.8.0(Unreleased)
+# v2.8.0(2020-09-25)
 ### Notes
 - This release extends support of the SDK to Oneview REST API version 2000 (OneView v5.40).
 
