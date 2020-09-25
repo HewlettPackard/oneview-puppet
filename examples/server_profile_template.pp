@@ -27,8 +27,8 @@ oneview_server_profile_template{'Server Profile Template Create':
   data   =>
     {
       name                  => 'New SPT',
-      enclosureGroupUri     => 'e10_encl_group',
-      serverHardwareTypeUri => 'BL460c Gen9 1',
+      enclosureGroupUri     => 'enclosureGp',
+      serverHardwareTypeUri => 'SY 480 Gen9 1',
       connectionSettings    =>
       {
         manageConnections => true,
@@ -229,8 +229,8 @@ oneview_server_profile_template{'Server Profile Template Create #2':
   data    =>
     {
       name                  => 'New SPT #2',
-      enclosureGroupUri     => 'e10_encl_group',
-      serverHardwareTypeUri => 'BL460c Gen9 1'
+      enclosureGroupUri     => 'enclosureGp',
+      serverHardwareTypeUri => 'SY 480 Gen9 1'
     }
 }
 
@@ -270,8 +270,8 @@ oneview_server_profile_template{'Get Transformation':
     {
       name            => 'New SPT #2',
       queryParameters => {
-        enclosureGroupUri     => 'e11-encl-group',
-        serverHardwareTypeUri => 'BL460c Gen9 1'
+        enclosureGroupUri     => 'enclosureGp',
+        serverHardwareTypeUri => 'SY 480 Gen9 1'
       }
     }
 }
@@ -282,8 +282,8 @@ oneview_server_profile_template{'Get Available Networks':
     {
       name            => 'New SPT #2',
       queryParameters => {
-        enclosureGroupUri     => 'e11-encl-group',
-        serverHardwareTypeUri => 'BL460c Gen9 1'
+        enclosureGroupUri     => 'enclosureGp',
+        serverHardwareTypeUri => 'SY 480 Gen9 1'
       }
     }
 }
