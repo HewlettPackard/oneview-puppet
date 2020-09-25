@@ -15,6 +15,7 @@
 ################################################################################
 
 # NOTE: As with all resources, the found ensurable accepts a data as an optional filter field.
+# NOTE: As a pre-requisite, create 2 FC networks and provide those uris in bulk delete example
 
 oneview_fc_network{'fc1':
     ensure => 'present',
@@ -55,7 +56,7 @@ oneview_fc_network{'fc4':
     }
 }
 
-# Bulk delete FC Networks
+# Bulk delete FC Networks is supported from API1800
 oneview_fc_network{'Bulk Delete':
     ensure => 'present',
     data   => {

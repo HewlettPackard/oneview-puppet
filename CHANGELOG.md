@@ -6,11 +6,30 @@
 - Enhanced the method to set the default API version to appliance's max API version if the API version is not given.
 
 ### Oneview Features supported
+- Connection Template
+- Enclosure
+- Enclosure Group
+- Ethernet Network
+- FC Network
+- FCOE Network
+- Hypervisor Cluster Profile
+- Hypervisor Manager
 - Interconnects
 - Interconnect Types
 - Logical Enclosure
 - Logical Interconnect Groups
+- Network Set
+- Server Certificate
+- Server Hardware
+- Server Hardware Type
+- Server Profile
+- Server Profile Template
+- Storage Pool
 - Storage System
+- Storage Volume Template
+- Uplink Set
+- Volume
+- Volume Attachment
 
 # v2.7.0(2020-08-04)
 ### Notes

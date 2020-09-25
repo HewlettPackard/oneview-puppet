@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
 ################################################################################
 
 # NOTE: Both 'customBaselineName' or simply 'name' are accepted as the single identifier for the custom firmware package.
-  # It is required to have exactly one of those on each resource declaration
+# It is required to have exactly one of those on each resource declaration
 # NOTE: 1- baselineUri and hotfixUris accept either the uri or names for the drivers
 # NOTE: 2- hotfixUris values must be inserted inside an array, enclosed by [].
-  # Example: hotfixUris => ['value1', 'value2', 'value3']
+# Example: hotfixUris => ['value1', 'value2', 'value3']
 
 oneview_firmware_driver{'firmware_driver_1':
     ensure => 'present',

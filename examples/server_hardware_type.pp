@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
 
 # NOTE: Other than the 'found' method, all methods require a name/id for a server hardware to be specified
 
+# Variable declaration
+$sht_name = 'SY 480 Gen9 1'
+
 oneview_server_hardware_type{'server_hardware_type_1':
     ensure => 'present',
     data   => {
-      name     => 'BL460c Gen8 1',
+      name     => $sht_name,
       new_name => 'Puppet Test'
     },
 }
@@ -28,7 +31,7 @@ oneview_server_hardware_type{'server_hardware_type_2':
     ensure => 'present',
     data   => {
       name     => 'Puppet Test',
-      new_name => 'BL460c Gen8 1'
+      new_name => $sht_name
     },
 }
 
@@ -36,14 +39,15 @@ oneview_server_hardware_type{'server_hardware_type_2':
 oneview_server_hardware_type{'server_hardware_type_3':
     ensure => 'found',
     # data   => {
-    #   name            => 'Puppet Test',
+    #   name            => $sht_name
     # },
 }
 
 # Absent can only remove a server hardware type if it is not in use.
+# This example works only for C7000
 # oneview_server_hardware_type{'server_hardware_type_4':
 #     ensure => 'absent',
 #     data   => {
-#       name            => 'BL460c Gen8 1',
+#       name            => $sht_name
 #     },
 # }

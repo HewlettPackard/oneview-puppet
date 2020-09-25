@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+# NOTE: As a pre-requisite, create 2 FCoE networks and provide those uris in bulk delete example
 
 oneview_fcoe_network{'FCoE Create':
   ensure => 'present',
@@ -49,7 +50,7 @@ oneview_fcoe_network{'FCoE Delete':
   }
 }
 
-# Bulk delete FCoE Networks
+# Bulk delete FCoE Networks is supported from API1800
 oneview_fcoe_network{'Bulk Delete':
     ensure => 'present',
     data   => {

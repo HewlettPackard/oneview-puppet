@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+# NOTE: As a pre-requisite, create 2 ethernet networks and provide those uris in bulk delete example
 
 oneview_ethernet_network{'Ethernet Network Create':
   ensure => 'present',
@@ -119,7 +120,7 @@ oneview_ethernet_network{'Bulk Delete 2':
     }
 }
 
-# Bulk delete Ethernet Networks
+# Bulk delete Ethernet Networks is supported from API1800
 oneview_ethernet_network{'Bulk Delete':
     ensure => 'present',
     data   => {

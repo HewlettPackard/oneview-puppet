@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
 ################################################################################
 
 # NOTE: The 'portConfigInfos' at the moment do not have the 'list a name instead of uri' available for
-  # the tag. It should be declared with all infos required as per the oneview documentation in case it
-  # is needed.
+#       the tag. It should be declared with all infos required as per the oneview documentation in case it
+#       is needed.
 
 oneview_uplink_set{'uplink_set_1':
     ensure => 'present',
@@ -31,7 +31,7 @@ oneview_uplink_set{'uplink_set_1':
       description                    => 'nil',
       name                           => 'Puppet Uplink Set',
       networkUris                    => [
-        'Puppet Test EthNetwork', 'OneViewSDK_Bulk_Network_28'
+        'TestNetwork_1', 'TestNetwork_2'
       ],
       logicalInterconnectUri         => 'Encl1-Test Oneview'
     },
@@ -52,7 +52,7 @@ oneview_uplink_set{'uplink_set_2':
       name                           => 'Puppet Uplink Set',
       new_name                       => 'Puppet Uplink Set Updated',
       networkUris                    => [
-        'Puppet Test EthNetwork'
+        'TestNetwork_1'
       ],
       logicalInterconnectUri         => 'Encl1-Test Oneview'
     },

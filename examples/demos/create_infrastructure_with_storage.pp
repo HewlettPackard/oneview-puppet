@@ -44,7 +44,6 @@ oneview_fc_network{'Test Puppet Network Create1':
 # Creates Storage System in OneView
 # If you already have Storage System having ports configured with FC Networks,
 # then you can skip this step
-
 oneview_storage_system{'storage_system_1':
     ensure => 'present',
     data   => {
@@ -207,20 +206,20 @@ oneview_server_profile_template{'Test Puppet SPT':
       manageConnections => true,
       connections       =>
       [
-      {
+        {
           id            => 1,
-          networkUri    => 'Oneview_fc_network['Test Puppet Network Create']['data']['name']',
+          networkUri    => Oneview_fc_network['Test Puppet Network']['data']['name'],
           functionType  => 'FibreChannel',
           portId        => 'Mezz 3:1',
           requestedMbps => '2000'
-      },
-      {
+        },
+        {
           id            => 2,
-          networkUri    => 'Oneview_fc_network['Test Puppet Network Create1']['data']['name']',
+          networkUri    => Oneview_fc_network['Test Puppet Network Create1']['data']['name'],
           functionType  => 'FibreChannel',
           portId        => 'Mezz 3:2',
           requestedMbps => '2000'
-      }
+        }
       ]
     },
     boot                  =>
