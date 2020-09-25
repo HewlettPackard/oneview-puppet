@@ -14,6 +14,7 @@
 - FCOE Network
 - Hypervisor Cluster Profile
 - Hypervisor Manager
+- Interconnect
 - Interconnect Types
 - Logical Enclosure
 - Logical Interconnect
