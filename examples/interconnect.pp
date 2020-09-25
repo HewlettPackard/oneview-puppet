@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ oneview_interconnect{'Interconnect Get Types':
 oneview_interconnect{'Interconnect Found':
   ensure => 'found',
   data   => {
-    name => 'Encl1, interconnect 2'
+    name => 'Encl1, interconnect 2',
   }
 }
 
