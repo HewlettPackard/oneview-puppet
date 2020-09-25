@@ -37,6 +37,10 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     !li.empty?
   end
 
+  def self.api_version
+    2000
+  end
+
   def create
     raise('This resource relies on others to be created.')
   end

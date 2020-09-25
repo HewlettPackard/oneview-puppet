@@ -16,13 +16,10 @@
 
 require 'spec_helper'
 require_relative '../../support/fake_response'
-require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
-api_version = login[:api_version] || 200
-api = 2000
+api_version = 300
 resource_type = OneviewSDK.resource_named(:LogicalInterconnect, api_version, :C7000)
-resource_type1 = OneviewSDK.resource_named(:LogicalInterconnect, api, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -65,23 +62,7 @@ describe provider_class, unit: true do
   end
 
   let(:provider) { resource.provider }
-  let(:test1) { resource_type1.new(@client, resource['data']) }
   let(:instance) { provider.class.instances.first }
-
-  context 'given the min parameters' do
-    before(:each) do
-      allow_any_instance_of(resource_type1).to receive(:retrieve!).and_return(true)
-      allow(resource_type1).to receive(:find_by).with(anything, resource['data']).and_return([test1])
-      provider.exists?
-    end
-
-    it 'should be able to do bulk validation' do
-      resource['data']['logical_interconnect_uris'] = ['uris']
-      allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(test1)
-      expect(provider.bulk_inconsistency_validation_check).to be
-    end
-  end
-
 
   context 'given the min parameters' do
     before(:each) do
@@ -212,6 +193,69 @@ describe provider_class, unit: true do
 
     it 'should be able to get the telemetry configuration' do
       expect(provider.get_telemetry_configuration).to be
+    end
+  end
+end
+
+describe provider_class, unit: true do
+  include_context 'shared context Oneview API 2000'
+
+  let(:resource) do
+    Puppet::Type.type(:oneview_logical_interconnect).new(
+      name: 'LI',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Encl2-my enclosure logical interconnect group',
+            'internalNetworks' => ['NET'],
+            'igmpSettings' =>
+            {
+              'igmpIdleTimeoutInterval' => 210
+            },
+            'snmpConfiguration' =>
+            {
+              'enabled' => true,
+              'readCommunity' => 'public'
+            },
+            'portMonitor' =>
+            {
+              'enablePortMonitor' => false
+            },
+            'telemetryConfiguration' =>
+            {
+              'enableTelemetry' => true
+            },
+            'qosConfiguration' =>
+            {
+              'activeQosConfig' =>
+              {
+                'configType' => 'Passthrough'
+              }
+            }
+          },
+      provider: 'c7000'
+    )
+  end
+
+  expected_output = {
+    'logicalInterconnectsReport' => 'dummy_data'
+  }
+
+  let(:provider) { resource.provider }
+  let(:test) { resource_type.new(@client, resource['data']) }
+  let(:instance) { provider.class.instances.first }
+
+  context 'given the min parameters' do
+    before(:each) do
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      provider.exists?
+    end
+
+    it 'should be able to do bulk validation' do
+      resource['data']['logical_interconnect_uris'] = ['uris']
+      allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(expected_output)
+      expect(provider.bulk_inconsistency_validation_check).to be
     end
   end
 end
