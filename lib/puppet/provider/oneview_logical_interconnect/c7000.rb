@@ -37,12 +37,25 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     !li.empty?
   end
 
+  def self.api_version
+    2000
+  end
+
   def create
     raise('This resource relies on others to be created.')
   end
 
   def destroy
     raise('This resource relies on others to be destroyed.')
+  end
+
+  def bulk_inconsistency_validate
+    inconsistency_validation = @resource_type.new(@client)
+    inconsistency_validation.data['uri'] = @data['logical_interconnect_uris'].first
+    inconsistency_validation.data['logicalInterconnectUris'] = @data['logical_interconnect_uris']
+    response = inconsistency_validation.bulk_inconsistency_validate
+    pretty response.data['logicalInterconnectsReport']
+    true
   end
 
   # GET ENDPOINTS =======================================

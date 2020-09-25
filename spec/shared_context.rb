@@ -55,6 +55,14 @@ RSpec.shared_context 'shared context Oneview API 600', a: :b do
   end
 end
 
+RSpec.shared_context 'shared context Oneview API 2000', a: :b do
+  before :each do
+    api_version = 2000
+    options = { url: 'https://oneview.example.com', user: 'Administrator', password: 'secret123', api_version: api_version }
+    @client = OneviewSDK::Client.new(options)
+  end
+end
+
 RSpec.shared_context 'shared context Hypervisor Manager', a: :b do
   before :each do
     api_version = 800

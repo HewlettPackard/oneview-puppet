@@ -14,9 +14,10 @@
 - FCOE Network
 - Hypervisor Cluster Profile
 - Hypervisor Manager
-- Interconnects
+- Interconnect
 - Interconnect Types
 - Logical Enclosure
+- Logical Interconnect
 - Logical Interconnect Groups
 - Network Set
 - Server Certificate
