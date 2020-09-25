@@ -16,6 +16,7 @@
 
 require 'spec_helper'
 require_relative '../../support/fake_response'
+require_relative '../../shared_context'
 
 provider_class = Puppet::Type.type(:oneview_logical_interconnect).provider(:c7000)
 api_version = 2000
@@ -203,35 +204,11 @@ describe provider_class, unit: true do
   let(:resource) do
     Puppet::Type.type(:oneview_logical_interconnect).new(
       name: 'LI',
-      ensure: 'present',
+      ensure: 'bulk_inconsistency_validation_check',
       data:
           {
-            'name' => 'Encl2-my enclosure logical interconnect group',
-            'internalNetworks' => ['NET'],
-            'igmpSettings' =>
-            {
-              'igmpIdleTimeoutInterval' => 210
-            },
-            'snmpConfiguration' =>
-            {
-              'enabled' => true,
-              'readCommunity' => 'public'
-            },
-            'portMonitor' =>
-            {
-              'enablePortMonitor' => false
-            },
-            'telemetryConfiguration' =>
-            {
-              'enableTelemetry' => true
-            },
-            'qosConfiguration' =>
-            {
-              'activeQosConfig' =>
-              {
-                'configType' => 'Passthrough'
-              }
-            }
+            'name' => 'LI',
+            'logical_interconnect_uris' => ['/rest/fake']
           },
       provider: 'c7000'
     )
@@ -248,14 +225,16 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     before(:each) do
       allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      # allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return(['test'])
       provider.exists?
     end
 
     it 'should be able to do bulk validation' do
       resource['data']['uri'] = '/rest/fake'
-      resource['data']['logical_interconnect_uris'] = ['/rest/fake']
+      allow(resource_type).to receive(:find_by).and_return(['test'])
       allow_any_instance_of(resource_type).to receive(:bulk_inconsistency_validation_check).and_return(expected_output)
+      provider.exists?
       expect(provider.bulk_inconsistency_validation_check).to be
     end
   end
