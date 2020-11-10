@@ -8,6 +8,8 @@
 - Interconnect Types
 - Server Hardware
 - Server Hardware Type
+- Server Profile
+- Server Profile Template
 
 # v2.8.0(2020-09-25)
 ### Notes

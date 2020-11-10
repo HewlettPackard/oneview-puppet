@@ -109,9 +109,9 @@ oneview_server_profile_template{'Server Profile Template Create':
               localAccounts =>
               [
                 {
-                  userName                 => 'user1',
-                  displayName              => 'localuser',
-                  password                 => 'localuser',
+                  userName                 => '<username>',
+                  displayName              => '<localuser>',
+                  password                 => '<password>',
                   userConfigPriv           => false,
                   remoteConsolePriv        => true,
                   virtualMediaPriv         => true,
