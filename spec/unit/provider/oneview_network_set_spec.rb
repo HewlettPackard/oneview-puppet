@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -66,7 +66,11 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      allow(resource_type).to receive(:find_by).and_return([])
+      resource['data']['networkUris'] = %w(Test1 test2)
+      resource['data']['nativeNetworkUri'] = 'Test1'
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow(ethernet_class).to receive(:find_by).and_return([eth1])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
