@@ -4,10 +4,15 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure
+- Enclosure Group
 - Hypervisor Cluster Profile
 - Hypervisor Manager
 - Interconnect
 - Interconnect Types
+- Logical Enclosure
+- Logical Interconnect
+- Logical Interconnect Groups
 - Server Certificate
 - Server Hardware
 - Server Hardware Type
