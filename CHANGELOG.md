@@ -1,3 +1,14 @@
+# v2.9.0(unreleased)
+### Notes
+- This release extends support of the SDK to Oneview REST API version 2200 (OneView v5.50).
+
+### Oneview Features supported
+- Connection Template
+- Interconnect
+- Interconnect Types
+- Server Hardware
+- Server Hardware Type
+
 # v2.8.0(2020-09-25)
 ### Notes
 - This release extends support of the SDK to Oneview REST API version 2000 (OneView v5.40).
