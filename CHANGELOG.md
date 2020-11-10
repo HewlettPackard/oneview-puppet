@@ -4,8 +4,13 @@
 
 ### Oneview Features supported
 - Connection Template
+- Enclosure
+- Enclosure Group
 - Interconnect
 - Interconnect Types
+- Logical Enclosure
+- Logical Interconnect
+- Logical Interconnect Groups
 - Server Hardware
 - Server Hardware Type
 
