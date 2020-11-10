@@ -136,13 +136,9 @@ describe provider_class, unit: true do
 
     it 'should delete multiple uris' do
       resource['data']['uri'] = '/rest/fake'
-      resource2 = resource.clone
-      resource2['name'] = 'test2'
       resource['data']['networkUris'] = %w(test1 test2)
       test = resource_type.new(@client, resource['data'])
-      test2 = resource_type.new(@client, resource2['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resource_type).to receive(:find_by).with(anything, resource2['data']).and_return([test2])
       provider.exists?
       allow_any_instance_of(resource_type).to receive(:bulk_delete).and_return({})
       expect(provider.bulk_delete_check).to be
