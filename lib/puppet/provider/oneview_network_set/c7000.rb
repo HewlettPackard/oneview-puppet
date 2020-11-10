@@ -27,6 +27,7 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
   def exists?
     # assignments and deletions from @data
     prepare_environment
+    create_networks
     network_uris
     native_network_uris
     empty_data_check([nil, :found, :get_without_ethernet])
@@ -50,45 +51,42 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
   def create_networks
     network_class = OneviewSDK.resource_named('EthernetNetwork', @client.api_version)
     options = {
-           vlanId:  '1020',
-           purpose:  'General',
-           name:  'EtherNetwork_Test1',
-           smartLink:  false,
-           privateNetwork:  false,
-           connectionTemplateUri: nil
+      vlanId:  '1020',
+      purpose:  'General',
+      name:  'EtherNetwork_Test1',
+      smartLink:  false,
+      privateNetwork:  false,
+      connectionTemplateUri: nil
     }
-    $network_1 = network_class.new(@client, options)
-    $network_1.create!
+    network_one = network_class.new(@client, options)
+    network_one.create!
 
     options['name'] = 'EtherNetwork_Test2'
     options['vlanId'] = '1010'
-    $network_2 = network_class.new(@client, options)
-    $network_2.create!
+    network_two = network_class.new(@client, options)
+    network_two.create!
   end
 
   def network_uris
-    if @data['networkUris'] and @data['networkUris'].empty?
-       create_networks
-       @data['networkUris'] = [$network_1['name'], $network_2['name']]
-    end	
-    
+    set_network_uris
+
     list = []
     Puppet.debug("\n\nAPI VERSION: #{api_version} and \nRESOURCE VARIANT: #{resource_variant} \n")
-    Puppet.debug "#{@data['networkUris']}"
-    if @data['networkUris']
-       @data['networkUris'].each do |item|
-       net = OneviewSDK.resource_named(:EthernetNetwork, api_version, resource_variant).find_by(@client, name: item)
-       raise("The network #{name} does not exist.") unless net.first
-       list.push(net.first['uri'])
-       end
-    @data['networkUris'] = list
+    @data['networkUris'].each do |item|
+      net = OneviewSDK.resource_named(:EthernetNetwork, api_version, resource_variant).find_by(@client, name: item)
+      raise("The network #{name} does not exist.") unless net.first
+      list.push(net.first['uri'])
     end
+    @data['networkUris'] = list
+  end
+
+  def set_network_uris
+    return unless @data['networkUris'] && @data['networkUris'].present?
+    @data['networkUris'] = %w(EtherNetwork_Test1 EtherNetwork_Test2)
   end
 
   def native_network_uris
-    if @data['nativeNetworkUri'] and @data['nativeNetworkUri'].empty?
-       create_networks
-       @data['nativeNetworkUri'] = $network_1['name']
-    end
+    return unless @data['nativeNetworkUri'] && @data['nativeNetworkUri'].present?
+    @data['nativeNetworkUri'] = 'EtherNetwork_Test1'
   end
 end

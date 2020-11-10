@@ -53,21 +53,20 @@ Puppet::Type.type(:oneview_fc_network).provide :c7000, parent: Puppet::OneviewRe
   end
 
   def set_network_uris
-    if @data['networkUris'].empty?
-	    fc_network_class = OneviewSDK.resource_named('FCNetwork', @client.api_version)
-        options = {
-  		name: 'FcNetwork_Test1',
-  		connectionTemplateUri: nil,
-  		autoLoginRedistribution: true,
-  		fabricType: 'FabricAttach',
-	}		
-	network_1 = fc_network_class.new(@client, options)
-        network_1.create!
+    return unless @data['networkUris'].present?
+    fc_network_class = OneviewSDK.resource_named('FCNetwork', @client.api_version)
+    options = {
+      name: 'FcNetwork_Test1',
+      connectionTemplateUri: nil,
+      autoLoginRedistribution: true,
+      fabricType: 'FabricAttach'
+    }
+    network_one = fc_network_class.new(@client, options)
+    network_one.create!
 
-	options['name'] = 'FcNetwork_Test2'
-	network_2 = fc_network_class.new(@client, options)
-	network_2.create!
-	@data['networkUris'] = [network_1['uri'], network_2['uri']]
-    end
+    options['name'] = 'FcNetwork_Test2'
+    network_two = fc_network_class.new(@client, options)
+    network_two.create!
+    @data['networkUris'] = [network_1['uri'], network_2['uri']]
   end
 end

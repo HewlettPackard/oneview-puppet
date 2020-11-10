@@ -112,23 +112,22 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
   end
 
   def set_network_uris
-    if @data['networkUris'].empty?
-        network_class = OneviewSDK.resource_named('EthernetNetwork', @client.api_version)
-        options = {
-	   vlanId:  '1001',
-  	   purpose:  'General',
-  	   name:  'EtherNetwork_Test1',
-  	   smartLink:  false,
-  	   privateNetwork:  false,
-  	   connectionTemplateUri: nil
-        }
-        network_1 = network_class.new(@client, options)
-        network_1.create!
+    return unless @data['networkUris'].present?
+    network_class = OneviewSDK.resource_named('EthernetNetwork', @client.api_version)
+    options = {
+      vlanId:  '1001',
+      purpose:  'General',
+      name:  'EtherNetwork_Test1',
+      smartLink:  false,
+      privateNetwork:  false,
+      connectionTemplateUri: nil
+    }
+    network_one = network_class.new(@client, options)
+    network_one.create!
 
-        options['name'] = 'EtherNetwork_Test2'
-        network_2 = network_class.new(@client, options)
-        network_2.create!
-        @data['networkUris'] = [network_1['uri'], network_2['uri']]
-    end
+    options['name'] = 'EtherNetwork_Test2'
+    network_two = network_class.new(@client, options)
+    network_two.create!
+    @data['networkUris'] = [network_one['uri'], network_two['uri']]
   end
 end
