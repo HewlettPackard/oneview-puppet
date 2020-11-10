@@ -4,8 +4,11 @@
 
 ### Oneview Features supported
 - Connection Template
+- Hypervisor Cluster Profile
+- Hypervisor Manager
 - Interconnect
 - Interconnect Types
+- Server Certificate
 - Server Hardware
 - Server Hardware Type
 
