@@ -1,6 +1,6 @@
 # v2.9.0(unreleased)
 ### Notes
-- This release extends support of the SDK to Oneview REST API version 2200 (OneView v5.50).
+- This release extends support of the SDK to Oneview REST API version 2200 (OneView v5.50) and ImageStreamer REST API version 2000 (I3S v5.40).
 
 ### Oneview Features supported
 - Connection Template
@@ -21,6 +21,15 @@
 - Storage Volume Template
 - Volume
 - Volume Attachment
+
+### Image Streamer support
+- Artifact Bundle
+- Build Plan
+- Deployment plan
+- Golden Image
+- OS Deployment Plan
+- OS Volume
+- Plan Script
 
 # v2.8.0(2020-09-25)
 ### Notes
