@@ -77,8 +77,8 @@ RSpec.configure do |config|
   config.before(:each) do
     unless config.filter_manager.inclusions.rules[:integration] # If not using the integration flag, sets the mocks required for unit tests
       # Mock appliance version and login api requests, as well as loading trusted certs
-      allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(2000)
-      allow_any_instance_of(OneviewSDK::ImageStreamer::Client).to receive(:appliance_i3s_api_version).and_return(1600)
+      allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(2200)
+      allow_any_instance_of(OneviewSDK::ImageStreamer::Client).to receive(:appliance_i3s_api_version).and_return(2000)
       allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_return('secretToken')
       allow(OneviewSDK::SSLHelper).to receive(:load_trusted_certs).and_return(nil)
     end

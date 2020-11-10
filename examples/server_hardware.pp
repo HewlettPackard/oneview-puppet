@@ -24,9 +24,9 @@ $sh_name = '0000A66101, bay 3'
 oneview_server_hardware{'server_hardware_1':
     ensure => 'present',
     data   => {
-      hostname        => '172.18.6.14',
-      username        => 'dcs',
-      password        => 'dcs',
+      hostname        => '<hostname>',
+      username        => '<username>',
+      password        => '<password>',
       licensingIntent => 'OneView'
     },
 }
@@ -39,7 +39,7 @@ oneview_server_hardware{'server_hardware_2':
 oneview_server_hardware{'server_hardware_3':
     ensure => 'present',
     data   => {
-      hostname => '172.18.6.14',
+      hostname => '<hostname>',
       op       => 'add',
       path     => '/scopeUris/-',
       value    => '/rest/scopes/5438f376-b61f-45b1-8c11-052a48a474ad'
@@ -50,11 +50,11 @@ oneview_server_hardware{'server_hardware_3':
 oneview_server_hardware{'server_hardware_4':
     ensure => 'add_multiple_servers',
     data   => {
-      hostname         => '172.18.6.13',
-      username         => 'dcs',
-      password         => 'dcs',
+      hostname         => '<hostname>',
+      username         => '<username>',
+      password         => '<password>',
       licensingIntent  => 'OneView',
-      mpHostsAndRanges => ['172.18.6.13-172.18.6.14']
+      mpHostsAndRanges => ['<start>-<end>']
     },
 }
 
@@ -64,7 +64,7 @@ oneview_server_hardware{'server_hardware_30':
     ensure => 'get_bios',
     data   => {
       name    => $sh_name,
-#      hostname        => '172.18.6.14',
+#      hostname        => '<hostname>',
     },
 }
 
@@ -166,9 +166,9 @@ oneview_server_hardware{'server_hardware_16':
 oneview_server_hardware{'server_hardware_17':
     ensure => 'absent',
     data   => {
-      hostname        => '172.18.6.14',
-      username        => 'dcs',
-      password        => 'dcs',
+      hostname        => '<hostname>',
+      username        => '<username>',
+      password        => '<password>',
       licensingIntent => 'OneView'
     },
 }
