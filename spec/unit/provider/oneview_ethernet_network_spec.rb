@@ -134,13 +134,14 @@ describe provider_class, unit: true do
       expect(provider.reset_default_bandwidth).to be
     end
 
-    it 'should be able to set network uris' do
+    it 'should delete multiple uris' do
       resource['data']['uri'] = '/rest/fake'
+      resource['data']['networkUris'] = %w(test1 test2)
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      expect_any_instance_of(resource_type).to receive(:create).and_return({})
       provider.exists?
-      expect(provider.set_network_uris).to be
+      allow_any_instance_of(resource_type).to receive(:bulk_delete).and_return({})
+      expect(provider.bulk_delete_check).to be
     end
   end
 end
