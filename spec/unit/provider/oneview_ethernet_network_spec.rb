@@ -133,5 +133,14 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.reset_default_bandwidth).to be
     end
+
+    it 'should be able to set network uris' do
+      resource['data']['uri'] = '/rest/fake'
+      test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:create).and_return({})
+      provider.exists?
+      expect(provider.set_network_uris).to be
+    end
   end
 end
