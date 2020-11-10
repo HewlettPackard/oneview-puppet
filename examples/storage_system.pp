@@ -24,10 +24,10 @@ oneview_storage_system{'storage_system_1':
     ensure => 'present',
     data   => {
       family      => 'StoreServ',
-      hostname    => '172.18.11.11',
+      hostname    => '<hostname>',
       credentials => {
-        username => 'dcs',
-        password => 'dcs',
+        username => '<username>',
+        password => '<password>',
       }
     }
 }
@@ -37,7 +37,7 @@ oneview_storage_system{'storage_system_2':
     require => Oneview_storage_system['storage_system_1'],
     data    => {
       family                   => 'StoreServ',
-      hostname                 => '172.18.11.11',
+      hostname                 => '<hostname>',
       deviceSpecificAttributes => {
               managedDomain => 'TestDomain'
       },
@@ -53,7 +53,7 @@ oneview_storage_system{'storage_system_4':
     ensure  => 'get_storage_pools',
     require => Oneview_storage_system['storage_system_3'],
     data    => {
-      hostname   => '172.18.11.11'
+      hostname   => '<hostname>'
     }
 }
 
@@ -64,6 +64,6 @@ oneview_storage_system{'storage_system_6':
 oneview_storage_system{'storage_system_7':
     ensure => 'absent',
     data   => {
-      hostname   => '172.18.11.11'
+      hostname   => '<hostname>'
     }
 }

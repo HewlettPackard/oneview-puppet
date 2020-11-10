@@ -8,6 +8,11 @@
 - Interconnect Types
 - Server Hardware
 - Server Hardware Type
+- Storage Pool
+- Storage System
+- Storage Volume Template
+- Volume
+- Volume Attachment
 
 # v2.8.0(2020-09-25)
 ### Notes
