@@ -19,6 +19,8 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:UplinkSet, api_version, :C7000)
+li_class = OneviewSDK.resource_named(:LogicalInterconnect, api_version, :C7000)
+ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -64,6 +66,73 @@ describe provider_class, unit: true do
             },
         provider: 'c7000'
       )
+    end
+
+    let(:li_resource) do
+      Puppet::Type.type(:oneview_logical_interconnect).new(
+        name: 'LI',
+        ensure: 'present',
+        data:
+            [{
+              'name' => 'Encl2-my enclosure logical interconnect group',
+              'internalNetworks' => ['NET'],
+              'igmpSettings' =>
+              {
+                'igmpIdleTimeoutInterval' => 210
+              },
+              'snmpConfiguration' =>
+              {
+                'enabled' => true,
+                'readCommunity' => 'public'
+              },
+              'portMonitor' =>
+              {
+                'enablePortMonitor' => false
+              },
+              'telemetryConfiguration' =>
+              {
+                'enableTelemetry' => true
+              },
+              'qosConfiguration' =>
+              {
+                'activeQosConfig' =>
+                {
+                  'configType' => 'Passthrough'
+                }
+              }
+            }],
+        provider: 'c7000'
+      )
+    end
+
+    let(:ethernet_resource1) do
+      Puppet::Type.type(:oneview_ethernet_network).new(
+        name: 'ethernet',
+        ensure: 'present',
+        data:
+            {
+              'name'                    => 'EtherNetwork_Test1',
+              'connectionTemplateUri'   => nil,
+              'autoLoginRedistribution' => true,
+              'vlanId'                  => '202'
+
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:test) { resource_type.new(@client, resource['data']) }
+
+    let(:li1) { li_class.new(@client, name: li_resource['data']) }
+
+    let(:eth1) { ethernet_class.new(@client, name: ethernet_resource1['data']) }
+
+    before(:each) do
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(li_class).to receive(:get_all).and_return(li_resource)
+      allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource1)
+      provider.exists?
     end
 
     it 'should be an instance of the provider c7000' do

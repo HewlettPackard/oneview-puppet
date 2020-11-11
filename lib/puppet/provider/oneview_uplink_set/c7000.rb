@@ -68,12 +68,12 @@ Puppet::Type.type(:oneview_uplink_set).provide :c7000, parent: Puppet::OneviewRe
       privateNetwork:  false
     }
     network_one = network_class.new(@client, options)
-    network_one.create!
+    network_one.create
 
     options['name'] = 'EtherNetwork_2'
     options['vlanId'] = '201'
     network_two = network_class.new(@client, options)
-    network_two.create!
+    network_two.create
     @data['networkUris'] = [network_one['name'], network_two['name']]
   end
 
