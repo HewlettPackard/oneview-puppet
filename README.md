@@ -140,7 +140,7 @@ All you need is Docker and git (optional).
    ```bash
    # Download and store a local copy of hpe-oneview-sdk-for-puppet and
    # use it as a Docker image.
-   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.8.0-OV5.4
+   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.9.0-OV5.5
    # Run docker container with below commands.
    $docker run -it --rm \
      -v $(pwd)/:/puppet
@@ -150,7 +150,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
      -e ONEVIEW_API_VERSION=800 \
-     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.8.0-OV5.4 puppet apply fc_network.pp --debug --trace
+     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.9.0-OV5.5 puppet apply fc_network.pp --debug --trace
    ```
     Now you can run any of the example manifests in this directory:
 ```bash
