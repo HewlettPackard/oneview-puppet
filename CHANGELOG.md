@@ -3,11 +3,31 @@
 - This release extends support of the SDK to Oneview REST API version 2200 (OneView v5.50).
 
 ### Oneview Features supported
+- Connection Template
+- Enclosure
+- Enclosure Group
 - Ethernet Network
 - FC Network
 - FCOE Network
+- Hypervisor Cluster Profile
+- Hypervisor Manager
+- Interconnect
+- Interconnect Types
+- Logical Enclosure
+- Logical Interconnect
+- Logical Interconnect Groups
 - Network Set
+- Server Certificate
+- Server Hardware
+- Server Hardware Type
+- Server Profile
+- Server Profile Template
+- Storage Pool
+- Storage System
+- Storage Volume Template
 - Uplink Set
+- Volume
+- Volume Attachment
 
 # v2.8.0(2020-09-25)
 ### Notes

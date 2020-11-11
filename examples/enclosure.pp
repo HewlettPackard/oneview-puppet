@@ -24,9 +24,9 @@ oneview_enclosure{'Enclosure Create':
     ensure => 'present',
     data   => {
       name              => $enc_name,
-      hostname          => '172.18.1.13',
-      username          => 'dcs',
-      password          => 'dcs',
+      hostname          => '<hostname>',
+      username          => '<username>',
+      password          => '<password>',
       #state             => 'Monitored',
       licensingIntent   => 'OneViewNoiLO',
       enclosureGroupUri => '/rest/enclosure-groups/8be54be4-ce0c-4e7b-ab0a-b4941b1bac52'
