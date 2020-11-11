@@ -32,7 +32,7 @@ describe provider_class, unit: true do
         data:
             {
               'name' => 'Network Set',
-              'networkUris' => ['Network1']
+              'networkUris' => []
             },
         provider: 'c7000'
       )
@@ -44,7 +44,10 @@ describe provider_class, unit: true do
 
     let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
-    let(:eth1) { ethernet_class.new(@client, name: resource['data']['networkUris'].first) }
+    let(:eth1) { 
+        resource['data']['networkUris'] = %w(Test1 Test2)
+        ethernet_class.new(@client, name: resource['data']['networkUris'].first) 
+    }
 
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
@@ -66,11 +69,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      resource['data']['networkUris'] = %w(Test1 test2)
-      resource['data']['nativeNetworkUri'] = 'Test1'
-      test = resource_type.new(@client, resource['data'])
-      allow(resource_type).to receive(:find_by).and_return([test])
-      allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       expect(provider.exists?).to eq(false)
       expect(provider.create).to be
