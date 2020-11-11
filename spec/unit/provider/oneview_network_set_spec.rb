@@ -111,7 +111,7 @@ describe provider_class, unit: true do
     end
   end
   context 'given no data and the found ensure method' do
-    let(:resource) do
+    let(:resource1) do
       Puppet::Type.type(:oneview_network_set).new(
         name: 'Network Set',
         ensure: 'found',
@@ -119,7 +119,7 @@ describe provider_class, unit: true do
       )
     end
 
-    let(:ethernet_resource) do
+    let(:ethernet_resource1) do
       Puppet::Type.type(:oneview_ethernet_network).new(
         name: 'ethernet',
         ensure: 'present',
@@ -135,20 +135,19 @@ describe provider_class, unit: true do
       )
     end
 
-    let(:provider) { resource.provider }
+    let(:provider1) { resource1.provider }
 
-    let(:test) { resource_type.new(@client, {}) }
+    let(:test1) { resource_type.new(@client, {}) }
 
-    let(:eth1) { ethernet_class.new(@client, name: ethernet_resource['data']) }
+    let(:eth2) { ethernet_class.new(@client, name: ethernet_resource1['data']) }
 
     before(:each) do
-      allow(resource_type).to receive(:find_by).and_return([test])
-      provider.exists?
-      resource['data']['networkUris'] = %w(Test1 Test2)
-      allow(ethernet_class).to receive(:find_by).and_return([eth1])
-      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource)
-      provider.network_uris
-      provider.native_network_uris
+      allow(resource_type).to receive(:find_by).and_return([test1])
+      provider1.exists?
+      allow(ethernet_class).to receive(:find_by).and_return([eth2])
+      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource1)
+      provider1.network_uris
+      provider1.native_network_uris
     end
 
     it 'should be able to get all the network sets without ethernet' do
