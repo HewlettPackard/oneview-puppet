@@ -19,9 +19,9 @@
 oneview_hypervisor_manager{'hm Create':
     ensure => 'present',
     data   => {
-      name        => '172.18.13.11',
-      username    => 'dcs',
-      password    => 'dcs',
+      name        => '<hostname>',
+      username    => '<username>',
+      password    => '<password>',
       displayName => 'Test Puppet Hypervisor Manager'
     }
 }
@@ -30,9 +30,9 @@ oneview_hypervisor_manager{'hm Update':
     ensure  => 'present',
     require => Oneview_hypervisor_manager['hm Create'],
     data    => {
-      name        => '172.18.13.11',
-      username    => 'dcs',
-      password    => 'dcs',
+      name        => '<hostname>',
+      username    => '<username>',
+      password    => '<password>',
       displayName => 'Test HM'
     }
 }
@@ -41,7 +41,7 @@ oneview_hypervisor_manager{'hm Found':
     ensure  => 'found',
     require => Oneview_hypervisor_manager['hm Update'],
     data    => {
-      name     => '172.18.13.11'
+      name     => '<hostname>'
     }
 }
 
@@ -49,6 +49,6 @@ oneview_hypervisor_manager{'hm Delete':
     ensure  => 'absent',
     require => Oneview_hypervisor_manager['hm Found'],
     data    => {
-      name     => '172.18.13.11'
+      name     => '<hostname>'
     }
 }
