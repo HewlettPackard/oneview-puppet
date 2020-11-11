@@ -111,6 +111,7 @@ describe provider_class, unit: true do
     end
   end
   context 'given no data and the found ensure method' do
+    ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000)
     let(:resource1) do
       Puppet::Type.type(:oneview_network_set).new(
         name: 'Network Set',

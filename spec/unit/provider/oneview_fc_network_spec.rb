@@ -83,6 +83,7 @@ describe provider_class, unit: true do
 
     it 'should delete multiple uris' do
       resource['data']['uri'] = '/rest/fake'
+      resource['data']['networkUris'] = %w(test1 test2)
       test = resource_type.new(@client, resource['data'])
       test['networkUris'] = %w(test1 test2)
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])

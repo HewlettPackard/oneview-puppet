@@ -25,14 +25,6 @@ ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000
 describe provider_class, unit: true do
   include_context 'shared context'
 
-  let(:resource) do
-    Puppet::Type.type(:oneview_uplink_set).new(
-      name: 'uplink_set_1',
-      ensure: 'found',
-      provider: 'c7000'
-    )
-  end
-
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
@@ -129,7 +121,7 @@ describe provider_class, unit: true do
 
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(li_class).to receive(:get_all).and_return([li1])
+      allow_any_instance_of(li_class).to receive(:get_all).with(anything).and_return([li1])
       allow(ethernet_class).to receive(:find_by).and_return([eth1])
       allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource1)
       provider.exists?
