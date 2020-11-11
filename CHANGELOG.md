@@ -13,6 +13,7 @@
 - Logical Enclosure
 - Logical Interconnect
 - Logical Interconnect Groups
+- OS Deployment Plan
 - Server Certificate
 - Server Hardware
 - Server Hardware Type
@@ -25,9 +26,9 @@
 ### Image Streamer support
 - Artifact Bundle
 - Build Plan
-- Deployment plan
+- Deployment Plan
+- Deployment Group
 - Golden Image
-- OS Deployment Plan
 - OS Volume
 - Plan Script
 
