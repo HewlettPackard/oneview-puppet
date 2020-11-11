@@ -44,12 +44,10 @@ describe provider_class, unit: true do
 
     let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
-    let(:eth1) { 
-        resource['data']['networkUris'] = %w(Test1 Test2)
-        ethernet_class.new(@client, name: resource['data']['networkUris'].first) 
-    }
+    let(:eth1) { ethernet_class.new(@client, name: resource['data']['networkUris'].first) }
 
     before(:each) do
+      resource['data']['networkUris'] = %w(Test1 Test2)
       allow(resource_type).to receive(:find_by).and_return([test])
       allow(ethernet_class).to receive(:find_by).and_return([eth1])
       provider.exists?

@@ -82,7 +82,7 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)
     end
-    
+
     it 'should return false if lig does not exist' do
       allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
