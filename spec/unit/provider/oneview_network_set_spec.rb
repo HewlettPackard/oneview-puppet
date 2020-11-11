@@ -146,7 +146,7 @@ describe provider_class, unit: true do
       allow(resource_type).to receive(:find_by).and_return([test1])
       provider1.exists?
       allow(ethernet_class).to receive(:find_by).and_return([eth2])
-      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource1)
+      allow(ethernet_class).to receive(:create).and_return(ethernet_resource1)
       provider1.network_uris
       provider1.native_network_uris
     end

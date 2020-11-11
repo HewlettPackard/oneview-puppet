@@ -89,6 +89,7 @@ describe provider_class, unit: true do
       provider.exists?
       allow_any_instance_of(resource_type).to receive(:bulk_delete).and_return({})
       expect(provider.bulk_delete_check).to be
+      allow_any_instance_of(resource_type).to receive(:bulk_delete_check).and_return(true)
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
     end
   end

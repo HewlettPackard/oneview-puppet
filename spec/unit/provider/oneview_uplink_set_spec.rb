@@ -121,9 +121,9 @@ describe provider_class, unit: true do
 
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(li_class).to receive(:get_all).with(anything).and_return([li1])
+      allow(li_class).to receive(:get_all).with(anything).and_return([li1])
       allow(ethernet_class).to receive(:find_by).and_return([eth1])
-      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource1)
+      allow(ethernet_class).to receive(:create).and_return(ethernet_resource1)
       provider.exists?
     end
 
