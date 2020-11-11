@@ -119,13 +119,36 @@ describe provider_class, unit: true do
       )
     end
 
+    let(:ethernet_resource) do
+      Puppet::Type.type(:oneview_ethernet_network).new(
+        name: 'ethernet',
+        ensure: 'present',
+        data:
+            {
+              'name'                    => 'EtherNetwork_Test1',
+              'connectionTemplateUri'   => nil,
+              'autoLoginRedistribution' => true,
+              'vlanId'                  => '202'
+
+            },
+        provider: 'c7000'
+      )
+    end
+
     let(:provider) { resource.provider }
 
     let(:test) { resource_type.new(@client, {}) }
 
+    let(:eth1) { ethernet_class.new(@client, name: ethernet_resource['data']) }
+
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
+      resource['data']['networkUris'] = %w(Test1 Test2)
+      allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource)
+      provider.network_uris
+      provider.native_network_uris
     end
 
     it 'should be able to get all the network sets without ethernet' do

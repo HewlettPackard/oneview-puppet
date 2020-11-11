@@ -61,10 +61,10 @@ Puppet::Type.type(:oneview_fcoe_network).provide :c7000, parent: Puppet::Oneview
       vlanId: 300
     }
     network_one = network_class.new(@client, options)
-    network_one.create!
+    network_one.create
     options['name'] = 'FCoENetwork_2'
     network_two = network_class.new(@client, options)
-    network_two.create!
+    network_two.create
     @data['networkUris'] = [network_one['uri'], network_two['uri']]
   end
 end

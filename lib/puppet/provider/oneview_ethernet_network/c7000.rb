@@ -123,11 +123,11 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
       connectionTemplateUri: nil
     }
     network_one = network_class.new(@client, options)
-    network_one.create!
+    network_one.create
 
     options['name'] = 'EtherNetwork_Test2'
     network_two = network_class.new(@client, options)
-    network_two.create!
+    network_two.create
     @data['networkUris'] = [network_one['uri'], network_two['uri']]
   end
 end
