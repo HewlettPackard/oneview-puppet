@@ -151,7 +151,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to get all the network sets without ethernet' do
-      allow(resource_type).to receive(:get_without_ethernet).and_return([test])
+      allow(resource_type).to receive(:get_without_ethernet).and_return([test1])
       expect(provider.get_without_ethernet).to be
     end
   end
