@@ -59,12 +59,12 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
       connectionTemplateUri: nil
     }
     network_one = network_class.new(@client, options)
-    network_one.create!
+    network_one.create
 
     options['name'] = 'EtherNetwork_Test2'
     options['vlanId'] = '1010'
     network_two = network_class.new(@client, options)
-    network_two.create!
+    network_two.create
   end
 
   def network_uris
