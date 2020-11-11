@@ -82,6 +82,19 @@ describe provider_class, unit: true do
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)
     end
+    
+    it 'should return false if lig does not exist' do
+      allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect { provider.found }.to raise_error(/No LIG with the specified data were found on the Oneview Appliance/)
+    end
+
+    it 'should return true if lig exists / is found' do
+      test = OneviewSDK::LogicalInterconnect.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to be
+      expect(provider.found).to eq(true)
+    end
 
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
