@@ -67,6 +67,6 @@ Puppet::Type.type(:oneview_fc_network).provide :c7000, parent: Puppet::OneviewRe
     options['name'] = 'FcNetwork_Test2'
     network_two = fc_network_class.new(@client, options)
     network_two.create
-    @data['networkUris'] = [network_1['uri'], network_2['uri']]
+    @data['networkUris'] = [network_one['uri'], network_two['uri']]
   end
 end

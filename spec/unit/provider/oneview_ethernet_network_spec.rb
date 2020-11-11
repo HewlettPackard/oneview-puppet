@@ -138,12 +138,11 @@ describe provider_class, unit: true do
       resource['data']['uri'] = '/rest/fake'
       resource['data']['networkUris'] = %w(test1 test2)
       test = resource_type.new(@client, resource['data'])
-      test['networkUris'] = %w(test1 test2)
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       allow_any_instance_of(resource_type).to receive(:bulk_delete).and_return({})
       expect(provider.bulk_delete_check).to be
-      allow_any_instance_of(resource_type).to receive(:create).and_return(resource)
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
     end
   end
 end
