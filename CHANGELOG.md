@@ -6,6 +6,9 @@
 - Connection Template
 - Enclosure
 - Enclosure Group
+- Ethernet Network
+- FC Network
+- FCOE Network
 - Hypervisor Cluster Profile
 - Hypervisor Manager
 - Interconnect
@@ -13,6 +16,7 @@
 - Logical Enclosure
 - Logical Interconnect
 - Logical Interconnect Groups
+- Network Set
 - OS Deployment Plan
 - Server Certificate
 - Server Hardware
@@ -22,6 +26,7 @@
 - Storage Pool
 - Storage System
 - Storage Volume Template
+- Uplink Set
 - Volume
 - Volume Attachment
 
