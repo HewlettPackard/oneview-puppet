@@ -40,11 +40,11 @@ describe provider_class, unit: true do
 
     let(:ethernet_resource) do
       Puppet::Type.type(:oneview_ethernet_network).new(
-        name: 'fc',
+        name: 'ethernet',
         ensure: 'present',
         data:
             {
-              'name'                    => 'OneViewSDK Test FC Network',
+              'name'                    => 'EtherNetwork_Test1',
               'connectionTemplateUri'   => nil,
               'autoLoginRedistribution' => true,
               'vlanId'                  => '202'
@@ -65,9 +65,9 @@ describe provider_class, unit: true do
     before(:each) do
       resource['data']['networkUris'] = %w(Test1 Test2)
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow(ethernet_class).to receive(:find_by).and_return([])
+      allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource)
       provider.exists?
-      allow(ethernet_class).to receive(:create).and_return(ethernet_resource)
       provider.network_uris
       provider.native_network_uris
     end
@@ -89,6 +89,7 @@ describe provider_class, unit: true do
       allow(ethernet_class).to receive(:create).and_return(ethernet_resource)
       expect(provider.exists?).to eq(true)
       expect(provider.create_networks).to be
+      expect(ethernet_class.create).to be
     end
 
     it 'should be able to create the resource' do
