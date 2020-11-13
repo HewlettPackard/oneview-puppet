@@ -65,7 +65,7 @@ describe provider_class, unit: true do
       resource['data']['networkUris'] = %w(Test1 Test2)
       allow(resource_type).to receive(:find_by).and_return([test])
       allow(ethernet_class).to receive(:find_by).and_return([eth1])
-      allow_any_instance_of(ethernet_class).to receive(:create).and_return(ethernet_resource)
+      allow_any_instance_of(ethernet_class).to receive(:create).and_return(eth1)
       provider.exists?
       provider.network_uris
       provider.native_network_uris
@@ -144,8 +144,8 @@ describe provider_class, unit: true do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test1])
       provider1.exists?
-      allow(ethernet_class).to receive(:find_by).and_return([eth2])
-      allow(ethernet_class).to receive(:create).and_return(ethernet_resource1)
+      allow(ethernet_class).to receive(:find_by).and_return([])
+      allow(ethernet_class).to receive(:create).and_return(eth2)
       provider1.network_uris
       provider1.native_network_uris
     end

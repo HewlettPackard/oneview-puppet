@@ -165,16 +165,16 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     before(:each) do
       ethernet_resource['data']['uri'] = '/rest/fake'
-      allow_any_instance_of(resource_types).to receive(:retrieve!).and_return(true)
+      allow(resource_types).to receive(:retrieve!).and_return(true)
       allow(resource_types).to receive(:find_by).and_return([])
       provider.exists?
     end
 
     it 'should delete multiple uris' do
-      allow_any_instance_of(resource_types).to receive(:bulk_delete_check).and_return(true)
-      allow_any_instance_of(resource_types).to receive(:bulk_create_check).and_return(false)
-      expect(provider.bulk_delete_check).to be
-      allow_any_instance_of(resource_types).to receive(:create).and_return(test)
+      allow(resource_types).to receive(:bulk_delete_check).and_return(true)
+      allow(resource_types).to receive(:bulk_create_check).and_return(false)
+      provider.bulk_delete_check
+      allow(resource_types).to receive(:create).and_return(test)
     end
   end
 end
