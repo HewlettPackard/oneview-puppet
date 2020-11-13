@@ -151,7 +151,8 @@ describe provider_class, unit: true do
             'name'                    => 'EtherNetwork_Test1',
             'connectionTemplateUri'   => nil,
             'autoLoginRedistribution' => true,
-            'vlanId'                  => '202'
+            'vlanId'                  => '202',
+            'networkUris'             => ['/rest/ethernet-networks/123']
           },
       provider: 'c7000'
     )
@@ -164,9 +165,8 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     before(:each) do
       ethernet_resource['data']['uri'] = '/rest/fake'
-      ethernet_resource['data']['networkUris'] = %w(test1 test2)
       allow_any_instance_of(resource_types).to receive(:retrieve!).and_return(true)
-      allow(resource_types).to receive(:find_by).with(anything, ethernet_resource['data']).and_return([test])
+      allow(resource_types).to receive(:find_by).and_return([])
       provider.exists?
     end
 
@@ -174,7 +174,7 @@ describe provider_class, unit: true do
       allow_any_instance_of(resource_types).to receive(:bulk_delete_check).and_return(true)
       allow_any_instance_of(resource_types).to receive(:bulk_create_check).and_return(false)
       expect(provider.bulk_delete_check).to be
-      allow_any_instance_of(resource_types).to receive(:create).and_return(ethernet_resource)
+      allow_any_instance_of(resource_types).to receive(:create).and_return(test)
     end
   end
 end
