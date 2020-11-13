@@ -48,7 +48,6 @@ describe provider_class, unit: true do
               'connectionTemplateUri'   => nil,
               'autoLoginRedistribution' => true,
               'vlanId'                  => '202'
-
             },
         provider: 'c7000'
       )

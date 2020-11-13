@@ -133,31 +133,48 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.reset_default_bandwidth).to be
     end
+  end
+end
 
-    it 'should delete multiple uris' do
-      let(:ethernet_resource) do
-        Puppet::Type.type(:oneview_ethernet_network).new(
-          name: 'ethernet',
-          ensure: 'present',
-          data:
-              {
-                'name'                    => 'EtherNetwork_Test1',
-                'connectionTemplateUri'   => nil,
-                'autoLoginRedistribution' => true,
-                'vlanId'                  => '202',
-                'networkUris'             => []
-              },
-          provider: 'c7000'
-        )
-      end
+api_versions = 1800
+resource_types = OneviewSDK.resource_named(:EthernetNetwork, api_versions, :C7000)
+
+describe provider_class, unit: true do
+  include_context 'shared context Oneview API 1800'
+
+  let(:ethernet_resource) do
+    Puppet::Type.type(:oneview_ethernet_network).new(
+      name: 'ethernet',
+      ensure: 'present',
+      data:
+          {
+            'name'                    => 'EtherNetwork_Test1',
+            'connectionTemplateUri'   => nil,
+            'autoLoginRedistribution' => true,
+            'vlanId'                  => '202'
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:provider) { ethernet_resource.provider }
+  let(:test) { resource_types.new(@client, ethernet_resource['data']) }
+  let(:instance) { provider.class.instances.first }
+
+  context 'given the min parameters' do
+    before(:each) do
       ethernet_resource['data']['uri'] = '/rest/fake'
       ethernet_resource['data']['networkUris'] = %w(test1 test2)
-      test = resource_type.new(@client, ethernet_resource['data'])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow_any_instance_of(resource_types).to receive(:retrieve!).and_return(true)
+      allow(resource_types).to receive(:find_by).with(anything, ethernet_resource['data']).and_return([test])
       provider.exists?
-      allow_any_instance_of(resource_type).to receive(:bulk_delete).and_return({})
+    end
+
+    it 'should delete multiple uris' do
+      allow_any_instance_of(resource_types).to receive(:bulk_delete_check).and_return(true)
+      allow_any_instance_of(resource_types).to receive(:bulk_create_check).and_return(false)
       expect(provider.bulk_delete_check).to be
-      allow_any_instance_of(resource_type).to receive(:create).and_return(ethernet_resource)
+      allow_any_instance_of(resource_types).to receive(:create).and_return(ethernet_resource)
     end
   end
 end

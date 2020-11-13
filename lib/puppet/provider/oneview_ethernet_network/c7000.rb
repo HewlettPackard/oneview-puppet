@@ -34,6 +34,10 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
     end
   end
 
+  def self.api_version
+    1800
+  end
+
   def create
     # Checks if there is a connection template update
     update_connection_template if @bandwidth
