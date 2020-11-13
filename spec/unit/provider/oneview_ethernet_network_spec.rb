@@ -146,7 +146,6 @@ describe provider_class, unit: true do
                 'autoLoginRedistribution' => true,
                 'vlanId'                  => '202',
                 'networkUris'             => []
-  
               },
           provider: 'c7000'
         )
