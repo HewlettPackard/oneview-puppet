@@ -135,14 +135,30 @@ describe provider_class, unit: true do
     end
 
     it 'should delete multiple uris' do
-      resource['data']['uri'] = '/rest/fake'
-      resource['data']['networkUris'] = %w(test1 test2)
-      test = resource_type.new(@client, resource['data'])
+      let(:ethernet_resource) do
+        Puppet::Type.type(:oneview_ethernet_network).new(
+          name: 'ethernet',
+          ensure: 'present',
+          data:
+              {
+                'name'                    => 'EtherNetwork_Test1',
+                'connectionTemplateUri'   => nil,
+                'autoLoginRedistribution' => true,
+                'vlanId'                  => '202',
+                'networkUris'             => []
+  
+              },
+          provider: 'c7000'
+        )
+      end
+      ethernet_resource['data']['uri'] = '/rest/fake'
+      ethernet_resource['data']['networkUris'] = %w(test1 test2)
+      test = resource_type.new(@client, ethernet_resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       provider.exists?
       allow_any_instance_of(resource_type).to receive(:bulk_delete).and_return({})
       expect(provider.bulk_delete_check).to be
-      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:create).and_return(ethernet_resource)
     end
   end
 end
