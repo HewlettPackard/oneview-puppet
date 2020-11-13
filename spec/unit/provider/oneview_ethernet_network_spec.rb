@@ -173,6 +173,7 @@ describe provider_class, unit: true do
     it 'should delete multiple uris' do
       allow(resource_types).to receive(:bulk_delete_check).and_return(true)
       allow(resource_types).to receive(:bulk_create_check).and_return(false)
+      allow(resource_types).to receive(:set_network_uris).and_return(test)
       provider.bulk_delete_check
       allow(resource_types).to receive(:create).and_return(test)
     end
