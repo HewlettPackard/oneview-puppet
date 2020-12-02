@@ -37,27 +37,27 @@ describe provider_class, unit: true do
     )
   end
 
-  let(:resource_test) do
+  let(:resource_manage) do
     Puppet::Type.type(:oneview_storage_pool).new(
       name: 'Storage Pool',
-      ensure: 'present',
+      ensure: 'manage',
       data:
           {
-            'name' => '172.18.8.11, PDU 1',
-            'poolName' => 'CPG-SSD-AO',
-            'storageSystemUri' => '/rest/'
+            'isManaged'        => 'true',
+            'name'             => 'cpg-growth-limit-1TiB',
+            'storageSystemUri' => ''
           },
       provider: 'c7000'
     )
   end
+
+  resource_types = OneviewSDK.resource_named(:StorageSystem, api_versions, :C7000)
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   let(:test) { resource_type.new(@client, resource['data']) }
-
-  let(:test_new) { resource_type.new(@client, resource_test['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
@@ -95,14 +95,16 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to edit the state of the resource' do
+      allow(resource_types).to receive(:get_all).and_return([test_manage])
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(resource_types).to receive(:set_storage_system).and_return(test_new)
+      allow(resource_types).to receive(:set_storage_system).and_return(test_manage)
       expect(provider.manage).to be
     end
 
     it 'should be able to get all reachable pools' do
+      allow(resource_types).to receive(:get_all).and_return([test])
       allow(resource_type).to receive(:reachable).and_return(true)
-      allow(resource_types).to receive(:set_storage_system).and_return(test_new)
+      allow(resource_types).to receive(:set_storage_system).and_return(test)
       expect(provider.reachable).to be
     end
 

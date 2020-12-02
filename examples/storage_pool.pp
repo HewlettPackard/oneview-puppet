@@ -30,6 +30,7 @@ oneview_storage_pool{'storage_pool_1':
 
 oneview_storage_pool{'storage_pool_2':
     ensure  => 'found',
+    require => Oneview_storage_pool['storage_pool_1']
     #This resource accepts a data hash to filter out results or no data hash to display all
     data    => {
       poolName                   => 'CPG-SSD-AO',
@@ -50,7 +51,7 @@ oneview_storage_pool{'storage_pool_4':
 oneview_storage_pool{'storage_pool_5':
     ensure => 'reachable',
     data   => {
-      uri => '/rest/storage-pools/BEDB9ADB-ADF5-4B3A-94BE-AC7500DDF350',
+      uri              => '/rest/storage-pools/BEDB9ADB-ADF5-4B3A-94BE-AC7500DDF350',
       storageSystemUri => ''
     }
 }
