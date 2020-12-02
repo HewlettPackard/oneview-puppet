@@ -37,11 +37,27 @@ describe provider_class, unit: true do
     )
   end
 
+  let(:resource_test) do
+    Puppet::Type.type(:oneview_storage_pool).new(
+      name: 'Storage Pool',
+      ensure: 'present',
+      data:
+          {
+            'name' => '172.18.8.11, PDU 1',
+            'poolName' => 'CPG-SSD-AO',
+            'storageSystemUri' => '/rest/'
+          },
+      provider: 'c7000'
+    )
+  end
+
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   let(:test) { resource_type.new(@client, resource['data']) }
+
+  let(:test_new) { resource_type.new(@client, resource_test['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
@@ -80,11 +96,13 @@ describe provider_class, unit: true do
 
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
+      allow(resource_types).to receive(:set_storage_system).and_return(test_new)
       expect(provider.manage).to be
     end
 
     it 'should be able to get all reachable pools' do
       allow(resource_type).to receive(:reachable).and_return(true)
+      allow(resource_types).to receive(:set_storage_system).and_return(test_new)
       expect(provider.reachable).to be
     end
 

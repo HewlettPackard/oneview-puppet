@@ -29,6 +29,7 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def create
+    return unless @client.api_version <= 500
     raise 'A "poolName" or "name" tag is required within data for this operation' unless @data['name']
     return unless setup_for_recreation
     # Changes name into poolName which is required only for creation
@@ -37,17 +38,22 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def manage
+    return unless @client.api_version >= 500
+    set_storage_system
     is_managed = @data.delete('isManaged')
     get_single_resource_instance.manage(is_managed)
     true
   end
 
   def reachable
+    return unless @client.api_version >= 500
+    set_storage_system
     pretty @resource_type.reachable(@client)
     true
   end
 
   def destroy
+    return unless @client.api_version <= 500
     super(:remove)
   end
 
@@ -59,5 +65,11 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
     return true if storage_pool.empty?
     storage_pool.first.remove
     true
+  end
+
+  def set_storage_system
+    return unless @data['storageSystemUri'].empty?
+    storage_system_class = OneviewSDK.resource_named('StorageSystem', @client.api_version)
+    @data['storageSystemUri'] = storage_system_class.get_all(@client).first['uri']
   end
 end
