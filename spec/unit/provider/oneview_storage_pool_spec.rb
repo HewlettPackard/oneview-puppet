@@ -41,10 +41,12 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test_manage) { resource_type.new(@client, resource_manage['data']) }
+  let(:test) { resource_type.new(@client, resource_manage['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
+      resource_manage['data']['storageSystemUri'] = '/rest/fake'
+      allow(resource_type).to receive(:get_all).and_return([])
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
@@ -65,14 +67,14 @@ describe provider_class, unit: true, if: api_version >= 500 do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
       allow(resource_type).to receive(:set_storage_system).and_return(test)
       provider.manage
-      allow(resource_type).to receive(:get_all).and_return([test])
+      expect(resource_type).to receive(:get_all).and_return([test])
     end
 
     it 'should be able to get all reachable pools' do
       allow(resource_type).to receive(:reachable).and_return(true)
       allow(resource_type).to receive(:set_storage_system).and_return(test)
       provider.reachable
-      allow(resource_type).to receive(:get_all).and_return([test])
+      expect(resource_type).to receive(:get_all).and_return([test])
     end
   end
 end
