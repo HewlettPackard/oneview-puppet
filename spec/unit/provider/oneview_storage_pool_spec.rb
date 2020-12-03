@@ -65,16 +65,16 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(resource_type).to receive(:set_storage_system).and_return(test_manage)
+      allow(resource_type).to receive(:set_storage_system).and_return(test)
       provider.manage
-      expect(resource_types).to receive(:get_all).and_return([test_manage])
+      allow(resource_type).to receive(:get_all).and_return([test])
     end
 
     it 'should be able to get all reachable pools' do
       allow(resource_type).to receive(:reachable).and_return(true)
-      allow(resource_type).to receive(:set_storage_system).and_return(test_manage)
+      allow(resource_type).to receive(:set_storage_system).and_return(test)
       provider.reachable
-      expect(resource_types).to receive(:get_all).and_return([test_manage])
+      allow(resource_type).to receive(:get_all).and_return([test])
     end
   end
 end
