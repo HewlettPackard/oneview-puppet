@@ -63,8 +63,13 @@ describe provider_class, unit: true, if: api_version >= 500 do
       expect(provider.found).to be
     end
 
+    it 'should be able to get the storage system' do
+      test_manage['storageSystemUri'] = '/rest/'
+      allow(resource_types).to receive(:get_all).and_return([test_manage])
+      expect(provider.set_storage_system).to be
+    end
+
     it 'should be able to edit the state of the resource' do
-      expect(condition).to be true
       allow(resource_types).to receive(:get_all).and_return([test_manage])
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
       allow(resource_type).to receive(:set_storage_system).and_return(test_manage)
@@ -72,10 +77,9 @@ describe provider_class, unit: true, if: api_version >= 500 do
     end
 
     it 'should be able to get all reachable pools' do
-      expect(condition).to be true
-      allow(resource_types).to receive(:get_all).and_return([test])
+      allow(resource_types).to receive(:get_all).and_return([test_manage])
       allow(resource_type).to receive(:reachable).and_return(true)
-      allow(resource_type).to receive(:set_storage_system).and_return(test)
+      allow(resource_type).to receive(:set_storage_system).and_return(test_manage)
       expect(provider.reachable).to be
     end
   end
