@@ -17,7 +17,8 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
-api_version = login[:api_version] || 500
+api_version = login[:api_version] || 200
+api_version_check = 1800
 resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
 
 describe provider_class, unit: true do
@@ -59,7 +60,7 @@ describe provider_class, unit: true do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
-  let(:condition) { api_version >= 500 }
+  let(:condition) { api_version_check >= 500 }
 
   context 'given the minimum parameters' do
     before(:each) do
