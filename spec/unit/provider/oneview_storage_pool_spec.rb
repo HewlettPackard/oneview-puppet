@@ -51,13 +51,15 @@ describe provider_class, unit: true do
     )
   end
 
-  resource_types = OneviewSDK.resource_named(:StorageSystem, api_versions, :C7000)
+  resource_types = OneviewSDK.resource_named(:StorageSystem, api_version, :C7000)
 
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   let(:test) { resource_type.new(@client, resource['data']) }
+
+  let(:condition) { api_version >= 500 }
 
   context 'given the minimum parameters' do
     before(:each) do
@@ -78,6 +80,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
+      expect(condition).to be false
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
       expect_any_instance_of(resource_type).to receive(:add).and_return(test)
@@ -86,6 +89,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to destroy and recreate the resource to update its atributes' do
+      expect(condition).to be false
       expect(resource_type).to receive(:find_by).and_return([test])
       allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
@@ -95,20 +99,23 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to edit the state of the resource' do
+      expect(condition).to be true
       allow(resource_types).to receive(:get_all).and_return([test_manage])
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(resource_types).to receive(:set_storage_system).and_return(test_manage)
+      allow(resource_type).to receive(:set_storage_system).and_return(test_manage)
       expect(provider.manage).to be
     end
 
     it 'should be able to get all reachable pools' do
+      expect(condition).to be true
       allow(resource_types).to receive(:get_all).and_return([test])
       allow(resource_type).to receive(:reachable).and_return(true)
-      allow(resource_types).to receive(:set_storage_system).and_return(test)
+      allow(resource_type).to receive(:set_storage_system).and_return(test)
       expect(provider.reachable).to be
     end
 
     it 'should delete the resource' do
+      expect(condition).to be false
       allow_any_instance_of(resource_type).to receive(:remove).and_return([])
       expect(provider.destroy).to be
     end
