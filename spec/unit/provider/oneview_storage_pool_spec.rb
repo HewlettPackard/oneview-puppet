@@ -37,8 +37,6 @@ describe provider_class, unit: true, if: api_version >= 500 do
     )
   end
 
-  resource_types = OneviewSDK.resource_named(:StorageSystem, api_version, :C7000)
-
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
