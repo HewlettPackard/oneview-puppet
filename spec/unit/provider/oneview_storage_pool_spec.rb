@@ -18,25 +18,10 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
 api_version = login[:api_version] || 200
-api_version_check = 1800
 resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
 
-describe provider_class, unit: true do
+describe provider_class, unit: true, if: api_version >= 500 do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_storage_pool).new(
-      name: 'Storage Pool',
-      ensure: 'present',
-      data:
-          {
-            'name' => '172.18.8.11, PDU 1',
-            'poolName' => 'CPG-SSD-AO',
-            'storageSystemUri' => '/rest/'
-          },
-      provider: 'c7000'
-    )
-  end
 
   let(:resource_manage) do
     Puppet::Type.type(:oneview_storage_pool).new(
@@ -58,13 +43,7 @@ describe provider_class, unit: true do
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resource_type.new(@client, resource['data']) }
-
   let(:test_manage) { resource_type.new(@client, resource_manage['data']) }
-
-  let(:condition) { api_version_check >= 500 }
-
-  let(:condition1) { api_version >= 500 }
 
   context 'given the minimum parameters' do
     before(:each) do
@@ -84,25 +63,6 @@ describe provider_class, unit: true do
       expect(provider.found).to be
     end
 
-    it 'should be able to create the resource' do
-      expect(condition1).to be false
-      allow(resource_type).to receive(:find_by).and_return([])
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
-      expect_any_instance_of(resource_type).to receive(:add).and_return(test)
-      provider.exists?
-      expect(provider.create).to be
-    end
-
-    it 'should be able to destroy and recreate the resource to update its atributes' do
-      expect(condition1).to be false
-      expect(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
-      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
-      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
-      provider.exists?
-      expect(provider.create).to be
-    end
-
     it 'should be able to edit the state of the resource' do
       expect(condition).to be true
       allow(resource_types).to receive(:get_all).and_return([test_manage])
@@ -118,9 +78,56 @@ describe provider_class, unit: true do
       allow(resource_type).to receive(:set_storage_system).and_return(test)
       expect(provider.reachable).to be
     end
+  end
+end
+
+describe provider_class, unit: true, if: api_version <= 500 do
+  include_context 'shared context'
+
+  let(:resource) do
+    Puppet::Type.type(:oneview_storage_pool).new(
+      name: 'Storage Pool',
+      ensure: 'present',
+      data:
+          {
+            'name' => '172.18.8.11, PDU 1',
+            'poolName' => 'CPG-SSD-AO',
+            'storageSystemUri' => '/rest/'
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:provider) { resource.provider }
+
+  let(:instance) { provider.class.instances.first }
+
+  let(:test) { resource_type.new(@client, resource['data']) }
+
+  context 'given the minimum parameters' do
+    before(:each) do
+      allow(resource_type).to receive(:find_by).and_return([test])
+      provider.exists?
+    end
+
+    it 'should be able to create the resource' do
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:add).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
+    end
+
+    it 'should be able to destroy and recreate the resource to update its atributes' do
+      expect(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
+    end
 
     it 'should delete the resource' do
-      expect(condition1).to be false
       allow_any_instance_of(resource_type).to receive(:remove).and_return([])
       expect(provider.destroy).to be
     end
