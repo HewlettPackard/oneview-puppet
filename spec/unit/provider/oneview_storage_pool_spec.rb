@@ -37,7 +37,7 @@ describe provider_class, unit: true, if: api_version >= 500 do
     )
   end
 
-  let(:provider) { resource.provider }
+  let(:provider) { resource_manage.provider }
 
   let(:instance) { provider.class.instances.first }
 
