@@ -60,7 +60,11 @@ describe provider_class, unit: true do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
+  let(:test_manage) { resource_type.new(@client, resource_manage['data']) }
+
   let(:condition) { api_version_check >= 500 }
+
+  let(:condition1) { api_version >= 500 }
 
   context 'given the minimum parameters' do
     before(:each) do
@@ -81,7 +85,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to create the resource' do
-      expect(condition).to be false
+      expect(condition1).to be false
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
       expect_any_instance_of(resource_type).to receive(:add).and_return(test)
@@ -90,7 +94,7 @@ describe provider_class, unit: true do
     end
 
     it 'should be able to destroy and recreate the resource to update its atributes' do
-      expect(condition).to be false
+      expect(condition1).to be false
       expect(resource_type).to receive(:find_by).and_return([test])
       allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
       allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
@@ -116,7 +120,7 @@ describe provider_class, unit: true do
     end
 
     it 'should delete the resource' do
-      expect(condition).to be false
+      expect(condition1).to be false
       allow_any_instance_of(resource_type).to receive(:remove).and_return([])
       expect(provider.destroy).to be
     end
