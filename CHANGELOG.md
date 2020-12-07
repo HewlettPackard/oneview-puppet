@@ -1,3 +1,7 @@
+# v2.9.1(Unreleased)
+#### Bug fixes & Enhancements:
+- [#301] (https://github.com/HewlettPackard/oneview-puppet/issues/301) Failing to create a oneview enclosure group with ipRangeUris
+
 # v2.9.0(2020-11-11)
 ### Notes
 - This release extends support of the SDK to Oneview REST API version 2200 (OneView v5.50) and ImageStreamer REST API version 2000 (I3S v5.40).
