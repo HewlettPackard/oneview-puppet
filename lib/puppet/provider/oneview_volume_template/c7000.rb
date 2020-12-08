@@ -24,6 +24,27 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
 
   mk_resource_methods
 
+  def exists?
+    @data = resource['data']
+    set_template_uri
+    set_storage_pool
+  end
+
+  def set_template_uri
+    return unless @data['rootTemplateUri'].empty?
+    volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
+    @data['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
+  end
+
+  def set_storage_pool
+    @data = resource['data']
+    Puppet.debug "#{@data['properties']['storagePool']}"
+    storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
+    uri = storage_pool_class.get_all(@client).first['uri']
+    @data['properties']['storagePool']['default'] = uri
+    Puppet.debug "#{@data['properties']['storagePool']}"
+  end
+
   def get_connectable_volume_templates
     query_parameters = @data.delete('query_parameters') || {}
     pretty get_single_resource_instance.get_connectable_volume_templates(query_parameters)

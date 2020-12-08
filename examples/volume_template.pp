@@ -20,7 +20,7 @@ oneview_volume_template{'volume_template_1':
     data   => {
       'name'            => 'ONEVIEW_PUPPET_TEST',
       'description'     => 'Test volume template for puppet',
-      'rootTemplateUri' => '/rest/storage-volume-templates/96196d4c-3cac-4d6b-ab6b-a93c0143ac75',
+      'rootTemplateUri' => '',
       'properties'      => {
           'name'             => {
               'title'       => 'Volume name',
@@ -50,7 +50,7 @@ oneview_volume_template{'volume_template_1':
               'description' => 'A common provisioning group URI reference',
               'type'        => 'string',
               'format'      => 'x-uri-reference',
-              'default'     => '/rest/storage-pools/D1A6DDF6-806D-4F6E-8CDC-A93C0143AC72',
+              'default'     => '',
               'required'    => true,
               'meta'        => {
                   'locked'       => false,
@@ -63,7 +63,7 @@ oneview_volume_template{'volume_template_1':
               'title'       => 'Snapshot Pool',
               'description' => 'A URI reference to the common provisioning group used to create snapshots',
               'format'      => 'x-uri-reference',
-              'default'     => '/rest/storage-pools/D1A6DDF6-806D-4F6E-8CDC-A93C0143AC72',
+              'default'     => '',
               'meta'        => {
                   'locked'       => true,
                   'semanticType' => 'device-snapshot-storage-pool'

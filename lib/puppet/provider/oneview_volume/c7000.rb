@@ -27,7 +27,24 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
 
   # Provider methods
   def exists?
+    set_template_uri
+    set_storage_pool
     super([nil, :found, :get_attachable_volumes, :get_extra_managed_volume_paths])
+  end
+
+  def set_template_uri
+    return unless resource['data']['templateUri'].empty?
+    volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
+    resource['data']['templateUri'] = volume_template_class.get_all(@client).first['uri']
+  end
+
+  def set_storage_pool
+    Puppet.debug "#{resource['data']['properties']['storagePool']}"
+    storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
+    uri = storage_pool_class.get_all(@client).first['uri']
+    snap_uri = storage_pool_class.find_by(@client, name: 'CPG_FC-AO').first['uri'] 
+    resource['data']['properties']['storagePool'] = uri
+    resource['data']['properties']['snapshotPool'] = snap_uri
   end
 
   def get_attachable_volumes
@@ -54,6 +71,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   end
 
   def create_snapshot
+    Puppet.debug "#{@data}"
     snapshot_parameters ||= @data.delete('snapshotParameters')
     get_single_resource_instance.create_snapshot(snapshot_parameters)
     Puppet.notice "\n\n Snapshot Created Successfully. \n"
