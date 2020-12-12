@@ -26,20 +26,26 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   confine true: login[:hardware_variant] == 'C7000'
 
   # Provider methods
-  def self.exists?
-    set_template_uri
-    set_storage_pool
+  def exists?
+    create
     super([nil, :found, :get_attachable_volumes, :get_extra_managed_volume_paths])
+  end
+
+  def create
+    set_template_uri if resource['data'].key?('templateUri')
+    @data = resource['data']
+    return true if resource_update
+    super(:create)    
   end
 
   def set_template_uri
     return unless resource['data']['templateUri'].empty?
     volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
     resource['data']['templateUri'] = volume_template_class.get_all(@client).first['uri']
+    set_storage_pool
   end
 
   def set_storage_pool
-    Puppet.debug "#{resource['data']['properties']['storagePool']}"
     storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
     uri = storage_pool_class.get_all(@client).first['uri']
     snap_uri = storage_pool_class.find_by(@client, name: 'CPG_FC-AO').first['uri'] 

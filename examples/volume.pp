@@ -26,7 +26,7 @@ oneview_volume{'volume_1':
       properties  => {
             provisioningType => 'Thin',
             size             => 1073741824,
-            name             => 'Oneview_Puppet_TEST_VOLUME_1',
+            name             => 'Oneview_Puppet_TEST_VOLUME_2',
             storagePool      => '',
             isShareable      => false,
             snapshotPool     => ''
@@ -39,7 +39,7 @@ oneview_volume{'volume_2':
     ensure  => 'create_snapshot',
     require => Oneview_volume['volume_1'],
     data    => {
-      name               => 'Oneview_Puppet_TEST_VOLUME_1',
+      name               => 'Oneview_Puppet_TEST_VOLUME_2',
       snapshotParameters => {
               name        => 'test_snapshot',
               type        => 'Snapshot',
