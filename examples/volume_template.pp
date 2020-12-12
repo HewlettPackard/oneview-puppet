@@ -18,10 +18,11 @@
 oneview_volume_template{'volume_template_1':
     ensure => 'present',
     data   => {
-      'name'            => 'ONEVIEW_PUPPET_TEST',
-      'description'     => 'Test volume template for puppet',
-      'rootTemplateUri' => '',
-      'properties'      => {
+      'name'               => 'ONEVIEW_PUPPET_TEST',
+      'description'        => 'Test volume template for puppet',
+      'rootTemplateUri'    => '',
+      'initialScopeUris'   => [],
+      'properties'         => {
           'name'             => {
               'title'       => 'Volume name',
               'description' => 'A volume name between 1 and 100 characters',
@@ -123,16 +124,16 @@ oneview_volume_template{'volume_template_2':
 oneview_volume_template{'volume_template_3':
     ensure  => 'found',
     require => Oneview_volume_template['volume_template_2'],
-    # data   => {
-    #   name                   => 'ONEVIEW_PUPPET_TEST VT1',
-    # }
+     data   => {
+       name                   => 'ONEVIEW_PUPPET_TEST VT1',
+     }
 }
 
 # Method unavailable for api500 and above
 # This ensurable accepts a tag query_parameters with type hash, containing the filters to the get
 oneview_volume_template{'volume_template_4':
     ensure  => 'get_connectable_volume_templates',
-    require => Oneview_volume_template['volume_template_3'],
+    require => Oneview_volume_template['volume_template_2'],
     data    => {
       name             => 'ONEVIEW_PUPPET_TEST VT1',
       query_parameters => {
@@ -145,7 +146,7 @@ oneview_volume_template{'volume_template_4':
 # Method available from api500 and above
 oneview_volume_template{'volume_template_5':
     ensure  => 'get_compatible_systems',
-    require => Oneview_volume_template['volume_template_3'],
+    require => Oneview_volume_template['volume_template_2'],
     data    => {
       name                   => 'ONEVIEW_PUPPET_TEST VT1',
     }
@@ -154,18 +155,18 @@ oneview_volume_template{'volume_template_5':
 # Method available from api500 and above
 oneview_volume_template{'volume_template_6':
     ensure  => 'get_reachable_volume_templates',
-    require => Oneview_volume_template['volume_template_3'],
+    require => Oneview_volume_template['volume_template_2'],
     data    => {
-      name             => 'qw',
+      name             => 'ONEVIEW_PUPPET_TEST VT1',
       query_parameters => {
-        scopeUris => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+        scopeUris => ''
       }
     }
 }
 
 oneview_volume_template{'volume_template_7':
     ensure  => 'absent',
-    require => Oneview_volume_template['volume_template_3'],
+    require => Oneview_volume_template['volume_template_2'],
     data    => {
       name => 'ONEVIEW_PUPPET_TEST VT1',
     }

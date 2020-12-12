@@ -26,7 +26,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   confine true: login[:hardware_variant] == 'C7000'
 
   # Provider methods
-  def exists?
+  def self.exists?
     set_template_uri
     set_storage_pool
     super([nil, :found, :get_attachable_volumes, :get_extra_managed_volume_paths])
@@ -71,7 +71,6 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   end
 
   def create_snapshot
-    Puppet.debug "#{@data}"
     snapshot_parameters ||= @data.delete('snapshotParameters')
     get_single_resource_instance.create_snapshot(snapshot_parameters)
     Puppet.notice "\n\n Snapshot Created Successfully. \n"
