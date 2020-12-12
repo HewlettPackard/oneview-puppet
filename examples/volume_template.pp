@@ -133,7 +133,7 @@ oneview_volume_template{'volume_template_3':
 # This ensurable accepts a tag query_parameters with type hash, containing the filters to the get
 oneview_volume_template{'volume_template_4':
     ensure  => 'get_connectable_volume_templates',
-    require => Oneview_volume_template['volume_template_2'],
+    require => Oneview_volume_template['volume_template_3'],
     data    => {
       name             => 'ONEVIEW_PUPPET_TEST VT1',
       query_parameters => {
@@ -146,7 +146,7 @@ oneview_volume_template{'volume_template_4':
 # Method available from api500 and above
 oneview_volume_template{'volume_template_5':
     ensure  => 'get_compatible_systems',
-    require => Oneview_volume_template['volume_template_2'],
+    require => Oneview_volume_template['volume_template_3'],
     data    => {
       name                   => 'ONEVIEW_PUPPET_TEST VT1',
     }
@@ -155,7 +155,7 @@ oneview_volume_template{'volume_template_5':
 # Method available from api500 and above
 oneview_volume_template{'volume_template_6':
     ensure  => 'get_reachable_volume_templates',
-    require => Oneview_volume_template['volume_template_2'],
+    require => Oneview_volume_template['volume_template_3'],
     data    => {
       name             => 'ONEVIEW_PUPPET_TEST VT1',
       query_parameters => {
@@ -166,7 +166,7 @@ oneview_volume_template{'volume_template_6':
 
 oneview_volume_template{'volume_template_7':
     ensure  => 'absent',
-    require => Oneview_volume_template['volume_template_2'],
+    require => Oneview_volume_template['volume_template_3'],
     data    => {
       name => 'ONEVIEW_PUPPET_TEST VT1',
     }

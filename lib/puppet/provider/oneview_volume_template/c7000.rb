@@ -24,35 +24,26 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
 
   mk_resource_methods
 
-  def set_template_uri
-    @data = resource['data']
-    unless @data['rootTemplateUri'].nil?
-      volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
-      @data['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
-    end
-    
-    scope = OneviewSDK.resource_named('Scope', api_version)
-    scope_uri = scope.get_all(@client).first['uri']
-
-    unless resource['data']['initialScopeUris'].any?
-      resource['data']['initialScopeUris'].append(scope_uri)
-    end
-
+  def set_storage_pool
     storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
     uri = storage_pool_class.get_all(@client).first['uri']
+    @data['properties']['storagePool']['default'] = uri
+    @data['properties']['snapshotPool']['default'] = uri
+  end
 
-    unless @data['properties']['storagePool']['default'].nil?
-      @data['properties']['storagePool']['default'] = uri
-    end
+  def set_initial_scope
+    scope = OneviewSDK.resource_named('Scope', api_version)
+    scope_uri = scope.get_all(@client).first['uri']
+    @data['initialScopeUris'].append(scope_uri)
+  end
 
-    unless @data['properties']['description']['default'].nil?
-      @data['properties']['description']['default'] = uri
-    end
-
-    unless @data['properties']['snapshotPool']['default'].nil?
-      @data['properties']['snapshotPool']['default'] = uri
-    end
-    resource['data'] = @data
+  def set_template_uri
+    @data = resource['data']
+    return unless @data['rootTemplateUri'].empty?
+    volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
+    @data['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
+    set_storage_pool
+    set_initial_scope
   end
 
   def exists?
@@ -60,15 +51,14 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
   end
 
   def set_scope_uri
-    unless resource['data']['query_parameters']['scopeUris'].nil?
-      scope = OneviewSDK.resource_named('Scope', api_version)
-      scope_uri = scope.get_all(@client).first['uri']
-      resource['data']['query_parameters']['scopeUris'] = scope_uri
-    end
+    return unless resource['data']['query_parameters']['scopeUris'].empty?
+    scope = OneviewSDK.resource_named('Scope', api_version)
+    scope_uri = scope.get_all(@client).first['uri']
+    resource['data']['query_parameters']['scopeUris'] = scope_uri
   end
 
   def create
-    set_template_uri if resource['data'] && resource['data'].key?("rootTemplateUri")
+    set_template_uri if resource['data'] && resource['data'].key?('rootTemplateUri')
     set_scope_uri if resource['data'] && resource['data'].key?('query_parameters')
     @data = resource['data']
     return true if resource_update
@@ -83,7 +73,6 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
   end
 
   def get_reachable_volume_templates
-    @data = resource['data']
     query_parameters = @data.delete('query_parameters') || {}
     svt = OneviewSDK.resource_named('VolumeTemplate', api_version, resource_variant)
     pretty svt.get_reachable_volume_templates(client, query_parameters)
