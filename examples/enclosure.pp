@@ -29,7 +29,7 @@ oneview_enclosure{'Enclosure Create':
       password          => 'dcs',
       #state             => 'Monitored',
       licensingIntent   => 'OneViewNoiLO',
-      enclosureGroupUri => '/rest/enclosure-groups/8be54be4-ce0c-4e7b-ab0a-b4941b1bac52'
+      enclosureGroupUri => ''
       # firmwareBaselineUri => 'Service Pack for ProLiant',
       # updateFirmwareOn => 'EnclosureOnly'
     }

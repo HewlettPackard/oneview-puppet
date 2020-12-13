@@ -24,11 +24,34 @@ Puppet::Type.type(:oneview_enclosure_group).provide :c7000, parent: Puppet::Onev
 
   mk_resource_methods
 
+  def exists?
+    create if resource['data']
+  end
+
+  def create
+    return unless resource['data'].key?('interconnectBayMappings')
+    set_lig_uri if resource['data']['interconnectBayMappings'][0]['logicalInterconnectGroupUri'].empty?
+    @data = resource['data']
+    return true if resource_update
+    super(:create)
+  end
+
+  def set_lig_uri
+    lig_class = OneviewSDK.resource_named('LogicalInterconnectGroup', @client.api_version)
+    lig_uri = lig_class.get_all(@client).first['uri']
+
+    resource['data']['interconnectBayMappings'].each do |mapping_attr|
+      mapping_attr['logicalInterconnectGroupUri'] = lig_uri
+    end
+  end
+
   def get_script
+    return unless login[:hardware_variant] == 'C7000'
     Puppet.notice("Enclosure Group's current script: \n#{get_single_resource_instance.get_script}\n")
   end
 
   def set_script
+    return unless login[:hardware_variant] == 'C7000'
     script = @data.delete('script') || raise("\nThe 'script' field is required in data hash to run the set_script action.")
     get_single_resource_instance.set_script(script)
     Puppet.notice("Enclosure Group script set to:\n#{script}\n")

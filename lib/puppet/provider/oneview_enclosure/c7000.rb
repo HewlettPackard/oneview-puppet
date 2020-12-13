@@ -43,7 +43,7 @@ Puppet::Type.type(:oneview_enclosure).provide :c7000, parent: Puppet::OneviewRes
     patch_enclosure unless @patch_tags.empty?
     return true if resource_update
     @data = @data.merge(@authentication)
-    @resource_type.new(@client, @data).add
+    @resource_type.new(@client, @data).add if @client.hardware_variant == 'C7000'
     @property_hash[:ensure] = :present
     @property_hash[:data] = @data
     true

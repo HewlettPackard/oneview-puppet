@@ -34,11 +34,11 @@ oneview_enclosure_group{'Enclosure Group Create':
       interconnectBayMappings     => [
         {
           interconnectBay             => '3',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
+          logicalInterconnectGroupUri => ''
         },
         {
           interconnectBay             => '6',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
+          logicalInterconnectGroupUri => ''
         }
       ]
     }
@@ -91,7 +91,7 @@ oneview_enclosure_group{'Enclosure Group Get Script':
 
 oneview_enclosure_group{'Enclosure Group Delete':
     ensure => 'absent',
-#    require => Oneview_enclosure_group['Enclosure Group Get Script'],
+    require => Oneview_enclosure_group['Enclosure Group Get Script'],
     data   => {
       name => $eg_name
     }
