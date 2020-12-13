@@ -24,6 +24,43 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
 
   mk_resource_methods
 
+  def exists?
+    create
+  end
+
+  def create
+    set_uri if resource['data'] && resource['data'].key?('hypervisorManagerUri')
+    @data = resource['data']
+    return true if resource_update
+    super(:create)
+  end
+
+  def set_uri
+    hm_class = OneviewSDK.resource_named('HypervisorManager', @client.api_version)
+    hm_uri = hm_class.get_all(@client).first['uri']
+    resource['data']['hypervisorManagerUri'] = hm_uri if resource['data']['hypervisorManagerUri'].empty?
+ 
+    set_spt_without_dp unless resource['data']['hypervisorHostProfileTemplate'].key?('deploymentPlan')
+    set_spt_with_dp if resource['data']['hypervisorHostProfileTemplate'].key?('deploymentPlan')
+  end
+
+  def set_spt_without_dp
+    spt_class = OneviewSDK.resource_named('ServerProfileTemplate', @client.api_version)
+    params = { 'complianceControl' => 'Checked' }
+    spt_uri = spt_class.find_by(@client, osDeploymentSettings: params).first['uri']
+    resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_uri
+  end
+
+  def set_spt_with_dp
+    return unless resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'].empty?
+    spt_class = OneviewSDK.resource_named('ServerProfileTemplate', @client.api_version)
+    resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_class.get_all(@client).first['uri']
+
+    dp_class = OneviewSDK.resource_named('OSDeploymentPlan', @client.api_version, 'Synergy')
+    dp_uri = dp_class.find_by(@client, name: 'Deploy-HPE-Esxi-6.2-U2').first['uri']
+    resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'] = dp_uri
+  end
+
   def self.api_version
     1800
   end
