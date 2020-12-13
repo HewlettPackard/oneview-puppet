@@ -25,6 +25,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
   mk_resource_methods
 
   def exists?
+    set_name if resource['data'] && resource['data']['name'].empty?
     prepare_environment
     empty_data_check
     variable_assignments
@@ -35,6 +36,18 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
            @resource_type.find_by(@client, @data)
          end
     !li.empty?
+  end
+
+  def set_lig_uri
+    li_class = OneviewSDK.resource_named('LogicalInterconnect', @client.api_version)
+    @data['logical_interconnect_uris'] = li_class.get_all(@client).first['uri']
+  end
+
+  def set_name
+    @data = resource['data']
+    li_class = OneviewSDK.resource_named('LogicalInterconnect', @client.api_version)
+    @data['name'] = li_class.get_all(@client).first['name'] if @data['name'].empty?
+    resource['data'] = @data
   end
 
   def self.api_version
@@ -51,6 +64,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
 
   def bulk_inconsistency_validate
     inconsistency_validation = @resource_type.new(@client)
+    set_lig_uri if @data['logical_interconnect_uris'].empty?
     inconsistency_validation.data['uri'] = @data['logical_interconnect_uris'].first
     inconsistency_validation.data['logicalInterconnectUris'] = @data['logical_interconnect_uris']
     response = inconsistency_validation.bulk_inconsistency_validate
@@ -153,10 +167,20 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     true
   end
 
+  def set_network_uri(int_nets)
+    net_class = OneviewSDK.resource_named('LogicalInterconnect', @client.api_version)
+    net1 = net_class.get_all(@client).first['uri']
+    net2 = net_class.get_all(@client).last['uri']
+    int_nets.extend([net1, net2])
+    int_nets
+  end
+
   def set_internal_networks
     Puppet.notice('Updating Internal Networks...')
+    int_nets = @internal_networks
+    set_network_uri(int_nets) if @internal_networks.nil?
     list = []
-    @internal_networks.each do |net|
+    int_nets.each do |net|
       object = OneviewSDK::EthernetNetwork.find_by(@client, name: net)
       raise('No matching networks were found in the Appliance.') unless object.first
       list.push(object.first)

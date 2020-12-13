@@ -18,7 +18,7 @@ oneview_logical_interconnect{'Logical Interconnect Found':
   ensure => 'found',
   data   =>
     {
-      name => 'Encl2-my enclosure logical interconnect group'
+      name => ''
     }
 }
 
@@ -30,7 +30,7 @@ oneview_logical_interconnect{'Logical Interconnect QoS Get':
   ensure => 'get_qos_aggregated_configuration',
   data   =>
     {
-      name => 'Encl2-my enclosure logical interconnect group'
+      name => ''
     }
 }
 
@@ -38,7 +38,7 @@ oneview_logical_interconnect{'Logical Interconnect Port Monitor Set':
   ensure => 'set_port_monitor',
   data   =>
     {
-      name        => 'Encl2-my enclosure logical interconnect group',
+      name        => '',
       portMonitor =>
       {
         enablePortMonitor => false
@@ -50,7 +50,7 @@ oneview_logical_interconnect{'Logical Interconnect Port Monitor Get':
   ensure => 'get_port_monitor',
   data   =>
     {
-      name => 'Encl2-my enclosure logical interconnect group',
+      name => '',
     }
 }
 
@@ -58,7 +58,7 @@ oneview_logical_interconnect{'Logical Interconnect Internal Vlan':
   ensure => 'get_internal_vlans',
   data   =>
     {
-      name => 'Encl2-my enclosure logical interconnect group'
+      name => ''
     }
 }
 
@@ -66,7 +66,7 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Get':
   ensure => 'get_snmp_configuration',
   data   =>
     {
-      name              => 'Encl2-my enclosure logical interconnect group',
+      name              => '',
       snmpConfiguration =>
       {
         enabled => false
@@ -78,7 +78,7 @@ oneview_logical_interconnect{'Logical Interconnect SNMP Config Set':
   ensure => 'set_snmp_configuration',
   data   =>
     {
-      name              => 'Encl2-my enclosure logical interconnect group',
+      name              => '',
       snmpConfiguration =>
       {
         enabled       => true,
@@ -91,7 +91,7 @@ oneview_logical_interconnect{'Logical Interconnect IGMP Get':
   ensure => 'get_igmp_settings',
   data   =>
     {
-      name  =>  'Encl2-my enclosure logical interconnect group'
+      name  =>  ''
     }
 }
 
@@ -99,7 +99,7 @@ oneview_logical_interconnect{'Logical Interconnect IGMP Set':
   ensure => 'set_igmp_settings',
   data   =>
     {
-      name         => 'LE-LIG',
+      name         => '',
       igmpSettings =>
       {
         consistencyChecking     => 'MinimumMatch',
@@ -112,7 +112,7 @@ oneview_logical_interconnect{'Logical Interconnect Compliance':
   ensure => 'set_compliance',
   data   =>
     {
-      name => 'Encl2-my enclosure logical interconnect group'
+      name => ''
     }
 }
 
@@ -120,8 +120,8 @@ oneview_logical_interconnect{'Logical Interconnect Internal Networks':
   ensure => 'set_internal_networks',
   data   =>
     {
-      name             => 'Encl2-my enclosure logical interconnect group',
-      internalNetworks => ['NET', 'Ethernet 1']
+      name             => '',
+      internalNetworks => []
     }
 }
 
@@ -129,7 +129,7 @@ oneview_logical_interconnect{'Logical Interconnect Set Configuration':
   ensure => 'set_configuration',
   data   =>
   {
-    name => 'Encl2-my enclosure logical interconnect group'
+    name => ''
   }
 }
 
@@ -137,7 +137,7 @@ oneview_logical_interconnect{'Bulk Inconsistency Validation':
   ensure => 'bulk_inconsistency_validate',
   data   => {
     logical_interconnect_uris => [
-      '/rest/logical-interconnects/1d2be484-6d4c-46f4-8f6a-8a34080030a6',
+      '',
     ]
   }
 }
@@ -148,7 +148,7 @@ oneview_logical_interconnect{'Logical Interconnect Set Firmware':
   ensure => 'set_firmware',
   data   =>
     {
-      name     => 'Encl2-my enclosure logical interconnect group',
+      name     => '',
       firmware =>
       {
         command => 'Stage',

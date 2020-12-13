@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # If no enclosure_index is provided for interconnects, a value of '1' is assumed.
 $interconnect_type_1 = 'Virtual Connect SE 40Gb F8 Module for Synergy'
 $interconnect_type_2 = 'Synergy 20Gb Interconnect Link Module'
-$network_names = [ 'test1' ]
+
 oneview_logical_interconnect_group{'Puppet - Synergy Tunnel LIG with 2 Enclosures':
   ensure => 'present',
   data   => {
@@ -44,7 +44,7 @@ oneview_logical_interconnect_group{'Puppet - Synergy Tunnel LIG with 2 Enclosure
                                   type            => $interconnect_type_1,
                                   enclosure_index => 2 }
         ],
-        networkUris         => $network_names
+        networkUris         => []
       }
     ],
     interconnects      =>

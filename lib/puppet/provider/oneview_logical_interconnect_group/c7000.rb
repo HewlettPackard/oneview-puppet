@@ -90,22 +90,28 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
 
   # Method to allow for a compact syntax to be used for creating LIG uplink sets
   def parse_uplink_sets
-    api_version = login[:api_version]
-    hardware_variant = login[:hardware_variant]
-    lig = OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, hardware_variant).new(@client, {})
+    lig = OneviewSDK.resource_named(:LogicalInterconnectGroup, @client.api_version, login[:hardware_variant]).new(@client, {})
     @uplink_sets.each do |uplink_set_params|
       network_uris = uplink_set_params.delete('networkUris')
       uplink_ports = uplink_set_params.delete('uplink_ports')
-      uplink_set = OneviewSDK.resource_named(:LIGUplinkSet, api_version, hardware_variant).new(@client, uplink_set_params)
-      set_network(uplink_set, uplink_set_params['networkType'], network_uris) if network_uris
+      uplink_set = OneviewSDK.resource_named(:LIGUplinkSet, @client.api_version, login[:hardware_variant]).new(@client, uplink_set_params)
+      set_network(uplink_set, uplink_set_params['networkType'], network_uris)
       set_uplink_ports(uplink_set, uplink_ports) if uplink_ports
       lig.add_uplink_set(uplink_set)
     end
     lig.data['uplinkSets']
   end
 
+  def set_network_uri(network_uris)
+    ethernet_class = OneviewSDK.resource_named('EthernetNetwork', api_version)
+    network_uri = ethernet_class.find_by(@client, ethernetNetworkType: 'Tunnel').first['name']
+    network_uris.append(network_uri)
+    network_uris
+  end
+
   # Method to allow using a name instead of uri for networks inside the UplinkSet
   def set_network(uplink_set, network_type, network_uris)
+    set_network_uri(network_uris) unless network_uris.any?
     net_type = network_type == 'Ethernet' ? :EthernetNetwork : :FCNetwork
     net_class = OneviewSDK.resource_named(net_type, login[:api_version], login[:hardware_variant])
     network_uris.each do |network_uri|

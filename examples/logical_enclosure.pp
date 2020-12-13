@@ -14,24 +14,24 @@
 # limitations under the License.
 ################################################################################
 
-#Create a Logical Enclosure. Supported in Synergy only
-# oneview_logical_enclosure{'logical_enc0':
-#     ensure  => 'present',
-#     data    => {
-#       name                      =>  'one_enclosure_le',
-#       enclosureUris             =>  ['/rest/enclosures/0000000000A66101',  '/rest/enclosures/0000000000A66102', '/rest/enclosures/0000000000A66103'],
-#       enclosureGroupUri         =>  '/rest/enclosure-groups/110e4326-e42f-457a-baca-50e16c590f49',
-#       firmwareBaselineUri       =>  'null',
-#       forceInstallFirmware       =>  'false',
-#     }
-# }
+# Create a Logical Enclosure. Supported in Synergy only
+ oneview_logical_enclosure{'logical_enc0':
+     ensure  => 'present',
+     data    => {
+       name                      =>  'Puppet_Test_Enclosure',
+       enclosureUris             =>  ['/rest/enclosures/0000000000A66101',  '/rest/enclosures/0000000000A66102', '/rest/enclosures/0000000000A66103'],
+       enclosureGroupUri         =>  '',
+       firmwareBaselineUri       =>  'null',
+       forceInstallFirmware       =>  'false',
+     }
+ }
 
 
 #Reapply configuration of Logical Enclosure
 oneview_logical_enclosure{'logical_enc1':
     ensure => 'reapply_configuration',
     data   => {
-      name                      =>  'Puppet_Test_Enclosure',
+      name                      =>  '',
     }
 }
 
@@ -39,7 +39,7 @@ oneview_logical_enclosure{'logical_enc1':
 oneview_logical_enclosure{'logical_enc2':
     ensure => 'get_script',
     data   => {
-      name                      =>  'Puppet_Test_Enclosure',
+      name                      =>  '',
     }
 }
 
@@ -47,16 +47,8 @@ oneview_logical_enclosure{'logical_enc2':
 oneview_logical_enclosure{'logical_enc3':
     ensure => 'set_script',
     data   => {
-      name   =>  'Puppet_Test_Enclosure',
+      name   =>  '',
       script =>  'This is a script example',
-    }
-}
-
-#Get configuration script of LE. Supported in C7000 only.
-oneview_logical_enclosure{'logical_enc4':
-    ensure => 'get_script',
-    data   => {
-      name                      =>  'Puppet_Test_Enclosure',
     }
 }
 
@@ -64,7 +56,7 @@ oneview_logical_enclosure{'logical_enc4':
 oneview_logical_enclosure{'logical_enc5':
     ensure => 'updated_from_group',
     data   => {
-      name                      =>  'Puppet_Test_Enclosure',
+      name                      =>  '',
     }
 }
 
@@ -72,7 +64,7 @@ oneview_logical_enclosure{'logical_enc5':
 oneview_logical_enclosure{'logical_enc6':
     ensure => 'generate_support_dump',
     data   => {
-      name =>  'Puppet_Test_Enclosure',
+      name =>  '',
       dump =>
         {
           errorCode            => 'Mydump',
@@ -83,9 +75,9 @@ oneview_logical_enclosure{'logical_enc6':
 
 # Delete the Logical Enclsoure. Supported in Synergy only.
 #oneview_logical_enclosure{ 'destroy' :
-#    ensure => 'absent',
-#    data => {
-#        name => 'one_enclosure_le'
-#    }
+ #   ensure => 'absent',
+  #  data => {
+   #     name => 'Puppet_Test_Enclosure'
+   # }
 #}
 

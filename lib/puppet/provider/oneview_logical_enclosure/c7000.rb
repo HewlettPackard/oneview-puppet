@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -26,9 +26,26 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
 
   def exists?
     super
+    create if login[:hardware_variant] == 'Synergy'
+    update_name if @data['name'].empty?
     @patch = @data.delete('patch')
     get_single_resource_instance.patch(@patch['op'], @patch['path'], @patch['value']) if @patch
     !@resource_type.find_by(@client, @data).empty?
+  end
+
+  def update_name
+    le_class = OneviewSDK.resource_named('LogicalEnclosure', @client.api_version)
+    @data['name'] = le_class.get_all(@client).first['name']
+  end
+
+  def create
+    le_class = OneviewSDK.resource_named('LogicalEnclosure', @client.api_version)
+    return unless le_class.get_all(@client).first['uri'].empty?
+    eg_class = OneviewSDK.resource_named('EnclosureGroup', @client.api_version)
+    eg_uri = eg_class.get_all(@client).first['uri']
+    @data['enclosureGroupUri'] = eg_uri if @data['enclosureGroupUri'].empty?
+    return true if resource_update
+    super(:create)
   end
 
   def reapply_configuration
@@ -37,6 +54,7 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
   end
 
   def get_script
+    return unless login[:hardware_variant] != 'C7000'
     Puppet.notice "\n\n-- Start of the configuration script :"
     pretty get_single_resource_instance.get_script
     Puppet.notice "\n\n-- End of the configuration script."
@@ -44,6 +62,7 @@ Puppet::Type.type(:oneview_logical_enclosure).provide :c7000, parent: Puppet::On
   end
 
   def set_script
+    return unless login[:hardware_variant] != 'C7000'
     script = @data.delete('script')
     raise 'The "script" field is required inside data in order to use this ensurable' unless script
     get_single_resource_instance.set_script(script)
