@@ -18,11 +18,11 @@
 oneview_volume_template{'volume_template_1':
     ensure => 'present',
     data   => {
-      'name'               => 'ONEVIEW_PUPPET_TEST',
-      'description'        => 'Test volume template for puppet',
-      'rootTemplateUri'    => '',
-      'initialScopeUris'   => [],
-      'properties'         => {
+      'name'             => 'ONEVIEW_PUPPET_TEST',
+      'description'      => 'Test volume template for puppet',
+      'rootTemplateUri'  => '',
+      'initialScopeUris' => [],
+      'properties'       => {
           'name'             => {
               'title'       => 'Volume name',
               'description' => 'A volume name between 1 and 100 characters',
@@ -124,8 +124,8 @@ oneview_volume_template{'volume_template_2':
 oneview_volume_template{'volume_template_3':
     ensure  => 'found',
     require => Oneview_volume_template['volume_template_2'],
-     data   => {
-       name                   => 'ONEVIEW_PUPPET_TEST VT1',
+    data    => {
+      name        => 'ONEVIEW_PUPPET_TEST VT1'
      }
 }
 
