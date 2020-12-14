@@ -73,11 +73,38 @@ describe provider_class, unit: true do
       )
     end
 
+    let(:resource_create) do
+      Puppet::Type.type(:oneview_enclosure_group).new(
+        name: 'EnclosureGroup',
+        ensure: 'present',
+        data:
+          {
+            'name'                         => 'Enclosure Group',
+            'interconnectBayMappingCount'  => '8',
+            'stackingMode'                 => 'Enclosure',
+            'interconnectBayMappings'      =>
+            [
+              {
+                'interconnectBay' => '1',
+                'logicalInterconnectGroupUri' => ''
+              },
+              {
+                'interconnectBay' => '2',
+                'logicalInterconnectGroupUri' => ''
+              }
+             ]
+          },
+        provider: 'c7000'
+      )
+    end
+
     let(:provider) { resource.provider }
 
     let(:instance) { provider.class.instances.first }
 
     let(:test) { resource_type.new(@client, resource['data']) }
+
+    let(:test_uri) { resource_type.new(@client, resource_create['data']) }
 
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
@@ -89,9 +116,13 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
+      resource_create['data']['interconnectBayMappings'][0]['logicalInterconnectGroupUri'] = '/rest/fake'
+      resource_create['data']['interconnectBayMappings'][1]['logicalInterconnectGroupUri'] = '/rest/fake'
       allow(resource_type).to receive(:find_by).and_return([])
       expect_any_instance_of(resource_type).to receive(:create).and_return(test)
+      expect_any_instance_of(resource_type).to receive(:set_lig_uri).and_return(test_uri)
       expect(provider.create).to be
+      allow(resource_type).to receive(:get_all).and_return([])
     end
 
     it 'deletes the resource' do
