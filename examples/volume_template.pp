@@ -126,7 +126,7 @@ oneview_volume_template{'volume_template_3':
     require => Oneview_volume_template['volume_template_2'],
     data    => {
       name        => 'ONEVIEW_PUPPET_TEST VT1'
-     }
+    }
 }
 
 # Method unavailable for api500 and above
