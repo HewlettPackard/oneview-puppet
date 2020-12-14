@@ -92,9 +92,9 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      resource_manage['data']['provisioningParameters']['storagePoolUri'] = '/rest/fake'
-      resource_manage['data']['provisioningParameters']['snapshotPoolUri'] = '/rest/fake'
-      resource_manage['data']['templateUri'] = '/rest/fake'
+      resource_create['data']['provisioningParameters']['storagePoolUri'] = '/rest/fake'
+      resource_create['data']['provisioningParameters']['snapshotPoolUri'] = '/rest/fake'
+      resource_create['data']['templateUri'] = '/rest/fake'
       expect(resource_type).to receive(:get_all).and_return([])
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)

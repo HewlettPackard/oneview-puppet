@@ -114,7 +114,6 @@ describe provider_class, unit: true do
     it 'runs through the create method' do
       resource_create['data']['rootTemplateUri'] = '/rest/fake'
       resource_create['data']['initialScopeUris'] = '/rest/fake'
-      allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       allow_any_instance_of(resource_type).to receive(:set_template_uri).and_return(test_uri)
       allow_any_instance_of(resource_type).to receive(:set_scope_uri).and_return(test_uri)
