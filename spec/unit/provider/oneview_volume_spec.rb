@@ -43,11 +43,34 @@ describe provider_class, unit: true do
     )
   end
 
+  let(:resource_create) do
+    Puppet::Type.type(:oneview_volume).new(
+      name: 'Storage Pool',
+      ensure: 'present',
+      data:
+          {
+            'name' => 'Oneview_Puppet_TEST_VOLUME_1',
+            'description' => 'Test',
+            'provisioningParameters' => {
+              'provisionType' => 'Full',
+              'shareable' => true,
+              'requestedCapacity' => 1024 * 1024 * 1024,
+              'storagePoolUri' => '',
+              'snapshotPoolUri' => ''
+            },
+            'templateUri' => ''
+          },
+      provider: 'c7000'
+    )
+  end
+
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   let(:test) { resource_type.new(@client, resource['data']) }
+
+  let(:test_uri) { resource_type.new(@client, resource_create['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
@@ -69,10 +92,17 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
+      resource_manage['data']['provisioningParameters']['storagePoolUri'] = '/rest/fake'
+      resource_manage['data']['provisioningParameters']['snapshotPoolUri'] = '/rest/fake'
+      resource_manage['data']['templateUri'] = '/rest/fake'
+      expect(resource_type).to receive(:get_all).and_return([])
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:template_uri).and_return(test_uri)
+      allow_any_instance_of(resource_type).to receive(:set_storage_pool).and_return(test_uri)
       provider.exists?
       expect(provider.create).to be
+      expect(resource_type).to receive(:get_all).and_return([test_uri])
     end
 
     it 'should be able to get the snapshots' do

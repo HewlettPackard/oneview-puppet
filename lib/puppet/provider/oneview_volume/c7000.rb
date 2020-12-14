@@ -35,7 +35,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
     set_template_uri if resource['data'].key?('templateUri')
     @data = resource['data']
     return true if resource_update
-    super(:create)    
+    super(:create)
   end
 
   def set_template_uri
@@ -48,7 +48,7 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   def set_storage_pool
     storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
     uri = storage_pool_class.get_all(@client).first['uri']
-    snap_uri = storage_pool_class.find_by(@client, name: 'CPG_FC-AO').first['uri'] 
+    snap_uri = storage_pool_class.find_by(@client, name: 'CPG_FC-AO').first['uri']
     resource['data']['properties']['storagePool'] = uri
     resource['data']['properties']['snapshotPool'] = snap_uri
   end

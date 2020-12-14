@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -44,11 +44,57 @@ describe provider_class, unit: true do
     )
   end
 
+  let(:resource) do
+    Puppet::Type.type(:oneview_volume_template).new(
+      name: 'vt',
+      ensure: 'present',
+      data:
+          {
+            'name'         => 'ONEVIEW_PUPPET_TEST',
+            'description'  => 'Volume Template',
+            'type'         => 'StorageVolumeTemplateV3',
+            'stateReason'  => 'None',
+            'provisioning' => {
+              'shareable'      => true,
+              'provisionType'  => 'Thin',
+              'capacity'       => '235834383322',
+              'storagePoolUri' => '/rest/fake'
+            }
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:resource_create) do
+    Puppet::Type.type(:oneview_volume_template).new(
+      name: 'vt',
+      ensure: 'present',
+      data:
+          {
+            'name'         => 'ONEVIEW_PUPPET_TEST',
+            'description'  => 'Volume Template',
+            'type'         => 'StorageVolumeTemplateV3',
+            'stateReason'  => 'None',
+            'rootTemplateUri' => '',
+            'initialScopeUris' => '',
+            'provisioning' => {
+              'shareable'      => true,
+              'provisionType'  => 'Thin',
+              'capacity'       => '235834383322',
+              'storagePoolUri' => '/rest/fake'
+            }
+          },
+      provider: 'c7000'
+    )
+  end
+
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
   let(:test) { resource_type.new(@client, resource['data']) }
+
+  let(:test_uri) { resource_type.new(@client, resource_create['data']) }
 
   context 'given the Creation parameters' do
     before(:each) do
@@ -66,10 +112,15 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
+      resource_create['data']['rootTemplateUri'] = '/rest/fake'
+      resource_create['data']['initialScopeUris'] = '/rest/fake'
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
+      allow_any_instance_of(resource_type).to receive(:set_template_uri).and_return(test_uri)
+      allow_any_instance_of(resource_type).to receive(:set_scope_uri).and_return(test_uri)
       provider.exists?
       expect(provider.create).to be
+      allow(resource_type).to receive(:get_all).and_return([])
     end
 
     it 'should be able to find the connectable volume templates' do
