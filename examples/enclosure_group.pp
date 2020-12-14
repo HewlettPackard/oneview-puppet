@@ -85,14 +85,14 @@ oneview_enclosure_group{'Enclosure Group Get Script':
     ensure  => 'get_script',
     require => Oneview_enclosure_group['Enclosure Group Set Script'],
     data    => {
-      name => $eg_name
+      name  => $eg_name
     }
 }
 
 oneview_enclosure_group{'Enclosure Group Delete':
     ensure  => 'absent',
     require => Oneview_enclosure_group['Enclosure Group Get Script'],
-    data   => {
-      name => $eg_name
+    data    => {
+      name  => $eg_name
     }
 }
