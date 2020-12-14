@@ -92,7 +92,7 @@ describe provider_class, unit: true do
                 'interconnectBay' => '2',
                 'logicalInterconnectGroupUri' => ''
               }
-             ]
+            ]
           },
         provider: 'c7000'
       )
