@@ -118,21 +118,21 @@ describe provider_class, unit: true do
       test = resource_type.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
-      allow_any_instance_of(resource_type).to receive(:template_uri).and_return(vt_test)
+      allow_any_instance_of(resource_type).to receive(:set_template_uri).and_return(vt_test)
       allow_any_instance_of(resource_type).to receive(:set_storage_pool).and_return(sp_test)
       provider.exists?
       expect(provider.create).to be
     end
 
-    it 'should return false if li does not exist' do
-      allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([])
+    it 'should return false if volume template does not exist' do
+      allow(OneviewSDK::VolumeTemplate).to receive(:find_by).and_return([])
       expect(provider.exists?).to eq(false)
       expect { provider.found }.to raise_error(/No LI with the specified data were found on the Oneview Appliance/)
     end
 
-    it 'should return true if li exists / is found' do
-      test = OneviewSDK::LogicalInterconnect.new(@client, resource['data'])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+    it 'should return true if volume template exists / is found' do
+      test = OneviewSDK::VolumeTemplate.new(@client, vt['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([vt_test])
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)
     end
