@@ -100,15 +100,18 @@ describe provider_class, unit: true do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
+      provider.set_template_uri
+      provider.set_scope_uri
+      provider.set_initial_scope
+      provider.set_storage_pool
     end
 
     it 'should be an instance of the provider oneview_volume_template' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:c7000)
     end
 
-    it 'if nothing is found should return false' do
-      allow(resource_type).to receive(:find_by).and_return([])
-      expect(provider.exists?).to eq(false)
+    it 'should be able to find the resource' do
+      expect(provider.found).to be
     end
 
     it 'runs through the create method' do

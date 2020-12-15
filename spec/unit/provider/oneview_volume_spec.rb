@@ -76,6 +76,8 @@ describe provider_class, unit: true do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
+      provider.template_uri
+      provider.set_storage_pool
     end
 
     it 'should be able to run through self.instances' do
@@ -95,14 +97,13 @@ describe provider_class, unit: true do
       resource_create['data']['provisioningParameters']['storagePoolUri'] = '/rest/fake'
       resource_create['data']['provisioningParameters']['snapshotPoolUri'] = '/rest/fake'
       resource_create['data']['templateUri'] = '/rest/fake'
-      expect(resource_type).to receive(:get_all).and_return([])
       allow(resource_type).to receive(:find_by).and_return([])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       allow_any_instance_of(resource_type).to receive(:template_uri).and_return(test_uri)
       allow_any_instance_of(resource_type).to receive(:set_storage_pool).and_return(test_uri)
       provider.exists?
       expect(provider.create).to be
-      expect(resource_type).to receive(:get_all).and_return([test_uri])
+      expect(resource_type).to receive(:get_all).and_return([])
     end
 
     it 'should be able to get the snapshots' do
