@@ -131,8 +131,7 @@ describe provider_class, unit: true do
     end
 
     it 'should return true if volume template exists / is found' do
-      test = OneviewSDK::VolumeTemplate.new(@client, vt['data'])
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([vt_test])
+      allow(vt_class).to receive(:find_by).with(anything, vt['data']).and_return([vt_test])
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)
     end
