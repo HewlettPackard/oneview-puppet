@@ -19,11 +19,12 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
+storage_class = OneviewSDK.resource_named(:StorageSystem, api_version, :C7000)
 
 describe provider_class, unit: true, if: api_version >= 500 do
   include_context 'shared context'
 
-  let(:resource_manage) do
+  let(:resource) do
     Puppet::Type.type(:oneview_storage_pool).new(
       name: 'Storage Pool',
       ensure: 'manage',
@@ -37,17 +38,17 @@ describe provider_class, unit: true, if: api_version >= 500 do
     )
   end
 
-  let(:provider) { resource_manage.provider }
+  let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
 
-  let(:test) { resource_type.new(@client, resource_manage['data']) }
+  let(:test) { resource_type.new(@client, resource['data']) }
 
-  let(:storage_test) { resource_type.new(@client, name: storage_system['data']) }
+  let(:storage_test) { storage_class.new(@client, name: storage_system['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
-      allow(sp_class).to receive(:get_all).with(anything).and_return([storage_system])
+      allow(sp_class).to receive(:get_all).with(anything).and_return([storage_test])
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
@@ -66,69 +67,16 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(resource_type).to receive(:set_storage_system).and_return(test)
+      allow(storage_class).to receive(:find_by).and_return(storage_test)
       provider.manage
       expect(resource_type).to receive(:get_all).and_return([test])
     end
 
     it 'should be able to get all reachable pools' do
       allow(resource_type).to receive(:reachable).and_return(true)
-      allow(resource_type).to receive(:set_storage_system).and_return(test)
+      allow(storage_class).to receive(:find_by).and_return(storage_test)
       provider.reachable
       expect(resource_type).to receive(:get_all).and_return([test])
-    end
-  end
-end
-
-describe provider_class, unit: true, if: api_version <= 500 do
-  include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_storage_pool).new(
-      name: 'Storage Pool',
-      ensure: 'present',
-      data:
-          {
-            'name' => '172.18.8.11, PDU 1',
-            'poolName' => 'CPG-SSD-AO',
-            'storageSystemUri' => '/rest/'
-          },
-      provider: 'c7000'
-    )
-  end
-
-  let(:provider) { resource.provider }
-
-  let(:instance) { provider.class.instances.first }
-
-  let(:test) { resource_type.new(@client, resource['data']) }
-
-  context 'given the minimum parameters' do
-    before(:each) do
-      allow(resource_type).to receive(:find_by).and_return([test])
-      provider.exists?
-    end
-
-    it 'should be able to create the resource' do
-      allow(resource_type).to receive(:find_by).and_return([])
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
-      expect_any_instance_of(resource_type).to receive(:add).and_return(test)
-      provider.exists?
-      expect(provider.create).to be
-    end
-
-    it 'should be able to destroy and recreate the resource to update its atributes' do
-      expect(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
-      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
-      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
-      provider.exists?
-      expect(provider.create).to be
-    end
-
-    it 'should delete the resource' do
-      allow_any_instance_of(resource_type).to receive(:remove).and_return([])
-      expect(provider.destroy).to be
     end
   end
 end
