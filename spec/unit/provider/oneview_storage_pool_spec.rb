@@ -38,6 +38,24 @@ describe provider_class, unit: true, if: api_version >= 500 do
     )
   end
 
+  let(:storage_system) do
+    Puppet::Type.type(:oneview_storage_system).new(
+      name: 'Storage System',
+      ensure: 'present',
+      data:
+          {
+            'managedDomain' => 'TestDomain',
+            'credentials' =>
+            {
+              'ip_hostname' => '172.18.11.12',
+              'username' => 'dcs',
+              'password' => 'dcs'
+            }
+          },
+      provider: 'c7000'
+    )
+  end
+
   let(:provider) { resource.provider }
 
   let(:instance) { provider.class.instances.first }
@@ -48,8 +66,9 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
   context 'given the minimum parameters' do
     before(:each) do
-      allow(sp_class).to receive(:get_all).with(anything).and_return([storage_test])
+      resource['data']['storageSystemUri'] = '/rest/fake'
       allow(resource_type).to receive(:find_by).and_return([test])
+      allow(sp_class).to receive(:find_by).and_return([storage_test])
       provider.exists?
     end
 
@@ -67,16 +86,15 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(storage_class).to receive(:find_by).and_return(storage_test)
       provider.manage
-      expect(resource_type).to receive(:get_all).and_return([test])
+      expect(provider.set_storage_system).to be
     end
 
     it 'should be able to get all reachable pools' do
       allow(resource_type).to receive(:reachable).and_return(true)
-      allow(storage_class).to receive(:find_by).and_return(storage_test)
       provider.reachable
-      expect(resource_type).to receive(:get_all).and_return([test])
+      expect(provider.set_storage_system).to be
     end
   end
 end
+
