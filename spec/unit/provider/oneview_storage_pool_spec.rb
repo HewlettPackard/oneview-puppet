@@ -43,10 +43,11 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
   let(:test) { resource_type.new(@client, resource_manage['data']) }
 
+  let(:storage_test) { resource_type.new(@client, name: storage_system['data']) }
+
   context 'given the minimum parameters' do
     before(:each) do
-      resource_manage['data']['storageSystemUri'] = '/rest/fake'
-      allow(resource_type).to receive(:get_all).and_return([])
+      allow(sp_class).to receive(:get_all).with(anything).and_return([storage_system])
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
     end
