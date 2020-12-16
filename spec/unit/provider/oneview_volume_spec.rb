@@ -86,9 +86,9 @@ describe provider_class, unit: true do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
-  let(:vt_test) { resource_type.new(@client, name: vt['data']) }
+  let(:vt_test) { vt_class.new(@client, name: vt['data']) }
 
-  let(:sp_test) { resource_type.new(@client, name: sp['data']) }
+  let(:sp_test) { sp_class.new(@client, name: sp['data']) }
 
   context 'given the minimum parameters' do
     before(:each) do
