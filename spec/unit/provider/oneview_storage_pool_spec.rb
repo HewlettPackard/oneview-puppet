@@ -97,4 +97,3 @@ describe provider_class, unit: true, if: api_version >= 500 do
     end
   end
 end
-
