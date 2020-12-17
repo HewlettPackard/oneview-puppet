@@ -29,9 +29,40 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
   def exists?
     prepare_environment
     load_template(@data['serverProfileTemplateUri'], 'new_profile')
+    create
     return @resource_type.find_by(@client, @data).any? if resource['ensure'].to_sym == :absent
     super([nil, :found, :get_available_targets, :get_available_networks, :get_available_servers, :get_compliance_preview,
            :get_messages, :get_profile_ports, :get_transformation, :absent])
+  end
+
+  def create
+    set_sh_uri if resource['data']
+    return true if resource_update
+    super(:create)
+  end
+
+  def set_scope_uri
+    scope_class = OneviewSDK.resource_named('Scope', @client.api_version)
+    scope_uri = scope_class.get_all(@client).first['uri'] 
+    resource['data']['query_parameters']['scopesUri'] = scope_uri
+  end
+
+  def set_sh_uri
+    sh_class = OneviewSDK.resource_named('ServerHardware', @client.api_version)
+    sh_uri = sh_class.get_all(@client).first['uri']
+    resource['data']['query_parameters']['serverHardwareUri'] = sh_uri
+  end
+ 
+  def set_sht_uri
+    sht_class = OneviewSDK.resource_named('ServerHardwareType', @client.api_version)
+    sht_uri = sht_class.get_all(@client).first['uri']
+    resource['data']['query_parameters']['serverHardwareTypeUri'] = sht_uri
+  end
+
+  def set_eg_uri
+    eg_class = OneviewSDK.resource_named('EnclosureGroup', @client.api_version)
+    eg_uri = eg_class.get_all(@client).first['uri']
+    resource['data']['query_parameters']['enclosureGroupUri'] = eg_uri
   end
 
   # Gets the connection uris if those exist and remove 'query_parameters' from @data
@@ -51,12 +82,17 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
   end
 
   def get_available_targets
+    set_scope_uri if resource['data']['query_parameters']['scopesUri'].empty?
     Puppet.notice("\n\nServer Profile Available Targets\n")
     pretty @resource_type.get_available_targets(@client, @query)
     true
   end
 
   def get_available_networks
+    set_scope_uri if resource['data']['query_parameters']['scopesUri'].empty?
+    set_sht_uri if resource['data']['query_parameters']['serverHardwareTypeUri'].empty?
+    set_eg_uri if resource['data']['query_parameters']['enclosureGroupUri'].empty?
+    
     Puppet.notice("\n\nServer Profile Available Networks\n")
     if @data['name'] || @data['uri']
       pretty get_single_resource_instance.get_available_networks
@@ -67,6 +103,7 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
   end
 
   def get_available_servers
+    set_scope_uri if resource['data']['query_parameters']['scopesUri'].empty?
     Puppet.notice("\n\nServer Profile Available Targets\n")
     pretty @resource_type.get_available_servers(@client, @query)
     true
