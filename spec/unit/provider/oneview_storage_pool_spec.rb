@@ -66,9 +66,7 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
   context 'given the minimum parameters' do
     before(:each) do
-      resource['data']['storageSystemUri'] = '/rest/fake'
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow(sp_class).to receive(:find_by).and_return([storage_test])
       provider.exists?
     end
 
@@ -86,14 +84,14 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
+      allow(resource_type).to receive(:set_storage_system).and_return([storage_test])
       provider.manage
-      expect(provider.set_storage_system).to be
     end
 
     it 'should be able to get all reachable pools' do
-      allow(resource_type).to receive(:reachable).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:reachable).and_return(true)
+      allow(resource_type).to receive(:set_storage_system).and_return([storage_test])
       provider.reachable
-      expect(provider.set_storage_system).to be
     end
   end
 end
