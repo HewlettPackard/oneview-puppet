@@ -67,7 +67,6 @@ describe provider_class, unit: true, if: api_version >= 500 do
   context 'given the minimum parameters' do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow(storage_class).to receive(:get_all).and_return([storage_test])
       provider.exists?
     end
 
@@ -85,13 +84,13 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(storage_class).to receive(:set_storage_system).and_return(true)
+      allow(storage_class).to receive(:get_all).and_return([storage_test])
       provider.manage
     end
 
     it 'should be able to get all reachable pools' do
       allow_any_instance_of(resource_type).to receive(:reachable).and_return(true)
-      allow(storage_class).to receive(:set_storage_system).and_return(true)
+      allow(storage_class).to receive(:get_all).and_return([storage_test])
       provider.reachable
     end
   end
