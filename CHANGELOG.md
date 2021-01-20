@@ -1,6 +1,7 @@
 # v2.9.1(Unreleased)
 #### Bug fixes & Enhancements:
 - [#301] (https://github.com/HewlettPackard/oneview-puppet/issues/301) Failing to create a oneview enclosure group with ipRangeUris
+- [#304] (https://github.com/HewlettPackard/oneview-puppet/issues/304) Failing to create a oneview logical interconnect group with real networkUris
 
 # v2.9.0(2020-11-11)
 ### Notes

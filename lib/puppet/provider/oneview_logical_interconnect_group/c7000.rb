@@ -109,7 +109,12 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
     net_type = network_type == 'Ethernet' ? :EthernetNetwork : :FCNetwork
     net_class = OneviewSDK.resource_named(net_type, login[:api_version], login[:hardware_variant])
     network_uris.each do |network_uri|
-      next if network_uri.to_s[0..6].include?('/rest/')
+      # Added a block to handle network uris in an uplinkset
+      if network_uri.to_s[0..6].include?('/rest/')
+	net = net_class.new(@client, uri: network_uri)
+	raise "Network in networkUris not found. Uri specified for the network: #{network_uri}" unless net.retrieve!
+	uplink_set.add_network(net)
+      end
       net = net_class.new(@client, name: network_uri)
       raise "Network in networkUris not found. Name specified for the network: #{network_uri}" unless net.retrieve!
       uplink_set.add_network(net)
