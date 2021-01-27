@@ -2,6 +2,7 @@
 
 ## Build Status 
 SDK Branch/Version | [Master](https://github.com/HewlettPackard/oneview-puppet/tree/master) | [Rel-1 Tag](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [Rel-2 Tag](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | [Rel-3 Tag](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.7.0) |
+| ------------- |:-------------:| -------------:| -------------:| -------------:|
 Supported OV Version | OV 5.60 | OV 5.50 | OV 5.40 | OV 5.30 | 
 Build Status | ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)|
 
