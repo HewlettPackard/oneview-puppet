@@ -1,34 +1,17 @@
-[![Puppet Forge](https://img.shields.io/puppetforge/v/hewlettpackard/oneview.svg)](https://forge.puppet.com/hewlettpackard/oneview)
-[![Inline docs](http://inch-ci.org/github/HewlettPackard/oneview-puppet.svg?branch=master)](http://inch-ci.org/github/HewlettPackard/oneview-puppet)
-[![Build Status](https://travis-ci.org/HewlettPackard/oneview-puppet.svg?branch=master)](https://travis-ci.org/HewlettPackard/oneview-puppet)
-[![Coverage Status](https://coveralls.io/repos/github/HewlettPackard/oneview-puppet/badge.svg?branch=master)](https://coveralls.io/github/HewlettPackard/oneview-puppet?branch=master)
-[![Code Climate](https://codeclimate.com/github/HewlettPackard/oneview-puppet/badges/gpa.svg)](https://codeclimate.com/github/HewlettPackard/oneview-puppet)
+# HPE OneView SDK for Puppet
 
-# Puppet Module for HPE OneView
+## Build Status 
+OV Version | 5.60 | 5.50 | 5.40 | 5.30 |
+| ------------- |:-------------:| -------------:| -------------:| -------------:|
+SDK Version/Tag | [Master](https://github.com/HewlettPackard/oneview-puppet/tree/master) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | [v2.7.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.7.0) |
+Build Status | ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)|
 
-#### Table of Contents
 
-1. [Overview](#overview)
-2. [Module description](#module-description)
-3. [Setup](#setup)
-    * [Requirements](#requirements)
-    * [Beginning with the Puppet Module for HPE OneView](#beginning-with-the-puppet-module-for-hpe-oneview)
-4. [Usage](#usage)
-    * [OneView appliance authentication](#oneview-appliance-authentication)
-    * [Synergy Image Streamer authentication](#synergy-image-streamer-authentication)
-    * [Types and providers](#types-and-providers)
-5. [Reference](#reference)
-6. [Contributing and feature requests](#contributing-and-feature-requests)
-7. [Testing](#testing)
-8. [License](#license)
-9. [Version and changes](#version-and-changes)
-10. [Authors](#authors)
+## Introduction
 
-## Overview
+HPE OneView makes it simple to deploy and manage today’s complex hybrid cloud infrastructure. HPE OneView can help you transform your data center to software-defined, and it supports HPE’s broad portfolio of servers, storage, and networking solutions, ensuring the simple and automated management of your hybrid infrastructure. Software-defined intelligence enables a template-driven approach for deploying, provisioning, updating, and integrating compute, storage, and networking infrastructure.
 
 The Puppet Module for HPE OneView provides resource style declaration capabilities to Puppet manifests for managing HPE OneView Appliances.
-
-## Module description
 
 The Puppet Module for HPE OneView allows for management of HPE OneView Appliances through the use of puppet manifests and resource style declarations, which makes internal use of the HPE OneView Ruby SDK and HPE OneView API.
 
@@ -36,7 +19,13 @@ It adds several resource types to puppet, and uses ensurable methods such as `pr
 
 For more information on the Puppet Module for HPE OneView resource types and their specifications, see the [Usage](#usage) and [examples](examples).
 
-## Setup
+## What's New
+
+HPE OneView Puppet library extends support of the SDK to OneView REST API version 2200 (OneView v5.50)
+
+Please refer to [notes](https://github.com/HewlettPackard/oneview-puppet/blob/master/CHANGELOG.md) for more information on the changes , features supported and issues fixed in this version
+
+## Getting Started 
 
 ### Requirements
 
