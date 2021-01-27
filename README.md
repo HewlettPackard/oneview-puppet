@@ -1,10 +1,10 @@
 # HPE OneView SDK for Puppet
 
 ## Build Status 
-
-| 5.50 Branch   | 5.40 Branch   | 5.30 Branch   | 
-| ------------- |:-------------:| -------------:| 
-| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| 
+SDK Branch | [Master](https://github.com/HewlettPackard/oneview-puppet/tree/master) | [Rel-1 Tag](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [Rel-2 Tag](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | [Rel-3 Tag](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.7.0) |
+Supported OV Version | OV5.60 | OV5.50 | OV5.40 | OV5.30 | 
+                     | ------------- | ------------- |:-------------:| -------------:| 
+Build Status | ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)|
 
 
 ## Introduction
