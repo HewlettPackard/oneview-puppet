@@ -115,6 +115,7 @@ end
 # FCoE to be added (no need so far)
 def connections_parse
   @data.each_key do |key|
+    next unless @data[key].is_a?(Hash)
     next unless @data[key].include?('manageConnections')
     @data[key].each do |conn, value|
       next unless conn.include?('connections')
