@@ -111,9 +111,10 @@ Puppet::Type.type(:oneview_logical_interconnect_group).provide :c7000, parent: P
     network_uris.each do |network_uri|
       # Added a block to handle network uris in an uplinkset
       if network_uri.to_s[0..6].include?('/rest/')
-	net = net_class.new(@client, uri: network_uri)
-	raise "Network in networkUris not found. Uri specified for the network: #{network_uri}" unless net.retrieve!
-	uplink_set.add_network(net)
+        net = net_class.new(@client, uri: network_uri)
+        raise "Network in networkUris not found. Uri specified for the network: #{network_uri}" unless net.retrieve!
+        uplink_set.add_network(net)
+        next
       end
       net = net_class.new(@client, name: network_uri)
       raise "Network in networkUris not found. Name specified for the network: #{network_uri}" unless net.retrieve!

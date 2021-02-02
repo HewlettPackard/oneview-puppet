@@ -111,7 +111,8 @@ describe provider_class, unit: true do
                                         { 'bay'  => 2,
                                           'port' => 'X8' }],
               'networkUris'         => [
-                { name: 'test_network' }
+                { name: 'test_network' },
+                { uri: '/rest/fake_uri' }
               ]
             }
           ],
