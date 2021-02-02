@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -111,7 +111,8 @@ describe provider_class, unit: true do
                                         { 'bay'  => 2,
                                           'port' => 'X8' }],
               'networkUris'         => [
-                { name: 'test_network' }
+                { name: 'test_network' },
+                { uri: '/rest/fake_uri' }
               ]
             }
           ],
