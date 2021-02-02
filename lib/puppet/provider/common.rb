@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -115,6 +115,7 @@ end
 # FCoE to be added (no need so far)
 def connections_parse
   @data.each_key do |key|
+    next unless @data[key].is_a?(Hash)
     next unless @data[key].include?('manageConnections')
     @data[key].each do |conn, value|
       next unless conn.include?('connections')
