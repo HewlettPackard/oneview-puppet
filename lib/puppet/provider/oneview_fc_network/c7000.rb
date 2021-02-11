@@ -45,6 +45,13 @@ Puppet::Type.type(:oneview_fc_network).provide :c7000, parent: Puppet::OneviewRe
   # Bulk deletes networks if there is @data['networkUris']
   def bulk_delete_check
     if @data['networkUris']
+      list = []
+      @data['networkUris'].each do |item|
+        net = OneviewSDK.resource_named(:FCNetwork, api_version, resource_variant).find_by(@client, name: item)
+        raise("The network #{name} does not exist.") unless net.first
+        list.push(net.first['uri'])
+      end
+      @data['networkUris'] = list
       @resource_type.bulk_delete(@client, @data)
     else
       false

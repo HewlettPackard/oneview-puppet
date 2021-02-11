@@ -45,8 +45,11 @@ describe provider_class, unit: true do
 
     let(:test) { resource_type.new(@client, resource['data']) }
 
+    let(:uri) { resource_type.new(@client, name: resource['data']['networkUris'].first) }
+
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([uri])
       provider.exists?
     end
 
