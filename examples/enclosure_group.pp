@@ -34,11 +34,11 @@ oneview_enclosure_group{'Enclosure Group Create':
       interconnectBayMappings     => [
         {
           interconnectBay             => '3',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
+          logicalInterconnectGroupUri => 'LIG'
         },
         {
           interconnectBay             => '6',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
+          logicalInterconnectGroupUri => 'LIG'
         }
       ]
     }
