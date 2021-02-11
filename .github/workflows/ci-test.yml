@@ -1,4 +1,4 @@
-name: Puppet rake test
+name: Puppet Rake test
 on: [pull_request]
 jobs:
   test:
