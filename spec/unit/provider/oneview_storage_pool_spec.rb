@@ -19,7 +19,6 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
-storage_class = OneviewSDK.resource_named(:StorageSystem, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -32,7 +31,7 @@ describe provider_class, unit: true do
           {
             'name' => '172.18.8.11, PDU 1',
             'poolName' => 'CPG-SSD-AO',
-            'storageSystemUri' => '/rest/'
+            'storageSystemUri' => 'THREE-PAR1'
           },
       provider: 'c7000'
     )
@@ -44,15 +43,9 @@ describe provider_class, unit: true do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
-  let(:system_uri) { storage_class.new(@client, name: resource['data']['storageSystemUri'].first) }
-
-  let(:uri) { resource_type.new(@client, name: resource['data']['uri'].first) }
-
   context 'given the minimum parameters' do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
-      allow(resource_type).to receive(:find_by).and_return([uri])
-      allow(storage_class).to receive(:find_by).and_return([system_uri])
       provider.exists?
     end
 
@@ -62,6 +55,7 @@ describe provider_class, unit: true do
 
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
+      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:c7000)
     end
 
     it 'should able to find the resource' do
