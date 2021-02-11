@@ -43,7 +43,7 @@ oneview_storage_pool{'storage_pool_4':
     data   => {
       name             => 'cpg-growth-limit-1TiB',
       isManaged        => true,
-      storageSystemUri => ''
+      storageSystemUri => 'ThreePAR-1'
     }
 }
 
@@ -51,8 +51,8 @@ oneview_storage_pool{'storage_pool_4':
 oneview_storage_pool{'storage_pool_5':
     ensure => 'reachable',
     data   => {
-      uri              => '/rest/storage-pools/BEDB9ADB-ADF5-4B3A-94BE-AC7500DDF350',
-      storageSystemUri => ''
+      uri              => 'CPG-SSD-AO',
+      storageSystemUri => 'ThreePAR-1'
     }
 }
 
@@ -62,6 +62,6 @@ oneview_storage_pool{'storage_pool_3':
     require => Oneview_storage_pool['storage_pool_2'],
     data    => {
       poolName         => 'cpg-growth-limit-1TiB',
-      storageSystemUri => ''
+      storageSystemUri => 'ThreePAR-1'
     }
 }

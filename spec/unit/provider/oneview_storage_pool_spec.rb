@@ -17,41 +17,22 @@
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
-#api_version = login[:api_version] || 300
-api_version = 300
+api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
 storage_class = OneviewSDK.resource_named(:StorageSystem, api_version, :C7000)
 
-describe provider_class, unit: true, if: api_version >= 500 do
+describe provider_class, unit: true do
   include_context 'shared context'
 
   let(:resource) do
     Puppet::Type.type(:oneview_storage_pool).new(
       name: 'Storage Pool',
-      ensure: 'manage',
-      data:
-          {
-            'isManaged'        => 'true',
-            'name'             => 'cpg-growth-limit-1TiB',
-            'storageSystemUri' => ''
-          },
-      provider: 'c7000'
-    )
-  end
-
-  let(:storage_system) do
-    Puppet::Type.type(:oneview_storage_system).new(
-      name: 'Storage System',
       ensure: 'present',
       data:
           {
-            'managedDomain' => 'TestDomain',
-            'credentials' =>
-            {
-              'ip_hostname' => '172.18.11.12',
-              'username' => 'dcs',
-              'password' => 'dcs'
-            }
+            'name' => '172.18.8.11, PDU 1',
+            'poolName' => 'CPG-SSD-AO',
+            'storageSystemUri' => '/rest/'
           },
       provider: 'c7000'
     )
@@ -63,11 +44,15 @@ describe provider_class, unit: true, if: api_version >= 500 do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
-  let(:storage_test) { storage_class.new(@client, name: storage_system['data']) }
+  let(:system_uri) { storage_class.new(@client, name: resource['data']['storageSystemUri'].first) }
+
+  let(:uri) { resource_type.new(@client, name: resource['data']['uri'].first) }
 
   context 'given the minimum parameters' do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
+      allow(resource_type).to receive(:find_by).and_return([uri])
+      allow(storage_class).to receive(:find_by).and_return([system_uri])
       provider.exists?
     end
 
@@ -83,16 +68,36 @@ describe provider_class, unit: true, if: api_version >= 500 do
       expect(provider.found).to be
     end
 
+    it 'should be able to create the resource' do
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(false)
+      expect_any_instance_of(resource_type).to receive(:add).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
+    end
+
+    it 'should be able to destroy and recreate the resource to update its atributes' do
+      expect(resource_type).to receive(:find_by).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:retrieve!).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:remove).and_return(true)
+      allow_any_instance_of(resource_type).to receive(:add).and_return(test)
+      provider.exists?
+      expect(provider.create).to be
+    end
+
     it 'should be able to edit the state of the resource' do
       allow_any_instance_of(resource_type).to receive(:manage).and_return(true)
-      allow(storage_class).to receive(:get_all).and_return([storage_test])
-      provider.manage
+      expect(provider.manage).to be
     end
 
     it 'should be able to get all reachable pools' do
-      allow_any_instance_of(resource_type).to receive(:reachable).and_return(true)
-      allow(storage_class).to receive(:get_all).and_return([storage_test])
-      provider.reachable
+      allow(resource_type).to receive(:reachable).and_return(true)
+      expect(provider.reachable).to be
+    end
+
+    it 'should delete the resource' do
+      allow_any_instance_of(resource_type).to receive(:remove).and_return([])
+      expect(provider.destroy).to be
     end
   end
 end
