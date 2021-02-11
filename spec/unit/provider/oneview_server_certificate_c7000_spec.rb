@@ -98,8 +98,8 @@ describe provider_class, unit: true do
            'base64Data' => 'some certificate data'
          }]
       }
-      allow_any_instance_of(resource_type).to receive(:get_certificate).and_return(test)
-      allow_any_instance_of(resource_type).to receive(:update).and_return(expected_output)
+      allow_any_instance_of(resource_type).to receive(:get_certificate).and_return(expected_output)
+      allow_any_instance_of(resource_type).to receive(:update).and_return(test)
       expect(provider.create_or_update).to be
     end
   end
