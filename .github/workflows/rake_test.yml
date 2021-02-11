@@ -22,12 +22,13 @@ jobs:
         bundler-cache: true
 
     - name: Rake test
-      run: bundle exec rake
+      run: |
+        bundle exec rake
+        COVERAGE=true bundle exec rspec
 
-    - name: npm install, make test-coverage
-      run: make test-coverage
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
+    - name: Upload coverage results
+      uses: actions/upload-artifact@master
+      if: always()
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: coverage-report
+        path: coverage
