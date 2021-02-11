@@ -122,7 +122,7 @@ oneview_ethernet_network{'Bulk Delete 2':
 
 # Bulk delete Ethernet Networks is supported from API1800
 oneview_ethernet_network{'Bulk Delete':
-    ensure => 'present',
+    ensure => 'absent',
     data   => {
       networkUris    =>
       [

@@ -28,6 +28,20 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
     1800
   end
 
+  def data_parse
+    hcm_name = @data['hypervisorManagerUri'] if @data['hypervisorManagerUri']
+    hcm = OneviewSDK.resource_named(:HypervisorManager, api_version, resource_variant).find_by(@client, name: hcm_name)
+    @data['hypervisorManagerUri'] = hcm.first['uri']
+
+    spt_name = @data['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] if @data['hypervisorHostProfileTemplate']['serverProfileTemplateUri']
+    spt = OneviewSDK.resource_named(:ServerProfileTemplate, api_version, resource_variant).find_by(@client, name: spt_name)
+    @data['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt.first['uri']
+
+    os_name = @data['hypervisorHostProfileTemplate']['deploymentPlanUri'] if @data['hypervisorHostProfileTemplate']['deploymentPlanUri']
+    os = OneviewSDK.resource_named(:DeploymentPlan, api_version, resource_variant).find_by(@client, name: os_name)
+    @data['hypervisorHostProfileTemplate']['deploymentPlanUri'] = os.first['uri']
+  end
+
   def self.resource_name
     'HypervisorClusterProfile'
   end
