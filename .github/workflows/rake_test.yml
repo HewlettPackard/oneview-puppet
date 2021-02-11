@@ -16,10 +16,9 @@ jobs:
     name: Ruby ${{ matrix.ruby }}
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: ruby hello.rb
 
     - name: Install dependencies
       run: gem update bundler
