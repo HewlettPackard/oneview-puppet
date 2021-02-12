@@ -36,7 +36,7 @@ Puppet::Type.newtype(:oneview_logical_interconnect) do
     newvalue(:set_ethernet_settings) do
       provider.set_ethernet_settings
     end
-   
+
     newvalue(:set_port_flap_settings) do
       provider.set_port_flap_settings
     end
