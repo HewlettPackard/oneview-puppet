@@ -108,6 +108,18 @@ oneview_logical_interconnect{'Logical Interconnect IGMP Set':
     }
 }
 
+oneview_logical_interconnect{'Logical Interconnect Port Flap Set':
+  ensure => 'set_port_flap_settings',
+  data   =>
+    {
+      name         => 'LE-LIG',
+      portFlapProtection =>
+      {
+        portFlapThresholdPerInterval =>  10
+      }
+    }
+}
+
 oneview_logical_interconnect{'Logical Interconnect Compliance':
   ensure => 'set_compliance',
   data   =>
