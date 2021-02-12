@@ -135,3 +135,47 @@ describe provider_class, unit: true do
     end
   end
 end
+
+api_versions = 1800
+resource_types = OneviewSDK.resource_named(:EthernetNetwork, api_versions, :C7000)
+
+describe provider_class, unit: true do
+  include_context 'shared context Oneview API 1800'
+
+  let(:ethernet_resource) do
+    Puppet::Type.type(:oneview_ethernet_network).new(
+      name: 'ethernet',
+      ensure: 'present',
+      data:
+          {
+            'name'                    => 'EtherNetwork_Test1',
+            'connectionTemplateUri'   => nil,
+            'autoLoginRedistribution' => true,
+            'vlanId'                  => '202',
+            'networkUris'             => ['/rest/ethernet-networks/123']
+          },
+      provider: 'c7000'
+    )
+  end
+
+  let(:provider) { ethernet_resource.provider }
+  let(:test) { resource_types.new(@client, ethernet_resource['data']) }
+  let(:instance) { provider.class.instances.first }
+
+  context 'given the min parameters' do
+    before(:each) do
+      ethernet_resource['data']['uri'] = '/rest/fake'
+      allow(resource_types).to receive(:retrieve!).and_return(true)
+      allow(resource_types).to receive(:find_by).and_return([])
+      provider.exists?
+    end
+
+    it 'should delete multiple uris' do
+      allow(resource_types).to receive(:bulk_delete_check).and_return(true)
+      allow(resource_types).to receive(:bulk_create_check).and_return(false)
+      allow(resource_types).to receive(:set_network_uris).and_return(test)
+      provider.bulk_delete_check
+      allow(resource_types).to receive(:create).and_return(test)
+    end
+  end
+end

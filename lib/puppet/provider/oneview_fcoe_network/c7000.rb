@@ -45,9 +45,26 @@ Puppet::Type.type(:oneview_fcoe_network).provide :c7000, parent: Puppet::Oneview
   # Bulk deletes networks if there is @data['networkUris']
   def bulk_delete_check
     if @data['networkUris']
+      set_network_uris
       @resource_type.bulk_delete(@client, @data)
     else
       false
     end
+  end
+
+  def set_network_uris
+    return unless @data['networkUris'].present?
+    network_class = OneviewSDK.resource_named('FCoENetwork', @client.api_version)
+    options = {
+      name: 'FCoENetwork_1',
+      connectionTemplateUri: nil,
+      vlanId: 300
+    }
+    network_one = network_class.new(@client, options)
+    network_one.create
+    options['name'] = 'FCoENetwork_2'
+    network_two = network_class.new(@client, options)
+    network_two.create
+    @data['networkUris'] = [network_one['uri'], network_two['uri']]
   end
 end

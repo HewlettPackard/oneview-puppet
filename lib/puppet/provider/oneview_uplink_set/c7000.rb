@@ -27,8 +27,10 @@ Puppet::Type.type(:oneview_uplink_set).provide :c7000, parent: Puppet::OneviewRe
 
   # Provider methods
   def exists?
+    @data = resource['data']
+    set_li_uri
+    set_network_uris
     prepare_environment
-    empty_data_check
     name_to_uris
     # Taking out portConfigInfos before the find_by since it is not returned
     @port_config = @data.delete('portConfigInfos')
@@ -52,6 +54,33 @@ Puppet::Type.type(:oneview_uplink_set).provide :c7000, parent: Puppet::OneviewRe
     uri_set('networkUris', OneviewSDK::EthernetNetwork)
     uri_set('fcNetworkUris', OneviewSDK::FCNetwork)
     uri_set('fcoeNetworkUris', OneviewSDK::FCoENetwork)
+  end
+
+  def set_network_uris
+    return unless @data['networkUris'] && @data['networkUris'].present?
+    network_class = OneviewSDK.resource_named('EthernetNetwork', @client.api_version)
+    options = {
+      vlanId:  '200',
+      purpose:  'General',
+      name:  'EtherNetwork_1',
+      ethernetNetworkType: 'Tagged',
+      smartLink:  false,
+      privateNetwork:  false
+    }
+    network_one = network_class.new(@client, options)
+    network_one.create
+
+    options['name'] = 'EtherNetwork_2'
+    options['vlanId'] = '201'
+    network_two = network_class.new(@client, options)
+    network_two.create
+    @data['networkUris'] = [network_one['name'], network_two['name']]
+  end
+
+  def set_li_uri
+    return unless resource['data']['logicalInterconnectUri'] && resource['data']['logicalInterconnectUri'].present?
+    li_class = OneviewSDK.resource_named('LogicalInterconnect', @client.api_version)
+    resource['data']['logicalInterconnectUri'] = li_class.get_all(@client).first['name']
   end
 
   def uri_set(tag, type)

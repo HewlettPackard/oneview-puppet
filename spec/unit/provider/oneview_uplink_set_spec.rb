@@ -19,17 +19,11 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_uplink_set).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:UplinkSet, api_version, :C7000)
+li_class = OneviewSDK.resource_named(:LogicalInterconnect, api_version, :C7000)
+ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_uplink_set).new(
-      name: 'uplink_set_1',
-      ensure: 'found',
-      provider: 'c7000'
-    )
-  end
 
   let(:provider) { resource.provider }
 
@@ -66,6 +60,73 @@ describe provider_class, unit: true do
       )
     end
 
+    let(:li_resource) do
+      Puppet::Type.type(:oneview_logical_interconnect).new(
+        name: 'LI',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'Encl2-my enclosure logical interconnect group',
+              'internalNetworks' => ['NET'],
+              'igmpSettings' =>
+              {
+                'igmpIdleTimeoutInterval' => 210
+              },
+              'snmpConfiguration' =>
+              {
+                'enabled' => true,
+                'readCommunity' => 'public'
+              },
+              'portMonitor' =>
+              {
+                'enablePortMonitor' => false
+              },
+              'telemetryConfiguration' =>
+              {
+                'enableTelemetry' => true
+              },
+              'qosConfiguration' =>
+              {
+                'activeQosConfig' =>
+                {
+                  'configType' => 'Passthrough'
+                }
+              }
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:ethernet_resource1) do
+      Puppet::Type.type(:oneview_ethernet_network).new(
+        name: 'ethernet',
+        ensure: 'present',
+        data:
+            {
+              'name'                    => 'EtherNetwork_Test1',
+              'connectionTemplateUri'   => nil,
+              'autoLoginRedistribution' => true,
+              'vlanId'                  => '202'
+
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:test) { resource_type.new(@client, resource['data']) }
+
+    let(:li1) { li_class.new(@client, name: li_resource['data']) }
+
+    let(:eth1) { ethernet_class.new(@client, name: ethernet_resource1['data']) }
+
+    before(:each) do
+      allow(resource_type).to receive(:find_by).and_return([test])
+      allow(li_class).to receive(:get_all).with(anything).and_return([li1])
+      allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      allow(ethernet_class).to receive(:create).and_return(ethernet_resource1)
+      provider.exists?
+    end
+
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_uplink_set).provider(:c7000)
     end
@@ -78,6 +139,19 @@ describe provider_class, unit: true do
 
     it 'should return true if resource exists / is found' do
       test = resource_type.new(@client, resource['data'])
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect(provider.exists?).to be
+      expect(provider.found).to eq(true)
+    end
+
+    it 'should return false if lig does not exist' do
+      allow(OneviewSDK::LogicalInterconnect).to receive(:find_by).and_return([])
+      expect(provider.exists?).to eq(false)
+      expect { provider.found }.to raise_error(/No LIG with the specified data were found on the Oneview Appliance/)
+    end
+
+    it 'should return true if lig exists / is found' do
+      test = OneviewSDK::LogicalInterconnect.new(@client, resource['data'])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       expect(provider.exists?).to be
       expect(provider.found).to eq(true)

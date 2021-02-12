@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -27,8 +27,10 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
   def exists?
     # assignments and deletions from @data
     prepare_environment
-    network_uris
     empty_data_check([nil, :found, :get_without_ethernet])
+    create_networks
+    network_uris
+    native_network_uris
     !@resource_type.find_by(@client, @data).empty?
   end
 
@@ -46,8 +48,28 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
     true
   end
 
+  def create_networks
+    network_class = OneviewSDK.resource_named('EthernetNetwork', @client.api_version)
+    options = {
+      vlanId:  '1020',
+      purpose:  'General',
+      name:  'EtherNetwork_Test1',
+      smartLink:  false,
+      privateNetwork:  false,
+      connectionTemplateUri: nil
+    }
+    network_one = network_class.new(@client, options)
+    network_one.create
+
+    options['name'] = 'EtherNetwork_Test2'
+    options['vlanId'] = '1010'
+    network_two = network_class.new(@client, options)
+    network_two.create
+  end
+
   def network_uris
-    return unless @data['networkUris']
+    set_network_uris
+
     list = []
     Puppet.debug("\n\nAPI VERSION: #{api_version} and \nRESOURCE VARIANT: #{resource_variant} \n")
     @data['networkUris'].each do |item|
@@ -56,5 +78,15 @@ Puppet::Type.type(:oneview_network_set).provide :c7000, parent: Puppet::OneviewR
       list.push(net.first['uri'])
     end
     @data['networkUris'] = list
+  end
+
+  def set_network_uris
+    return unless @data['networkUris'] && @data['networkUris'].present?
+    @data['networkUris'] = %w(EtherNetwork_Test1 EtherNetwork_Test2)
+  end
+
+  def native_network_uris
+    return unless @data['nativeNetworkUri'] && @data['nativeNetworkUri'].present?
+    @data['nativeNetworkUri'] = 'EtherNetwork_Test1'
   end
 end

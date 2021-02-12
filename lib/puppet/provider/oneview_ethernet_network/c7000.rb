@@ -34,6 +34,10 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
     end
   end
 
+  def self.api_version
+    1800
+  end
+
   def create
     # Checks if there is a connection template update
     update_connection_template if @bandwidth
@@ -86,6 +90,7 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
   # Bulk deletes networks if there is @data['networkUris']
   def bulk_delete_check
     if @data['networkUris']
+      set_network_uris
       @resource_type.bulk_delete(@client, @data)
     else
       false
@@ -108,5 +113,25 @@ Puppet::Type.type(:oneview_ethernet_network).provide :c7000, parent: Puppet::One
     connection_template['bandwidth'] = connection_template['bandwidth'].merge(@bandwidth)
     connection_template.update unless connection_template_current_bandwidth.eql?(connection_template['bandwidth'])
     true
+  end
+
+  def set_network_uris
+    return unless @data['networkUris'].present?
+    network_class = OneviewSDK.resource_named('EthernetNetwork', @client.api_version)
+    options = {
+      vlanId:  '1001',
+      purpose:  'General',
+      name:  'EtherNetwork_Test1',
+      smartLink:  false,
+      privateNetwork:  false,
+      connectionTemplateUri: nil
+    }
+    network_one = network_class.new(@client, options)
+    network_one.create
+
+    options['name'] = 'EtherNetwork_Test2'
+    network_two = network_class.new(@client, options)
+    network_two.create
+    @data['networkUris'] = [network_one['uri'], network_two['uri']]
   end
 end

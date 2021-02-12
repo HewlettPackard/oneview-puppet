@@ -21,12 +21,15 @@ oneview_network_set{'Network Set Get Without Ethernet':
   ensure => 'get_without_ethernet',
 }
 
+# creates networks and adds to networkSet if networkUris is empty
+# creates networkSet if networkUris is given 
+# networkUris => ['Eth1', 'Eth2'] 
 oneview_network_set{'Network Set Create':
   ensure => 'present',
   data   =>
   {
     name        => 'Test Network Set',
-    networkUris => ['Ethernet 1', 'Ethernet 2']
+    networkUris => []
   }
 }
 
@@ -36,13 +39,15 @@ oneview_network_set{'Network Set Get All':
   require => Oneview_network_set['Network Set Create'],
 }
 
+# Takes any one of the networkUris as nativeNetworkUri if its empty
+# nativeNetworkUri => 'Eth1'
 oneview_network_set{'Network Set Edit':
   ensure  => 'present',
   require => Oneview_network_set['Network Set Get All'],
   data    =>
   {
     name             => 'Test Network Set',
-    nativeNetworkUri => 'Ethernet 2'
+    nativeNetworkUri => ''
   }
 }
 

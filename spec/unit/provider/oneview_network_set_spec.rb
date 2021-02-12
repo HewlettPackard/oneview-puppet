@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -32,7 +32,22 @@ describe provider_class, unit: true do
         data:
             {
               'name' => 'Network Set',
-              'networkUris' => ['Network1']
+              'networkUris' => []
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:ethernet_resource) do
+      Puppet::Type.type(:oneview_ethernet_network).new(
+        name: 'ethernet',
+        ensure: 'present',
+        data:
+            {
+              'name'                    => 'EtherNetwork_Test1',
+              'connectionTemplateUri'   => nil,
+              'autoLoginRedistribution' => true,
+              'vlanId'                  => '202'
             },
         provider: 'c7000'
       )
@@ -44,12 +59,16 @@ describe provider_class, unit: true do
 
     let(:test) { resource_type.new(@client, name: resource['data']['name']) }
 
-    let(:eth1) { ethernet_class.new(@client, name: resource['data']['networkUris'].first) }
+    let(:eth1) { ethernet_class.new(@client, name: ethernet_resource['data']) }
 
     before(:each) do
+      resource['data']['networkUris'] = %w(Test1 Test2)
       allow(resource_type).to receive(:find_by).and_return([test])
       allow(ethernet_class).to receive(:find_by).and_return([eth1])
+      allow_any_instance_of(ethernet_class).to receive(:create).and_return(eth1)
       provider.exists?
+      provider.network_uris
+      provider.native_network_uris
     end
 
     it 'should be an instance of the provider c7000' do
@@ -63,6 +82,13 @@ describe provider_class, unit: true do
 
     it 'should return that the resource exists' do
       expect(provider.found).to be
+    end
+
+    it 'should be able to create networks' do
+      allow(ethernet_class).to receive(:create).and_return(ethernet_resource)
+      expect(provider.exists?).to eq(true)
+      expect(provider.create_networks).to be
+      expect(ethernet_class.create).to be
     end
 
     it 'should be able to create the resource' do
@@ -84,7 +110,8 @@ describe provider_class, unit: true do
     end
   end
   context 'given no data and the found ensure method' do
-    let(:resource) do
+    ethernet_class = OneviewSDK.resource_named(:EthernetNetwork, api_version, :C7000)
+    let(:resource1) do
       Puppet::Type.type(:oneview_network_set).new(
         name: 'Network Set',
         ensure: 'found',
@@ -92,17 +119,39 @@ describe provider_class, unit: true do
       )
     end
 
-    let(:provider) { resource.provider }
+    let(:ethernet_resource1) do
+      Puppet::Type.type(:oneview_ethernet_network).new(
+        name: 'ethernet',
+        ensure: 'present',
+        data:
+            {
+              'name'                    => 'EtherNetwork_Test1',
+              'connectionTemplateUri'   => nil,
+              'autoLoginRedistribution' => true,
+              'vlanId'                  => '202'
 
-    let(:test) { resource_type.new(@client, {}) }
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:provider1) { resource1.provider }
+
+    let(:test1) { resource_type.new(@client, {}) }
+
+    let(:eth2) { ethernet_class.new(@client, name: ethernet_resource1['data']) }
 
     before(:each) do
-      allow(resource_type).to receive(:find_by).and_return([test])
-      provider.exists?
+      allow(resource_type).to receive(:find_by).and_return([test1])
+      provider1.exists?
+      allow(ethernet_class).to receive(:find_by).and_return([])
+      allow(ethernet_class).to receive(:create).and_return(eth2)
+      provider1.network_uris
+      provider1.native_network_uris
     end
 
     it 'should be able to get all the network sets without ethernet' do
-      allow(resource_type).to receive(:get_without_ethernet).and_return([test])
+      allow(resource_type).to receive(:get_without_ethernet).and_return([test1])
       expect(provider.get_without_ethernet).to be
     end
   end
