@@ -67,10 +67,9 @@ describe provider_class, unit: true do
     end
 
     it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
       test = resource_type.new(@client, resource['data'])
+      resource['data']['networkUris'] = [test['uri']]
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(resource_type).to receive(:delete).and_return({})
       provider.exists?
       expect(provider.destroy).to be
