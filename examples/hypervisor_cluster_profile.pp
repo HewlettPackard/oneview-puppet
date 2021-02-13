@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2021 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@
 oneview_hypervisor_cluster_profile{'hcp1 Create':
     ensure => 'present',
     data   => {
-      type                          => 'HypervisorClusterProfileV3',
+      type                          => 'HypervisorClusterProfileV4',
       name                          => 'Cluster5',
-      hypervisorManagerUri          => 'TestHypervisorManager',
+      hypervisorManagerUri          => '',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-      serverProfileTemplateUri => 'SPT',
+      serverProfileTemplateUri => '',
       hostprefix               => 'Test-Cluster-host'
       }
     }
@@ -38,18 +38,18 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
     ensure  => 'present',
     require => Oneview_hypervisor_cluster_profile['hcp1 Create'],
     data    => {
-      type                          => 'HypervisorClusterProfileV3',
+      type                          => 'HypervisorClusterProfileV4',
       name                          => 'Cluster10',
-      hypervisorManagerUri          => 'HCM',
+      hypervisorManagerUri          => '',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-        serverProfileTemplateUri => 'SPT-OS',
+        serverProfileTemplateUri => '',
         deploymentPlan           => {
-          deploymentPlanUri => 'Deploy-HPE-Esxi-6.2-U2',
+          deploymentPlanUri => '',
           serverPassword    => '<server-password>'
         },
-        hostprefix               => 'Test-Cluster-host'
+        hostprefix               => 'Test-Cluster-host-10'
       }
     }
 }
