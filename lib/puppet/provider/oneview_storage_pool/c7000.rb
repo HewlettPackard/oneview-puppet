@@ -26,14 +26,6 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
 
   def data_parse
     @data['name'] = @data.delete('poolName') if @data['poolName']
-    system_name = @data['storageSystemUri'] if @data['storageSystemUri']
-
-    system_uri = OneviewSDK.resource_named(:StorageSystem, api_version, resource_variant).find_by(@client, name: system_name)
-    @data['storageSystemUri'] = system_uri
-
-    pool_name = @data['uri'] if @data['uri']
-    pool = OneviewSDK.resource_named(:StoragePool, api_version, resource_variant).find_by(@client, name: pool_name)
-    @data['uri'] = pool
   end
 
   def create

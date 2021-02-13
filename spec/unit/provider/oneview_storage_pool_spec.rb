@@ -31,7 +31,7 @@ describe provider_class, unit: true do
           {
             'name' => '172.18.8.11, PDU 1',
             'poolName' => 'CPG-SSD-AO',
-            'storageSystemUri' => 'THREE-PAR1'
+            'storageSystemUri' => '/rest/'
           },
       provider: 'c7000'
     )
@@ -55,7 +55,6 @@ describe provider_class, unit: true do
 
     it 'should be an instance of the provider c7000' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_pool).provider(:c7000)
-      expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_storage_system).provider(:c7000)
     end
 
     it 'should able to find the resource' do
