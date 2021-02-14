@@ -32,9 +32,10 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
   end
 
   def set_initial_scope
+    list = []
     scope = OneviewSDK.resource_named('Scope', api_version)
-    scope_uri = scope.get_all(@client).first['uri']
-    @data['initialScopeUris'].append(scope_uri)
+    list.push(scope.get_all(@client).first['uri'])
+    @data['initialScopeUris'] = list
   end
 
   def set_template_uri
