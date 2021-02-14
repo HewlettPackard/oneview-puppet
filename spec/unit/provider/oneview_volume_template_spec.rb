@@ -109,6 +109,7 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       resource['data']['rootTemplateUri'] = '/rest/fake'
+      resource['data']['initialScopeUris'] = ['/rest/fake']
       allow(resource_type).to receive(:find_by).and_return([])
       allow(resource_type).to receive(:get_all).and_return(['/rest/fake'])
       allow(sp_type).to receive(:get_all).and_return(['/rest/fake'])
