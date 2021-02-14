@@ -51,18 +51,12 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
   end
 
   def get_available_targets
-    sp_name = @query.delete('scopesUri')
-    sp = OneviewSDK.resource_named(:Scope, api_version, resource_variant).find_by(@client, name: sp_name)
-    @query['enclosureGroupUri'] = sp.first['uri']
     Puppet.notice("\n\nServer Profile Available Targets\n")
     pretty @resource_type.get_available_targets(@client, @query)
     true
   end
 
   def get_available_networks
-    eg_name = @query.delete('enclosureGroupUri')
-    eg = OneviewSDK.resource_named(:EnclosureGroup, api_version, resource_variant).find_by(@client, name: eg_name)
-    @query['enclosureGroupUri'] = eg.first['uri']
     if @data['name'] || @data['uri']
       pretty get_single_resource_instance.get_available_networks
     else

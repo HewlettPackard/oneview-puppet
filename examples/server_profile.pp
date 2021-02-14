@@ -36,7 +36,7 @@ oneview_server_profile{'Server Profile Get Available Targets':
   ensure => 'get_available_targets',
   data   => {
     query_parameters  => {
-      scopesUri        => 'ScopeTest'
+      enclosureGroupUri       => 'EG'
     }
   }
 }
@@ -47,7 +47,6 @@ oneview_server_profile{'Server Profile Get Available Networks':
     query_parameters  => {
       enclosureGroupUri     => 'EG',
       serverHardwareTypeUri => 'SY 480 Gen9 2'
-      scopesUri             => 'ScopeTest'
     }
   }
 }
@@ -57,7 +56,7 @@ oneview_server_profile{'Server Profile Get Available Servers':
   ensure => 'get_available_servers',
   data   => {
       query_parameters  => {
-        scopesUri        => 'ScopeTest'
+        enclosureGroupUri        => 'EG'
       }
     }
 }

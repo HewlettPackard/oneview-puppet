@@ -27,8 +27,8 @@ oneview_server_profile_template{'Server Profile Template Create':
   data   =>
     {
       name                  => 'New SPT',
-      enclosureGroupUri     => 'enclosureGp',
-      serverHardwareTypeUri => 'SY 480 Gen9 1',
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'SY 480 Gen9 2',
       connectionSettings    =>
       {
         manageConnections => true,
@@ -36,7 +36,7 @@ oneview_server_profile_template{'Server Profile Template Create':
         [
         {
             id           => 3,
-            networkUri   => 'FC01',
+            networkUri   => 'FcTest1',
             functionType => 'FibreChannel'
         },
         {
@@ -48,8 +48,8 @@ oneview_server_profile_template{'Server Profile Template Create':
       },
       firmware              =>
       {
-        firmwareBaselineUri => 'HPE Synergy Custom SPP 201912 2019 12 19',
-        manageFirmware      => true
+        firmwareBaselineUri => '',
+        manageFirmware      => false
       },
       boot                  =>
       {
@@ -171,9 +171,9 @@ oneview_server_profile_template{'Server Profile Template Create':
                 targetSelector => 'Auto'
               }
             ],
-            volumeUri                      => '/rest/storage-volumes/16ADC014-7799-4814-9962-A93C0143BC68',
+            volumeUri                      => 'VolumeTest',
             volume                         => {},
-            volumeStorageSystemUri         => '/rest/storage-systems/MXN6122CVA',
+            volumeStorageSystemUri         => 'ThreePAR-1',
             bootVolumePriority             => 'NotBootable'
           },
           {
@@ -194,9 +194,9 @@ oneview_server_profile_template{'Server Profile Template Create':
                 targetSelector => 'Auto'
               }
             ],
-            volumeUri                      => '/rest/storage-volumes/B9981C13-EED1-4F21-B95F-A93D00D23E3F',
+            volumeUri                      => 'VolumeTest',
             volume                         => {},
-            volumeStorageSystemUri         => '/rest/storage-systems/MXN6122CVA',
+            volumeStorageSystemUri         => 'ThreePAR-1',
             bootVolumePriority             => 'NotBootable'
           }
           ]
@@ -229,8 +229,8 @@ oneview_server_profile_template{'Server Profile Template Create #2':
   data    =>
     {
       name                  => 'New SPT #2',
-      enclosureGroupUri     => 'enclosureGp',
-      serverHardwareTypeUri => 'SY 480 Gen9 1'
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'SY 480 Gen9 2'
     }
 }
 
@@ -270,8 +270,8 @@ oneview_server_profile_template{'Get Transformation':
     {
       name            => 'New SPT #2',
       queryParameters => {
-        enclosureGroupUri     => 'enclosureGp',
-        serverHardwareTypeUri => 'SY 480 Gen9 1'
+        enclosureGroupUri     => 'EG',
+        serverHardwareTypeUri => 'SY 480 Gen9 2'
       }
     }
 }
@@ -282,8 +282,8 @@ oneview_server_profile_template{'Get Available Networks':
     {
       name            => 'New SPT #2',
       queryParameters => {
-        enclosureGroupUri     => 'enclosureGp',
-        serverHardwareTypeUri => 'SY 480 Gen9 1'
+        enclosureGroupUri     => 'EG',
+        serverHardwareTypeUri => 'SY 480 Gen9 2'
       }
     }
 }
