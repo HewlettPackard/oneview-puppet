@@ -19,6 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_volume_template).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:VolumeTemplate, api_version, :C7000)
+pool_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -33,7 +34,7 @@ describe provider_class, unit: true do
             'description'  => 'Volume Template',
             'type'         => 'StorageVolumeTemplateV3',
             'stateReason'  => 'None',
-            'provisioning' => {
+            'properties' => {
               'shareable'      => true,
               'provisionType'  => 'Thin',
               'capacity'       => '235834383322',
@@ -44,45 +45,13 @@ describe provider_class, unit: true do
     )
   end
 
-  let(:resource) do
-    Puppet::Type.type(:oneview_volume_template).new(
-      name: 'vt',
+  let(:sp_resource) do
+    Puppet::Type.type(:oneview_storage_pool).new(
+      name: 'Storage Pool',
       ensure: 'present',
       data:
           {
-            'name'         => 'ONEVIEW_PUPPET_TEST',
-            'description'  => 'Volume Template',
-            'type'         => 'StorageVolumeTemplateV3',
-            'stateReason'  => 'None',
-            'provisioning' => {
-              'shareable'      => true,
-              'provisionType'  => 'Thin',
-              'capacity'       => '235834383322',
-              'storagePoolUri' => '/rest/fake'
-            }
-          },
-      provider: 'c7000'
-    )
-  end
-
-  let(:resource_create) do
-    Puppet::Type.type(:oneview_volume_template).new(
-      name: 'vt',
-      ensure: 'present',
-      data:
-          {
-            'name'         => 'ONEVIEW_PUPPET_TEST',
-            'description'  => 'Volume Template',
-            'type'         => 'StorageVolumeTemplateV3',
-            'stateReason'  => 'None',
-            'rootTemplateUri' => '',
-            'initialScopeUris' => '',
-            'provisioning' => {
-              'shareable'      => true,
-              'provisionType'  => 'Thin',
-              'capacity'       => '235834383322',
-              'storagePoolUri' => '/rest/fake'
-            }
+            'name' => 'CPG-FC-AO'
           },
       provider: 'c7000'
     )
@@ -94,16 +63,12 @@ describe provider_class, unit: true do
 
   let(:test) { resource_type.new(@client, resource['data']) }
 
-  let(:test_uri) { resource_type.new(@client, resource_create['data']) }
+  let(:sp_test) { pool_type.new(@client, sp_resource['data']) }
 
   context 'given the Creation parameters' do
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
-      provider.set_template_uri
-      provider.set_scope_uri
-      provider.set_initial_scope
-      provider.set_storage_pool
     end
 
     it 'should be an instance of the provider oneview_volume_template' do
@@ -115,14 +80,12 @@ describe provider_class, unit: true do
     end
 
     it 'runs through the create method' do
-      resource_create['data']['rootTemplateUri'] = '/rest/fake'
-      resource_create['data']['initialScopeUris'] = '/rest/fake'
-      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
-      allow_any_instance_of(resource_type).to receive(:set_template_uri).and_return(test_uri)
-      allow_any_instance_of(resource_type).to receive(:set_scope_uri).and_return(test_uri)
+      resource['data']['properties']['storagePoolUri'] = '/rest/fake'
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(pool_type).to receive(:find_by).and_return([sp_test])
+      expect_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
-      allow(resource_type).to receive(:get_all).and_return([])
     end
 
     it 'should be able to find the connectable volume templates' do

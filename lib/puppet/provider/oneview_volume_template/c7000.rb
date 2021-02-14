@@ -39,9 +39,8 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
 
   def set_template_uri
     @data = resource['data']
-    return unless @data['rootTemplateUri'].empty?
     volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
-    @data['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
+    @data['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri'] unless @data['rootTemplateUri']
     set_storage_pool
     set_initial_scope
   end
@@ -51,10 +50,9 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
   end
 
   def set_scope_uri
-    return unless resource['data']['query_parameters']['scopeUris'].empty?
     scope = OneviewSDK.resource_named('Scope', api_version)
     scope_uri = scope.get_all(@client).first['uri']
-    resource['data']['query_parameters']['scopeUris'] = scope_uri
+    resource['data']['query_parameters']['scopeUris'] = scope_uri unless resource['data']['query_parameters']['scopeUris']
   end
 
   def create
