@@ -40,7 +40,7 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
   def set_template_uri
     @data = resource['data']
     volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
-    @data['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri'] unless @data['rootTemplateUri']
+    resource['data']['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
     set_storage_pool
     set_initial_scope
   end

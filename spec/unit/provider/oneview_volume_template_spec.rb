@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_volume_template).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:VolumeTemplate, api_version, :C7000)
-pool_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
+sp_type = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
+scope_type = OneviewSDK.resource_named(:Scope, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -33,12 +34,39 @@ describe provider_class, unit: true do
             'name'         => 'ONEVIEW_PUPPET_TEST',
             'description'  => 'Volume Template',
             'type'         => 'StorageVolumeTemplateV3',
+            'initialScopeUris' => [],
             'stateReason'  => 'None',
-            'properties' => {
+            'provisioning' => {
               'shareable'      => true,
               'provisionType'  => 'Thin',
               'capacity'       => '235834383322',
               'storagePoolUri' => '/rest/fake'
+            },
+            'properties' => {
+              'storagePool' => {
+                'title'       => 'Storage Pool',
+                'description' => 'A common provisioning group URI reference',
+                'type'        => 'string',
+                'format'      => 'x-uri-reference',
+                'default'     => '/rest/fake',
+                'required'    => true,
+                'meta'        => {
+                  'locked'       => false,
+                  'createOnly'   => true,
+                  'semanticType' => 'device-storage-pool'
+                }
+              },
+              'snapshotPool' => {
+                'type'        => 'string',
+                'title'       => 'Snapshot Pool',
+                'description' => 'A URI reference to the common provisioning group used to create snapshots',
+                'format'      => 'x-uri-reference',
+                'default'     => '/rest/fake',
+                'meta'        => {
+                  'locked'       => true,
+                  'semanticType' => 'device-snapshot-storage-pool'
+                }
+              }
             }
           },
       provider: 'c7000'
@@ -75,15 +103,17 @@ describe provider_class, unit: true do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_volume_template).provider(:c7000)
     end
 
-    it 'should be able to find the resource' do
-      expect(provider.found).to be
+    it 'if nothing is found should return false' do
+      allow(resource_type).to receive(:find_by).and_return([])
     end
 
     it 'runs through the create method' do
-      resource['data']['properties']['storagePoolUri'] = '/rest/fake'
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(pool_type).to receive(:find_by).and_return([sp_test])
-      expect_any_instance_of(resource_type).to receive(:create).and_return(test)
+      resource['data']['rootTemplateUri'] = '/rest/fake'
+      allow(resource_type).to receive(:find_by).and_return([])
+      allow(resource_type).to receive(:get_all).and_return(['/rest/fake'])
+      allow(sp_type).to receive(:get_all).and_return(['/rest/fake'])
+      allow(scope_type).to receive(:get_all).and_return(['/rest/fake'])
+      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
     end
