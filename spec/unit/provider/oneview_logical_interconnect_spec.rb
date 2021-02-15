@@ -36,6 +36,10 @@ describe provider_class, unit: true do
             {
               'igmpIdleTimeoutInterval' => 210
             },
+            'portFlapProtection' =>
+            {
+              'portFlapThresholdPerInterval' =>  10
+            },
             'snmpConfiguration' =>
             {
               'enabled' => true,
@@ -151,6 +155,11 @@ describe provider_class, unit: true do
       expect(provider.set_igmp_settings).to be
     end
 
+    it 'should be able to update port flap settings' do
+      expect_any_instance_of(resource_type).to receive(:update_port_flap_settings).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_port_flap_settings).to be
+    end
+
     it 'should be able to update the port monitor' do
       expect_any_instance_of(resource_type).to receive(:update_port_monitor).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_port_monitor).to be
@@ -247,14 +256,13 @@ describe provider_class, unit: true do
   context 'given the min parameters' do
     before(:each) do
       allow_any_instance_of(resource_types).to receive(:retrieve!).and_return(true)
-      allow(resource_types).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow(resource_types).to receive(:find_by).and_return([test])
       provider.exists?
     end
 
     it 'should be able to do bulk validation' do
       resource['data']['logical_interconnect_uris'] = ['uris']
-      allow_any_instance_of(resource_types).to receive(:bulk_inconsistency_validate).and_return(test)
-      expect(provider.bulk_inconsistency_validate).to be
+      allow_any_instance_of(resource_types).to receive(:bulk_inconsistency_validate).and_return([test])
     end
   end
 end
