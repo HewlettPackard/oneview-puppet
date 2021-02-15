@@ -36,6 +36,10 @@ describe provider_class, unit: true do
             {
               'igmpIdleTimeoutInterval' => 210
             },
+            'portFlapProtection' =>
+            {
+              'portFlapThresholdPerInterval' =>  10
+            },
             'snmpConfiguration' =>
             {
               'enabled' => true,
@@ -149,6 +153,11 @@ describe provider_class, unit: true do
     it 'should be able to update the igmp settings' do
       expect_any_instance_of(resource_type).to receive(:update_igmp_settings).and_return(FakeResponse.new('uri' => '/rest/fake'))
       expect(provider.set_igmp_settings).to be
+    end
+
+    it 'should be able to update port flap settings' do
+      expect_any_instance_of(resource_type).to receive(:update_port_flap_settings).and_return(FakeResponse.new('uri' => '/rest/fake'))
+      expect(provider.set_port_flap_settings).to be
     end
 
     it 'should be able to update the port monitor' do
