@@ -45,8 +45,9 @@ Puppet::Type.type(:oneview_volume).provide :c7000, parent: Puppet::OneviewResour
   end
 
   def set_storage_pool
+    pool_name = resource['data']['properties']['storagePool']
     storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
-    snap_uri = storage_pool_class.find_by(@client, name: 'CPG_FC-AO').first['uri']
+    snap_uri = storage_pool_class.find_by(@client, name: pool_name).first['uri']
     resource['data']['properties']['storagePool'] = snap_uri
     resource['data']['properties']['snapshotPool'] = snap_uri
   end
