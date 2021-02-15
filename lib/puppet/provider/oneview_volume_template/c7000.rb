@@ -34,7 +34,7 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
   def set_initial_scope
     list = []
     scope = OneviewSDK.resource_named('Scope', api_version)
-    list.push(scope.get_all(@client).first['uri'])
+    list.push(scope.get_all(@client).first['uri']) unless @data['initialScopeUris']
     @data['initialScopeUris'] = list
   end
 
