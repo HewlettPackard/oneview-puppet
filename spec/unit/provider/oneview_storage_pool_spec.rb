@@ -30,7 +30,7 @@ describe provider_class, unit: true do
         ensure: 'present',
         data:
             {
-              'name' => '172.18.8.11, PDU 1',
+              'name' => 'PDU 1',
               'poolName' => 'CPG-SSD-AO',
               'storageSystemUri' => '/rest/'
             },
@@ -47,9 +47,9 @@ describe provider_class, unit: true do
               'managedDomain' => 'TestDomain',
               'credentials' =>
               {
-                'ip_hostname' => '172.18.11.12',
-                'username' => 'dcs',
-                'password' => 'dcs'
+                'ip_hostname' => '<hostname>',
+                'username' => '<username>',
+                'password' => '<password>'
               }
             },
         provider: 'c7000'
