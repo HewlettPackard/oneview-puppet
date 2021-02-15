@@ -47,6 +47,10 @@ Puppet::Type.type(:oneview_fcoe_network).provide :c7000, parent: Puppet::Oneview
     if @data['networkUris']
       list = []
       @data['networkUris'].each do |item|
+        if item.to_s[0..6].include?('/rest/')
+          list.push(item)
+          next
+        end
         net = OneviewSDK.resource_named(:FCoENetwork, api_version, resource_variant).find_by(@client, name: item)
         raise("The network #{name} does not exist.") unless net.first
         list.push(net.first['uri'])
