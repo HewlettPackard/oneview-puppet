@@ -33,7 +33,7 @@ oneview_uplink_set{'uplink_set_1':
       networkUris                    => [
         'TestNetwork_1', 'TestNetwork_2'
       ],
-      logicalInterconnectUri         => 'Encl1-Test Oneview'
+      logicalInterconnectUri         => 'LE-LIG'
     },
 }
 
@@ -54,7 +54,7 @@ oneview_uplink_set{'uplink_set_2':
       networkUris                    => [
         'TestNetwork_1'
       ],
-      logicalInterconnectUri         => 'Encl1-Test Oneview'
+      logicalInterconnectUri         => 'LE-LIG'
     },
 }
 

@@ -22,30 +22,29 @@ resource_type = OneviewSDK.resource_named(:FCNetwork, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_fc_network).new(
-      name: 'fc',
-      ensure: 'present',
-      data:
-          {
-            'name'                    => 'OneViewSDK Test FC Network',
-            'connectionTemplateUri'   => nil,
-            'autoLoginRedistribution' => true,
-            'fabricType'              => 'FabricAttach',
-            'linkStabilityTime' => 30
-          },
-      provider: 'c7000'
-    )
-  end
-
-  let(:provider) { resource.provider }
-
-  let(:instance) { provider.class.instances.first }
-
-  let(:test) { resource_type.new(@client, resource['data']) }
-
   context 'given the Creation parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_fc_network).new(
+        name: 'fc',
+        ensure: 'present',
+        data:
+             {
+               'name'                    => 'OneViewSDK Test FC Network',
+               'connectionTemplateUri'   => nil,
+               'autoLoginRedistribution' => true,
+               'fabricType'              => 'FabricAttach',
+               'linkStabilityTime' => 30
+             },
+        provider: 'c7000'
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    let(:test) { resource_type.new(@client, resource['data']) }
+
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
@@ -57,17 +56,14 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resource_type).to receive(:find_by).and_return([])
+      resource['data']['networkUris'] = ['/rest/fake']
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:bulk_delete_check).and_return({})
+      allow(resource_type).to receive(:bulk_delete).with(anything, resource['data']).and_return({})
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
+      expect(provider.bulk_delete_check).to be
       expect(provider.create).to be
-    end
-
-    it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
-      allow(resource_type).to receive(:find_by).and_return([test])
-      allow_any_instance_of(resource_type).to receive(:delete).and_return([])
-      provider.exists?
-      expect(provider.destroy).to be
     end
 
     it 'should be able to run through self.instances' do
@@ -75,10 +71,11 @@ describe provider_class, unit: true do
       expect(instance).to be
     end
 
-    it 'finds the resource' do
+    it 'deletes the resource' do
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      expect_any_instance_of(resource_type).to receive(:delete).and_return({})
       provider.exists?
-      expect(provider.found).to be
+      expect(provider.destroy).to be
     end
   end
 end
