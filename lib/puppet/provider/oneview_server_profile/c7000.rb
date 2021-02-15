@@ -57,6 +57,7 @@ Puppet::Type.type(:oneview_server_profile).provide :c7000, parent: Puppet::Onevi
   end
 
   def get_available_networks
+    Puppet.notice("\n\nServer Profile Available Networks\n")	  
     if @data['name'] || @data['uri']
       pretty get_single_resource_instance.get_available_networks
     else
