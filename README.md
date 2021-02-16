@@ -3,7 +3,7 @@
 ## Build Status 
 OV Version | 5.60 | 5.50 | 5.40 | 5.30 |
 | ------------- |:-------------:| -------------:| -------------:| -------------:|
-SDK Version/Tag | [Master](https://github.com/HewlettPackard/oneview-puppet/tree/master) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | [v2.7.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.7.0) |
+SDK Version/Tag | [v2.10.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.10.0) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | [v2.7.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.7.0) |
 Build Status | ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)|
 
 
@@ -21,7 +21,7 @@ For more information on the Puppet Module for HPE OneView resource types and the
 
 ## What's New
 
-HPE OneView Puppet library extends support of the SDK to OneView REST API version 2200 (OneView v5.50)
+HPE OneView Puppet library extends support of the SDK to OneView REST API version 2400 (OneView v5.60)
 
 Please refer to [notes](https://github.com/HewlettPackard/oneview-puppet/blob/master/CHANGELOG.md) for more information on the changes , features supported and issues fixed in this version
 
@@ -129,7 +129,7 @@ All you need is Docker and git (optional).
    ```bash
    # Download and store a local copy of hpe-oneview-sdk-for-puppet and
    # use it as a Docker image.
-   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.9.0-OV5.5
+   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.10.0-OV5.6
    # Run docker container with below commands.
    $docker run -it --rm \
      -v $(pwd)/:/puppet
@@ -139,7 +139,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
      -e ONEVIEW_API_VERSION=800 \
-     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.9.0-OV5.5 puppet apply fc_network.pp --debug --trace
+     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.10.0-OV5.6 puppet apply fc_network.pp --debug --trace
    ```
     Now you can run any of the example manifests in this directory:
 ```bash
