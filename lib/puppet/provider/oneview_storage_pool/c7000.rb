@@ -45,12 +45,12 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
 
   def reachable
     return unless @client.api_version >= 500
-    @data['name'] = OneviewSDK.resource_named('StoragePool', api_version).find_by(@client, name: @data['name']).first['uri']
     pretty @resource_type.reachable(@client)
     true
   end
 
   def destroy
+    return unless @client.api_version <= 500
     super(:remove)
   end
 
