@@ -39,7 +39,6 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   def manage
     return unless @client.api_version >= 500
     is_managed = @data.delete('isManaged')
-    set_storage_system
     get_single_resource_instance.manage(is_managed)
     true
   end
@@ -63,12 +62,5 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
     return true if storage_pool.empty?
     storage_pool.first.remove
     true
-  end
-  
-  def set_storage_system
-    storage_system = @data['storageSystemUri']
-    storage_system_class = OneviewSDK.resource_named('StorageSystem', @client.api_version)
-    uri = storage_system_class.find_by(@client, name: storage_system).first['uri']
-    @data['storageSystemUri'] = uri
   end
 end
