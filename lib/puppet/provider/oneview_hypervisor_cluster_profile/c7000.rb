@@ -29,15 +29,18 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   end
 
   def create
-    set_uri if resource['data'] && resource['data'].key?('hypervisorManagerUri')
+    set_uri
+    Puppet.debug 'Hi'
     @data = resource['data']
     return true if resource_update
     super(:create)
   end
 
   def set_uri
+    hm_name = resource['data']['hypervisorManagerUri']
     hm_class = OneviewSDK.resource_named('HypervisorManager', @client.api_version)
-    hm_uri = hm_class.find_by(@client, name: 'HM').first['uri']
+    hm_uri = hm_class.find_by(@client, name: hm_name).first['uri']
+    Puppet.debug hm_uri
     resource['data']['hypervisorManagerUri'] = hm_uri if resource['data']['hypervisorManagerUri'].empty?
     set_spt_uri
   end
@@ -56,15 +59,17 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
 
   def set_spt_with_dp
     return unless resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'].empty?
+    spt_name = resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri']
     spt_class = OneviewSDK.resource_named('ServerProfileTemplate', @client.api_version)
-    resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_class.find_by(@client, name: 'SPT').first['uri']
+    resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_class.find_by(@client, name: spt_name).first['uri']
 
     set_dp
   end
 
   def set_dp
     dp_class = OneviewSDK.resource_named('OSDeploymentPlan', @client.api_version, 'Synergy')
-    dp_uri = dp_class.find_by(@client, name: 'Deploy-HPE-Esxi-6.2-U2').first['uri']
+    dp_name = resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri']
+    dp_uri = dp_class.find_by(@client, name: dp_name).first['uri']
     resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'] = dp_uri
   end
 

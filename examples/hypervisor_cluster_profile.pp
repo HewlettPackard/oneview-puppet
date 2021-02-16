@@ -23,7 +23,7 @@ oneview_hypervisor_cluster_profile{'hcp1 Create':
     data   => {
       type                          => 'HypervisorClusterProfileV4',
       name                          => 'Cluster5',
-      hypervisorManagerUri          => '',
+      hypervisorManagerUri          => 'HM',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
@@ -40,13 +40,13 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
     data    => {
       type                          => 'HypervisorClusterProfileV4',
       name                          => 'Cluster10',
-      hypervisorManagerUri          => '',
+      hypervisorManagerUri          => 'HM',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-        serverProfileTemplateUri => '',
+        serverProfileTemplateUri => 'SPT',
         deploymentPlan           => {
-          deploymentPlanUri => '',
+          deploymentPlanUri => 'Deploy-HPE-Esxi-6.2-U2',
           serverPassword    => '<server-password>'
         },
         hostprefix               => 'Test-Cluster-host-10'
