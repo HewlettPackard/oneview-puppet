@@ -23,7 +23,7 @@ oneview_storage_pool{'storage_pool_1':
     ensure => 'present',
     data   => {
       poolName         => 'CPG-SSD-AO',
-      storageSystemUri => 'ThreePAR-2'
+      storageSystemUri => 'ThreePAR-1'
       # storageSystemUri => '/rest/storage-systems/TXQ1000307'
     }
 }
@@ -41,9 +41,9 @@ oneview_storage_pool{'storage_pool_2':
 oneview_storage_pool{'storage_pool_4':
     ensure => 'manage',
     data   => {
-      name             => 'cpg-growth-limit-1TiB',
+      name             => 'CPG-SSD-AO',
       isManaged        => true,
-      storageSystemUri => '/rest/storage-systems/TXQ1010307'
+      storageSystemUri => 'ThreePAR-1'
     }
 }
 
@@ -51,8 +51,9 @@ oneview_storage_pool{'storage_pool_4':
 oneview_storage_pool{'storage_pool_5':
     ensure => 'reachable',
     data   => {
-      uri              => '/rest/storage-pools/85DEFE8C-939C-4E40-B886-AB6B00DBCB05',
-      storageSystemUri => '/rest/storage-systems/TXQ1010307'
+      name             => 'CPG-SSD-AO',
+      #uri              => '/rest/storage-pools/FC1DE749-6396-4D14-BDE8-ACBD00F33D8B',
+      storageSystemUri => 'ThreePAR-1'
     }
 }
 
@@ -61,7 +62,7 @@ oneview_storage_pool{'storage_pool_3':
     ensure  => 'absent',
     require => Oneview_storage_pool['storage_pool_2'],
     data    => {
-      poolName         => 'cpg-growth-limit-1TiB',
-      storageSystemUri => '/rest/storage-systems/TXQ1010307'
+      poolName         => 'CPG-SSD-AO',
+      storageSystemUri => 'ThreePAR-1'
     }
 }
