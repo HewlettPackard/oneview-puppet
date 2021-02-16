@@ -51,7 +51,8 @@ oneview_storage_pool{'storage_pool_4':
 oneview_storage_pool{'storage_pool_5':
     ensure => 'reachable',
     data   => {
-      uri              => 'CPG-SSD-AO',
+      name             => 'CPG-SSD-AO',
+      #uri              => '/rest/storage-pools/FC1DE749-6396-4D14-BDE8-ACBD00F33D8B',
       storageSystemUri => 'ThreePAR-1'
     }
 }
