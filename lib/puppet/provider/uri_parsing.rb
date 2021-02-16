@@ -38,7 +38,7 @@ end
 def exception_to_be_treated_within_provider(key)
   # TODO: Remove the enclosureUris from this list once the issue(#194) is fixed.
   exception_list = %w(networkUris networkUri hotfixUris fcNetworkUris fcoeNetworkUris connectionUri providerUri
-                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris enclosureUris)
+                      permittedInterconnectTypeUri permittedSwitchTypeUri internalNetworkUris enclosureUris ipRangeUris ipv6RangeUris)
   true if exception_list.include?(key)
 end
 

@@ -54,10 +54,6 @@ oneview_fcoe_network{'FCoE Delete':
 oneview_fcoe_network{'Bulk Delete':
     ensure => 'present',
     data   => {
-      networkUris    =>
-      [
-        '/rest/fcoe-networks/2701a5a8-ffa6-4ce2-bfde-8644e1d83b35',
-        '/rest/fcoe-networks/6308d537-7925-427e-a64f-41ca441111c5'
-      ]
+      networkUris    => ['FcoeTest1', 'FcoeTest2']
     }
 }

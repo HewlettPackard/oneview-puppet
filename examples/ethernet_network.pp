@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -124,10 +124,7 @@ oneview_ethernet_network{'Bulk Delete 2':
 oneview_ethernet_network{'Bulk Delete':
     ensure => 'present',
     data   => {
-      networkUris    =>
-      [
-        '/rest/ethernet-networks/9bec3c8e-8529-4c55-9f4d-d0a1717c5c64',
-        '/rest/ethernet-networks/9ce4ea16-d5c0-4cce-b6a0-7abc6a88c1cb'
-      ]
+      networkUris    => [ 'Test1', 'Test2' ]
     }
 }
+

@@ -23,8 +23,8 @@ oneview_storage_pool{'storage_pool_1':
     ensure => 'present',
     data   => {
       poolName         => 'CPG-SSD-AO',
-      storageSystemUri => 'ThreePAR-1'
-      #storageSystemUri => '/rest/storage-systems/TXQ1000307'
+      storageSystemUri => 'ThreePAR-2'
+      # storageSystemUri => '/rest/storage-systems/TXQ1000307'
     }
 }
 

@@ -19,6 +19,7 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_enclosure_group).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:EnclosureGroup, api_version, :C7000)
+lig_type = OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
@@ -73,18 +74,46 @@ describe provider_class, unit: true do
       )
     end
 
+    let(:lig_resource) do
+      Puppet::Type.type(:oneview_logical_interconnect_group).new(
+        name: 'LIG',
+        ensure: 'present',
+        data:
+          {
+            'name'               => 'Puppet LIG Synergy',
+            'redundancyType'     => 'Redundant',
+            'interconnectBaySet' => 3,
+            'interconnects'      =>
+            [
+              {
+                'bay'  => 3,
+                'type' => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+              },
+              {
+                'bay'  => 6,
+                'type' => 'Virtual Connect SE 40Gb F8 Module for Synergy'
+              }
+            ]
+          },
+        provider: 'c7000'
+      )
+    end
+
     let(:provider) { resource.provider }
 
     let(:instance) { provider.class.instances.first }
 
     let(:test) { resource_type.new(@client, resource['data']) }
 
+    let(:lig) { lig_type.new(@client, name: lig_resource['data']) }
+
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
+      allow(lig_type).to receive(:find_by).and_return([lig])
       provider.exists?
     end
 
-    it 'should be an instance of the provider Ruby' do
+    it 'should be an instance of the provider' do
       expect(provider).to be_an_instance_of Puppet::Type.type(:oneview_enclosure_group).provider(:c7000)
     end
 

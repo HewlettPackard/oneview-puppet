@@ -29,7 +29,6 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def create
-    return unless @client.api_version <= 500
     raise 'A "poolName" or "name" tag is required within data for this operation' unless @data['name']
     return unless setup_for_recreation
     # Changes name into poolName which is required only for creation
@@ -53,7 +52,6 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def destroy
-    return unless @client.api_version <= 500
     super(:remove)
   end
 
@@ -66,7 +64,7 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
     storage_pool.first.remove
     true
   end
-
+  
   def set_storage_system
     storage_system = @data['storageSystemUri']
     storage_system_class = OneviewSDK.resource_named('StorageSystem', @client.api_version)

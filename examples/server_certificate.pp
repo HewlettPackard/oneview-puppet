@@ -14,8 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-$aliasname = '172.18.13.11'
-$remoteip = '172.18.13.11'
+$aliasname = '<ip>'
+$remoteip = '<ip>'
 
 # Imports the given Server certificate into the appliance
 oneview_server_certificate{'Import Certificates from RemoteIP':

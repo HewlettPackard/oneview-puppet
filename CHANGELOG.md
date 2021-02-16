@@ -1,3 +1,81 @@
+# v2.10.0(Unreleased)
+### Notes
+- This release extends support of the SDK to Oneview REST API version 2400 (OneView v5.60).
+
+### Oneview Features supported
+- Connection Template
+- Enclosure
+- Enclosure Group
+- Ethernet Network
+- FC Network
+- FCOE Network
+- Hypervisor Cluster Profile
+- Hypervisor Manager
+- Interconnect
+- Interconnect Types
+- Logical Enclosure
+- Logical Interconnect
+- Logical Interconnect Groups
+- Network Set
+- OS Deployment Plan
+- Server Certificate
+- Server Hardware
+- Server Hardware Type
+- Server Profile
+- Server Profile Template
+- Storage Pool
+- Storage System
+- Storage Volume Template
+- Uplink Set
+- Volume
+- Volume Attachment
+
+#### Bug fixes & Enhancements:
+- [#301] (https://github.com/HewlettPackard/oneview-puppet/issues/301) Failing to create a oneview enclosure group with ipRangeUris
+- [#304] (https://github.com/HewlettPackard/oneview-puppet/issues/304) Failing to create a oneview logical interconnect group with real networkUris
+- [#315] (https://github.com/HewlettPackard/oneview-puppet/issues/315) Failing to create oneview_server_profile_tempate with connections
+
+# v2.9.0(2020-11-11)
+### Notes
+- This release extends support of the SDK to Oneview REST API version 2200 (OneView v5.50) and ImageStreamer REST API version 2000 (I3S v5.40).
+
+### Oneview Features supported
+- Connection Template
+- Enclosure
+- Enclosure Group
+- Ethernet Network
+- FC Network
+- FCOE Network
+- Hypervisor Cluster Profile
+- Hypervisor Manager
+- Interconnect
+- Interconnect Types
+- Logical Enclosure
+- Logical Interconnect
+- Logical Interconnect Groups
+- Network Set
+- OS Deployment Plan
+- Server Certificate
+- Server Hardware
+- Server Hardware Type
+- Server Profile
+- Server Profile Template
+- Storage Pool
+- Storage System
+- Storage Volume Template
+- Uplink Set
+- Volume
+- Volume Attachment
+
+### Image Streamer support
+- Artifact Bundle
+- Build Plan
+- Deployment Plan
+- Deployment Group
+- Golden Image
+- OS Volume
+- Plan Script
+
 # v2.8.0(2020-09-25)
 ### Notes
 - This release extends support of the SDK to Oneview REST API version 2000 (OneView v5.40).

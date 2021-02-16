@@ -21,7 +21,7 @@ oneview_interconnect{'Interconnect Get Types':
 oneview_interconnect{'Interconnect Found':
   ensure => 'found',
   data   => {
-    name => 'Encl1, interconnect 2',
+    name => '0000A66101, interconnect 2',
   }
 }
 
@@ -33,10 +33,10 @@ oneview_interconnect{'Interconnect Found All':
 oneview_interconnect{'Interconnect Get Specific Statistics':
   ensure => 'get_statistics',
   data   => {
-    name       => 'Encl1, interconnect 2',
+    name       => '0000A66101, interconnect 2',
     statistics =>
     {
-      portName => 'X1'
+      portName => 'Q1'
       # subportNumber => '1'
     }
   }
@@ -45,14 +45,14 @@ oneview_interconnect{'Interconnect Get Specific Statistics':
 oneview_interconnect{'Interconnect Get Name Servers':
   ensure => 'get_name_servers',
   data   => {
-    name => 'Encl1, interconnect 2'
+    name => '0000A66101, interconnect 2'
   }
 }
 
 oneview_interconnect{'Interconnect Patch Interconnect':
   ensure => 'present',
   data   => {
-    name  => 'Encl1, interconnect 2',
+    name  => '0000A66101, interconnect 2',
     patch =>
     {
       op    => 'replace',
@@ -65,7 +65,7 @@ oneview_interconnect{'Interconnect Patch Interconnect':
 oneview_interconnect{'Interconnect Reset Port Protection':
   ensure => 'reset_port_protection',
   data   => {
-    name => 'Encl1, interconnect 2',
+    name => '0000A66101, interconnect 2',
   }
 }
 
@@ -75,15 +75,15 @@ oneview_interconnect{'Interconnect Update Ports':
   ensure => 'update_ports',
   data   =>
   {
-    name  => 'Encl1, interconnect 2',
+    name  => '0000A66101, interconnect 2',
     ports =>
       [
         {
-          portName => 'X1',
+          portName => 'Q1',
           enabled  => false
         },
         {
-          portName => 'X2',
+          portName => 'Q2',
           enabled  => false
         }
       ]

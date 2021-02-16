@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2019-2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2019-2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -34,11 +34,11 @@ oneview_enclosure_group{'Enclosure Group Create':
       interconnectBayMappings     => [
         {
           interconnectBay             => '3',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
+          logicalInterconnectGroupUri => 'LIG'
         },
         {
           interconnectBay             => '6',
-          logicalInterconnectGroupUri => '/rest/logical-interconnect-groups/be93c6ae-e0d1-4de6-aa5b-8521a0b13d31'
+          logicalInterconnectGroupUri => 'LIG'
         }
       ]
     }

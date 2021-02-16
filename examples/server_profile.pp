@@ -36,7 +36,7 @@ oneview_server_profile{'Server Profile Get Available Targets':
   ensure => 'get_available_targets',
   data   => {
     query_parameters  => {
-      scopesUri        => '/rest/scopes/94a9804e-8521-4c26-bb00-e4875be53498'
+      enclosureGroupUri       => 'EG'
     }
   }
 }
@@ -45,9 +45,8 @@ oneview_server_profile{'Server Profile Get Available Networks':
   ensure => 'get_available_networks',
   data   => {
     query_parameters  => {
-      enclosureGroupUri     => '/rest/enclosure-groups/d8f1f41e-6bc1-4842-932b-b526ce4f7321',
-      serverHardwareTypeUri => '/rest/server-hardware-types/30303437-3034-4D32-3230-313031324752'
-      scopesUri             => '/rest/scopes/94a9804e-8521-4c26-bb00-e4875be53498'
+      enclosureGroupUri     => 'EG',
+      serverHardwareTypeUri => 'SY 480 Gen9 2'
     }
   }
 }
@@ -57,7 +56,7 @@ oneview_server_profile{'Server Profile Get Available Servers':
   ensure => 'get_available_servers',
   data   => {
       query_parameters  => {
-        scopesUri        => '/rest/scopes/aa42a1c2-114e-49ef-b725-4cee9f284d74'
+        enclosureGroupUri        => 'EG'
       }
     }
 }
@@ -68,7 +67,7 @@ oneview_server_profile{'Server Profile Create':
   {
     type              => 'ServerProfileV12',
     name              => 'Test Server Profile',
-    serverHardwareUri => '/rest/server-hardware/33343538-3136-4332-3230-313531304752',
+    serverHardwareUri => '0000A66101, bay 7',
   }
 }
 

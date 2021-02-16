@@ -56,6 +56,20 @@ describe provider_class, unit: true do
       )
     end
 
+    let(:resource) do
+      Puppet::Type.type(:oneview_storage_pool).new(
+        name: 'Storage Pool',
+        ensure: 'present',
+        data:
+            {
+              'name' => '172.18.8.11, PDU 1',
+              'poolName' => 'CPG-SSD-AO',
+              'storageSystemUri' => '/rest/'
+            },
+        provider: 'c7000'
+      )
+    end
+
     let(:provider) { resource.provider }
 
     let(:instance) { provider.class.instances.first }
