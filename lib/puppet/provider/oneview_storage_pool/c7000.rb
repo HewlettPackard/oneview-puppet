@@ -68,11 +68,7 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def set_storage_system
-    storage_system = @data['storageSystemUri'] 
-    Puppet.debug storage_system
-    if storage_system.to_s[0..6].include?('/rest/')
-       uri = storage_system
-    end
+    storage_system = @data['storageSystemUri']
     storage_system_class = OneviewSDK.resource_named('StorageSystem', @client.api_version)
     uri = storage_system_class.find_by(@client, name: storage_system).first['uri']
     @data['storageSystemUri'] = uri
