@@ -5,24 +5,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         ruby: [2.3,2.4,2.5]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-    - name: git clone
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-
+    - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - run: bundle exec rake
 
-    - uses: codecov/codecov-action@v1
+    - name: Build and test with Rake
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        bundle exec rake
+    - name: Output codecov report
+      run: cat ./coverage/.resultset.json
+    - name: Send test coverage report to codecov.io
+      uses: codecov/codecov-action@v1
       with:
-        flags: unit-test
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        verbose: true
+        file: ./coverage/.resultset.json
