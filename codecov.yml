@@ -1,1 +1,8 @@
+# Setting coverage targets per flag
+coverage:
+  status:
+    project:
+      default:
+        target: 90% #overall project/ repo coverage
+
 comment: false
