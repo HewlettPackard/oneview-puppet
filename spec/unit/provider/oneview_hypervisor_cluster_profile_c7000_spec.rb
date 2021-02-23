@@ -131,6 +131,8 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resource_type).to receive(:find_by).and_return([])
+      resource['data']['hypervisorManagerUri'] = ['/rest/fake']
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
