@@ -66,8 +66,9 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
 
   def parameter_check(res)
     return unless res
-    set_scope_uri if resource['data'].key?('query_parameters').key?('scopeUris')
-    set_networks  if resource['data'].key?('query_parameters').key?('networks')
+    Puppet.debug res
+    set_scope_uri if resource['data']['query_parameters'].key?('scopeUris')
+    set_networks  if resource['data']['query_parameters'].key?('networks')
   end
 
   def get_connectable_volume_templates
