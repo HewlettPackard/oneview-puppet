@@ -10,8 +10,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - run: bundle exec rake
+
+    - name: Build and test with Rake
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        bundle exec rake
+    - name: Output codecov report
+      run: cat ./coverage/.resultset.json
+    - name: Send test coverage report to codecov.io
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage/.resultset.json
