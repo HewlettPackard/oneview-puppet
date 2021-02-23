@@ -30,7 +30,6 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
 
   def create
     set_uri
-    Puppet.debug 'Hi'
     @data = resource['data']
     return true if resource_update
     super(:create)
@@ -38,9 +37,7 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
 
   def set_uri
     hm_name = resource['data']['hypervisorManagerUri']
-    hm_class = OneviewSDK.resource_named('HypervisorManager', @client.api_version)
-    hm_uri = hm_class.find_by(@client, name: hm_name).first['uri']
-    Puppet.debug hm_uri
+    hm_uri = OneviewSDK.resource_named(:HypervisorManager, api_version).find_by(@client, name: hm_name).first['uri']
     resource['data']['hypervisorManagerUri'] = hm_uri if resource['data']['hypervisorManagerUri'].empty?
     set_spt_uri
   end
@@ -62,7 +59,6 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
     spt_name = resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri']
     spt_class = OneviewSDK.resource_named('ServerProfileTemplate', @client.api_version)
     resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_class.find_by(@client, name: spt_name).first['uri']
-
     set_dp
   end
 
