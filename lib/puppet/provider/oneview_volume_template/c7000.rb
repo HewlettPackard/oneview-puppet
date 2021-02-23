@@ -31,19 +31,11 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
     @data['properties']['snapshotPool']['default'] = uri
   end
 
-  def set_initial_scope
-    list = []
-    scope = OneviewSDK.resource_named('Scope', api_version)
-    list.push(scope.get_all(@client).first['uri']) unless @data['initialScopeUris']
-    @data['initialScopeUris'] = list
-  end
-
   def set_template_uri
     @data = resource['data']
     volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
     resource['data']['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
     set_storage_pool
-    set_initial_scope
   end
 
   def exists?
@@ -56,12 +48,26 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
     resource['data']['query_parameters']['scopeUris'] = scope_uri unless resource['data']['query_parameters']['scopeUris']
   end
 
+  # sets Ethernet Network if user doesn't pass any networks
+  def set_networks
+    networks = OneviewSDK.resource_named('EthernetNetwork', api_version)
+    network_uri = networks.get_all(@client).first['uri']
+    resource['data']['query_parameters']['networks'] = network_uri unless resource['data']['query_parameters']['networks']
+  end
+
   def create
     set_template_uri if resource['data'] && resource['data'].key?('rootTemplateUri')
-    set_scope_uri if resource['data'] && resource['data'].key?('query_parameters')
+    res = resource['data'].key?('query_parameters')
+    parameter_check(res)
     @data = resource['data']
     return true if resource_update
     super(:create)
+  end
+
+  def parameter_check(res)
+    return unless res
+    set_scope_uri if resource['data'].key?('query_parameters').key?('scopeUris')
+    set_networks  if resource['data'].key?('query_parameters').key?('networks')
   end
 
   def get_connectable_volume_templates

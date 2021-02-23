@@ -21,7 +21,6 @@ oneview_volume_template{'volume_template_1':
       'name'             => 'ONEVIEW_PUPPET_TEST',
       'description'      => 'Test volume template for puppet',
       'rootTemplateUri'  => '',
-      'initialScopeUris' => [],
       'properties'       => {
           'name'             => {
               'title'       => 'Volume name',
