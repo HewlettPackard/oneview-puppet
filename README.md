@@ -1,9 +1,9 @@
 # HPE OneView SDK for Puppet
 
 ## Build Status 
-OV Version | 5.60 | 5.50 | 5.40 | 5.30 |
+OV Version | 6.00 | 5.60 | 5.50 | 5.40 |
 | ------------- |:-------------:| -------------:| -------------:| -------------:|
-SDK Version/Tag | [v2.10.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.10.0) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | [v2.7.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.7.0) |
+SDK Version/Tag | [v6.0.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.0.0) | [v2.10.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.10.0) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | 
 Build Status | ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)| ![Build status](https://ci.appveyor.com/api/projects/status/u84505l6syp70013?svg=true)|
 
 
@@ -21,7 +21,7 @@ For more information on the Puppet Module for HPE OneView resource types and the
 
 ## What's New
 
-HPE OneView Puppet library extends support of the SDK to OneView REST API version 2400 (OneView v5.60)
+HPE OneView Puppet library extends support of the SDK to OneView REST API version 2600 (OneView v6.00)
 
 Please refer to [notes](https://github.com/HewlettPackard/oneview-puppet/blob/master/CHANGELOG.md) for more information on the changes , features supported and issues fixed in this version
 
@@ -129,7 +129,7 @@ All you need is Docker and git (optional).
    ```bash
    # Download and store a local copy of hpe-oneview-sdk-for-puppet and
    # use it as a Docker image.
-   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.10.0-OV5.6
+   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v6.0.0-OV6.0
    # Run docker container with below commands.
    $docker run -it --rm \
      -v $(pwd)/:/puppet
@@ -138,8 +138,8 @@ All you need is Docker and git (optional).
      -e ONEVIEW_PASSWORD='secret123' \
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
-     -e ONEVIEW_API_VERSION=800 \
-     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.10.0-OV5.6 puppet apply fc_network.pp --debug --trace
+     -e ONEVIEW_API_VERSION=2600 \
+     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v6.0.0-OV6.0 puppet apply fc_network.pp --debug --trace
    ```
     Now you can run any of the example manifests in this directory:
 ```bash
@@ -154,7 +154,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_PASSWORD='secret123' \
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
-     -e ONEVIEW_API_VERSION=2000 \
+     -e ONEVIEW_API_VERSION=2600 \
      puppet-oneview puppet apply fc_network.pp --debug --trace
    ```
    To run an Image Streamer example manifests:
@@ -164,7 +164,7 @@ All you need is Docker and git (optional).
     $ docker run -it --rm \
      -v $(pwd)/:/puppet
      -e IMAGE_STREAMER_URL= 'https://imagestreamer.example.com' \
-     -e IMAGE_STREAMER_API_VERSION=600 \
+     -e IMAGE_STREAMER_API_VERSION=2010 \
      -e IMAGE_STREAMER_LOG_LEVEL='info' \
      -e IMAGE_STREAMER_SSL_ENABLED=true \
      puppet-oneview puppet apply image_streamer/deployment_plan.pp --debug --trace

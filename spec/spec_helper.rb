@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -77,8 +77,8 @@ RSpec.configure do |config|
   config.before(:each) do
     unless config.filter_manager.inclusions.rules[:integration] # If not using the integration flag, sets the mocks required for unit tests
       # Mock appliance version and login api requests, as well as loading trusted certs
-      allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(2400)
-      allow_any_instance_of(OneviewSDK::ImageStreamer::Client).to receive(:appliance_i3s_api_version).and_return(2000)
+      allow_any_instance_of(OneviewSDK::Client).to receive(:appliance_api_version).and_return(2600)
+      allow_any_instance_of(OneviewSDK::ImageStreamer::Client).to receive(:appliance_i3s_api_version).and_return(2010)
       allow_any_instance_of(OneviewSDK::Client).to receive(:login).and_return('secretToken')
       allow(OneviewSDK::SSLHelper).to receive(:load_trusted_certs).and_return(nil)
     end

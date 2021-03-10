@@ -27,4 +27,4 @@ jobs:
     - name: Send test coverage report to codecov.io
       uses: codecov/codecov-action@v1
       with:
-        file: ./coverage/.resultset.json
+        files: ./coverage/.resultset.json
