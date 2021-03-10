@@ -26,11 +26,12 @@ oneview_volume{'volume_1':
       properties  => {
             provisioningType => 'Thin',
             size             => 1073741824,
-            name             => 'Oneview_Puppet_TEST_VOLUME_1',
-            storagePool      => '/rest/storage-pools/547F8659-BD66-4775-9943-A93C0143AC70',
-            isShareable      => false
+            name             => 'Oneview_Puppet_TEST_VOLUME_2',
+            storagePool      => '',
+            isShareable      => false,
+            snapshotPool     => ''
       },
-      templateUri => '/rest/storage-volume-templates/b8c4489e-4a19-4bfe-857c-aab8006478a7',
+      templateUri => '',
     }
 }
 
@@ -38,7 +39,7 @@ oneview_volume{'volume_2':
     ensure  => 'create_snapshot',
     require => Oneview_volume['volume_1'],
     data    => {
-      name               => 'Oneview_Puppet_TEST_VOLUME_1',
+      name               => 'Oneview_Puppet_TEST_VOLUME_2',
       snapshotParameters => {
               name        => 'test_snapshot',
               type        => 'Snapshot',
@@ -69,11 +70,6 @@ oneview_volume{'volume_4':
 oneview_volume{'volume_5':
     ensure  => 'get_attachable_volumes',
     require => Oneview_volume['volume_4'],
-    data    => {
-      query_parameters  => {
-        connections    => "[{'networkUri':'/rest/fc-networks/90bd0f63-3aab-49e2-a45f-a52500b46616','proxyName':'20:19:50:EB:1A:0F:0E:B6','initiatorName':'10:00:62:01:F8:70:00:0E'}]"
-      }
-    }
 }
 
 oneview_volume{'volume_6':

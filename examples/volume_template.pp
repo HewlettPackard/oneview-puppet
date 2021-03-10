@@ -18,10 +18,10 @@
 oneview_volume_template{'volume_template_1':
     ensure => 'present',
     data   => {
-      'name'            => 'ONEVIEW_PUPPET_TEST',
-      'description'     => 'Test volume template for puppet',
-      'rootTemplateUri' => '/rest/storage-volume-templates/96196d4c-3cac-4d6b-ab6b-a93c0143ac75',
-      'properties'      => {
+      'name'             => 'ONEVIEW_PUPPET_TEST',
+      'description'      => 'Test volume template for puppet',
+      'rootTemplateUri'  => '',
+      'properties'       => {
           'name'             => {
               'title'       => 'Volume name',
               'description' => 'A volume name between 1 and 100 characters',
@@ -50,7 +50,7 @@ oneview_volume_template{'volume_template_1':
               'description' => 'A common provisioning group URI reference',
               'type'        => 'string',
               'format'      => 'x-uri-reference',
-              'default'     => '/rest/storage-pools/D1A6DDF6-806D-4F6E-8CDC-A93C0143AC72',
+              'default'     => '',
               'required'    => true,
               'meta'        => {
                   'locked'       => false,
@@ -63,7 +63,7 @@ oneview_volume_template{'volume_template_1':
               'title'       => 'Snapshot Pool',
               'description' => 'A URI reference to the common provisioning group used to create snapshots',
               'format'      => 'x-uri-reference',
-              'default'     => '/rest/storage-pools/D1A6DDF6-806D-4F6E-8CDC-A93C0143AC72',
+              'default'     => '',
               'meta'        => {
                   'locked'       => true,
                   'semanticType' => 'device-snapshot-storage-pool'
@@ -123,9 +123,9 @@ oneview_volume_template{'volume_template_2':
 oneview_volume_template{'volume_template_3':
     ensure  => 'found',
     require => Oneview_volume_template['volume_template_2'],
-    # data   => {
-    #   name                   => 'ONEVIEW_PUPPET_TEST VT1',
-    # }
+    data    => {
+      name        => 'ONEVIEW_PUPPET_TEST VT1'
+    }
 }
 
 # Method unavailable for api500 and above
@@ -156,9 +156,9 @@ oneview_volume_template{'volume_template_6':
     ensure  => 'get_reachable_volume_templates',
     require => Oneview_volume_template['volume_template_3'],
     data    => {
-      name             => 'qw',
+      name             => 'ONEVIEW_PUPPET_TEST VT1',
       query_parameters => {
-        scopeUris => '/rest/scopes/bf3e77e3-3248-41b3-aaee-5d83b6ac4b49'
+        scopeUris => ''
       }
     }
 }

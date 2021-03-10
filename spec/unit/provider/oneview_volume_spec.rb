@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2016-2017 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2016-2020 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -19,37 +19,77 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:oneview_volume).provider(:c7000)
 api_version = login[:api_version] || 200
 resource_type = OneviewSDK.resource_named(:Volume, api_version, :C7000)
+vt_class = OneviewSDK.resource_named(:VolumeTemplate, api_version, :C7000)
+sp_class = OneviewSDK.resource_named(:StoragePool, api_version, :C7000)
 
 describe provider_class, unit: true do
   include_context 'shared context'
-
-  let(:resource) do
-    Puppet::Type.type(:oneview_volume).new(
-      name: 'Storage Pool',
-      ensure: 'present',
-      data:
-          {
-            'name' => 'Oneview_Puppet_TEST_VOLUME_1',
-            'description' => 'Test',
-            'provisioningParameters' => {
-              'provisionType' => 'Full',
-              'shareable' => true,
-              'requestedCapacity' => 1024 * 1024 * 1024,
-              'storagePoolUri' => '/rest/'
-            },
-            'snapshotPoolUri' => '/rest/'
-          },
-      provider: 'c7000'
-    )
-  end
-
-  let(:provider) { resource.provider }
-
-  let(:instance) { provider.class.instances.first }
-
-  let(:test) { resource_type.new(@client, resource['data']) }
-
   context 'given the minimum parameters' do
+    let(:resource) do
+      Puppet::Type.type(:oneview_volume).new(
+        name: 'Storage Pool',
+        ensure: 'present',
+        data:
+            {
+              'name' => 'Oneview_Puppet_TEST_VOLUME_1',
+              'description' => 'Test',
+              'provisioningParameters' => {
+                'provisionType' => 'Full',
+                'shareable' => true,
+                'requestedCapacity' => 1024 * 1024 * 1024,
+                'storagePoolUri' => '/rest/fake'
+              },
+              'snapshotPoolUri' => '/rest/fake'
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:vt) do
+      Puppet::Type.type(:oneview_volume_template).new(
+        name: 'vt',
+        ensure: 'present',
+        data:
+            {
+              'name'         => 'ONEVIEW_PUPPET_TEST',
+              'description'  => 'Volume Template',
+              'type'         => 'StorageVolumeTemplateV3',
+              'stateReason'  => 'None',
+              'provisioning' => {
+                'shareable'      => true,
+                'provisionType'  => 'Thin',
+                'capacity'       => '235834383322',
+                'storagePoolUri' => '/rest/fake'
+              }
+            },
+        provider: 'c7000'
+      )
+    end
+
+    let(:sp) do
+      Puppet::Type.type(:oneview_storage_pool).new(
+        name: 'Storage Pool',
+        ensure: 'present',
+        data:
+           {
+             'name' => '172.18.8.11, PDU 1',
+             'poolName' => 'CPG-SSD-AO',
+             'storageSystemUri' => '/rest/fake'
+           },
+        provider: 'c7000'
+      )
+    end
+
+    let(:provider) { resource.provider }
+
+    let(:instance) { provider.class.instances.first }
+
+    let(:test) { resource_type.new(@client, resource['data']) }
+
+    let(:vt_test) { vt_class.new(@client, name: vt['data']) }
+
+    let(:sp_test) { sp_class.new(@client, name: sp['data']) }
+
     before(:each) do
       allow(resource_type).to receive(:find_by).and_return([test])
       provider.exists?
@@ -73,6 +113,16 @@ describe provider_class, unit: true do
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
+    end
+
+    it 'should return false if volume template does not exist' do
+      allow(OneviewSDK::VolumeTemplate).to receive(:find_by).and_return([])
+    end
+
+    it 'should return true if volume template exists / is found' do
+      allow(vt_class).to receive(:find_by).with(anything, vt['data']).and_return([vt_test])
+      expect(provider.exists?).to be
+      expect(provider.found).to eq(true)
     end
 
     it 'should be able to get the snapshots' do
