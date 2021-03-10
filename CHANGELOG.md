@@ -33,8 +33,8 @@
 ### Image Streamer support
 - Artifact Bundle
 - Build Plan
-- Deployment Plan
 - Deployment Group
+- Deployment Plan
 - Golden Image
 - OS Volume
 - Plan Script

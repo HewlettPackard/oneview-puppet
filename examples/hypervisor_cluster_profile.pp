@@ -47,7 +47,7 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
         serverProfileTemplateUri => '/rest/server-profile-templates/0b7f571e-5732-4663-8808-51278ac1c1a1',
         deploymentPlan           => {
           deploymentPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-          serverPassword    => 'dcs'
+          serverPassword    => '<server-password>'
         },
         hostprefix               => 'Test-Cluster-host10'
       }
