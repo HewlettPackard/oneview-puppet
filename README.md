@@ -138,7 +138,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_PASSWORD='secret123' \
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
-     -e ONEVIEW_API_VERSION=800 \
+     -e ONEVIEW_API_VERSION=2600 \
      hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v6.0.0-OV6.0 puppet apply fc_network.pp --debug --trace
    ```
     Now you can run any of the example manifests in this directory:
@@ -154,7 +154,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_PASSWORD='secret123' \
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
-     -e ONEVIEW_API_VERSION=2000 \
+     -e ONEVIEW_API_VERSION=2600 \
      puppet-oneview puppet apply fc_network.pp --debug --trace
    ```
    To run an Image Streamer example manifests:
@@ -164,7 +164,7 @@ All you need is Docker and git (optional).
     $ docker run -it --rm \
      -v $(pwd)/:/puppet
      -e IMAGE_STREAMER_URL= 'https://imagestreamer.example.com' \
-     -e IMAGE_STREAMER_API_VERSION=600 \
+     -e IMAGE_STREAMER_API_VERSION=2010 \
      -e IMAGE_STREAMER_LOG_LEVEL='info' \
      -e IMAGE_STREAMER_SSL_ENABLED=true \
      puppet-oneview puppet apply image_streamer/deployment_plan.pp --debug --trace
