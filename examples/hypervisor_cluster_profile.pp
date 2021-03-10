@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@
 oneview_hypervisor_cluster_profile{'hcp1 Create':
     ensure => 'present',
     data   => {
-      type                          => 'HypervisorClusterProfileV3',
+      type                          => 'HypervisorClusterProfileV5',
       name                          => 'Cluster5',
-      hypervisorManagerUri          => '/rest/hypervisor-managers/1ded903a-ac66-41cf-ba57-1b9ded9359b6',
+      hypervisorManagerUri          => '/rest/hypervisor-managers/64334d44-cd26-4ca4-b4f0-5e492374de1a',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-      serverProfileTemplateUri => '/rest/server-profile-templates/278cadfb-2e86-4a05-8932-972553518259',
+      serverProfileTemplateUri => '/rest/server-profile-templates/0b7f571e-5732-4663-8808-51278ac1c1a1',
       hostprefix               => 'Test-Cluster-host'
       }
     }
@@ -38,18 +38,18 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
     ensure  => 'present',
     require => Oneview_hypervisor_cluster_profile['hcp1 Create'],
     data    => {
-      type                          => 'HypervisorClusterProfileV3',
+      type                          => 'HypervisorClusterProfileV5',
       name                          => 'Cluster10',
-      hypervisorManagerUri          => '/rest/hypervisor-managers/1ded903a-ac66-41cf-ba57-1b9ded9359b6',
+      hypervisorManagerUri          => '/rest/hypervisor-managers/64334d44-cd26-4ca4-b4f0-5e492374de1a',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-        serverProfileTemplateUri => '/rest/server-profile-templates/278abdfb-2e86-4865-893276532647',
+        serverProfileTemplateUri => '/rest/server-profile-templates/0b7f571e-5732-4663-8808-51278ac1c1a1',
         deploymentPlan           => {
-          deploymnetPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
-          serverPassword    => '<server-password>'
+          deploymentPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+          serverPassword    => 'dcs'
         },
-        hostprefix               => 'Test-Cluster-host'
+        hostprefix               => 'Test-Cluster-host10'
       }
     }
 }
