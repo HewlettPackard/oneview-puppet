@@ -29,7 +29,7 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   end
 
   def create
-    set_uri
+    set_uri if resource['data']['hypervisorManagerUri']
     @data = resource['data']
     return true if resource_update
     super(:create)
@@ -49,7 +49,7 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   end
 
   def set_spt_without_dp
-    spt_class = OneviewSDK.resource_named('ServerProfileTemplate', @client.api_version)
+    spt_class = OneviewSDK.resource_named(:ServerProfileTemplate, @client.api_version)
     params = { 'complianceControl' => 'Checked' }
     spt_uri = spt_class.find_by(@client, osDeploymentSettings: params).first['uri']
     resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_uri
@@ -58,13 +58,13 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   def set_spt_with_dp
     spt_name = resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri']
     return if spt_name.to_s[0..6].include?('/rest/')
-    spt_class = OneviewSDK.resource_named('ServerProfileTemplate', @client.api_version)
+    spt_class = OneviewSDK.resource_named(:ServerProfileTemplate, @client.api_version)
     resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_class.find_by(@client, name: spt_name).first['uri']
     set_dp
   end
 
   def set_dp
-    dp_class = OneviewSDK.resource_named('OSDeploymentPlan', @client.api_version, 'Synergy')
+    dp_class = OneviewSDK.resource_named(:OSDeploymentPlan, @client.api_version, 'Synergy')
     dp_name = resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri']
     return if dp_name.to_s[0..6].include?('/rest/')
     dp_uri = dp_class.find_by(@client, name: dp_name).first['uri']

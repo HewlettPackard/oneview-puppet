@@ -23,11 +23,11 @@ oneview_hypervisor_cluster_profile{'hcp1 Create':
     data   => {
       type                          => 'HypervisorClusterProfileV4',
       name                          => 'Cluster5',
-      hypervisorManagerUri          => 'HM',
+      hypervisorManagerUri          => '<serverIp>',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-      serverProfileTemplateUri => '',
+      serverProfileTemplateUri => 'SPT-OS',
       hostprefix               => 'Test-Cluster-host'
       }
     }
@@ -40,7 +40,7 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
     data    => {
       type                          => 'HypervisorClusterProfileV4',
       name                          => 'Cluster10',
-      hypervisorManagerUri          => 'HM',
+      hypervisorManagerUri          => '<serverIp>',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
