@@ -37,17 +37,20 @@ Puppet::Type.type(:oneview_storage_pool).provide :c7000, parent: Puppet::Oneview
   end
 
   def manage
+    return unless @client.api_version >= 500
     is_managed = @data.delete('isManaged')
     get_single_resource_instance.manage(is_managed)
     true
   end
 
   def reachable
+    return unless @client.api_version >= 500
     pretty @resource_type.reachable(@client)
     true
   end
 
   def destroy
+    return unless @client.api_version <= 500
     super(:remove)
   end
 

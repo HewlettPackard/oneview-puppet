@@ -38,7 +38,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
   end
 
   def self.api_version
-    2000
+    2400
   end
 
   def create
@@ -52,7 +52,11 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
   def bulk_inconsistency_validate
     inconsistency_validation = @resource_type.new(@client)
     inconsistency_validation.data['uri'] = @data['logical_interconnect_uris'].first
+    li_name = @data['logical_interconnect_uris'] if @data['logical_interconnect_uris']
+    li_uri = OneviewSDK.resource_named(:LogicalInterconnect, api_version, resource_variant).find_by(@client, name: li_name)
+    @data['logical_interconnect_uris'] = li_uri.first['uri']
     inconsistency_validation.data['logicalInterconnectUris'] = @data['logical_interconnect_uris']
+
     response = inconsistency_validation.bulk_inconsistency_validate
     pretty response.data['logicalInterconnectsReport']
     true
@@ -119,6 +123,12 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     true
   end
 
+  def set_port_flap_settings
+    resource = set_info('Port Flap Settings', 'portFlapProtection', @port_flap_settings)
+    resource.update_port_flap_settings
+    true
+  end
+
   def set_telemetry_configuration
     resource = set_info('Telemetry Configuration', 'telemetryConfiguration', @telemetry_configuration)
     resource.update_telemetry_configuration
@@ -171,6 +181,7 @@ Puppet::Type.type(:oneview_logical_interconnect).provide :c7000, parent: Puppet:
     @ethernet_settings = @data.delete('ethernetSettings')
     @igmp_settings = @data.delete('igmpSettings')
     @port_monitor = @data.delete('portMonitor')
+    @port_flap_settings = @data.delete('portFlapProtection')
     @snmp_configuration = @data.delete('snmpConfiguration')
     @qos_configuration = @data.delete('qosConfiguration')
     @telemetry_configuration = @data.delete('telemetryConfiguration')

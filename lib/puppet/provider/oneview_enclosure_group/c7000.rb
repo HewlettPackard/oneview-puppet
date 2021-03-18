@@ -40,6 +40,9 @@ Puppet::Type.type(:oneview_enclosure_group).provide :c7000, parent: Puppet::Onev
     @data['interconnectBayMappings'].each do |mapping_attr|
       mapping_attr['interconnectBay'] = mapping_attr['interconnectBay'].to_i
       mapping_attr['logicalInterconnectGroupUri'] = nil if mapping_attr['logicalInterconnectGroupUri'] == 'nil'
+      lig_name = mapping_attr['logicalInterconnectGroupUri'] if mapping_attr['logicalInterconnectGroupUri']
+      lig = OneviewSDK.resource_named(:LogicalInterconnectGroup, api_version, resource_variant).find_by(@client, name: lig_name)
+      mapping_attr['logicalInterconnectGroupUri'] = lig.first['uri']
     end
   end
 end

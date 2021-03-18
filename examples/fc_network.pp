@@ -60,10 +60,7 @@ oneview_fc_network{'fc4':
 oneview_fc_network{'Bulk Delete':
     ensure => 'present',
     data   => {
-      networkUris    =>
-      [
-        '/rest/fc-networks/5f3fdfcf-0a51-4976-a979-4a19ea3519c3',
-        '/rest/fc-networks/87057f6d-cdbe-4726-aac5-4f39df694fa8'
-      ]
+      networkUris    => [ 'FcTest1', 'FcTest2' ]
     }
 }
+

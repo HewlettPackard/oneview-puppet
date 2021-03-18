@@ -1,6 +1,6 @@
 {
   "name": "hewlettpackard-oneview",
-  "version": "2.9.0",
+  "version": "6.0.0",
   "author": "Hewlett Packard Enterprise",
   "summary": "HPE Puppet providers and types for management of HPE OneView Appliances",
   "license": "Apache-2.0",

@@ -24,7 +24,55 @@ Puppet::Type.type(:oneview_volume_template).provide :c7000, parent: Puppet::Onev
 
   mk_resource_methods
 
+  def set_storage_pool
+    storage_pool_class = OneviewSDK.resource_named('StoragePool', @client.api_version)
+    uri = storage_pool_class.get_all(@client).first['uri']
+    @data['properties']['storagePool']['default'] = uri
+    @data['properties']['snapshotPool']['default'] = uri
+  end
+
+  def set_template_uri
+    @data = resource['data']
+    volume_template_class = OneviewSDK.resource_named('VolumeTemplate', @client.api_version)
+    resource['data']['rootTemplateUri'] = volume_template_class.get_all(@client, isRoot: true).first['uri']
+    set_storage_pool
+  end
+
+  def exists?
+    create
+  end
+
+  def set_scope_uri
+    scope = OneviewSDK.resource_named('Scope', api_version)
+    scope_uri = scope.get_all(@client).first['uri']
+    resource['data']['query_parameters']['scopeUris'] = scope_uri unless resource['data']['query_parameters']['scopeUris']
+  end
+
+  # sets Ethernet Network if user doesn't pass any networks
+  def set_networks
+    networks = OneviewSDK.resource_named('EthernetNetwork', api_version)
+    network_uri = networks.get_all(@client).first['uri']
+    resource['data']['query_parameters']['networks'] = network_uri unless resource['data']['query_parameters']['networks']
+  end
+
+  def create
+    set_template_uri if resource['data'] && resource['data'].key?('rootTemplateUri')
+    res = resource['data'].key?('query_parameters')
+    parameter_check(res)
+    @data = resource['data']
+    return true if resource_update
+    super(:create)
+  end
+
+  def parameter_check(res)
+    return unless res
+    Puppet.debug res
+    set_scope_uri if resource['data']['query_parameters'].key?('scopeUris')
+    set_networks  if resource['data']['query_parameters'].key?('networks')
+  end
+
   def get_connectable_volume_templates
+    return unless @client.api_version <= 500
     query_parameters = @data.delete('query_parameters') || {}
     pretty get_single_resource_instance.get_connectable_volume_templates(query_parameters)
     true

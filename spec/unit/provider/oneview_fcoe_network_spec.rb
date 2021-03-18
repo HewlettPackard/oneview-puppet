@@ -56,8 +56,13 @@ describe provider_class, unit: true do
 
     it 'runs through the create method' do
       allow(resource_type).to receive(:find_by).and_return([])
+      resource['data']['networkUris'] = ['/rest/fake']
+      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+      allow_any_instance_of(resource_type).to receive(:bulk_delete_check).and_return({})
+      allow(resource_type).to receive(:bulk_delete).with(anything, resource['data']).and_return({})
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
+      expect(provider.bulk_delete_check).to be
       expect(provider.create).to be
     end
 
@@ -67,10 +72,9 @@ describe provider_class, unit: true do
     end
 
     it 'deletes the resource' do
-      resource['data']['uri'] = '/rest/fake'
       test = resource_type.new(@client, resource['data'])
+      resource['data']['networkUris'] = [test['uri']]
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-      allow(resource_type).to receive(:find_by).with(anything, 'name' => resource['data']['name']).and_return([test])
       expect_any_instance_of(resource_type).to receive(:delete).and_return({})
       provider.exists?
       expect(provider.destroy).to be
