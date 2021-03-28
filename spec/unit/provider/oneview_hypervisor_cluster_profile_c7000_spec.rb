@@ -148,11 +148,12 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'set dp' do
+    it 'run set_spt_without_dp' do
       allow(resource_type).to receive(:find_by).and_return([])
       resource['data']['hypervisorHostProfileTemplate'] = ''
       allow(spt_type).to receive(:find_by).with(anything, spt_resource['data']).and_return([spt_test])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
+
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
       provider.exists?
       expect(provider.create).to be
@@ -160,12 +161,8 @@ describe provider_class, unit: true do
 
     it 'runs through the create method with set_dp' do
       allow(resource_type).to receive(:find_by).and_return([])
-      spt_resource['data']['osDeploymentSettings']['complianceControl'] = 'Checked'
-      allow(spt_type).to receive(:find_by).with(anything, spt_resource['data']).and_return([spt_test])
-      allow(dp_type).to receive(:find_by).and_return([])
       resource['data']['hypervisorManagerUri'] = ['/rest/fake']
       resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = 'c865a62c-8fd8-414c-8c16-3f7ca75ab2ba'
-      resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'] = '/rest/fake'
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
 
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
