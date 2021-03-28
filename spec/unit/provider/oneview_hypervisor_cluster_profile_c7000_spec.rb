@@ -159,21 +159,6 @@ describe provider_class, unit: true do
       expect(provider.create).to be
     end
 
-    it 'runs through the create method with set_dp' do
-      allow(resource_type).to receive(:find_by).and_return([])
-      spt_resource['data']['osDeploymentSettings']['complianceControl'] = 'Checked'
-      allow(spt_type).to receive(:find_by).with(anything, spt_resource['data']).and_return([spt_test])
-      allow(dp_type).to receive(:find_by).and_return([])
-      resource['data']['hypervisorManagerUri'] = ['/rest/fake']
-      resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = 'fake'
-      resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'] = '/rest/fake'
-      allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
-
-      allow_any_instance_of(resource_type).to receive(:create).and_return(test)
-      provider.exists?
-      expect(provider.create).to be
-    end
-
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       resource['data']['force'] = true
