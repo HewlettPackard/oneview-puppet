@@ -163,6 +163,7 @@ describe provider_class, unit: true do
       allow(resource_type).to receive(:find_by).and_return([])
       resource['data']['hypervisorManagerUri'] = ['/rest/fake']
       resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = 'c865a62c-8fd8-414c-8c16-3f7ca75ab2ba'
+      allow(spt_type).to receive(:find_by).with(anything, spt_resource['data']).and_return([spt_test])
       allow(resource_type).to receive(:find_by).with(anything, resource['data']).and_return([test])
 
       allow_any_instance_of(resource_type).to receive(:create).and_return(test)
