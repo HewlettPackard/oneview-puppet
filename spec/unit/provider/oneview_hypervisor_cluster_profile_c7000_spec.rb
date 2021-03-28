@@ -172,7 +172,7 @@ describe provider_class, unit: true do
       provider.exists?
       expect(provider.create).to be
     end
-          
+
     it 'deletes the resource' do
       resource['data']['uri'] = '/rest/fake'
       resource['data']['force'] = true
