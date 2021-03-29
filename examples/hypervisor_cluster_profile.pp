@@ -21,7 +21,7 @@
 oneview_hypervisor_cluster_profile{'hcp1 Create':
     ensure => 'present',
     data   => {
-      type                          => 'HypervisorClusterProfileV4',
+      type                          => 'HypervisorClusterProfileV5',
       name                          => 'Cluster5',
       hypervisorManagerUri          => '<serverIp>',
       path                          => 'DC2',
@@ -38,7 +38,7 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
     ensure  => 'present',
     require => Oneview_hypervisor_cluster_profile['hcp1 Create'],
     data    => {
-      type                          => 'HypervisorClusterProfileV4',
+      type                          => 'HypervisorClusterProfileV5',
       name                          => 'Cluster10',
       hypervisorManagerUri          => '<serverIp>',
       path                          => 'DC2',
