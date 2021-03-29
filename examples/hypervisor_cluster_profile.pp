@@ -23,11 +23,11 @@ oneview_hypervisor_cluster_profile{'hcp1 Create':
     data   => {
       type                          => 'HypervisorClusterProfileV5',
       name                          => 'Cluster5',
-      hypervisorManagerUri          => '/rest/hypervisor-managers/64334d44-cd26-4ca4-b4f0-5e492374de1a',
+      hypervisorManagerUri          => '<serverIp>',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-      serverProfileTemplateUri => '/rest/server-profile-templates/0b7f571e-5732-4663-8808-51278ac1c1a1',
+      serverProfileTemplateUri => 'SPT-OS',
       hostprefix               => 'Test-Cluster-host'
       }
     }
@@ -40,16 +40,16 @@ oneview_hypervisor_cluster_profile{'hcp2 Create':
     data    => {
       type                          => 'HypervisorClusterProfileV5',
       name                          => 'Cluster10',
-      hypervisorManagerUri          => '/rest/hypervisor-managers/64334d44-cd26-4ca4-b4f0-5e492374de1a',
+      hypervisorManagerUri          => '<serverIp>',
       path                          => 'DC2',
       hypervisorType                => 'Vmware',
       hypervisorHostProfileTemplate => {
-        serverProfileTemplateUri => '/rest/server-profile-templates/0b7f571e-5732-4663-8808-51278ac1c1a1',
+        serverProfileTemplateUri => 'SPT',
         deploymentPlan           => {
-          deploymentPlanUri => '/rest/os-deploymenmt-plans/c54e1dab-cc14-48fa-92bf-d301671fb0cf',
+          deploymentPlanUri => 'Deploy-HPE-Esxi-6.2-U2',
           serverPassword    => '<server-password>'
         },
-        hostprefix               => 'Test-Cluster-host10'
+        hostprefix               => 'Test-Cluster-host-10'
       }
     }
 }

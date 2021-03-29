@@ -1,5 +1,5 @@
 ################################################################################
-# (C) Copyright 2020 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -23,6 +23,53 @@ Puppet::Type.type(:oneview_hypervisor_cluster_profile).provide :c7000, parent: P
   confine true: login[:hardware_variant] == 'C7000'
 
   mk_resource_methods
+
+  def exists?
+    create
+  end
+
+  def create
+    set_uri if resource['data']['hypervisorManagerUri']
+    @data = resource['data']
+    return true if resource_update
+    super(:create)
+  end
+
+  def set_uri
+    hm_name = resource['data']['hypervisorManagerUri']
+    return if hm_name.to_s[0..6].include?('/rest/')
+    hm_uri = OneviewSDK.resource_named(:HypervisorManager, api_version).find_by(@client, name: hm_name).first['uri']
+    resource['data']['hypervisorManagerUri'] = hm_uri
+    set_spt_uri
+  end
+
+  def set_spt_uri
+    set_spt_without_dp unless resource['data']['hypervisorHostProfileTemplate'].key?('deploymentPlan')
+    set_spt_with_dp if resource['data']['hypervisorHostProfileTemplate'].key?('deploymentPlan')
+  end
+
+  def set_spt_without_dp
+    spt_class = OneviewSDK.resource_named(:ServerProfileTemplate, @client.api_version)
+    params = { 'complianceControl' => 'Checked' }
+    spt_uri = spt_class.find_by(@client, osDeploymentSettings: params).first['uri']
+    resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_uri
+  end
+
+  def set_spt_with_dp
+    spt_name = resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri']
+    return if spt_name.to_s[0..6].include?('/rest/')
+    spt_class = OneviewSDK.resource_named(:ServerProfileTemplate, @client.api_version)
+    resource['data']['hypervisorHostProfileTemplate']['serverProfileTemplateUri'] = spt_class.find_by(@client, name: spt_name).first['uri']
+    set_dp
+  end
+
+  def set_dp
+    dp_class = OneviewSDK.resource_named(:OSDeploymentPlan, @client.api_version, 'Synergy')
+    dp_name = resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri']
+    return if dp_name.to_s[0..6].include?('/rest/')
+    dp_uri = dp_class.find_by(@client, name: dp_name).first['uri']
+    resource['data']['hypervisorHostProfileTemplate']['deploymentPlan']['deploymentPlanUri'] = dp_uri
+  end
 
   def self.api_version
     1800
