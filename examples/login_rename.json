@@ -2,8 +2,8 @@
   "url": "https://oneview.example.com",
   "user": "Administrator",
   "password": "secret123",
-  "ssl_enabled": "true",
-  "api_version": 2000,
+  "ssl_enabled": "false",
+  "api_version": 2800,
   "log_level": "info",
-  "hardware_variant": "C7000"
+  "hardware_variant": "Synergy"
 }
