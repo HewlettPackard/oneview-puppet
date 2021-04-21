@@ -1,4 +1,4 @@
-# v6.1.0(2021-04-21)
+# v6.1.0(Unreleased)
 ### Notes
 - This release extends support of the SDK to Oneview REST API version 2800 (OneView v6.10) and ImageStreamer REST API version 2020 (I3S v6.10).
 
