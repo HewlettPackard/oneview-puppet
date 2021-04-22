@@ -22,9 +22,4 @@ jobs:
         gem install bundler
         bundle install --jobs 4 --retry 3
         bundle exec rake
-    - name: Output codecov report
-      run: cat ./coverage/.resultset.json
-    - name: Send test coverage report to codecov.io
-      uses: codecov/codecov-action@v1
-      with:
-        files: ./coverage/.resultset.json
+
