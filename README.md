@@ -2,7 +2,7 @@
 
 ## Build Status 
 OV Version | 6.20 | 6.10 | 6.00 | 5.60 | 5.50 | 5.40 |
-| ------------- |:-------------:| -------------:| -------------:| -------------:| -------------:|
+| ------------- |:-------------:| -------------:| -------------:| -------------:| -------------:| -------------:|
 SDK Version/Tag | [v6.2.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.2.0) | [v6.1.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.1.0) | [v6.0.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.0.0) | [v2.10.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.10.0) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | 
 Build Status | [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/workflows/ci-test.yml)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/workflows/ci-test.yml)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/runs/638765441)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/runs/571657976)| [![Build status](https://api.travis-ci.com/HewlettPackard/oneview-puppet.svg?branch=master&status=passed)](https://travis-ci.com/github/HewlettPackard/oneview-puppet/builds/214831118)| [![Build status](https://api.travis-ci.com/HewlettPackard/oneview-puppet.svg?branch=master&status=passed)](https://travis-ci.com/github/HewlettPackard/oneview-puppet/builds)|
 
