@@ -1,10 +1,10 @@
 # HPE OneView SDK for Puppet
 
 ## Build Status 
-OV Version | 6.10 | 6.00 | 5.60 | 5.50 | 5.40 |
+OV Version | 6.20 | 6.10 | 6.00 | 5.60 | 5.50 | 5.40 |
 | ------------- |:-------------:| -------------:| -------------:| -------------:| -------------:|
-SDK Version/Tag | [v6.1.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.1.0) | [v6.0.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.0.0) | [v2.10.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.10.0) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | 
-Build Status | [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/workflows/ci-test.yml)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/runs/638765441)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/runs/571657976)| [![Build status](https://api.travis-ci.com/HewlettPackard/oneview-puppet.svg?branch=master&status=passed)](https://travis-ci.com/github/HewlettPackard/oneview-puppet/builds/214831118)| [![Build status](https://api.travis-ci.com/HewlettPackard/oneview-puppet.svg?branch=master&status=passed)](https://travis-ci.com/github/HewlettPackard/oneview-puppet/builds)|
+SDK Version/Tag | [v6.2.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.2.0) | [v6.1.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.1.0) | [v6.0.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v6.0.0) | [v2.10.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.10.0) | [v2.9.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.9.0) | [v2.8.0](https://github.com/HewlettPackard/oneview-puppet/releases/tag/v2.8.0) | 
+Build Status | [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/workflows/ci-test.yml)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/workflows/ci-test.yml)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/runs/638765441)| [![Build status](https://action-badges.now.sh/JasonEtco/action-badges)](https://github.com/HewlettPackard/oneview-puppet/actions/runs/571657976)| [![Build status](https://api.travis-ci.com/HewlettPackard/oneview-puppet.svg?branch=master&status=passed)](https://travis-ci.com/github/HewlettPackard/oneview-puppet/builds/214831118)| [![Build status](https://api.travis-ci.com/HewlettPackard/oneview-puppet.svg?branch=master&status=passed)](https://travis-ci.com/github/HewlettPackard/oneview-puppet/builds)|
 
 
 ## Introduction
@@ -21,7 +21,7 @@ For more information on the Puppet Module for HPE OneView resource types and the
 
 ## What's New
 
-HPE OneView Puppet library extends support of the SDK to OneView REST API version 2800 (OneView v6.10) & ImageStreamer REST API version 2020 (I3S v6.10)
+HPE OneView Puppet library extends support of the SDK to OneView REST API version 3000 (OneView v6.20)
 
 Please refer to [notes](https://github.com/HewlettPackard/oneview-puppet/blob/master/CHANGELOG.md) for more information on the changes , features supported and issues fixed in this version
 
@@ -129,7 +129,8 @@ All you need is Docker and git (optional).
    ```bash
    # Download and store a local copy of hpe-oneview-sdk-for-puppet and
    # use it as a Docker image.
-   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v6.1.0-OV6.1
+   $ docker pull hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.7.0-OV5.3
+
    # Run docker container with below commands.
    $docker run -it --rm \
      -v $(pwd)/:/puppet
@@ -138,8 +139,8 @@ All you need is Docker and git (optional).
      -e ONEVIEW_PASSWORD='secret123' \
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
-     -e ONEVIEW_API_VERSION=2800 \
-     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v6.1.0-OV6.1 puppet apply fc_network.pp --debug --trace
+     -e ONEVIEW_API_VERSION=1800 \
+     hewlettpackardenterprise/hpe-oneview-sdk-for-puppet:v2.7.0-OV5.3 puppet apply fc_network.pp --debug --trace
    ```
     Now you can run any of the example manifests in this directory:
 ```bash
@@ -154,7 +155,7 @@ All you need is Docker and git (optional).
      -e ONEVIEW_PASSWORD='secret123' \
      -e ONEVIEW_SSL_ENABLED=true, \
      -e ONEVIEW_LOG_LEVEL='info' \
-     -e ONEVIEW_API_VERSION=2800 \
+     -e ONEVIEW_API_VERSION=1800 \
      puppet-oneview puppet apply fc_network.pp --debug --trace
    ```
    To run an Image Streamer example manifests:
