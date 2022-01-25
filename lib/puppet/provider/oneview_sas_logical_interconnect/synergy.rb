@@ -57,8 +57,11 @@ Puppet::Type.type(:oneview_sas_logical_interconnect).provide :synergy, parent: P
   end
 
   def set_compliance
-    Puppet.notice('Setting Logical Interconnect compliance...')
-    get_single_resource_instance.compliance
+    resource = get_single_resource_instance
+    if resource.data['consistencyStatus'] == 'NOT_CONSISTENT'
+      Puppet.notice('Setting SAS Logical Interconnect compliance...')
+      resource.compliance
+    end
     true
   end
 
